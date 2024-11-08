@@ -338,7 +338,6 @@ static GLFWbool cursorInContentArea(_GLFWwindow* window)
     return PtInRect(&area, pos);
 }
 
-// Update native window styles to match attributes
 // update native window styles to match attributes
 //
 static void updateWindowStyles(const _GLFWwindow* window)
@@ -368,7 +367,6 @@ static void updateWindowStyles(const _GLFWwindow* window)
                  SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-// Update window framebuffer transparency
 // update window framebuffer transparency
 //
 static void updateFramebufferTransparency(const _GLFWwindow* window)

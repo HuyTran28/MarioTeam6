@@ -1032,7 +1032,6 @@ void UnloadSoundAlias(Sound alias)
     }
 }
 
-// Update sound buffer with new data
 // update sound buffer with new data
 void UpdateSound(Sound sound, const void *data, int frameCount)
 {
@@ -1859,7 +1858,6 @@ void SeekMusicStream(Music music, float position)
     ma_mutex_unlock(&AUDIO.System.lock);
 }
 
-// Update (re-fill) music buffers if data already processed
 // update (re-fill) music buffers if data already processed
 void UpdateMusicStream(Music music)
 {
@@ -2138,7 +2136,6 @@ void UnloadAudioStream(AudioStream stream)
     TRACELOG(LOG_INFO, "STREAM: Unloaded audio stream data from RAM");
 }
 
-// Update audio stream buffers with data
 // update audio stream buffers with data
 // NOTE 1: Only updates one buffer of the stream source: dequeue -> update -> queue
 // NOTE 2: To dequeue a buffer it needs to be processed: IsAudioStreamProcessed()
@@ -2653,7 +2650,6 @@ static void StopAudioBufferInLockedState(AudioBuffer *buffer)
     }
 }
 
-// Update audio stream, assuming the audio system mutex has been locked
 // update audio stream, assuming the audio system mutex has been locked
 static void UpdateAudioStreamInLockedState(AudioStream stream, const void *data, int frameCount)
 {
@@ -2666,7 +2662,6 @@ static void UpdateAudioStreamInLockedState(AudioStream stream, const void *data,
             if (stream.buffer->isSubBufferProcessed[0] && stream.buffer->isSubBufferProcessed[1])
             {
                 // Both buffers are available for updating
-                // Update the first one and make sure the cursor is moved back to the front
                 // update the first one and make sure the cursor is moved back to the front
                 subBufferToUpdate = 0;
                 stream.buffer->frameCursorPos = 0;

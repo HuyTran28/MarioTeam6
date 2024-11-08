@@ -3322,7 +3322,7 @@ void ImageClearBackground(Image *dst, Color color)
     }
 }
 
-// Draw pixel within an image
+// draw pixel within an image
 // NOTE: Compressed image formats not supported
 void ImageDrawPixel(Image *dst, int x, int y, Color color)
 {
@@ -3463,13 +3463,13 @@ void ImageDrawPixel(Image *dst, int x, int y, Color color)
     }
 }
 
-// Draw pixel within an image (Vector version)
+// draw pixel within an image (Vector version)
 void ImageDrawPixelV(Image *dst, Vector2 position, Color color)
 {
     ImageDrawPixel(dst, (int)position.x, (int)position.y, color);
 }
 
-// Draw line within an image
+// draw line within an image
 void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int endPosY, Color color)
 {
     // Calculate differences in coordinates
@@ -3501,7 +3501,7 @@ void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int en
     // Calculate fixed-point increment for shorter length
     int decInc = (longLen == 0)? 0 : (shortLen << 16)/longLen;
 
-    // Draw the line pixel by pixel
+    // draw the line pixel by pixel
     if (yLonger)
     {
         // If line is more vertical, iterate over y-axis
@@ -3522,7 +3522,7 @@ void ImageDrawLine(Image *dst, int startPosX, int startPosY, int endPosX, int en
     }
 }
 
-// Draw line within an image (Vector version)
+// draw line within an image (Vector version)
 void ImageDrawLineV(Image *dst, Vector2 start, Vector2 end, Color color)
 {
     // Round start and end positions to nearest integer coordinates
@@ -3531,11 +3531,11 @@ void ImageDrawLineV(Image *dst, Vector2 start, Vector2 end, Color color)
     int x2 = (int)(end.x + 0.5f);
     int y2 = (int)(end.y + 0.5f);
 
-    // Draw a vertical line using ImageDrawLine function
+    // draw a vertical line using ImageDrawLine function
     ImageDrawLine(dst, x1, y1, x2, y2, color);
 }
 
-// Draw a line defining thickness within an image
+// draw a line defining thickness within an image
 void ImageDrawLineEx(Image *dst, Vector2 start, Vector2 end, int thick, Color color)
 {
     // Round start and end positions to nearest integer coordinates
@@ -3548,7 +3548,7 @@ void ImageDrawLineEx(Image *dst, Vector2 start, Vector2 end, int thick, Color co
     int dx = x2 - x1;
     int dy = y2 - y1;
 
-    // Draw the main line between (x1, y1) and (x2, y2)
+    // draw the main line between (x1, y1) and (x2, y2)
     ImageDrawLine(dst, x1, y1, x2, y2, color);
 
     // Determine if the line is more horizontal or vertical
@@ -3558,11 +3558,11 @@ void ImageDrawLineEx(Image *dst, Vector2 start, Vector2 end, int thick, Color co
         // Calculate half the width of the line
         int wy = (thick - 1)*(int)sqrtf((float)(dx*dx + dy*dy))/(2*abs(dx));
 
-        // Draw additional lines above and below the main line
+        // draw additional lines above and below the main line
         for (int i = 1; i <= wy; i++)
         {
-            ImageDrawLine(dst, x1, y1 - i, x2, y2 - i, color); // Draw above the main line
-            ImageDrawLine(dst, x1, y1 + i, x2, y2 + i, color); // Draw below the main line
+            ImageDrawLine(dst, x1, y1 - i, x2, y2 - i, color); // draw above the main line
+            ImageDrawLine(dst, x1, y1 + i, x2, y2 + i, color); // draw below the main line
         }
     }
     else if (dy != 0)
@@ -3571,16 +3571,16 @@ void ImageDrawLineEx(Image *dst, Vector2 start, Vector2 end, int thick, Color co
         // Calculate half the width of the line
         int wx = (thick - 1)*(int)sqrtf((float)(dx*dx + dy*dy))/(2*abs(dy));
 
-        // Draw additional lines to the left and right of the main line
+        // draw additional lines to the left and right of the main line
         for (int i = 1; i <= wx; i++)
         {
-            ImageDrawLine(dst, x1 - i, y1, x2 - i, y2, color); // Draw left of the main line
-            ImageDrawLine(dst, x1 + i, y1, x2 + i, y2, color); // Draw right of the main line
+            ImageDrawLine(dst, x1 - i, y1, x2 - i, y2, color); // draw left of the main line
+            ImageDrawLine(dst, x1 + i, y1, x2 + i, y2, color); // draw right of the main line
         }
     }
 }
 
-// Draw circle within an image
+// draw circle within an image
 void ImageDrawCircle(Image* dst, int centerX, int centerY, int radius, Color color)
 {
     int x = 0;
@@ -3604,13 +3604,13 @@ void ImageDrawCircle(Image* dst, int centerX, int centerY, int radius, Color col
     }
 }
 
-// Draw circle within an image (Vector version)
+// draw circle within an image (Vector version)
 void ImageDrawCircleV(Image* dst, Vector2 center, int radius, Color color)
 {
     ImageDrawCircle(dst, (int)center.x, (int)center.y, radius, color);
 }
 
-// Draw circle outline within an image
+// draw circle outline within an image
 void ImageDrawCircleLines(Image *dst, int centerX, int centerY, int radius, Color color)
 {
     int x = 0;
@@ -3638,25 +3638,25 @@ void ImageDrawCircleLines(Image *dst, int centerX, int centerY, int radius, Colo
     }
 }
 
-// Draw circle outline within an image (Vector version)
+// draw circle outline within an image (Vector version)
 void ImageDrawCircleLinesV(Image *dst, Vector2 center, int radius, Color color)
 {
     ImageDrawCircleLines(dst, (int)center.x, (int)center.y, radius, color);
 }
 
-// Draw rectangle within an image
+// draw rectangle within an image
 void ImageDrawRectangle(Image *dst, int posX, int posY, int width, int height, Color color)
 {
     ImageDrawRectangleRec(dst, (Rectangle){ (float)posX, (float)posY, (float)width, (float)height }, color);
 }
 
-// Draw rectangle within an image (Vector version)
+// draw rectangle within an image (Vector version)
 void ImageDrawRectangleV(Image *dst, Vector2 position, Vector2 size, Color color)
 {
     ImageDrawRectangle(dst, (int)position.x, (int)position.y, (int)size.x, (int)size.y, color);
 }
 
-// Draw rectangle within an image
+// draw rectangle within an image
 void ImageDrawRectangleRec(Image *dst, Rectangle rec, Color color)
 {
     // Security check to avoid program crash
@@ -3701,7 +3701,7 @@ void ImageDrawRectangleRec(Image *dst, Rectangle rec, Color color)
     }
 }
 
-// Draw rectangle lines within an image
+// draw rectangle lines within an image
 void ImageDrawRectangleLines(Image *dst, Rectangle rec, int thick, Color color)
 {
     ImageDrawRectangle(dst, (int)rec.x, (int)rec.y, (int)rec.width, thick, color);
@@ -3710,7 +3710,7 @@ void ImageDrawRectangleLines(Image *dst, Rectangle rec, int thick, Color color)
     ImageDrawRectangle(dst, (int)rec.x, (int)(rec.y + rec.height - thick), (int)rec.width, thick, color);
 }
 
-// Draw triangle within an image
+// draw triangle within an image
 void ImageDrawTriangle(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color color)
 {
     // Calculate the 2D bounding box of the triangle
@@ -3777,7 +3777,7 @@ void ImageDrawTriangle(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color col
     }
 }
 
-// Draw triangle with interpolated colors within an image
+// draw triangle with interpolated colors within an image
 void ImageDrawTriangleEx(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color c1, Color c2, Color c3)
 {
     // Calculate the 2D bounding box of the triangle
@@ -3848,7 +3848,7 @@ void ImageDrawTriangleEx(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color c
                 finalColor.b = (c1.b*aW1 + c2.b*aW2 + c3.b*aW3)/255;
                 finalColor.a = (c1.a*aW1 + c2.a*aW2 + c3.a*aW3)/255;
 
-                // Draw the pixel with the interpolated color
+                // draw the pixel with the interpolated color
                 ImageDrawPixel(dst, x, y, finalColor);
             }
 
@@ -3865,7 +3865,7 @@ void ImageDrawTriangleEx(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color c
     }
 }
 
-// Draw triangle outline within an image
+// draw triangle outline within an image
 void ImageDrawTriangleLines(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Color color)
 {
     ImageDrawLine(dst, (int)v1.x, (int)v1.y, (int)v2.x, (int)v2.y, color);
@@ -3873,7 +3873,7 @@ void ImageDrawTriangleLines(Image *dst, Vector2 v1, Vector2 v2, Vector2 v3, Colo
     ImageDrawLine(dst, (int)v3.x, (int)v3.y, (int)v1.x, (int)v1.y, color);
 }
 
-// Draw a triangle fan defined by points within an image (first vertex is the center)
+// draw a triangle fan defined by points within an image (first vertex is the center)
 void ImageDrawTriangleFan(Image *dst, Vector2 *points, int pointCount, Color color)
 {
     if (pointCount >= 3)
@@ -3885,7 +3885,7 @@ void ImageDrawTriangleFan(Image *dst, Vector2 *points, int pointCount, Color col
     }
 }
 
-// Draw a triangle strip defined by points within an image
+// draw a triangle strip defined by points within an image
 void ImageDrawTriangleStrip(Image *dst, Vector2 *points, int pointCount, Color color)
 {
     if (pointCount >= 3)
@@ -3898,7 +3898,7 @@ void ImageDrawTriangleStrip(Image *dst, Vector2 *points, int pointCount, Color c
     }
 }
 
-// Draw an image (source) within an image (destination)
+// draw an image (source) within an image (destination)
 // NOTE: Color tint is applied to source image
 void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec, Color tint)
 {
@@ -4022,7 +4022,7 @@ void ImageDraw(Image *dst, Image src, Rectangle srcRec, Rectangle dstRec, Color 
     }
 }
 
-// Draw text (default font) within an image (destination)
+// draw text (default font) within an image (destination)
 void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSize, Color color)
 {
 #if defined(SUPPORT_MODULE_RTEXT) && defined(SUPPORT_DEFAULT_FONT)
@@ -4036,7 +4036,7 @@ void ImageDrawText(Image *dst, const char *text, int posX, int posY, int fontSiz
 #endif
 }
 
-// Draw text (custom sprite font) within an image (destination)
+// draw text (custom sprite font) within an image (destination)
 void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint)
 {
     Image imText = ImageTextEx(font, text, fontSize, spacing, tint);
@@ -4281,14 +4281,14 @@ void UnloadRenderTexture(RenderTexture2D target)
     }
 }
 
-// Update GPU texture with new data
+// update GPU texture with new data
 // NOTE: pixels data must match texture.format
 void UpdateTexture(Texture2D texture, const void *pixels)
 {
     rlUpdateTexture(texture.id, 0, 0, texture.width, texture.height, texture.format, pixels);
 }
 
-// Update GPU texture rectangle with new data
+// update GPU texture rectangle with new data
 // NOTE: pixels data must match texture.format
 void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels)
 {
@@ -4405,19 +4405,19 @@ void SetTextureWrap(Texture2D texture, int wrap)
 //------------------------------------------------------------------------------------
 // Texture drawing functions
 //------------------------------------------------------------------------------------
-// Draw a texture
+// draw a texture
 void DrawTexture(Texture2D texture, int posX, int posY, Color tint)
 {
     DrawTextureEx(texture, (Vector2){ (float)posX, (float)posY }, 0.0f, 1.0f, tint);
 }
 
-// Draw a texture with position defined as Vector2
+// draw a texture with position defined as Vector2
 void DrawTextureV(Texture2D texture, Vector2 position, Color tint)
 {
     DrawTextureEx(texture, position, 0, 1.0f, tint);
 }
 
-// Draw a texture with extended parameters
+// draw a texture with extended parameters
 void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
 {
     Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
@@ -4427,7 +4427,7 @@ void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float sc
     DrawTexturePro(texture, source, dest, origin, rotation, tint);
 }
 
-// Draw a part of a texture (defined by a rectangle)
+// draw a part of a texture (defined by a rectangle)
 void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint)
 {
     Rectangle dest = { position.x, position.y, fabsf(source.width), fabsf(source.height) };
@@ -4436,7 +4436,6 @@ void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color
     DrawTexturePro(texture, source, dest, origin, 0.0f, tint);
 }
 
-// Draw a part of a texture (defined by a rectangle) with 'pro' parameters
 // draw a part of a texture (defined by a rectangle) with 'pro' parameters
 // NOTE: origin is relative to destination rectangle size
 void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)

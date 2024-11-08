@@ -906,7 +906,6 @@ static GLFWbool initExtensions(void)
         }
     }
 
-    // Update the key code LUT
     // update the key code LUT
     // FIXME: We should listen to XkbMapNotify events to track changes to
     // the keyboard mapping.

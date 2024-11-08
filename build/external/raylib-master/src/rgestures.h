@@ -120,7 +120,7 @@ extern "C" {            // Prevents name mangling of functions
 #endif
 
 void ProcessGestureEvent(GestureEvent event);           // Process gesture event and translate it into gestures
-void UpdateGestures(void);                              // Update gestures detected (must be called every frame)
+void UpdateGestures(void);                              // update gestures detected (must be called every frame)
 
 #if defined(RGESTURES_STANDALONE)
 void SetGesturesEnabled(unsigned int flags);            // Enable a set of gestures using flags
@@ -408,7 +408,6 @@ void ProcessGestureEvent(GestureEvent event)
     }
 }
 
-// Update gestures detected (must be called every frame)
 // update gestures detected (must be called every frame)
 void UpdateGestures(void)
 {

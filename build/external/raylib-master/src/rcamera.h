@@ -432,7 +432,6 @@ Matrix GetCameraProjectionMatrix(Camera *camera, float aspect)
 }
 
 #if !defined(RCAMERA_STANDALONE)
-// Update camera position for selected mode
 // update camera position for selected mode
 // Camera mode: CAMERA_FREE, CAMERA_FIRST_PERSON, CAMERA_THIRD_PERSON, CAMERA_ORBITAL or CUSTOM
 void UpdateCamera(Camera *camera, int mode)
@@ -522,7 +521,6 @@ void UpdateCamera(Camera *camera, int mode)
 }
 #endif // !RCAMERA_STANDALONE
 
-// Update camera movement, movement/rotation values should be provided by user
 // update camera movement, movement/rotation values should be provided by user
 void UpdateCameraPro(Camera *camera, Vector3 movement, Vector3 rotation, float zoom)
 {

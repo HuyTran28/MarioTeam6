@@ -600,7 +600,6 @@ void SetWindowTitle(const char *title)
 // Set window position on screen (windowed mode)
 void SetWindowPosition(int x, int y)
 {
-    // Update CORE.Window.position as well
     // update CORE.Window.position as well
     CORE.Window.position.x = x;
     CORE.Window.position.y = y;
@@ -1224,7 +1223,6 @@ void PollInputEvents(void)
     CORE.Window.resizedLastFrame = false;
 
     if (CORE.Window.eventWaiting) glfwWaitEvents();     // Wait for in input events before continue (drawing is paused)
-    else glfwPollEvents();      // Poll input events: keyboard/mouse/window events (callbacks) -> Update keys state
     else glfwPollEvents();      // Poll input events: keyboard/mouse/window events (callbacks) -> update keys state
 
     // While window minimized, stop loop execution
@@ -1589,7 +1587,6 @@ int InitPlatform(void)
         if (posY < monitorY) posY = monitorY;
         SetWindowPosition(posX, posY);
 
-        // Update CORE.Window.position here so it is correct from the start
         // update CORE.Window.position here so it is correct from the start
         CORE.Window.position.x = posX;
         CORE.Window.position.y = posY;

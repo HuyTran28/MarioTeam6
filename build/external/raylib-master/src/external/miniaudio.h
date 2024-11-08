@@ -40846,7 +40846,6 @@ MA_API ma_result ma_device_post_init(ma_device* pDevice, ma_device_type deviceTy
         }
     }
 
-    /* Update data conversion. */
     /* update data conversion. */
     return ma_device__post_init_setup(pDevice, deviceType); /* TODO: Should probably rename ma_device__post_init_setup() to something better. */
 }
@@ -63417,7 +63416,6 @@ MA_API ma_result ma_stbvorbis_read_pcm_frames(ma_stbvorbis* pVorbis, void* pFram
                         }
                     }
 
-                    /* Update pointers and counters. */
                     /* update pointers and counters. */
                     pVorbis->push.framesConsumed  += framesToReadFromCache;
                     pVorbis->push.framesRemaining -= framesToReadFromCache;
@@ -69978,7 +69976,6 @@ MA_API ma_result ma_resource_manager_data_stream_seek_to_pcm_frame(ma_resource_m
     /* Increment the seek counter first to indicate to read_paged_pcm_frames() and map_paged_pcm_frames() that we are in the middle of a seek and MA_BUSY should be returned. */
     ma_atomic_fetch_add_32(&pDataStream->seekCounter, 1);
 
-    /* Update the absolute cursor so that ma_resource_manager_data_stream_get_cursor_in_pcm_frames() returns the new position. */
     /* update the absolute cursor so that ma_resource_manager_data_stream_get_cursor_in_pcm_frames() returns the new position. */
     ma_resource_manager_data_stream_set_absolute_cursor(pDataStream, frameIndex);
 
@@ -71622,12 +71619,10 @@ static void ma_node_input_bus_attach(ma_node_input_bus* pInputBus, ma_node_outpu
             ma_node_output_bus* pNewPrev = &pInputBus->head;
             ma_node_output_bus* pNewNext = (ma_node_output_bus*)ma_atomic_load_ptr(&pInputBus->head.pNext);
 
-            /* Update the local output bus. */
             /* update the local output bus. */
             ma_atomic_exchange_ptr(&pOutputBus->pPrev, pNewPrev);
             ma_atomic_exchange_ptr(&pOutputBus->pNext, pNewNext);
 
-            /* Update the other output buses to point back to the local output bus. */
             /* update the other output buses to point back to the local output bus. */
             ma_atomic_exchange_ptr(&pInputBus->head.pNext, pOutputBus); /* <-- This is where the output bus is actually attached to the input bus. */
 
@@ -74161,7 +74156,6 @@ static void ma_engine_node_process_pcm_frames__general(ma_engine_node* pEngineNo
     totalFramesProcessedIn  = 0;
     totalFramesProcessedOut = 0;
 
-    /* Update the fader if applicable. */
     /* update the fader if applicable. */
     {
         ma_uint64 fadeLengthInFrames = ma_atomic_uint64_get(&pEngineNode->fadeSettings.fadeLengthInFrames);
@@ -75036,7 +75030,6 @@ MA_API ma_result ma_engine_init(const ma_engine_config* pConfig, ma_engine* pEng
             pEngine->ownsDevice = MA_TRUE;
         }
 
-        /* Update the channel count and sample rate of the engine config so we can reference it below. */
         /* update the channel count and sample rate of the engine config so we can reference it below. */
         if (pEngine->pDevice != NULL) {
             engineConfig.channels   = pEngine->pDevice->playback.channels;

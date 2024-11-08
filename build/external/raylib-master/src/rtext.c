@@ -562,7 +562,7 @@ Font LoadFontFromMemory(const char *fileType, const unsigned char *fileData, int
         Image atlas = GenImageFontAtlas(font.glyphs, &font.recs, font.glyphCount, font.baseSize, font.glyphPadding, 0);
         if (isGpuReady) font.texture = LoadTextureFromImage(atlas);
 
-        // Update glyphs[i].image to use alpha, required to be used on ImageDrawText()
+        // update glyphs[i].image to use alpha, required to be used on ImageDrawText()
         for (int i = 0; i < font.glyphCount; i++)
         {
             UnloadImage(font.glyphs[i].image);
@@ -1112,7 +1112,7 @@ bool ExportFontAsCode(Font font, const char *fileName)
     return success;
 }
 
-// Draw current FPS
+// draw current FPS
 // NOTE: Uses default font
 void DrawFPS(int posX, int posY)
 {
@@ -1125,7 +1125,7 @@ void DrawFPS(int posX, int posY)
     DrawText(TextFormat("%2i FPS", fps), posX, posY, 20, color);
 }
 
-// Draw text (using default font)
+// draw text (using default font)
 // NOTE: fontSize work like in any drawing program but if fontSize is lower than font-base-size, then font-base-size is used
 // NOTE: chars spacing is proportional to fontSize
 void DrawText(const char *text, int posX, int posY, int fontSize, Color color)
@@ -1143,7 +1143,7 @@ void DrawText(const char *text, int posX, int posY, int fontSize, Color color)
     }
 }
 
-// Draw text using Font
+// draw text using Font
 // NOTE: chars spacing is NOT proportional to fontSize
 void DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, float spacing, Color tint)
 {
@@ -1184,7 +1184,7 @@ void DrawTextEx(Font font, const char *text, Vector2 position, float fontSize, f
     }
 }
 
-// Draw text using Font and pro parameters (rotation)
+// draw text using Font and pro parameters (rotation)
 void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 origin, float rotation, float fontSize, float spacing, Color tint)
 {
     rlPushMatrix();
@@ -1198,7 +1198,7 @@ void DrawTextPro(Font font, const char *text, Vector2 position, Vector2 origin, 
     rlPopMatrix();
 }
 
-// Draw one character (codepoint)
+// draw one character (codepoint)
 void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSize, Color tint)
 {
     // Character index position in sprite font
@@ -1218,11 +1218,10 @@ void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSiz
     Rectangle srcRec = { font.recs[index].x - (float)font.glyphPadding, font.recs[index].y - (float)font.glyphPadding,
                          font.recs[index].width + 2.0f*font.glyphPadding, font.recs[index].height + 2.0f*font.glyphPadding };
 
-    // Draw the character texture on the screen
+    // draw the character texture on the screen
     DrawTexturePro(font.texture, srcRec, dstRec, (Vector2){ 0, 0 }, 0.0f, tint);
 }
 
-// Draw multiple character (codepoints)
 // draw multiple character (codepoints)
 void DrawTextCodepoints(Font font, const int *codepoints, int codepointCount, Vector2 position, float fontSize, float spacing, Color tint)
 {
