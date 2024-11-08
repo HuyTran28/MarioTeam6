@@ -12139,6 +12139,7 @@ v0.12.26 - 2021-01-17
 
 v0.12.25 - 2020-12-26
   - Update documentation.
+  - update documentation.
 
 v0.12.24 - 2020-11-29
   - Fix ARM64/NEON detection when compiling with MSVC.

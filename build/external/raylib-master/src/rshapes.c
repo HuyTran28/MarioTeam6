@@ -2048,6 +2048,7 @@ void DrawSplineSegmentBezierQuadratic(Vector2 p1, Vector2 c2, Vector2 p3, float 
 }
 
 // Draw spline segment: Cubic Bezier, 2 points, 2 control points
+// draw spline segment: Cubic Bezier, 2 points, 2 control points
 void DrawSplineSegmentBezierCubic(Vector2 p1, Vector2 c2, Vector2 c3, Vector2 p4, float thick, Color color)
 {
     const float step = 1.0f/SPLINE_SEGMENT_DIVISIONS;

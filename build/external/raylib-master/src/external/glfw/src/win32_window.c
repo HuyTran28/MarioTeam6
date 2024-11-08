@@ -339,6 +339,7 @@ static GLFWbool cursorInContentArea(_GLFWwindow* window)
 }
 
 // Update native window styles to match attributes
+// update native window styles to match attributes
 //
 static void updateWindowStyles(const _GLFWwindow* window)
 {
@@ -368,6 +369,7 @@ static void updateWindowStyles(const _GLFWwindow* window)
 }
 
 // Update window framebuffer transparency
+// update window framebuffer transparency
 //
 static void updateFramebufferTransparency(const _GLFWwindow* window)
 {

@@ -1749,6 +1749,7 @@ static EM_BOOL EmscriptenTouchCallback(int eventType, const EmscriptenTouchEvent
     }
 
     // Update mouse position if we detect a single touch.
+    // update mouse position if we detect a single touch.
     if (CORE.Input.Touch.pointCount == 1)
     {
         CORE.Input.Mouse.currentPosition.x = CORE.Input.Touch.position[0].x;

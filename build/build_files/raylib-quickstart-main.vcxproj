@@ -267,9 +267,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h" />
+    <ClInclude Include="..\..\src\Game.h" />
+    <ClInclude Include="..\..\src\Observer.h" />
+    <ClInclude Include="..\..\src\Stage.h" />
+    <ClInclude Include="..\..\src\Stage1.h" />
+    <ClInclude Include="..\..\src\Stage2.h" />
+    <ClInclude Include="..\..\src\StageCreator.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Game.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Stage1.cpp" />
+    <ClCompile Include="..\..\src\Stage2.cpp" />
+    <ClCompile Include="..\..\src\StageCreator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">

@@ -409,6 +409,7 @@ void ProcessGestureEvent(GestureEvent event)
 }
 
 // Update gestures detected (must be called every frame)
+// update gestures detected (must be called every frame)
 void UpdateGestures(void)
 {
     // NOTE: Gestures are processed through system callbacks on touch events

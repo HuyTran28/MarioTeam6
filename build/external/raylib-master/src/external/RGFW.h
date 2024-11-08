@@ -8181,6 +8181,7 @@ RGFW_UNUSED(win); /*!< if buffer rendering is not being used */
             // Get the CGContext from the current NSGraphicsContext
             id cgContext = objc_msgSend_id(graphicsContext, sel_registerName("graphicsPort"));
 			// Draw the image in the context
+			// draw the image in the context
 			NSRect bounds = (NSRect){{0,0}, {win->r.w, win->r.h}};
 		    CGContextDrawImage((void*)cgContext, *(CGRect*)&bounds, image);
           	// Flush the graphics context to ensure the drawing is displayed

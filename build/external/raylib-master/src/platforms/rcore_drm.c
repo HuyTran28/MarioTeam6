@@ -1820,6 +1820,7 @@ static void PollMouseEvents(void)
         }
 
         // Update touch point count
+        // update touch point count
         CORE.Input.Touch.pointCount = 0;
         for (int i = 0; i < MAX_TOUCH_POINTS; i++)
         {

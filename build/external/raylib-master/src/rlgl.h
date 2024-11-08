@@ -4774,6 +4774,7 @@ void rlLoadDrawCube(void)
     glBindVertexArray(0);
 
     // Draw cube
+    // draw cube
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);

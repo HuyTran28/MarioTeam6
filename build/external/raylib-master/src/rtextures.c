@@ -4437,6 +4437,7 @@ void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color
 }
 
 // Draw a part of a texture (defined by a rectangle) with 'pro' parameters
+// draw a part of a texture (defined by a rectangle) with 'pro' parameters
 // NOTE: origin is relative to destination rectangle size
 void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
 {

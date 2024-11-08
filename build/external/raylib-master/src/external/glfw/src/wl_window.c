@@ -3004,6 +3004,7 @@ void _glfwSetCursorWayland(_GLFWwindow* window, _GLFWcursor* cursor)
         return;
 
     // Update pointer lock to match cursor mode
+    // update pointer lock to match cursor mode
     if (window->cursorMode == GLFW_CURSOR_DISABLED)
     {
         if (window->wl.confinedPointer)

@@ -1223,6 +1223,7 @@ void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSiz
 }
 
 // Draw multiple character (codepoints)
+// draw multiple character (codepoints)
 void DrawTextCodepoints(Font font, const int *codepoints, int codepointCount, Vector2 position, float fontSize, float spacing, Color tint)
 {
     float textOffsetY = 0;          // Offset between lines (on linebreak '\n')

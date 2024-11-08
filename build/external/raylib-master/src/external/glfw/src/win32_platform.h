@@ -179,9 +179,11 @@ typedef enum
                                         LOBYTE(_WIN32_WINNT_WINBLUE), 0)
 
 // Windows 10 Anniversary Update
+// Windows 10 Anniversary update
 #define _glfwIsWindows10Version1607OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(14393)
 // Windows 10 Creators Update
+// Windows 10 Creators update
 #define _glfwIsWindows10Version1703OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(15063)
 

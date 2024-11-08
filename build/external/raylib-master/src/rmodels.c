@@ -3907,6 +3907,7 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
 }
 
 // Draw a bounding box with wires
+// draw a bounding box with wires
 void DrawBoundingBox(BoundingBox box, Color color)
 {
     Vector3 size = { 0 };

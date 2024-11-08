@@ -1160,6 +1160,7 @@ void BeginScissorMode(int x, int y, int width, int height)
 void EndScissorMode(void)
 {
     rlDrawRenderBatchActive();      // Update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal render batch
     rlDisableScissorTest();
 }
 

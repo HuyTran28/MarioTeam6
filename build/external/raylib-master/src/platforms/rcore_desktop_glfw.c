@@ -601,6 +601,7 @@ void SetWindowTitle(const char *title)
 void SetWindowPosition(int x, int y)
 {
     // Update CORE.Window.position as well
+    // update CORE.Window.position as well
     CORE.Window.position.x = x;
     CORE.Window.position.y = y;
     glfwSetWindowPos(platform.handle, x, y);
@@ -1224,6 +1225,7 @@ void PollInputEvents(void)
 
     if (CORE.Window.eventWaiting) glfwWaitEvents();     // Wait for in input events before continue (drawing is paused)
     else glfwPollEvents();      // Poll input events: keyboard/mouse/window events (callbacks) -> Update keys state
+    else glfwPollEvents();      // Poll input events: keyboard/mouse/window events (callbacks) -> update keys state
 
     // While window minimized, stop loop execution
     while (IsWindowState(FLAG_WINDOW_MINIMIZED) && !IsWindowState(FLAG_WINDOW_ALWAYS_RUN)) glfwWaitEvents();
@@ -1588,6 +1590,7 @@ int InitPlatform(void)
         SetWindowPosition(posX, posY);
 
         // Update CORE.Window.position here so it is correct from the start
+        // update CORE.Window.position here so it is correct from the start
         CORE.Window.position.x = posX;
         CORE.Window.position.y = posY;
     }

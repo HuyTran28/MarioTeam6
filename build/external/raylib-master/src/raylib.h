@@ -1231,6 +1231,8 @@ RLAPI float GetGesturePinchAngle(void);                 // Get gesture pinch ang
 //------------------------------------------------------------------------------------
 RLAPI void UpdateCamera(Camera *camera, int mode);      // Update camera position for selected mode
 RLAPI void UpdateCameraPro(Camera *camera, Vector3 movement, Vector3 rotation, float zoom); // Update camera movement/rotation
+RLAPI void UpdateCamera(Camera *camera, int mode);      // update camera position for selected mode
+RLAPI void UpdateCameraPro(Camera *camera, Vector3 movement, Vector3 rotation, float zoom); // update camera movement/rotation
 
 //------------------------------------------------------------------------------------
 // Basic Shapes Drawing Functions (Module: shapes)
@@ -1682,6 +1684,7 @@ RLAPI AudioStream LoadAudioStream(unsigned int sampleRate, unsigned int sampleSi
 RLAPI bool IsAudioStreamValid(AudioStream stream);                    // Checks if an audio stream is valid (buffers initialized)
 RLAPI void UnloadAudioStream(AudioStream stream);                     // Unload audio stream and free memory
 RLAPI void UpdateAudioStream(AudioStream stream, const void *data, int frameCount); // Update audio stream buffers with data
+RLAPI void UpdateAudioStream(AudioStream stream, const void *data, int frameCount); // update audio stream buffers with data
 RLAPI bool IsAudioStreamProcessed(AudioStream stream);                // Check if any audio stream buffers requires refill
 RLAPI void PlayAudioStream(AudioStream stream);                       // Play audio stream
 RLAPI void PauseAudioStream(AudioStream stream);                      // Pause audio stream
