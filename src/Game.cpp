@@ -1,5 +1,4 @@
 #include "Game.h"
-#include "raylib.h"
 
 Game& Game::getInstance()
 {
@@ -7,20 +6,24 @@ Game& Game::getInstance()
     return instance;
 }
 
-Game::Game() : curState(STAGE1), isRunning(true), curStage(nullptr)
+Game::~Game()
 {
+	if (curStage)
+	{
+		delete curStage;
+	}
 }
 
-void Game::init()
+Game::Game()
 {
-    InitWindow(2000, 1200, "Mario Game");
-    SetTargetFPS(60);
+    curState = MENU;
+	curStage = StageCreator::createStage(curState);
+	isRunning = true;
 }
+
 
 void Game::run()
 {
-    this->init();
-
     while (isRunning && !WindowShouldClose())
     {
         this->update();
@@ -33,6 +36,8 @@ void Game::run()
 void Game::update()
 {
     // update game state
+	updateStage();
+
 }
 
 void Game::draw()
@@ -41,9 +46,7 @@ void Game::draw()
     ClearBackground(RAYWHITE);
 
     // Example draw functions
-    drawBackground();
     drawStage();
-    drawUI();
 
     EndDrawing();
 }
@@ -65,12 +68,11 @@ void Game::switchStage(GameState state)
 {
     curState = state;
     notifyStateChange();
-}
-
-void Game::drawBackground()
-{
-    // draw the background
-    DrawText("Background", 10, 10, 20, DARKGRAY);
+	if (curStage)
+	{
+		delete curStage;
+	}
+	curStage = StageCreator::createStage(curState);
 }
 
 void Game::drawStage()
@@ -81,8 +83,11 @@ void Game::drawStage()
     }
 }
 
-void Game::drawUI()
+void Game::updateStage()
 {
-    // draw the UI elements
-    DrawText("Score: 100", 10, 50, 20, DARKGRAY);
+	if (curStage)
+	{
+		curStage->update();
+	}
 }
+

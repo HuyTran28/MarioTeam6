@@ -62,6 +62,8 @@
 
 int main()
 {
+	InitWindow(2000, 1200, "Mario Game");
+	SetTargetFPS(60);
 	Game::getInstance().run();
 	return 0;
 }

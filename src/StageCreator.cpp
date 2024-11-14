@@ -1,9 +1,11 @@
 #include "StageCreator.h"
 
-Stage* StageCreator::createStage(StageType stageType) const
+Stage* StageCreator::createStage(GameState stageType)
 {
 	switch (stageType)
 	{
+	case MENU:
+		return new Menu();
 	case STAGE1:
 		return new Stage1();
 	case STAGE2:

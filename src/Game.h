@@ -5,20 +5,25 @@
 #include "Observer.h"
 #include <vector>
 #include "StageCreator.h"
+#include <string>
 
+enum GameState
+{
+	MENU,
+	STAGE1,
+	STAGE2,
+	GAME
+};
 
 class Game
 {
-public:
-	enum GameState { STAGE1, STAGE2 };
+public:	
+	~Game(); // private destructor
 
 	// Singleton pattern
 	static Game& getInstance();
 	Game(const Game&) = delete;
 	void operator=(const Game&) = delete;
-
-	// Init window and setFPS
-	void init();
 
 	// Main game loop
 	void run();
@@ -33,9 +38,8 @@ public:
 	// Notify all the observers
 	void notifyStateChange(); // Notify all the observers
 
-	void drawBackground();
 	void drawStage();
-	void drawUI();
+	void updateStage();
 
 private:
 	Game(); // private constructor
