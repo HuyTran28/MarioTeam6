@@ -1,6 +1,5 @@
 #pragma once
 #include "CharacterInterface.h"
-#include <string>
 #include "Map.h"
 
 using namespace std;
@@ -11,15 +10,21 @@ private:
     bool m_isCrouching;
     float m_jumpForce;
     float m_rotationAngle = 0.0f;
-    OBB m_bounds; // Add OBB for player's bounding box
 
 public:
-    Player(Model model, const Vector3& forwardDir, const Vector3& position, const Vector3& velocity,
+    Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
         const float& speed, const float& scale, const float& jumpForce, const int& health);
 
+    ~Player();
+
+    static Player* createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
+        const Vector3& forwardDir, float speed, float scale, float jumpForce, int health);
+
     void move() override;
-    void jump() override;
+    void rotate() override;
     void applyGravity() override;
     bool checkGroundCollision() override;
-    void rotate() override;
+    void render() override;
+    void jump();
+    void update();
 };

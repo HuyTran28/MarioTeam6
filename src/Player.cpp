@@ -1,118 +1,141 @@
 #include "Player.h"
 #include "raylib.h" // Include raylib for IsKeyDown and GetFrameTime
-#include <raymath.h>
+#include "raymath.h"
+#include "btBulletDynamicsCommon.h"
 
 using namespace std;
 
-// Constructor now takes model path as a parameter
-Player::Player(Model model, const Vector3& forwardDir, const Vector3& position, const Vector3& velocity,
-    const float& speed, const float& scale, const float& jumpForce, const int& health):
-    CharacterInterface(model, forwardDir, position, velocity, speed, scale),
-    m_jumpForce(jumpForce), 
-    m_health(health), 
-    m_isCrouching(false),
-    m_bounds(position, Vector3{scale, scale, scale}) // Initialize OBB
-{}
+// Constructor: Initialize player attributes and Bullet RigidBody
+Player::Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
+    const float& speed, const float& scale, const float& jumpForce, const int& health)
+    : CharacterInterface(rigidBody, model, forwardDir, position, speed, scale), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false) {}
+
+Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
+    const Vector3& forwardDir, float speed, float scale, float jumpForce, int health) {
+    // Player rigid body setup
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setOrigin(btVector3(startPosition.x, startPosition.y, startPosition.z)); // Start position of the player
+
+    btCollisionShape* playerShape = new btCapsuleShape(0.5f, 1.5f); // Capsule shape for the player
+    btScalar mass = 70.0f;
+    btVector3 localInertia(0, 0, 0);
+    playerShape->calculateLocalInertia(mass, localInertia);
+
+    btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, playerShape, localInertia);
+
+    btRigidBody* playerRigidBody = new btRigidBody(rbInfo);
+
+    // Add player to the world
+    world->addRigidBody(playerRigidBody);
+
+    // Create the player object
+    Model playerModel = LoadModel(modelPath.c_str()); // Load the player model from the given path
+
+    return new Player(playerRigidBody, playerModel, forwardDir, startPosition, speed, scale, jumpForce, health);
+}
 
 void Player::move() {
-    if (IsKeyDown(KEY_W)) m_position = Vector3Add(m_position, Vector3Scale(m_forwardDir, m_speed));
-    if (IsKeyDown(KEY_S)) m_position = Vector3Subtract(m_position, Vector3Scale(m_forwardDir, m_speed));
+    btVector3 movement(0, 0, 0);
 
-    updateTransform();
-}
-
-void Player::rotate() {
-    // Accumulate rotation angle based on input
-    if (IsKeyDown(KEY_A)) m_rotationAngle += 1.0f * GetFrameTime();
-    if (IsKeyDown(KEY_D)) m_rotationAngle -= 1.0f * GetFrameTime();
-
-    // Update forward direction based on cumulative rotation
-    Matrix rotationMatrix = MatrixRotateY(m_rotationAngle);
-    m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
-
-    // Update the player transform (position and rotation)
-    updateTransform();
-}
-
-// Implementing jump
-void Player::jump() {
-    if (m_isOnGround && IsKeyPressed(KEY_SPACE)) {
-        m_velocity.y = m_jumpForce;
-        m_isOnGround = false;
+    if (IsKeyDown(KEY_W)) {
+        movement = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
+        m_rigidBody->setLinearVelocity(movement);  
+    }
+    if (IsKeyDown(KEY_S)) {
+        movement = btVector3(-m_forwardDir.x, 0, -m_forwardDir.z).normalized() * m_speed;
+        m_rigidBody->setLinearVelocity(movement);  
     }
 
-    // Apply gravity to ensure smooth transition
-    applyGravity();
-
-    updateTransform();
+    // Update m_position based on rigid body position
+    btTransform trans;
+    m_rigidBody->getMotionState()->getWorldTransform(trans);
+    btVector3 pos = trans.getOrigin();
+    m_position = { pos.x(), pos.y(), pos.z() };
 }
 
-bool Player::checkGroundCollision() {
-    OBB playerBox = m_bounds;
-    BoundingBox groundBox = Map::getInstance().getGroundLevel(playerBox);
-    BoundingBox mapBound = Map::getInstance().calculateMapBounds();
-    
-    // Check if the player's position is within the map bounds
-    bool isWithinMapBounds = (m_position.x >= mapBound.min.x && m_position.x <= mapBound.max.x) &&
-                              (m_position.z >= mapBound.min.z && m_position.z <= mapBound.max.z);
 
-    return isWithinMapBounds && (m_position.y <= groundBox.max.y);
+void Player::rotate() {
+    float angularVelocity = 0.0f;
+    if (IsKeyDown(KEY_A)) {
+        angularVelocity = 1.0f;  // Positive for counterclockwise rotation
+    }
+    if (IsKeyDown(KEY_D)) {
+        angularVelocity = -1.0f;  // Negative for clockwise rotation
+    }
+
+    // Apply angular velocity around the Y-axis for rotation
+    m_rigidBody->setAngularVelocity(btVector3(0, angularVelocity, 0));
+
+    // Update the forward direction based on rotation
+    m_rotationAngle += angularVelocity * GetFrameTime();
+    Matrix rotationMatrix = MatrixRotateY(m_rotationAngle);
+    m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
 
 void Player::applyGravity() {
-    // Get the ground's bounding box beneath the player
-    BoundingBox groundBox = Map::getInstance().getGroundLevel(m_bounds);
-    BoundingBox playerBox = m_bounds;
-	
-    // Calculate the height of the player's bounding box
-    float playerHeight = m_position.y - playerBox.min.y;
+    // Bullet handles gravity through its world settings, no need for manual gravity application
+}
 
-    // Calculate ground level
-    float groundLevel = groundBox.max.y + playerHeight - 10.0f; // Lower the ground level
+void Player::render() {
+    // Translation matrix for position
+    Matrix translationMatrix = MatrixTranslate(m_position.x, m_position.y, m_position.z);
 
-    // Constants for gravity, drag, and bounce
-    const float terminalVelocity = -25.0f;  // Faster terminal velocity
-    const float drag = 0.98f;               // Slight drag for falling
-    const float bounceFactor = 0.5f;        // Moderate bounce height
-    const float maxBounceVelocity = 5.0f;   // Limit max upward bounce velocity
-    const float minBounceVelocity = 1.5f;   // Stop bouncing below this velocity
-    const float interpolationSpeed = 5.0f;  // Smoother ground snapping
+    // Calculate the right vector as the cross product of the world up and forward direction
+    Vector3 right = Vector3CrossProduct(Vector3{ 0.0f, 1.0f, 0.0f }, m_forwardDir);
+    right = Vector3Normalize(right);
 
-    if (checkGroundCollision()) {
-        if (!m_isOnGround && m_velocity.y < 0) {
-            // Ensure snapping to ground level before starting bounce
-            if (std::abs(m_position.y - groundLevel) > 0.05f) {
-                m_position.y = Lerp(m_position.y, groundLevel, interpolationSpeed * GetFrameTime());
-            }
+    // Calculate the up vector as the cross product of forward direction and right vector
+    Vector3 up = Vector3CrossProduct(m_forwardDir, right);
+    up = Vector3Normalize(up);
 
-            // Apply bounce effect
-            m_velocity.y *= -bounceFactor;
-            if (std::abs(m_velocity.y) < minBounceVelocity) {
-                m_velocity.y = 0;
-                m_isOnGround = true;
-            }
-            else if (m_velocity.y > maxBounceVelocity) {
-                m_velocity.y = maxBounceVelocity;
-            }
-        }
-    }
-    else {
-        // Apply gravity if not grounded
-        m_velocity.y -= CharacterInterface::GRAVITY * GetFrameTime(); // Corrected to subtract gravity
-        if (m_velocity.y < terminalVelocity) {
-            m_velocity.y = terminalVelocity;
-        }
+    // Create rotation matrix with right, up, and forward vectors as columns
+    Matrix rotationMatrix = {
+        right.x, up.x, m_forwardDir.x, 0.0f,
+        right.y, up.y, m_forwardDir.y, 0.0f,
+        right.z, up.z, m_forwardDir.z, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
+    // Combine rotation and translation matrices (rotation first, then translation)
+    m_model.transform = MatrixMultiply(rotationMatrix, translationMatrix);
+
+    // Draw the model at the correct position and scale
+    DrawModel(m_model, Vector3{ 0.0f, 0.0f, 0.0f }, m_scale, RAYWHITE);
+}
+
+void Player::jump() {
+    if (m_isOnGround && IsKeyPressed(KEY_SPACE)) {
+        // Apply an upward force for jumping
+        btVector3 jumpForce(0, m_jumpForce, 0);
+        m_rigidBody->setLinearVelocity(jumpForce);
+
+        // Set the flag to prevent double-jumping
         m_isOnGround = false;
     }
-
-    // Apply drag to the Y velocity (to slow down fall)
-    m_velocity.y *= drag;
-
-    // Update position based on velocity
-    m_position.y += m_velocity.y * GetFrameTime();
-
-    // Update player transform for rendering
-    updateTransform();
 }
+
+bool Player::checkGroundCollision() {
+    return true;
+}
+
+
+void Player::update()
+{
+    m_isOnGround = checkGroundCollision();
+    rotate();
+    if (m_isOnGround)
+    {
+        jump();
+        move();
+    }
+}
+
+Player::~Player() {
+	// Free the player model
+	UnloadModel(m_model);
+}
+
 
 
