@@ -4,6 +4,8 @@ Stage* StageCreator::createStage(GameState stageType)
 {
 	switch (stageType)
 	{
+	case LOGIN:
+		return new LogIn();
 	case MENU:
 		return new Menu();
 	case STAGE1:

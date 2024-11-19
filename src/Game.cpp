@@ -1,5 +1,8 @@
 #include "Game.h"
 
+float Game::screenWidth = 0;
+float Game::screenHeight = 0;
+
 Game& Game::getInstance()
 {
     static Game instance;
@@ -8,17 +11,29 @@ Game& Game::getInstance()
 
 Game::~Game()
 {
-	if (curStage)
+	for (Observer* ob : stateObservers)
 	{
-		delete curStage;
+		delete ob;
+	}
+    
+	while (!stageStack.empty())
+	{
+		delete stageStack.top();
+		stageStack.pop();
 	}
 }
 
 Game::Game()
 {
-    curState = MENU;
+	InitWindow(2000, 1200, "Mario Game");
+	SetTargetFPS(60);
+	screenHeight = GetScreenHeight();
+	screenWidth = GetScreenWidth();
+
+    curState = LOGIN;
 	curStage = StageCreator::createStage(curState);
 	isRunning = true;
+	stageStack.push(curStage);
 }
 
 
@@ -37,7 +52,6 @@ void Game::update()
 {
     // update game state
 	updateStage();
-
 }
 
 void Game::draw()
@@ -88,6 +102,16 @@ void Game::updateStage()
 	if (curStage)
 	{
 		curStage->update();
+	}
+}
+
+void Game::goBack()
+{
+	if (stageStack.size() > 1)
+	{
+		delete curStage;
+		stageStack.pop();
+		curStage = stageStack.top();
 	}
 }
 
