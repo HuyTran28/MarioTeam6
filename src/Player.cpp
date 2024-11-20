@@ -1,23 +1,43 @@
 #include "Player.h"
-#include "raylib.h" // Include raylib for IsKeyDown and GetFrameTime
+#include "raylib.h"
 #include "raymath.h"
-#include "btBulletDynamicsCommon.h"
 
 using namespace std;
 
 // Constructor: Initialize player attributes and Bullet RigidBody
 Player::Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
-    const float& speed, const float& scale, const float& jumpForce, const int& health)
-    : CharacterInterface(rigidBody, model, forwardDir, position, speed, scale), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false) {}
+    const float& speed, const float& scale, const float& jumpForce, const int& health, btDynamicsWorld* world)
+    : CharacterInterface(rigidBody, model, forwardDir, position, speed, scale, world), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false) {}
 
+// Method:Player::createPlayer
 Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
     const Vector3& forwardDir, float speed, float scale, float jumpForce, int health) {
+    // Load the player model first to get dimensions
+    Model playerModel = LoadModel(modelPath.c_str());
+    BoundingBox modelBounds = GetModelBoundingBox(playerModel);
+    
+    // Calculate dimensions for collision shape
+    Vector3 dimensions = {
+        (modelBounds.max.x - modelBounds.min.x) * scale,
+        (modelBounds.max.y - modelBounds.min.y) * scale,
+        (modelBounds.max.z - modelBounds.min.z) * scale
+    };
+
+    // Calculate the offset to position the collision shape below the model
+    float offsetY = (modelBounds.max.y - modelBounds.min.y) * scale * 0.5f;
+
     // Player rigid body setup
     btTransform startTransform;
     startTransform.setIdentity();
-    startTransform.setOrigin(btVector3(startPosition.x, startPosition.y, startPosition.z)); // Start position of the player
+    startTransform.setOrigin(btVector3(startPosition.x, startPosition.y - offsetY, startPosition.z));
+    
+    // Create box shape based on model dimensions
+    btCollisionShape* playerShape = new btBoxShape(btVector3(
+        dimensions.x * 0.5f,  // Half-extents
+        dimensions.y * 0.5f,
+        dimensions.z * 0.5f
+    ));
 
-    btCollisionShape* playerShape = new btCapsuleShape(0.5f, 1.5f); // Capsule shape for the player
     btScalar mass = 70.0f;
     btVector3 localInertia(0, 0, 0);
     playerShape->calculateLocalInertia(mass, localInertia);
@@ -26,14 +46,12 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, playerShape, localInertia);
 
     btRigidBody* playerRigidBody = new btRigidBody(rbInfo);
-
+    playerRigidBody->setActivationState(DISABLE_DEACTIVATION);
+    
     // Add player to the world
     world->addRigidBody(playerRigidBody);
 
-    // Create the player object
-    Model playerModel = LoadModel(modelPath.c_str()); // Load the player model from the given path
-
-    return new Player(playerRigidBody, playerModel, forwardDir, startPosition, speed, scale, jumpForce, health);
+    return new Player(playerRigidBody, playerModel, forwardDir, startPosition, speed, scale, jumpForce, health, world);
 }
 
 void Player::move() {
@@ -41,20 +59,26 @@ void Player::move() {
 
     if (IsKeyDown(KEY_W)) {
         movement = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
-        m_rigidBody->setLinearVelocity(movement);  
     }
     if (IsKeyDown(KEY_S)) {
         movement = btVector3(-m_forwardDir.x, 0, -m_forwardDir.z).normalized() * m_speed;
-        m_rigidBody->setLinearVelocity(movement);  
     }
 
-    // Update m_position based on rigid body position
+    // Only apply the movement if it is non-zero
+    if (movement.length() > 0) {
+        m_rigidBody->setLinearVelocity(movement);
+    }
+
     btTransform trans;
     m_rigidBody->getMotionState()->getWorldTransform(trans);
     btVector3 pos = trans.getOrigin();
-    m_position = { pos.x(), pos.y(), pos.z() };
-}
 
+    // Add a threshold to ignore very small position changes
+    const float positionThreshold = 0.001f;
+    if (btVector3(m_position.x, m_position.y, m_position.z).distance(pos) > positionThreshold) {
+        m_position = { pos.x(), pos.y(), pos.z() };
+    }
+}
 
 void Player::rotate() {
     float angularVelocity = 0.0f;
@@ -67,6 +91,10 @@ void Player::rotate() {
 
     // Apply angular velocity around the Y-axis for rotation
     m_rigidBody->setAngularVelocity(btVector3(0, angularVelocity, 0));
+    
+	if (angularVelocity == 0) {
+        return;
+    }
 
     // Update the forward direction based on rotation
     m_rotationAngle += angularVelocity * GetFrameTime();
@@ -74,11 +102,30 @@ void Player::rotate() {
     m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
 
-void Player::applyGravity() {
-    // Bullet handles gravity through its world settings, no need for manual gravity application
+void Player::updateCollisionShape() {
+    // Update the collision shape's scale based on the model's scale
+    btVector3 bulletScale(m_scale, m_scale, m_scale);
+    m_rigidBody->getCollisionShape()->setLocalScaling(bulletScale);
+
+    // Update the collision shape's transformation to match the model's position and rotation
+    btTransform transform;
+    m_rigidBody->getMotionState()->getWorldTransform(transform);
+    transform.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+
+    // Convert the model's rotation matrix into a Bullet quaternion
+    Matrix rotationMatrix = MatrixRotateY(m_rotationAngle); // Assumes Y-axis rotation
+    Quaternion modelQuaternion = QuaternionFromMatrix(rotationMatrix);
+    transform.setRotation(btQuaternion(modelQuaternion.x, modelQuaternion.y, modelQuaternion.z, modelQuaternion.w));
+
+    // Update the rigid body's transformation
+    m_rigidBody->setWorldTransform(transform);
+    m_rigidBody->getMotionState()->setWorldTransform(transform);
+
+    // Activate the rigid body to ensure changes take effect
+    m_rigidBody->activate(true);
 }
 
-void Player::render() {
+void Player::updateModelTransform() {
     // Translation matrix for position
     Matrix translationMatrix = MatrixTranslate(m_position.x, m_position.y, m_position.z);
 
@@ -100,9 +147,10 @@ void Player::render() {
 
     // Combine rotation and translation matrices (rotation first, then translation)
     m_model.transform = MatrixMultiply(rotationMatrix, translationMatrix);
+}
 
-    // Draw the model at the correct position and scale
-    DrawModel(m_model, Vector3{ 0.0f, 0.0f, 0.0f }, m_scale, RAYWHITE);
+void Player::render() {
+	CharacterInterface::render();
 }
 
 void Player::jump() {
@@ -117,25 +165,20 @@ void Player::jump() {
 }
 
 bool Player::checkGroundCollision() {
-    return true;
+	return CharacterInterface::checkGroundCollision();
 }
-
 
 void Player::update()
 {
     m_isOnGround = checkGroundCollision();
     rotate();
-    if (m_isOnGround)
-    {
-        jump();
-        move();
-    }
+    jump();
+    move();
+    updateModelTransform();
+    updateCollisionShape();
 }
 
 Player::~Player() {
 	// Free the player model
 	UnloadModel(m_model);
 }
-
-
-

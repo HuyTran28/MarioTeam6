@@ -172,7 +172,7 @@ static void ProcessMaterialsOBJ(Material *rayMaterials, tinyobj_material_t *mate
 // Module Functions Definition
 //----------------------------------------------------------------------------------
 
-// draw a line in 3D world space
+// Draw a line in 3D world space
 void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)
 {
     rlBegin(RL_LINES);
@@ -182,7 +182,7 @@ void DrawLine3D(Vector3 startPos, Vector3 endPos, Color color)
     rlEnd();
 }
 
-// draw a point in 3D space, actually a small line
+// Draw a point in 3D space, actually a small line
 void DrawPoint3D(Vector3 position, Color color)
 {
     rlPushMatrix();
@@ -195,7 +195,7 @@ void DrawPoint3D(Vector3 position, Color color)
     rlPopMatrix();
 }
 
-// draw a circle in 3D world space
+// Draw a circle in 3D world space
 void DrawCircle3D(Vector3 center, float radius, Vector3 rotationAxis, float rotationAngle, Color color)
 {
     rlPushMatrix();
@@ -214,7 +214,7 @@ void DrawCircle3D(Vector3 center, float radius, Vector3 rotationAxis, float rota
     rlPopMatrix();
 }
 
-// draw a color-filled triangle (vertex in counter-clockwise order!)
+// Draw a color-filled triangle (vertex in counter-clockwise order!)
 void DrawTriangle3D(Vector3 v1, Vector3 v2, Vector3 v3, Color color)
 {
     rlBegin(RL_TRIANGLES);
@@ -225,7 +225,7 @@ void DrawTriangle3D(Vector3 v1, Vector3 v2, Vector3 v3, Color color)
     rlEnd();
 }
 
-// draw a triangle strip defined by points
+// Draw a triangle strip defined by points
 void DrawTriangleStrip3D(const Vector3 *points, int pointCount, Color color)
 {
     if (pointCount < 3) return; // Security check
@@ -251,7 +251,7 @@ void DrawTriangleStrip3D(const Vector3 *points, int pointCount, Color color)
     rlEnd();
 }
 
-// draw cube
+// Draw cube
 // NOTE: Cube position is the center position
 void DrawCube(Vector3 position, float width, float height, float length, Color color)
 {
@@ -331,13 +331,13 @@ void DrawCube(Vector3 position, float width, float height, float length, Color c
     rlPopMatrix();
 }
 
-// draw cube (Vector version)
+// Draw cube (Vector version)
 void DrawCubeV(Vector3 position, Vector3 size, Color color)
 {
     DrawCube(position, size.x, size.y, size.z, color);
 }
 
-// draw cube wires
+// Draw cube wires
 void DrawCubeWires(Vector3 position, float width, float height, float length, Color color)
 {
     float x = 0.0f;
@@ -409,19 +409,19 @@ void DrawCubeWires(Vector3 position, float width, float height, float length, Co
     rlPopMatrix();
 }
 
-// draw cube wires (vector version)
+// Draw cube wires (vector version)
 void DrawCubeWiresV(Vector3 position, Vector3 size, Color color)
 {
     DrawCubeWires(position, size.x, size.y, size.z, color);
 }
 
-// draw sphere
+// Draw sphere
 void DrawSphere(Vector3 centerPos, float radius, Color color)
 {
     DrawSphereEx(centerPos, radius, 16, 16, color);
 }
 
-// draw sphere with extended parameters
+// Draw sphere with extended parameters
 void DrawSphereEx(Vector3 centerPos, float radius, int rings, int slices, Color color)
 {
 #if 0
@@ -511,7 +511,7 @@ void DrawSphereEx(Vector3 centerPos, float radius, int rings, int slices, Color 
     rlPopMatrix();
 }
 
-// draw sphere wires
+// Draw sphere wires
 void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Color color)
 {
     rlPushMatrix();
@@ -552,7 +552,7 @@ void DrawSphereWires(Vector3 centerPos, float radius, int rings, int slices, Col
     rlPopMatrix();
 }
 
-// draw a cylinder
+// Draw a cylinder
 // NOTE: It could be also used for pyramid and cone
 void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float height, int sides, Color color)
 {
@@ -568,7 +568,7 @@ void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float h
 
             if (radiusTop > 0)
             {
-                // draw Body -------------------------------------------------------------------------------------
+                // Draw Body -------------------------------------------------------------------------------------
                 for (int i = 0; i < sides; i++)
                 {
                     rlVertex3f(sinf(DEG2RAD*i*angleStep)*radiusBottom, 0, cosf(DEG2RAD*i*angleStep)*radiusBottom); //Bottom Left
@@ -580,7 +580,7 @@ void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float h
                     rlVertex3f(sinf(DEG2RAD*(i+1)*angleStep)*radiusTop, height, cosf(DEG2RAD*(i+1)*angleStep)*radiusTop); //Top Right
                 }
 
-                // draw Cap --------------------------------------------------------------------------------------
+                // Draw Cap --------------------------------------------------------------------------------------
                 for (int i = 0; i < sides; i++)
                 {
                     rlVertex3f(0, height, 0);
@@ -590,7 +590,7 @@ void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float h
             }
             else
             {
-                // draw Cone -------------------------------------------------------------------------------------
+                // Draw Cone -------------------------------------------------------------------------------------
                 for (int i = 0; i < sides; i++)
                 {
                     rlVertex3f(0, height, 0);
@@ -599,7 +599,7 @@ void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float h
                 }
             }
 
-            // draw Base -----------------------------------------------------------------------------------------
+            // Draw Base -----------------------------------------------------------------------------------------
             for (int i = 0; i < sides; i++)
             {
                 rlVertex3f(0, 0, 0);
@@ -611,7 +611,7 @@ void DrawCylinder(Vector3 position, float radiusTop, float radiusBottom, float h
     rlPopMatrix();
 }
 
-// draw a cylinder with base at startPos and top at endPos
+// Draw a cylinder with base at startPos and top at endPos
 // NOTE: It could be also used for pyramid and cone
 void DrawCylinderEx(Vector3 startPos, Vector3 endPos, float startRadius, float endRadius, int sides, Color color)
 {
@@ -670,7 +670,7 @@ void DrawCylinderEx(Vector3 startPos, Vector3 endPos, float startRadius, float e
     rlEnd();
 }
 
-// draw a wired cylinder
+// Draw a wired cylinder
 // NOTE: It could be also used for pyramid and cone
 void DrawCylinderWires(Vector3 position, float radiusTop, float radiusBottom, float height, int sides, Color color)
 {
@@ -702,7 +702,7 @@ void DrawCylinderWires(Vector3 position, float radiusTop, float radiusBottom, fl
     rlPopMatrix();
 }
 
-// draw a wired cylinder with base at startPos and top at endPos
+// Draw a wired cylinder with base at startPos and top at endPos
 // NOTE: It could be also used for pyramid and cone
 void DrawCylinderWiresEx(Vector3 startPos, Vector3 endPos, float startRadius, float endRadius, int sides, Color color)
 {
@@ -748,7 +748,7 @@ void DrawCylinderWiresEx(Vector3 startPos, Vector3 endPos, float startRadius, fl
     rlEnd();
 }
 
-// draw a capsule with the center of its sphere caps at startPos and endPos
+// Draw a capsule with the center of its sphere caps at startPos and endPos
 void DrawCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color)
 {
     if (slices < 3) slices = 3;
@@ -891,7 +891,7 @@ void DrawCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices, int
     rlEnd();
 }
 
-// draw capsule wires with the center of its sphere caps at startPos and endPos
+// Draw capsule wires with the center of its sphere caps at startPos and endPos
 void DrawCapsuleWires(Vector3 startPos, Vector3 endPos, float radius, int slices, int rings, Color color)
 {
     if (slices < 3) slices = 3;
@@ -1026,7 +1026,7 @@ void DrawCapsuleWires(Vector3 startPos, Vector3 endPos, float radius, int slices
     rlEnd();
 }
 
-// draw a plane
+// Draw a plane
 void DrawPlane(Vector3 centerPos, Vector2 size, Color color)
 {
     // NOTE: Plane is always created on XZ ground
@@ -1046,7 +1046,7 @@ void DrawPlane(Vector3 centerPos, Vector2 size, Color color)
     rlPopMatrix();
 }
 
-// draw a ray line
+// Draw a ray line
 void DrawRay(Ray ray, Color color)
 {
     float scale = 10000;
@@ -1060,7 +1060,7 @@ void DrawRay(Ray ray, Color color)
     rlEnd();
 }
 
-// draw a grid centered at (0, 0, 0)
+// Draw a grid centered at (0, 0, 0)
 void DrawGrid(int slices, float spacing)
 {
     int halfSlices = slices/2;
@@ -1405,13 +1405,13 @@ void UploadMesh(Mesh *mesh, bool dynamic)
 #endif
 }
 
-// update mesh vertex data in GPU for a specific buffer index
+// Update mesh vertex data in GPU for a specific buffer index
 void UpdateMeshBuffer(Mesh mesh, int index, const void *data, int dataSize, int offset)
 {
     rlUpdateVertexBuffer(mesh.vboId[index], data, dataSize, offset);
 }
 
-// draw a 3d mesh with material and transform
+// Draw a 3d mesh with material and transform
 void DrawMesh(Mesh mesh, Material material, Matrix transform)
 {
 #if defined(GRAPHICS_API_OPENGL_11)
@@ -1631,7 +1631,7 @@ void DrawMesh(Mesh mesh, Material material, Matrix transform)
         // Send combined model-view-projection matrix to shader
         rlSetUniformMatrix(material.shader.locs[SHADER_LOC_MATRIX_MVP], matModelViewProjection);
 
-        // draw mesh
+        // Draw mesh
         if (mesh.indices != NULL) rlDrawVertexArrayElements(0, mesh.triangleCount*3, 0);
         else rlDrawVertexArray(0, mesh.vertexCount);
     }
@@ -1666,7 +1666,7 @@ void DrawMesh(Mesh mesh, Material material, Matrix transform)
 #endif
 }
 
-// draw multiple mesh instances with material and different transforms
+// Draw multiple mesh instances with material and different transforms
 void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, int instances)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -1876,7 +1876,7 @@ void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, i
         // Send combined model-view-projection matrix to shader
         rlSetUniformMatrix(material.shader.locs[SHADER_LOC_MATRIX_MVP], matModelViewProjection);
 
-        // draw mesh instanced
+        // Draw mesh instanced
         if (mesh.indices != NULL) rlDrawVertexArrayElementsInstanced(0, mesh.triangleCount*3, 0, instances);
         else rlDrawVertexArrayInstanced(0, mesh.vertexCount, instances);
     }
@@ -2262,7 +2262,7 @@ ModelAnimation *LoadModelAnimations(const char *fileName, int *animCount)
     return animations;
 }
 
-// update model animated vertex data (positions and normals) for a given frame
+// Update model animated vertex data (positions and normals) for a given frame
 // NOTE: Updated data is uploaded to GPU
 void UpdateModelAnimation(Model model, ModelAnimation anim, int frame)
 {
@@ -2357,14 +2357,14 @@ void UpdateModelAnimation(Model model, ModelAnimation anim, int frame)
             // NOTE: Only update data when values changed
             if (updated)
             {
-                rlUpdateVertexBuffer(mesh.vboId[0], mesh.animVertices, mesh.vertexCount*3*sizeof(float), 0); // update vertex position
-                rlUpdateVertexBuffer(mesh.vboId[2], mesh.animNormals, mesh.vertexCount*3*sizeof(float), 0);  // update vertex normals
+                rlUpdateVertexBuffer(mesh.vboId[0], mesh.animVertices, mesh.vertexCount*3*sizeof(float), 0); // Update vertex position
+                rlUpdateVertexBuffer(mesh.vboId[2], mesh.animNormals, mesh.vertexCount*3*sizeof(float), 0);  // Update vertex normals
             }
         }
     }
 }
 
-// update model animated bones transform matrices for a given frame
+// Update model animated bones transform matrices for a given frame
 // NOTE: Updated data is not uploaded to GPU but kept at model.meshes[i].boneMatrices[boneId],
 // to be uploaded to shader at drawing, in case GPU skinning is enabled
 void UpdateModelAnimationBoneMatrices(Model model, ModelAnimation anim, int frame)
@@ -3712,7 +3712,7 @@ void GenMeshTangents(Mesh *mesh)
     {
         if (mesh->vboId[SHADER_LOC_VERTEX_TANGENT] != 0)
         {
-            // update existing vertex buffer
+            // Update existing vertex buffer
             rlUpdateVertexBuffer(mesh->vboId[SHADER_LOC_VERTEX_TANGENT], mesh->tangents, mesh->vertexCount*4*sizeof(float), 0);
         }
         else
@@ -3730,7 +3730,7 @@ void GenMeshTangents(Mesh *mesh)
     TRACELOG(LOG_INFO, "MESH: Tangents data computed and uploaded for provided mesh");
 }
 
-// draw a model (with texture if set)
+// Draw a model (with texture if set)
 void DrawModel(Model model, Vector3 position, float scale, Color tint)
 {
     Vector3 vScale = { scale, scale, scale };
@@ -3739,7 +3739,7 @@ void DrawModel(Model model, Vector3 position, float scale, Color tint)
     DrawModelEx(model, position, rotationAxis, 0.0f, vScale, tint);
 }
 
-// draw a model with extended parameters
+// Draw a model with extended parameters
 void DrawModelEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
 {
     // Calculate transformation matrix from function parameters
@@ -3769,7 +3769,7 @@ void DrawModelEx(Model model, Vector3 position, Vector3 rotationAxis, float rota
     }
 }
 
-// draw a model wires (with texture if set)
+// Draw a model wires (with texture if set)
 void DrawModelWires(Model model, Vector3 position, float scale, Color tint)
 {
     rlEnableWireMode();
@@ -3779,7 +3779,7 @@ void DrawModelWires(Model model, Vector3 position, float scale, Color tint)
     rlDisableWireMode();
 }
 
-// draw a model wires (with texture if set) with extended parameters
+// Draw a model wires (with texture if set) with extended parameters
 void DrawModelWiresEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
 {
     rlEnableWireMode();
@@ -3789,7 +3789,7 @@ void DrawModelWiresEx(Model model, Vector3 position, Vector3 rotationAxis, float
     rlDisableWireMode();
 }
 
-// draw a model points
+// Draw a model points
 void DrawModelPoints(Model model, Vector3 position, float scale, Color tint)
 {
     rlEnablePointMode();
@@ -3801,7 +3801,7 @@ void DrawModelPoints(Model model, Vector3 position, float scale, Color tint)
     rlDisableWireMode();
 }
 
-// draw a model points
+// Draw a model points
 void DrawModelPointsEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
 {
     rlEnablePointMode();
@@ -3813,7 +3813,7 @@ void DrawModelPointsEx(Model model, Vector3 position, Vector3 rotationAxis, floa
     rlDisableWireMode();
 }
 
-// draw a billboard
+// Draw a billboard
 void DrawBillboard(Camera camera, Texture2D texture, Vector3 position, float scale, Color tint)
 {
     Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
@@ -3821,7 +3821,7 @@ void DrawBillboard(Camera camera, Texture2D texture, Vector3 position, float sca
     DrawBillboardRec(camera, texture, source, position, (Vector2) { scale*fabsf((float)source.width/source.height), scale }, tint);
 }
 
-// draw a billboard (part of a texture defined by a rectangle)
+// Draw a billboard (part of a texture defined by a rectangle)
 void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
 {
     // NOTE: Billboard locked on axis-Y
@@ -3830,7 +3830,7 @@ void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector
     DrawBillboardPro(camera, texture, source, position, up, size, Vector2Scale(size, 0.5), 0.0f, tint);
 }
 
-// draw a billboard with additional parameters
+// Draw a billboard with additional parameters
 void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector3 up, Vector2 size, Vector2 origin, float rotation, Color tint)
 {
     // Compute the up vector and the right vector
@@ -3855,7 +3855,7 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
         origin.y *= -1.0f;
     }
 
-    // draw the texture region described by source on the following rectangle in 3D space:
+    // Draw the texture region described by source on the following rectangle in 3D space:
     //
     //                size.x          <--.
     //  3 ^---------------------------+ 2 \ rotation
@@ -3906,7 +3906,7 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
     rlSetTexture(0);
 }
 
-// draw a bounding box with wires
+// Draw a bounding box with wires
 void DrawBoundingBox(BoundingBox box, Color color)
 {
     Vector3 size = { 0 };

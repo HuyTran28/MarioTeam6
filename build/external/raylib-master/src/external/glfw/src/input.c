@@ -828,7 +828,7 @@ GLFWAPI void glfwSetCursorPos(GLFWwindow* handle, double xpos, double ypos)
     }
     else
     {
-        // update system cursor position
+        // Update system cursor position
         _glfw.platform.setCursorPos(window, xpos, ypos);
     }
 }

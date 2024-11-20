@@ -178,10 +178,10 @@ typedef enum
     _glfwIsWindowsVersionOrGreaterWin32(HIBYTE(_WIN32_WINNT_WINBLUE), \
                                         LOBYTE(_WIN32_WINNT_WINBLUE), 0)
 
-// Windows 10 Anniversary update
+// Windows 10 Anniversary Update
 #define _glfwIsWindows10Version1607OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(14393)
-// Windows 10 Creators update
+// Windows 10 Creators Update
 #define _glfwIsWindows10Version1703OrGreaterWin32() \
     _glfwIsWindows10BuildOrGreaterWin32(15063)
 

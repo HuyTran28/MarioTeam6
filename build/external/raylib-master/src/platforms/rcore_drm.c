@@ -1819,7 +1819,7 @@ static void PollMouseEvents(void)
             if (CORE.Input.Mouse.currentPosition.y > CORE.Window.screen.height/CORE.Input.Mouse.scale.y) CORE.Input.Mouse.currentPosition.y = CORE.Window.screen.height/CORE.Input.Mouse.scale.y;
         }
 
-        // update touch point count
+        // Update touch point count
         CORE.Input.Touch.pointCount = 0;
         for (int i = 0; i < MAX_TOUCH_POINTS; i++)
         {

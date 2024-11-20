@@ -863,10 +863,10 @@ void BeginDrawing(void)
 // End canvas drawing and swap buffers (double buffering)
 void EndDrawing(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
 #if defined(SUPPORT_GIF_RECORDING)
-    // draw record indicator
+    // Draw record indicator
     if (gifRecording)
     {
         #ifndef GIF_RECORD_FRAMERATE
@@ -902,7 +902,7 @@ void EndDrawing(void)
         }
     #endif
 
-        rlDrawRenderBatchActive();  // update and draw internal render batch
+        rlDrawRenderBatchActive();  // Update and draw internal render batch
     }
 #endif
 
@@ -979,7 +979,7 @@ void EndDrawing(void)
 // Initialize 2D mode with custom camera (2D)
 void BeginMode2D(Camera2D camera)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlLoadIdentity();               // Reset current matrix (modelview)
 
@@ -990,7 +990,7 @@ void BeginMode2D(Camera2D camera)
 // Ends 2D mode with custom camera
 void EndMode2D(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlLoadIdentity();               // Reset current matrix (modelview)
 
@@ -1000,7 +1000,7 @@ void EndMode2D(void)
 // Initializes 3D mode with custom camera (3D)
 void BeginMode3D(Camera camera)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlMatrixMode(RL_PROJECTION);    // Switch to projection matrix
     rlPushMatrix();                 // Save previous matrix, which contains the settings for the 2d ortho projection
@@ -1039,7 +1039,7 @@ void BeginMode3D(Camera camera)
 // Ends 3D mode and returns to default 2D orthographic mode
 void EndMode3D(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlMatrixMode(RL_PROJECTION);    // Switch to projection matrix
     rlPopMatrix();                  // Restore previous matrix (projection) from matrix stack
@@ -1055,7 +1055,7 @@ void EndMode3D(void)
 // Initializes render texture for drawing
 void BeginTextureMode(RenderTexture2D target)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlEnableFramebuffer(target.id); // Enable render target
 
@@ -1086,7 +1086,7 @@ void BeginTextureMode(RenderTexture2D target)
 // Ends drawing to render texture
 void EndTextureMode(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlDisableFramebuffer();         // Disable render target (fbo)
 
@@ -1133,7 +1133,7 @@ void EndBlendMode(void)
 // NOTE: Scissor rec refers to bottom-left corner, we change it to upper-left
 void BeginScissorMode(int x, int y, int width, int height)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
 
     rlEnableScissorTest();
 
@@ -1159,7 +1159,7 @@ void BeginScissorMode(int x, int y, int width, int height)
 // End scissor mode
 void EndScissorMode(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // Update and draw internal render batch
     rlDisableScissorTest();
 }
 

@@ -7,36 +7,24 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{11691cdb-50ee-4026-b859-05e86d596c37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Models">
-      <UniqueIdentifier>{9a27f1d5-5b2f-4769-a7c7-767c77cd823a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Sounds">
-      <UniqueIdentifier>{9850464c-fec4-474b-90de-292d971edb12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Textures">
-      <UniqueIdentifier>{a5cd9831-ed9f-4f43-ab15-4e706aa2b38b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Scripts">
-      <UniqueIdentifier>{f3186bde-52e6-435a-b191-96d9c9a4457c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Game.h">
+    <ClInclude Include="..\..\src\CharacterInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Stage.h">
+    <ClInclude Include="..\..\src\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Observer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\StageCreator.h">
+    <ClInclude Include="..\..\src\Stage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Stage1.h">
@@ -45,15 +33,30 @@
     <ClInclude Include="..\..\src\Stage2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\StageCreator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Enemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PatrollingEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EnemyFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Game.cpp">
+    <ClCompile Include="..\..\src\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\StageCreator.cpp">
+    <ClCompile Include="..\..\src\CharacterInterface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Stage1.cpp">
@@ -62,10 +65,17 @@
     <ClCompile Include="..\..\src\Stage2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Assets\Models\SkeletonMario.glb">
-      <Filter>Assets\Models</Filter>
-    </None>
+    <ClCompile Include="..\..\src\StageCreator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PatrollingEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\EnemyFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

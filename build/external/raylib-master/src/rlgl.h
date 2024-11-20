@@ -395,7 +395,7 @@ typedef struct rlVertexBuffer {
     unsigned int vboId[5];      // OpenGL Vertex Buffer Objects id (5 types of vertex data)
 } rlVertexBuffer;
 
-// draw call type
+// Draw call type
 // NOTE: Only texture changes register a new draw, other state-change-related elements are not
 // used at this moment (vaoId, shaderId, matrices), raylib just forces a batch draw call if any
 // of those state-change happens (this is done in core module)
@@ -417,8 +417,8 @@ typedef struct rlRenderBatch {
     int currentBuffer;          // Current buffer tracking in case of multi-buffering
     rlVertexBuffer *vertexBuffer; // Dynamic buffer(s) for vertex data
 
-    rlDrawCall *draws;          // draw calls array, depends on textureId
-    int drawCounter;            // draw calls counter
+    rlDrawCall *draws;          // Draw calls array, depends on textureId
+    int drawCounter;            // Draw calls counter
     float currentDepth;         // Current depth value for next draw
 } rlRenderBatch;
 
@@ -721,9 +721,9 @@ RLAPI int *rlGetShaderLocsDefault(void);                // Get default shader lo
 // but this render batch API is exposed in case of custom batches are required
 RLAPI rlRenderBatch rlLoadRenderBatch(int numBuffers, int bufferElements); // Load a render batch system
 RLAPI void rlUnloadRenderBatch(rlRenderBatch batch);    // Unload render batch system
-RLAPI void rlDrawRenderBatch(rlRenderBatch *batch);     // draw render batch data (update->draw->Reset)
+RLAPI void rlDrawRenderBatch(rlRenderBatch *batch);     // Draw render batch data (Update->Draw->Reset)
 RLAPI void rlSetRenderBatchActive(rlRenderBatch *batch); // Set the active render batch for rlgl (NULL for default internal)
-RLAPI void rlDrawRenderBatchActive(void);               // update and draw internal render batch
+RLAPI void rlDrawRenderBatchActive(void);               // Update and draw internal render batch
 RLAPI bool rlCheckRenderBatchLimit(int vCount);         // Check internal buffer overflow for a given number of vertex
 
 RLAPI void rlSetTexture(unsigned int id);               // Set current texture for render batch and check buffers limits
@@ -734,23 +734,23 @@ RLAPI void rlSetTexture(unsigned int id);               // Set current texture f
 RLAPI unsigned int rlLoadVertexArray(void);             // Load vertex array (vao) if supported
 RLAPI unsigned int rlLoadVertexBuffer(const void *buffer, int size, bool dynamic); // Load a vertex buffer object
 RLAPI unsigned int rlLoadVertexBufferElement(const void *buffer, int size, bool dynamic); // Load vertex buffer elements object
-RLAPI void rlUpdateVertexBuffer(unsigned int bufferId, const void *data, int dataSize, int offset); // update vertex buffer object data on GPU buffer
-RLAPI void rlUpdateVertexBufferElements(unsigned int id, const void *data, int dataSize, int offset); // update vertex buffer elements data on GPU buffer
+RLAPI void rlUpdateVertexBuffer(unsigned int bufferId, const void *data, int dataSize, int offset); // Update vertex buffer object data on GPU buffer
+RLAPI void rlUpdateVertexBufferElements(unsigned int id, const void *data, int dataSize, int offset); // Update vertex buffer elements data on GPU buffer
 RLAPI void rlUnloadVertexArray(unsigned int vaoId);     // Unload vertex array (vao)
 RLAPI void rlUnloadVertexBuffer(unsigned int vboId);    // Unload vertex buffer object
 RLAPI void rlSetVertexAttribute(unsigned int index, int compSize, int type, bool normalized, int stride, int offset); // Set vertex attribute data configuration
 RLAPI void rlSetVertexAttributeDivisor(unsigned int index, int divisor); // Set vertex attribute data divisor
 RLAPI void rlSetVertexAttributeDefault(int locIndex, const void *value, int attribType, int count); // Set vertex attribute default value, when attribute to provided
-RLAPI void rlDrawVertexArray(int offset, int count);    // draw vertex array (currently active vao)
-RLAPI void rlDrawVertexArrayElements(int offset, int count, const void *buffer); // draw vertex array elements
-RLAPI void rlDrawVertexArrayInstanced(int offset, int count, int instances); // draw vertex array (currently active vao) with instancing
-RLAPI void rlDrawVertexArrayElementsInstanced(int offset, int count, const void *buffer, int instances); // draw vertex array elements with instancing
+RLAPI void rlDrawVertexArray(int offset, int count);    // Draw vertex array (currently active vao)
+RLAPI void rlDrawVertexArrayElements(int offset, int count, const void *buffer); // Draw vertex array elements
+RLAPI void rlDrawVertexArrayInstanced(int offset, int count, int instances); // Draw vertex array (currently active vao) with instancing
+RLAPI void rlDrawVertexArrayElementsInstanced(int offset, int count, const void *buffer, int instances); // Draw vertex array elements with instancing
 
 // Textures management
 RLAPI unsigned int rlLoadTexture(const void *data, int width, int height, int format, int mipmapCount); // Load texture data
 RLAPI unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer); // Load depth texture/renderbuffer (to be attached to fbo)
 RLAPI unsigned int rlLoadTextureCubemap(const void *data, int size, int format); // Load texture cubemap data
-RLAPI void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data); // update texture with new data on GPU
+RLAPI void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data); // Update texture with new data on GPU
 RLAPI void rlGetGlTextureFormats(int format, unsigned int *glInternalFormat, unsigned int *glFormat, unsigned int *glType); // Get OpenGL internal formats
 RLAPI const char *rlGetPixelFormatName(unsigned int format);              // Get name string for pixel format
 RLAPI void rlUnloadTexture(unsigned int id);                              // Unload texture from GPU memory
@@ -784,7 +784,7 @@ RLAPI void rlComputeShaderDispatch(unsigned int groupX, unsigned int groupY, uns
 // Shader buffer storage object management (ssbo)
 RLAPI unsigned int rlLoadShaderBuffer(unsigned int size, const void *data, int usageHint); // Load shader storage buffer object (SSBO)
 RLAPI void rlUnloadShaderBuffer(unsigned int ssboId);                           // Unload shader storage buffer object (SSBO)
-RLAPI void rlUpdateShaderBuffer(unsigned int id, const void *data, unsigned int dataSize, unsigned int offset); // update SSBO buffer data
+RLAPI void rlUpdateShaderBuffer(unsigned int id, const void *data, unsigned int dataSize, unsigned int offset); // Update SSBO buffer data
 RLAPI void rlBindShaderBuffer(unsigned int id, unsigned int index);             // Bind SSBO buffer
 RLAPI void rlReadShaderBuffer(unsigned int id, void *dest, unsigned int count, unsigned int offset); // Read SSBO buffer data (GPU->CPU)
 RLAPI void rlCopyShaderBuffer(unsigned int destId, unsigned int srcId, unsigned int destOffset, unsigned int srcOffset, unsigned int count); // Copy SSBO data between buffers
@@ -1448,7 +1448,7 @@ void rlColor4f(float x, float y, float z, float w) { glColor4f(x, y, z, w); }
 // Initialize drawing mode (how to organize vertex)
 void rlBegin(int mode)
 {
-    // draw mode can be RL_LINES, RL_TRIANGLES and RL_QUADS
+    // Draw mode can be RL_LINES, RL_TRIANGLES and RL_QUADS
     // NOTE: In all three cases, vertex are accumulated over default internal vertex buffer
     if (RLGL.currentBatch->draws[RLGL.currentBatch->drawCounter - 1].mode != mode)
     {
@@ -2899,12 +2899,12 @@ void rlUnloadRenderBatch(rlRenderBatch batch)
 #endif
 }
 
-// draw render batch
+// Draw render batch
 // NOTE: We require a pointer to reset batch and increase current buffer (multi-buffer)
 void rlDrawRenderBatch(rlRenderBatch *batch)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-    // update batch vertex buffers
+    // Update batch vertex buffers
     //------------------------------------------------------------------------------------------------------------
     // NOTE: If there is not vertex data, buffers doesn't need to be updated (vertexCount > 0)
     // TODO: If no data changed on the CPU arrays --> No need to re-update GPU arrays (use a change detector flag?)
@@ -2916,22 +2916,22 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
         // Vertex positions buffer
         glBindBuffer(GL_ARRAY_BUFFER, batch->vertexBuffer[batch->currentBuffer].vboId[0]);
         glBufferSubData(GL_ARRAY_BUFFER, 0, RLGL.State.vertexCounter*3*sizeof(float), batch->vertexBuffer[batch->currentBuffer].vertices);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].vertices, GL_DYNAMIC_DRAW);  // update all buffer
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].vertices, GL_DYNAMIC_DRAW);  // Update all buffer
 
         // Texture coordinates buffer
         glBindBuffer(GL_ARRAY_BUFFER, batch->vertexBuffer[batch->currentBuffer].vboId[1]);
         glBufferSubData(GL_ARRAY_BUFFER, 0, RLGL.State.vertexCounter*2*sizeof(float), batch->vertexBuffer[batch->currentBuffer].texcoords);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].texcoords, GL_DYNAMIC_DRAW); // update all buffer
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*2*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].texcoords, GL_DYNAMIC_DRAW); // Update all buffer
 
         // Normals buffer
         glBindBuffer(GL_ARRAY_BUFFER, batch->vertexBuffer[batch->currentBuffer].vboId[2]);
         glBufferSubData(GL_ARRAY_BUFFER, 0, RLGL.State.vertexCounter*3*sizeof(float), batch->vertexBuffer[batch->currentBuffer].normals);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].normals, GL_DYNAMIC_DRAW); // update all buffer
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*3*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].normals, GL_DYNAMIC_DRAW); // Update all buffer
 
         // Colors buffer
         glBindBuffer(GL_ARRAY_BUFFER, batch->vertexBuffer[batch->currentBuffer].vboId[3]);
         glBufferSubData(GL_ARRAY_BUFFER, 0, RLGL.State.vertexCounter*4*sizeof(unsigned char), batch->vertexBuffer[batch->currentBuffer].colors);
-        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].colors, GL_DYNAMIC_DRAW);    // update all buffer
+        //glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*4*batch->vertexBuffer[batch->currentBuffer].elementCount, batch->vertexBuffer[batch->currentBuffer].colors, GL_DYNAMIC_DRAW);    // Update all buffer
 
         // NOTE: glMapBuffer() causes sync issue.
         // If GPU is working with this buffer, glMapBuffer() will wait(stall) until GPU to finish its job.
@@ -2944,7 +2944,7 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
         // batch->vertexBuffer[batch->currentBuffer].vertices = (float *)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_WRITE);
         // if (batch->vertexBuffer[batch->currentBuffer].vertices)
         // {
-            // update vertex data
+            // Update vertex data
         // }
         // glUnmapBuffer(GL_ARRAY_BUFFER);
 
@@ -2953,7 +2953,7 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
     }
     //------------------------------------------------------------------------------------------------------------
 
-    // draw batch vertex buffers (considering VR stereo if required)
+    // Draw batch vertex buffers (considering VR stereo if required)
     //------------------------------------------------------------------------------------------------------------
     Matrix matProjection = RLGL.State.projection;
     Matrix matModelView = RLGL.State.modelview;
@@ -2974,7 +2974,7 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
             rlSetMatrixProjection(RLGL.State.projectionStereo[eye]);
         }
 
-        // draw buffers
+        // Draw buffers
         if (RLGL.State.vertexCounter > 0)
         {
             // Set current shader and upload current MVP matrix
@@ -3136,7 +3136,7 @@ void rlSetRenderBatchActive(rlRenderBatch *batch)
 #endif
 }
 
-// update and draw internal render batch
+// Update and draw internal render batch
 void rlDrawRenderBatchActive(void)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -3458,7 +3458,7 @@ unsigned int rlLoadTextureCubemap(const void *data, int size, int format)
     return id;
 }
 
-// update already loaded texture in GPU with new data
+// Update already loaded texture in GPU with new data
 // NOTE: We don't know safely if internal texture format is the expected one...
 void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data)
 {
@@ -3859,7 +3859,7 @@ void rlDisableVertexBufferElement(void)
 #endif
 }
 
-// update vertex buffer with new data
+// Update vertex buffer with new data
 // NOTE: dataSize and offset must be provided in bytes
 void rlUpdateVertexBuffer(unsigned int id, const void *data, int dataSize, int offset)
 {
@@ -3869,7 +3869,7 @@ void rlUpdateVertexBuffer(unsigned int id, const void *data, int dataSize, int o
 #endif
 }
 
-// update vertex buffer elements with new data
+// Update vertex buffer elements with new data
 // NOTE: dataSize and offset must be provided in bytes
 void rlUpdateVertexBufferElements(unsigned int id, const void *data, int dataSize, int offset)
 {
@@ -3917,13 +3917,13 @@ void rlDisableVertexAttribute(unsigned int index)
 #endif
 }
 
-// draw vertex array
+// Draw vertex array
 void rlDrawVertexArray(int offset, int count)
 {
     glDrawArrays(GL_TRIANGLES, offset, count);
 }
 
-// draw vertex array elements
+// Draw vertex array elements
 void rlDrawVertexArrayElements(int offset, int count, const void *buffer)
 {
     // NOTE: Added pointer math separately from function to avoid UBSAN complaining
@@ -3933,7 +3933,7 @@ void rlDrawVertexArrayElements(int offset, int count, const void *buffer)
     glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_SHORT, (const unsigned short *)bufferPtr);
 }
 
-// draw vertex array instanced
+// Draw vertex array instanced
 void rlDrawVertexArrayInstanced(int offset, int count, int instances)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -3941,7 +3941,7 @@ void rlDrawVertexArrayInstanced(int offset, int count, int instances)
 #endif
 }
 
-// draw vertex array elements instanced
+// Draw vertex array elements instanced
 void rlDrawVertexArrayElementsInstanced(int offset, int count, const void *buffer, int instances)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -4475,7 +4475,7 @@ void rlUnloadShaderBuffer(unsigned int ssboId)
 
 }
 
-// update SSBO buffer data
+// Update SSBO buffer data
 void rlUpdateShaderBuffer(unsigned int id, const void *data, unsigned int dataSize, unsigned int offset)
 {
 #if defined(GRAPHICS_API_OPENGL_43)
@@ -4695,7 +4695,7 @@ void rlLoadDrawQuad(void)
     glEnableVertexAttribArray(RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD);
     glVertexAttribPointer(RL_DEFAULT_SHADER_ATTRIB_LOCATION_TEXCOORD, 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), (void *)(3*sizeof(float))); // Texcoords
 
-    // draw quad
+    // Draw quad
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
@@ -4773,7 +4773,7 @@ void rlLoadDrawCube(void)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-    // draw cube
+    // Draw cube
     glBindVertexArray(cubeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);

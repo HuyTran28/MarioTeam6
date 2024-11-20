@@ -1,6 +1,5 @@
 #pragma once
 #include "CharacterInterface.h"
-#include "Map.h"
 
 using namespace std;
 
@@ -13,7 +12,7 @@ private:
 
 public:
     Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
-        const float& speed, const float& scale, const float& jumpForce, const int& health);
+        const float& speed, const float& scale, const float& jumpForce, const int& health, btDynamicsWorld* world);
 
     ~Player();
 
@@ -22,7 +21,8 @@ public:
 
     void move() override;
     void rotate() override;
-    void applyGravity() override;
+    void updateCollisionShape();
+    void updateModelTransform();
     bool checkGroundCollision() override;
     void render() override;
     void jump();
