@@ -10,23 +10,28 @@ protected:
 	Model m_model;
     Vector3 m_position;
     Vector3 m_velocity;
-    Vector3 m_forwardDir;
     float m_scale;
     float m_speed;
+	float m_rotationAngle;
     bool m_isOnGround;
     btDynamicsWorld* m_dynamicsWorld;  // Store the dynamics world
 
 public:
     static const float GRAVITY;
 
-    CharacterInterface(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
+    CharacterInterface(btRigidBody* rigidBody, Model model, const Vector3& position,
         const float& speed, const float& scale, btDynamicsWorld* world);
-    virtual void render() = 0;
+    
     virtual void move() = 0;
     virtual void rotate() = 0;
-    virtual bool checkGroundCollision() = 0;
+    virtual void update() = 0;
 
     virtual ~CharacterInterface() = default;
+
+    void updateCollisionShape();
+    void updateModelTransform();
+    bool checkGroundCollision();
+    void render();
 };
 
 

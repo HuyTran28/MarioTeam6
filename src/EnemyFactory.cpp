@@ -1,49 +1,62 @@
-#include "EnemyFactory.h"
 #include "PatrollingEnemy.h"
+#include "EnemyFactory.h"
+
 #include "raylib.h"
 
 Enemy* EnemyFactory::createEnemy(EnemyType type, btDiscreteDynamicsWorld* world, const std::string& modelPath,
-    const Vector3& startPosition, const Vector3& forwardDir,
-    float speed, float scale, float param1) {
-    
-    // Load the model
+    const Vector3& startPosition,
+    float speed, float scale, EnemyAttributes* attributes) 
+{
+
+    // Load the enemy model first to get dimensions
     Model enemyModel = LoadModel(modelPath.c_str());
+    BoundingBox modelBounds = GetModelBoundingBox(enemyModel);
 
-    // Calculate the bounding box of the model
-    BoundingBox bbox = GetModelBoundingBox(enemyModel);
+    // Calculate dimensions for collision shape
+    Vector3 dimensions = {
+        (modelBounds.max.x - modelBounds.min.x),
+        (modelBounds.max.y - modelBounds.min.y),
+        (modelBounds.max.z - modelBounds.min.z)
+    };
 
-    // Calculate the dimensions of the bounding box
-    float width = bbox.max.x - bbox.min.x;
-    float height = bbox.max.y - bbox.min.y;
-    float depth = bbox.max.z - bbox.min.z;
-
-    // Shared Bullet Physics setup
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setOrigin(btVector3(startPosition.x, startPosition.y, startPosition.z));
 
-    // Create the collision shape based on the bounding box dimensions
-    btCollisionShape* enemyShape = new btBoxShape(btVector3(width / 2.0f, height / 2.0f, depth / 2.0f));
+    // Create box shape based on model dimensions
+    btCollisionShape* enemyShape = new btBoxShape(btVector3(
+        dimensions.x * 0.3f,  // Half-extents
+        dimensions.y * 0.4f,
+        dimensions.z * 0.3f
+    ));
+
     btScalar mass = 50.0f;
     btVector3 localInertia(0, 0, 0);
     enemyShape->calculateLocalInertia(mass, localInertia);
 
-    btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
+    btDefaultMotionState* motionState = new btDefaultMotionState(
+        btTransform(btQuaternion(0, 0, 0, 1), btVector3(startPosition.x, startPosition.y, startPosition.z))
+    );
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, enemyShape, localInertia);
 
     btRigidBody* enemyRigidBody = new btRigidBody(rbInfo);
+
+    // Add enemy to the world
     world->addRigidBody(enemyRigidBody);
 
     // Create enemy based on type
-    /*switch (type) {
+    switch (type) {
     case EnemyType::Patrolling:
-        return new PatrollingEnemy(enemyRigidBody, enemyModel, forwardDir, startPosition, speed, scale, param1);
-
-    case EnemyType::Flying:
-        return new FlyingEnemy(enemyRigidBody, enemyModel, forwardDir, startPosition, speed, scale, param1);
-
+    {
+        auto patrollingAttributes = dynamic_cast<PatrollingEnemyAttributes*>(attributes);
+        return new PatrollingEnemy(enemyRigidBody, enemyModel, startPosition, speed, scale, patrollingAttributes->point_A, patrollingAttributes->point_B);
+    }
     default:
         return nullptr;
-    }*/
-    return nullptr;
+
+    }
+
+    /*case EnemyType::Flying:
+        return new FlyingEnemy(enemyRigidBody, enemyModel, forwardDir, startPosition, speed, scale, param1);*/
+
 }

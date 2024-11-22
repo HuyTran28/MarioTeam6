@@ -5,10 +5,11 @@ using namespace std;
 
 class Player : public CharacterInterface {
 private:
+	Vector3 m_forwardDir;
     int m_health;
     bool m_isCrouching;
     float m_jumpForce;
-    float m_rotationAngle = 0.0f;
+
 
 public:
     Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
@@ -21,10 +22,7 @@ public:
 
     void move() override;
     void rotate() override;
-    void updateCollisionShape();
-    void updateModelTransform();
-    bool checkGroundCollision() override;
-    void render() override;
+
     void jump();
     void update();
 };
