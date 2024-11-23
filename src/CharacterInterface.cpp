@@ -6,7 +6,11 @@ CharacterInterface::CharacterInterface(btRigidBody* rigidBody, Model model, cons
     const float& speed, const float& scale, btDynamicsWorld* world)
     : m_rigidBody(rigidBody), m_model(model), m_position(position), 
       m_speed(speed), m_scale(scale), m_isOnGround(true), m_velocity({0.0f, 0.0f, 0.0f}),
-      m_dynamicsWorld(world), m_rotationAngle(0.0f) {}
+      m_dynamicsWorld(world), m_rotationAngle(0.0f) 
+{
+	// Set the rigid body's user pointer to this character
+	m_rigidBody->setUserPointer(this);
+}
 
 void CharacterInterface::render() {
     DrawModel(m_model, m_position, m_scale, WHITE);
@@ -50,7 +54,7 @@ bool CharacterInterface::checkGroundCollision() {
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 1.0f, 0); // Check 1 unit below the character
+        btVector3 end = start - btVector3(0, 1.5f, 0); // Check 1 unit below the character
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         m_dynamicsWorld->rayTest(start, end, rayCallback);

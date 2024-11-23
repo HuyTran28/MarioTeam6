@@ -1,4 +1,6 @@
 #include "PatrollingEnemy.h"
+#include "Player.h"
+
 
 PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position,
     const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB)
@@ -10,10 +12,6 @@ PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vect
 
     btVector3 physPos = trans.getOrigin();
     m_position = { physPos.x(), physPos.y(), physPos.z() };
-
-    // Debug prints to verify patrol points
-    std::cout << "Patrol Point A: (" << m_patrolPointA.x << ", " << m_patrolPointA.y << ", " << m_patrolPointA.z << ")" << std::endl;
-    std::cout << "Patrol Point B: (" << m_patrolPointB.x << ", " << m_patrolPointB.y << ", " << m_patrolPointB.z << ")" << std::endl;
 }
 
 
@@ -24,12 +22,8 @@ void PatrollingEnemy::patrol() {
 
     // Check if the enemy has reached the target position with some tolerance
     float distance = Vector3Distance(m_position, targetPosition);
-    std::cout << "Current position: (" << m_position.x << ", " << m_position.y << ", " << m_position.z << ")" << std::endl;
-    std::cout << "Target position: (" << targetPosition.x << ", " << targetPosition.y << ", " << targetPosition.z << ")" << std::endl;
-    std::cout << "Distance to target: " << distance << std::endl;
 
     if (distance < 1.5f) {
-        std::cout << "Reached patrol point: " << (m_movingToA ? "A" : "B") << std::endl;
         m_movingToA = !m_movingToA; // Switch target point after reaching current point
     }
 }
@@ -63,7 +57,6 @@ void PatrollingEnemy::moveTo(const Vector3& targetPosition) {
     m_rigidBody->getMotionState()->getWorldTransform(trans);
     btVector3 pos = trans.getOrigin();
     m_position = { pos.x(), pos.y(), pos.z() };
-    std::cout << "Updated position: (" << m_position.x << ", " << m_position.y << ", " << m_position.z << ")" << std::endl;
 }
 
 void PatrollingEnemy::move() {
@@ -91,8 +84,38 @@ void PatrollingEnemy::rotate() {
 
     // Update the model's transform to apply the rotation
     m_model.transform = MatrixRotate(Vector3{ 0.0f, 1.0f, 0.0f }, angle);
+}
 
-    
+void PatrollingEnemy::onCollision(const CollisionEvent& event) {
+    if (auto* player = dynamic_cast<Player*>(event.obj1)) {
+        for (const auto& point : event.contactPoints) {
+            if (point.m_normalWorldOnB.getY() > 0.7f) {
+                this->isStamped();
+                return;
+            }
+        }
+    }
+}
+
+void PatrollingEnemy::isStamped() {
+	cout << "Enemy is stamped!" << endl;
+    // Define the respawn position (you can adjust this as needed)
+    Vector3 respawnPosition = m_patrolPointA; // Example: respawn at patrol point A
+
+    // Reset the enemy's position to the respawn position
+    btTransform trans;
+    trans.setIdentity();
+    trans.setOrigin(btVector3(respawnPosition.x, respawnPosition.y, respawnPosition.z));
+    m_rigidBody->setWorldTransform(trans);
+    m_rigidBody->getMotionState()->setWorldTransform(trans);
+
+    // Update the internal position
+    m_position = respawnPosition;
+
+    // Reset other states if necessary
+    m_isChasing = false;
+    m_targetPosition = Vector3();
+    m_movingToA = true; // Reset to start patrolling from point A
 }
 
 

@@ -21,7 +21,10 @@ public:
     void detectPlayer(const Vector3& playerPosition);
     void chasePlayer();
     void moveTo(const Vector3& targetPosition);
+    void isStamped();
+
     void move() override;
     void rotate() override;
 	void update() override;
+	void onCollision(const CollisionEvent& event) override;
 };

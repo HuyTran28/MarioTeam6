@@ -1,6 +1,9 @@
 #pragma once
 #include "CharacterInterface.h"
 
+#include "Enemy.h"
+#include "CollisionEvent.h"
+
 using namespace std;
 
 class Player : public CharacterInterface {
@@ -9,6 +12,7 @@ private:
     int m_health;
     bool m_isCrouching;
     float m_jumpForce;
+    CollisionEvent m_lastCollisionEvent; // Store the latest collision event for this player
 
 
 public:
@@ -22,7 +26,12 @@ public:
 
     void move() override;
     void rotate() override;
+    void onCollision(const CollisionEvent& event) override;
+    void handleJumpOnEnemy();
+    void handleTouchEnemy();
+	void update() override;
 
     void jump();
-    void update();
+    void setLastCollisionEvent(const CollisionEvent& event);
+
 };

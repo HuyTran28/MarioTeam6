@@ -277,6 +277,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h" />
     <ClInclude Include="..\..\src\CharacterInterface.h" />
+    <ClInclude Include="..\..\src\CollisionManager.h" />
     <ClInclude Include="..\..\src\Enemy.h" />
     <ClInclude Include="..\..\src\EnemyFactory.h" />
     <ClInclude Include="..\..\src\Game.h" />
@@ -290,6 +291,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\CharacterInterface.cpp" />
+    <ClCompile Include="..\..\src\CollisionManager.cpp" />
     <ClCompile Include="..\..\src\Enemy.cpp" />
     <ClCompile Include="..\..\src\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />

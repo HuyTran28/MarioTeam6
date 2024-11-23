@@ -96,6 +96,34 @@ void Player::rotate() {
     m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
 
+void Player::onCollision(const CollisionEvent& event) {
+    if (auto* enemy = dynamic_cast<Enemy*>(event.obj2)) {
+        for (const auto& point : event.contactPoints) {
+            if (point.m_normalWorldOnB.getY() > 0.7f) {
+                this->handleJumpOnEnemy();
+                return;
+            }
+            else {
+                this->handleTouchEnemy();
+                return;
+            }
+        }
+    }
+}
+
+void Player::handleJumpOnEnemy() {
+    std::cout << "Handling jump on enemy." << std::endl;
+}
+
+void Player::handleTouchEnemy() {
+    std::cout << "Handling touch with enemy." << std::endl;
+    
+}
+
+void Player::setLastCollisionEvent(const CollisionEvent& event) {
+	m_lastCollisionEvent = event;
+}
+
 void Player::jump() {
     if (m_isOnGround && IsKeyPressed(KEY_SPACE)) {
         // Apply an upward force for jumping

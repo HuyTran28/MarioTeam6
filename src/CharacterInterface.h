@@ -2,6 +2,7 @@
 #include "btBulletDynamicsCommon.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "CollisionEvent.h"
 #include <iostream>
 
 class CharacterInterface {
@@ -25,9 +26,11 @@ public:
     virtual void move() = 0;
     virtual void rotate() = 0;
     virtual void update() = 0;
+    virtual void onCollision(const CollisionEvent& event) = 0;
 
     virtual ~CharacterInterface() = default;
 
+    btRigidBody* getRigidBody() { return m_rigidBody; }
     void updateCollisionShape();
     void updateModelTransform();
     bool checkGroundCollision();
