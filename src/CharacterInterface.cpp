@@ -96,7 +96,7 @@ void CharacterInterface::updateModelTransform() {
 
 	// Update the model's position with a downward offset
 	btVector3 origin = transform.getOrigin();
-	float yOffset = -1.0f; // Adjust this value as needed to align the model with the ground
+	float yOffset = -1.5f; // Adjust this value as needed to align the model with the ground
 	m_position = { origin.getX(), origin.getY() + yOffset, origin.getZ() };
 
 	// Update the model's rotation

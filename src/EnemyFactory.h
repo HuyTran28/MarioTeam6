@@ -26,6 +26,6 @@ public:
 class EnemyFactory {
 public:
     static Enemy* createEnemy(EnemyType type, btDiscreteDynamicsWorld* world, const std::string& modelPath,
-        const Vector3& startPosition,
+		const Vector3& startPosition, const Vector3& forwardDir,
         float speed, float scale, EnemyAttributes* attributes);
 };

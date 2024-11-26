@@ -2,9 +2,9 @@
 #include "Player.h"
 
 
-PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position,
+PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir,
     const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB)
-    : Enemy(rigidBody, model, position, speed, scale), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
+    : Enemy(rigidBody, model, position, forwardDir, speed, scale), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
     m_movingToA(true), m_detectionRange(10.0f), m_attackSpeed(2.0f), m_isChasing(false), m_targetPosition(Vector3())
 {
     btTransform trans;
@@ -17,14 +17,16 @@ PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vect
 
 void PatrollingEnemy::patrol() {
     // Select the target position based on whether the enemy is moving to A or B
-    Vector3 targetPosition = m_movingToA ? m_patrolPointA : m_patrolPointB;
-    moveTo(targetPosition);
+    m_targetPosition = m_movingToA ? m_patrolPointA : m_patrolPointB;
+    moveTo();
 
     // Check if the enemy has reached the target position with some tolerance
-    float distance = Vector3Distance(m_position, targetPosition);
+    float distance = Vector3Distance(m_position, m_targetPosition);
 
-    if (distance < 1.5f) {
+    if (distance < 2.0f) {
         m_movingToA = !m_movingToA; // Switch target point after reaching current point
+        m_targetPosition = m_movingToA ? m_patrolPointA : m_patrolPointB;
+        rotate();
     }
 }
 
@@ -42,13 +44,13 @@ void PatrollingEnemy::detectPlayer(const Vector3& playerPosition) {
 
 void PatrollingEnemy::chasePlayer() {
     if (m_isChasing) {
-        moveTo(m_targetPosition);
+        moveTo();
     }
 }
 
-void PatrollingEnemy::moveTo(const Vector3& targetPosition) {
+void PatrollingEnemy::moveTo() {
 
-    Vector3 direction = Vector3Normalize(targetPosition - m_position);
+    Vector3 direction = Vector3Normalize(m_targetPosition - m_position);
     btVector3 movement(direction.x, 0, direction.z);
     m_rigidBody->setLinearVelocity(movement * m_speed);
 
@@ -70,21 +72,66 @@ void PatrollingEnemy::move() {
 }
 
 void PatrollingEnemy::rotate() {
-    // Calculate the direction vector towards the target position
-    Vector3 direction = Vector3Subtract(m_targetPosition, m_position);
+    // Step 1: Calculate the desired direction
+    Vector3 desiredDirection = Vector3Subtract(m_targetPosition, m_position);
+    if (Vector3Length(desiredDirection) < 0.001f) return; // Avoid division by zero
+    desiredDirection = Vector3Normalize(desiredDirection);
 
-    // Normalize the direction vector to get the forward direction
-    direction = Vector3Normalize(direction);
+    // Step 2: Get the current forward direction
+    Vector3 normalizedForwardDir = Vector3Normalize(m_forwardDir);
+    btTransform transform;
+    m_rigidBody->getMotionState()->getWorldTransform(transform);
+    btQuaternion currentRotation = transform.getRotation();
+    btVector3 worldForward = quatRotate(currentRotation, btVector3(normalizedForwardDir.x, normalizedForwardDir.y, normalizedForwardDir.z));
+    Vector3 currentForwardDir = Vector3Normalize({ worldForward.getX(), worldForward.getY(), worldForward.getZ() });
 
-    // Calculate the angle to rotate the enemy to face the target
-    float angle = atan2(direction.x, direction.z); // Assuming forward in +Z
+    // Step 3: Calculate the rotation axis
+    Vector3 rotationAxis = Vector3CrossProduct(currentForwardDir, desiredDirection);
+    if (Vector3Length(rotationAxis) < 0.001f) {
+        if (Vector3DotProduct(currentForwardDir, desiredDirection) < -0.999f) {
+            rotationAxis = { 1.0f, 0.0f, 0.0f }; // Arbitrary perpendicular axis
+        }
+        else {
+            return; // Already aligned, no rotation needed
+        }
+    }
+    rotationAxis = Vector3Normalize(rotationAxis);
 
-    // Convert the angle to a quaternion rotation (Raylib or Bullet can help here)
-    Quaternion rotation = QuaternionFromAxisAngle(Vector3{ 0.0f, 1.0f, 0.0f }, angle);
+    // Step 4: Calculate the rotation angle
+    float dot = Vector3DotProduct(currentForwardDir, desiredDirection);
+    float angle = acosf(Clamp(dot, -1.0f, 1.0f)); // Clamp for safety
 
-    // Update the model's transform to apply the rotation
-    m_model.transform = MatrixRotate(Vector3{ 0.0f, 1.0f, 0.0f }, angle);
+
+
+    // Step 5: Create and apply the rotation
+    if (angle > 0.01f) { // Skip tiny rotations
+        btQuaternion rotation(btVector3(rotationAxis.x, rotationAxis.y, rotationAxis.z), angle);
+        btQuaternion newRotation = rotation * currentRotation;
+
+        // Smoothly interpolate the rotation
+        btQuaternion interpolatedRotation = slerp(currentRotation, newRotation, 0.1f);
+        interpolatedRotation.normalize(); // Normalize to avoid numerical errors
+
+        // Update transform (preserve position)
+        btVector3 currentPosition = transform.getOrigin();
+        transform.setRotation(interpolatedRotation);
+        transform.setOrigin(currentPosition);
+
+        // Apply to rigid body
+        m_rigidBody->setWorldTransform(transform);
+    }
+
+    // Debugging
+    m_rotationAngle = angle;
+    printf("Current Forward: (%.2f, %.2f, %.2f)\n", currentForwardDir.x, currentForwardDir.y, currentForwardDir.z);
+    printf("Desired Direction: (%.2f, %.2f, %.2f)\n", desiredDirection.x, desiredDirection.y, desiredDirection.z);
+    printf("Rotation Axis: (%.2f, %.2f, %.2f)\n", rotationAxis.x, rotationAxis.y, rotationAxis.z);
+    printf("Rotation Angle: %.2f\n", angle);
 }
+
+
+
+
 
 void PatrollingEnemy::onCollision(const CollisionEvent& event) {
     if (auto* player = dynamic_cast<Player*>(event.obj1)) {
@@ -98,7 +145,6 @@ void PatrollingEnemy::onCollision(const CollisionEvent& event) {
 }
 
 void PatrollingEnemy::isStamped() {
-	cout << "Enemy is stamped!" << endl;
     // Define the respawn position (you can adjust this as needed)
     Vector3 respawnPosition = m_patrolPointA; // Example: respawn at patrol point A
 
@@ -120,8 +166,14 @@ void PatrollingEnemy::isStamped() {
 
 
 void PatrollingEnemy::update() {
-    rotate();
-	move();
+    Vector3 normalizedForwardDir = Vector3Normalize(m_forwardDir);
+
+    // Scale the direction to the desired length
+    Vector3 endPosition = Vector3Add(m_position, Vector3Scale(normalizedForwardDir, 50));
+
+    // Draw the arrow
+    DrawLine3D(m_position, endPosition, RED);
+    move();
 	updateCollisionShape();
 	updateModelTransform();
 }
