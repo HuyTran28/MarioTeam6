@@ -7,7 +7,8 @@ using namespace std;
 // Constructor: Initialize player attributes and Bullet RigidBody
 Player::Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
     const float& speed, const float& scale, const float& jumpForce, const int& health, btDynamicsWorld* world)
-    : CharacterInterface(rigidBody, model, position, speed, scale, world), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false), m_forwardDir(forwardDir) {}
+    : CharacterInterface(rigidBody, model, position, speed, scale, world), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false), m_forwardDir(forwardDir) 
+{}
 
 Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
     const Vector3& forwardDir, float speed, float scale, float jumpForce, int health) {
@@ -33,7 +34,7 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
         dimensions.z * 0.3f
     ));
 
-    btScalar mass = 70.0f;
+    btScalar mass = 75.0f;
     btVector3 localInertia(0, 0, 0);
     playerShape->calculateLocalInertia(mass, localInertia);
 
@@ -96,27 +97,47 @@ void Player::rotate() {
     m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
 
-void Player::onCollision(const CollisionEvent& event) {
-    if (auto* enemy = dynamic_cast<Enemy*>(event.obj2)) {
-        for (const auto& point : event.contactPoints) {
-            if (point.m_normalWorldOnB.getY() > 0.7f) {
-                this->handleJumpOnEnemy();
-                return;
-            }
-            else {
-                this->handleTouchEnemy();
-                return;
+void Player::determineCollisionType(CollisionEvent& event) {
+    if (dynamic_cast<Enemy*>(event.obj2)) {
+        btRigidBody* player = event.obj1->getRigidBody(); // Player's collision object
+        btCollisionShape* shape = player->getCollisionShape(); // Player's collision shape
+
+        // Retrieve the bounding box of the player using the collision shape
+        btVector3 playerMin, playerMax;
+        shape->getAabb(player->getWorldTransform(), playerMin, playerMax);
+
+        const float epsilon = 0.01f;
+
+        // Check if any contact point is at the bottom of the bounding box
+        bool isLowestPoint = false;
+        for (const auto& contactPoint : event.contactPoints) {
+            btVector3 normal = contactPoint.m_normalWorldOnB;
+            if (normal.getY() > 0.9f && contactPoint.getPositionWorldOnA().getY() <= playerMin.getY() + epsilon) {
+                isLowestPoint = true;
+                break;
             }
         }
+
+        // If the player is the lowest point, it is a stomp
+        event.type = isLowestPoint ? CollisionType::Stomped : CollisionType::HitByEnemy;
+    }
+}
+
+void Player::onCollision(const CollisionEvent& event) {
+    if (event.type == CollisionType::Stomped) {
+        this->handleJumpOnEnemy();
+    }
+    else if (event.type == CollisionType::HitByEnemy) {
+        this->handleTouchEnemy();
     }
 }
 
 void Player::handleJumpOnEnemy() {
-    std::cout << "Handling jump on enemy." << std::endl;
+    //std::cout << "Handling jump on enemy." << std::endl;
 }
 
 void Player::handleTouchEnemy() {
-    std::cout << "Handling touch with enemy." << std::endl;
+    //std::cout << "Handling touch with enemy." << std::endl;
     
 }
 

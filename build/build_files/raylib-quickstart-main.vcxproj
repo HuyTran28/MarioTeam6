@@ -149,6 +149,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -213,6 +214,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -277,10 +279,16 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h" />
     <ClInclude Include="..\..\src\CharacterInterface.h" />
+    <ClInclude Include="..\..\src\CollisionEvent.h" />
     <ClInclude Include="..\..\src\CollisionManager.h" />
     <ClInclude Include="..\..\src\Enemy.h" />
     <ClInclude Include="..\..\src\EnemyFactory.h" />
+    <ClInclude Include="..\..\src\EnemyState.h" />
     <ClInclude Include="..\..\src\Game.h" />
+    <ClInclude Include="..\..\src\Koopa.h" />
+    <ClInclude Include="..\..\src\KoopaMovingShellState.h" />
+    <ClInclude Include="..\..\src\KoopaNormalState.h" />
+    <ClInclude Include="..\..\src\KoopaShellState.h" />
     <ClInclude Include="..\..\src\Observer.h" />
     <ClInclude Include="..\..\src\PatrollingEnemy.h" />
     <ClInclude Include="..\..\src\Player.h" />
@@ -288,6 +296,7 @@
     <ClInclude Include="..\..\src\Stage1.h" />
     <ClInclude Include="..\..\src\Stage2.h" />
     <ClInclude Include="..\..\src\StageCreator.h" />
+    <ClInclude Include="..\..\src\Stompable.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\CharacterInterface.cpp" />
@@ -295,12 +304,17 @@
     <ClCompile Include="..\..\src\Enemy.cpp" />
     <ClCompile Include="..\..\src\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
+    <ClCompile Include="..\..\src\Koopa.cpp" />
+    <ClCompile Include="..\..\src\KoopaMovingShellState.cpp" />
+    <ClCompile Include="..\..\src\KoopaNormalState.cpp" />
+    <ClCompile Include="..\..\src\KoopaShellState.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\PatrollingEnemy.cpp" />
     <ClCompile Include="..\..\src\Player.cpp" />
     <ClCompile Include="..\..\src\Stage1.cpp" />
     <ClCompile Include="..\..\src\Stage2.cpp" />
     <ClCompile Include="..\..\src\StageCreator.cpp" />
+    <ClCompile Include="..\..\src\Stompable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">

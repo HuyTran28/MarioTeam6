@@ -27,9 +27,12 @@ public:
     virtual void rotate() = 0;
     virtual void update() = 0;
     virtual void onCollision(const CollisionEvent& event) = 0;
+     virtual void determineCollisionType(CollisionEvent& event) = 0;
 
-    virtual ~CharacterInterface() = default;
+    virtual ~CharacterInterface();
 
+	Vector3 getPosition() const { return m_position; }
+	Vector3 getVelocity() const { return m_velocity; }
     btRigidBody* getRigidBody() { return m_rigidBody; }
     void updateCollisionShape();
     void updateModelTransform();

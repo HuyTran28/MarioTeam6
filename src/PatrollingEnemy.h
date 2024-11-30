@@ -12,10 +12,11 @@ private:
     Vector3 m_targetPosition; // Player's position to chase
 
 public:
-    PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB);
-    
+    PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir,
+        const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world);
     ~PatrollingEnemy() override = default;
 
+   
     void patrol();
     void detectPlayer(const Vector3& playerPosition);
     void chasePlayer();
@@ -25,5 +26,5 @@ public:
     void move() override;
     void rotate() override;
     void update() override;
-    void onCollision(const CollisionEvent& event) override;
+    virtual void onCollision(const CollisionEvent& event) override;
 };

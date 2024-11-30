@@ -4,7 +4,7 @@
 
 enum class EnemyType {
     Patrolling,
-    Flying
+    Koopa
 };
 
 

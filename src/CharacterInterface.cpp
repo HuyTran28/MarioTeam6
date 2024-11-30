@@ -1,4 +1,5 @@
 #include "CharacterInterface.h"
+#include <algorithm>
 
 const float CharacterInterface::GRAVITY = 9.8f;
 
@@ -8,6 +9,11 @@ CharacterInterface::CharacterInterface(btRigidBody* rigidBody, Model model, cons
       m_speed(speed), m_scale(scale), m_isOnGround(true), m_velocity({0.0f, 0.0f, 0.0f}),
       m_dynamicsWorld(world), m_rotationAngle(0.0f) 
 {
+    btTransform trans;
+    m_rigidBody->getMotionState()->getWorldTransform(trans);
+
+    btVector3 physicalPosition = trans.getOrigin();
+    m_position = { physicalPosition.x(), physicalPosition.y(), physicalPosition.z() };
 	// Set the rigid body's user pointer to this character
 	m_rigidBody->setUserPointer(this);
 }
@@ -35,6 +41,23 @@ void CharacterInterface::render() {
 
         //DrawCube(boxPosition, boxSize.x, boxSize.y, boxSize.z, RED); // Draw the box in red
         DrawCubeWires(boxPosition, boxSize.x, boxSize.y, boxSize.z, BLACK); // Draw the box wireframe in black
+    }
+    else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
+        btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(shape);
+
+        // Get the bounding box of the model
+        BoundingBox modelBounds = GetModelBoundingBox(m_model);
+        float modelHeight = (modelBounds.max.y - modelBounds.min.y) * m_scale;
+        float modelRadius = std::max((modelBounds.max.x - modelBounds.min.x), (modelBounds.max.z - modelBounds.min.z)) * m_scale / 2.0f;
+
+        // Adjust the capsule size to wrap around the model
+        float radius = modelRadius * 1.1f; // Slightly larger than the model radius
+        float halfHeight = (modelHeight / 2.0f) - radius;
+
+        Vector3 startPos = { boxPosition.x, boxPosition.y - halfHeight, boxPosition.z };
+        Vector3 endPos = { boxPosition.x, boxPosition.y + halfHeight, boxPosition.z };
+        //DrawCapsule(startPos, endPos, radius, RED); // Draw the capsule in red
+        DrawCapsuleWires(startPos, endPos, radius, 16, 16, BLACK); // Draw the capsule wireframe in black
     }
     // Add handling for other shape types here
     else if (shape->getShapeType() == SPHERE_SHAPE_PROXYTYPE) {
@@ -91,16 +114,53 @@ void CharacterInterface::updateCollisionShape() {
 }
 
 void CharacterInterface::updateModelTransform() {
-	btTransform transform;
-	m_rigidBody->getMotionState()->getWorldTransform(transform);
+    btTransform transform;
+    m_rigidBody->getMotionState()->getWorldTransform(transform);
 
-	// Update the model's position with a downward offset
-	btVector3 origin = transform.getOrigin();
-	float yOffset = -1.5f; // Adjust this value as needed to align the model with the ground
-	m_position = { origin.getX(), origin.getY() + yOffset, origin.getZ() };
+    BoundingBox modelBounds = GetModelBoundingBox(m_model);
+    btCollisionShape* shape = m_rigidBody->getCollisionShape();
+    float minY = modelBounds.min.y;
 
-	// Update the model's rotation
-	btQuaternion rotation = transform.getRotation();
-	Quaternion modelRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
-	m_model.transform = QuaternionToMatrix(modelRotation);
+    if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
+        btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
+        btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();
+        minY = halfExtents.getY();
+    } else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
+       
+    }
+
+    btVector3 origin = transform.getOrigin();
+    float yOffset = modelBounds.min.y * m_scale - minY;
+    m_position = { origin.getX(), origin.getY() + yOffset, origin.getZ() };
+
+    // Update the model's rotation
+    btQuaternion rotation = transform.getRotation();
+    Quaternion modelRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
+    /*m_model.transform = QuaternionToMatrix(modelRotation);*/
+
+     // Apply scaling to the transformation matrix
+    Matrix scaleMatrix = MatrixScale(m_scale, m_scale, m_scale);
+    Matrix rotationMatrix = QuaternionToMatrix(modelRotation);
+    m_model.transform = MatrixMultiply(scaleMatrix, rotationMatrix);
+
+}
+
+
+CharacterInterface::~CharacterInterface()
+{
+    // Remove the rigid body from the dynamics world
+    if (m_dynamicsWorld && m_rigidBody) {
+        m_dynamicsWorld->removeRigidBody(m_rigidBody);
+    }
+
+    // Delete the collision shape
+    btCollisionShape* shape = m_rigidBody->getCollisionShape();
+    delete shape;
+
+    // Delete the motion state
+    btMotionState* motionState = m_rigidBody->getMotionState();
+    delete motionState;
+
+    // Delete the rigid body
+    delete m_rigidBody;
 }

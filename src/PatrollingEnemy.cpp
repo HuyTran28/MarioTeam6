@@ -2,17 +2,10 @@
 #include "Player.h"
 
 
-PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir,
-    const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB)
-    : Enemy(rigidBody, model, position, forwardDir, speed, scale), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
+PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world)
+    :Enemy(rigidBody, model, position, forwardDir, speed, scale, world), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
     m_movingToA(true), m_detectionRange(10.0f), m_attackSpeed(2.0f), m_isChasing(false), m_targetPosition(Vector3())
-{
-    btTransform trans;
-    m_rigidBody->getMotionState()->getWorldTransform(trans);
-
-    btVector3 physPos = trans.getOrigin();
-    m_position = { physPos.x(), physPos.y(), physPos.z() };
-}
+{}
 
 
 void PatrollingEnemy::patrol() {
@@ -89,7 +82,7 @@ void PatrollingEnemy::rotate() {
     Vector3 rotationAxis = Vector3CrossProduct(currentForwardDir, desiredDirection);
     if (Vector3Length(rotationAxis) < 0.001f) {
         if (Vector3DotProduct(currentForwardDir, desiredDirection) < -0.999f) {
-            rotationAxis = { 1.0f, 0.0f, 0.0f }; // Arbitrary perpendicular axis
+            rotationAxis = { 0.0f, -1.0f, 0.0f }; // Arbitrary perpendicular axis
         }
         else {
             return; // Already aligned, no rotation needed
@@ -120,59 +113,20 @@ void PatrollingEnemy::rotate() {
         // Apply to rigid body
         m_rigidBody->setWorldTransform(transform);
     }
-
-    // Debugging
-    m_rotationAngle = angle;
-    printf("Current Forward: (%.2f, %.2f, %.2f)\n", currentForwardDir.x, currentForwardDir.y, currentForwardDir.z);
-    printf("Desired Direction: (%.2f, %.2f, %.2f)\n", desiredDirection.x, desiredDirection.y, desiredDirection.z);
-    printf("Rotation Axis: (%.2f, %.2f, %.2f)\n", rotationAxis.x, rotationAxis.y, rotationAxis.z);
-    printf("Rotation Angle: %.2f\n", angle);
+	m_rotationAngle = angle;
 }
 
-
-
-
-
 void PatrollingEnemy::onCollision(const CollisionEvent& event) {
-    if (auto* player = dynamic_cast<Player*>(event.obj1)) {
-        for (const auto& point : event.contactPoints) {
-            if (point.m_normalWorldOnB.getY() > 0.7f) {
-                this->isStamped();
-                return;
-            }
-        }
+    if (event.type == CollisionType::Stomped) {
+        this->isStamped();
     }
 }
 
 void PatrollingEnemy::isStamped() {
-    // Define the respawn position (you can adjust this as needed)
-    Vector3 respawnPosition = m_patrolPointA; // Example: respawn at patrol point A
-
-    // Reset the enemy's position to the respawn position
-    btTransform trans;
-    trans.setIdentity();
-    trans.setOrigin(btVector3(respawnPosition.x, respawnPosition.y, respawnPosition.z));
-    m_rigidBody->setWorldTransform(trans);
-    m_rigidBody->getMotionState()->setWorldTransform(trans);
-
-    // Update the internal position
-    m_position = respawnPosition;
-
-    // Reset other states if necessary
-    m_isChasing = false;
-    m_targetPosition = Vector3();
-    m_movingToA = true; // Reset to start patrolling from point A
+	"Enemy stamped!";
 }
 
-
 void PatrollingEnemy::update() {
-    Vector3 normalizedForwardDir = Vector3Normalize(m_forwardDir);
-
-    // Scale the direction to the desired length
-    Vector3 endPosition = Vector3Add(m_position, Vector3Scale(normalizedForwardDir, 50));
-
-    // Draw the arrow
-    DrawLine3D(m_position, endPosition, RED);
     move();
 	updateCollisionShape();
 	updateModelTransform();
