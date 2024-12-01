@@ -18,8 +18,6 @@ protected:
     btDynamicsWorld* m_dynamicsWorld;  // Store the dynamics world
 
 public:
-    static const float GRAVITY;
-
     CharacterInterface(btRigidBody* rigidBody, Model model, const Vector3& position,
         const float& speed, const float& scale, btDynamicsWorld* world);
     

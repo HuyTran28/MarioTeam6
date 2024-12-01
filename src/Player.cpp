@@ -2,6 +2,8 @@
 #include "raylib.h"
 #include "raymath.h"
 
+#include "CollisionUtils.h"
+
 using namespace std;
 
 // Constructor: Initialize player attributes and Bullet RigidBody
@@ -50,20 +52,32 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
 }
 
 void Player::move() {
-    btVector3 movement(0, 0, 0);
+    btVector3 desiredVelocity(0, 0, 0);
 
+    // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
-        movement = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
+        desiredVelocity = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
     }
-    if (IsKeyDown(KEY_S)) {
-        movement = btVector3(-m_forwardDir.x, 0, -m_forwardDir.z).normalized() * m_speed;
+    // Smooth acceleration towards the desired velocity
+    const float accelerationFactor = 5.0f; // Higher values mean faster acceleration
+    btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
+    btVector3 acceleration = (desiredVelocity - currentVelocity) * accelerationFactor * GetFrameTime();
+
+    // Update the player's velocity with acceleration
+    btVector3 newVelocity = currentVelocity + acceleration;
+
+    // Clamp the new velocity to the max speed
+    if (newVelocity.length() > m_speed) {
+        newVelocity = newVelocity.normalized() * m_speed;
     }
 
-    // Only apply the movement if it is non-zero
-    if (movement.length() > 0) {
-        m_rigidBody->setLinearVelocity(movement);
+    // Apply the new velocity if significant
+    const float velocityThreshold = 0.01f;
+    if (newVelocity.length() > velocityThreshold) {
+        m_rigidBody->setLinearVelocity(newVelocity);
     }
 
+    // Update the player's position from the rigid body's transform
     btTransform trans;
     m_rigidBody->getMotionState()->getWorldTransform(trans);
     btVector3 pos = trans.getOrigin();
@@ -74,6 +88,7 @@ void Player::move() {
         m_position = { pos.x(), pos.y(), pos.z() };
     }
 }
+
 
 void Player::rotate() {
     float angularVelocity = 0.0f;
@@ -97,31 +112,57 @@ void Player::rotate() {
     m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
 
-void Player::determineCollisionType(CollisionEvent& event) {
-    if (dynamic_cast<Enemy*>(event.obj2)) {
-        btRigidBody* player = event.obj1->getRigidBody(); // Player's collision object
-        btCollisionShape* shape = player->getCollisionShape(); // Player's collision shape
+void Player::jump() {
+    if (m_isOnGround) {
+        // Predefined jump velocity magnitude (tweak for gameplay feel)
+        const float jumpVelocityMagnitude = 50.0f;
 
-        // Retrieve the bounding box of the player using the collision shape
-        btVector3 playerMin, playerMax;
-        shape->getAabb(player->getWorldTransform(), playerMin, playerMax);
+        // Apply the impulse for the jump
+        float mass = (m_rigidBody->getInvMass() > 0) ? 1.0f / m_rigidBody->getInvMass() : 1.0f;
+        btVector3 jumpImpulse(0, jumpVelocityMagnitude * mass, 0);
 
-        const float epsilon = 0.01f;
+        m_rigidBody->applyCentralImpulse(jumpImpulse);
 
-        // Check if any contact point is at the bottom of the bounding box
-        bool isLowestPoint = false;
-        for (const auto& contactPoint : event.contactPoints) {
-            btVector3 normal = contactPoint.m_normalWorldOnB;
-            if (normal.getY() > 0.9f && contactPoint.getPositionWorldOnA().getY() <= playerMin.getY() + epsilon) {
-                isLowestPoint = true;
-                break;
-            }
-        }
-
-        // If the player is the lowest point, it is a stomp
-        event.type = isLowestPoint ? CollisionType::Stomped : CollisionType::HitByEnemy;
+        // Set ground flag
+        m_isOnGround = false;
     }
 }
+
+
+void Player::update() {
+    m_isOnGround = checkGroundCollision();
+    if (!m_isOnGround) {
+        btVector3 velocity = m_rigidBody->getLinearVelocity();
+        float gravityFactor = 2.0f; // Increase fall acceleration (tweak this value)
+        btVector3 additionalGravity(0, gravityFactor * m_dynamicsWorld->getGravity().getY(), 0);
+
+        if (velocity.getY() < 0.0f) { // Apply additional force only when falling
+            m_rigidBody->applyCentralForce(additionalGravity);
+        }
+
+        // Reduce damping for smooth movement while airborne
+        m_rigidBody->setDamping(0.1f, m_rigidBody->getAngularDamping());
+    }
+    else {
+        // Restore damping when on the ground
+        m_rigidBody->setDamping(0.5f, m_rigidBody->getAngularDamping());
+    }
+    move();
+    rotate();
+    if (IsKeyDown(KEY_SPACE))
+        jump();
+
+    updateModelTransform();
+	updateCollisionShape();
+}
+
+
+void Player::determineCollisionType(CollisionEvent& event) {
+    if (dynamic_cast<Enemy*>(event.obj2)) {
+        CollisionUtils::determineCollisionType(event);
+    }
+}
+
 
 void Player::onCollision(const CollisionEvent& event) {
     if (event.type == CollisionType::Stomped) {
@@ -145,27 +186,7 @@ void Player::setLastCollisionEvent(const CollisionEvent& event) {
 	m_lastCollisionEvent = event;
 }
 
-void Player::jump() {
-    if (m_isOnGround && IsKeyPressed(KEY_SPACE)) {
-        // Apply an upward force for jumping
-        btVector3 jumpForce(0, m_jumpForce, 0);
-        m_rigidBody->setLinearVelocity(jumpForce);
 
-        // Set the flag to prevent double-jumping
-        m_isOnGround = false;
-    }
-}
-
-void Player::update()
-{
-    m_isOnGround = checkGroundCollision();
-    move();
-    rotate();
-    jump();
-
-	updateCollisionShape();
-	updateModelTransform();
-}
 
 Player::~Player() {
 	// Free the player model

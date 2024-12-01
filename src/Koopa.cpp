@@ -58,7 +58,7 @@ void Koopa::recalculatePhysicsForShell() {
     btCollisionShape* newShape = new btCapsuleShape(radius, height);
 
     // Recalculate mass and inertia
-    btScalar shellMass = 50.0f;
+    btScalar shellMass = 30.0f;
     btVector3 shellInertia(0, 0, 0);
     newShape->calculateLocalInertia(shellMass, shellInertia);
 
@@ -81,13 +81,19 @@ void Koopa::recalculatePhysicsForShell() {
     m_rigidBody->setDamping(0.1f, 0.1f);
 
     // Set friction and restitution
-    m_rigidBody->setFriction(0.5f);
+    m_rigidBody->setFriction(0.1f);
+	m_rigidBody->setRollingFriction(0.1f);
+	m_rigidBody->setSpinningFriction(0.1f);
+
     m_rigidBody->setRestitution(0.2f); // Adjust for desired bounciness
+
 
     // Add the rigid body back to the physics world
     if (m_dynamicsWorld) {
         m_dynamicsWorld->addRigidBody(m_rigidBody);
     }
+
+    m_rigidBody->setUserPointer(this);
 }
 
 

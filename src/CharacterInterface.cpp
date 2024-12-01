@@ -1,8 +1,6 @@
 #include "CharacterInterface.h"
 #include <algorithm>
 
-const float CharacterInterface::GRAVITY = 9.8f;
-
 CharacterInterface::CharacterInterface(btRigidBody* rigidBody, Model model, const Vector3& position,
     const float& speed, const float& scale, btDynamicsWorld* world)
     : m_rigidBody(rigidBody), m_model(model), m_position(position), 
@@ -77,7 +75,7 @@ bool CharacterInterface::checkGroundCollision() {
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 1.5f, 0); // Check 1 unit below the character
+        btVector3 end = start - btVector3(0, 1.5f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         m_dynamicsWorld->rayTest(start, end, rayCallback);
@@ -98,7 +96,7 @@ void CharacterInterface::updateCollisionShape() {
 
 	// Create a new transformation for the collision shape
 	btTransform transform;
-	transform.setOrigin(btVector3(m_position.x, m_position.y, m_position.z));
+	transform.setOrigin(m_rigidBody->getWorldTransform().getOrigin());
 
 	// Convert the model's rotation matrix into a Bullet quaternion
 	Matrix rotationMatrix = MatrixRotateY(m_rotationAngle); // Assumes Y-axis rotation
@@ -115,7 +113,7 @@ void CharacterInterface::updateCollisionShape() {
 
 void CharacterInterface::updateModelTransform() {
     btTransform transform;
-    m_rigidBody->getMotionState()->getWorldTransform(transform);
+    transform = m_rigidBody->getWorldTransform();
 
     BoundingBox modelBounds = GetModelBoundingBox(m_model);
     btCollisionShape* shape = m_rigidBody->getCollisionShape();
@@ -136,7 +134,6 @@ void CharacterInterface::updateModelTransform() {
     // Update the model's rotation
     btQuaternion rotation = transform.getRotation();
     Quaternion modelRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
-    /*m_model.transform = QuaternionToMatrix(modelRotation);*/
 
      // Apply scaling to the transformation matrix
     Matrix scaleMatrix = MatrixScale(m_scale, m_scale, m_scale);

@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Player.h"
+#include "CollisionUtils.h"
 
 Enemy::Enemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, btDynamicsWorld* world)
     : CharacterInterface(rigidBody, model, position, speed, scale, world), m_forwardDir(forwardDir), m_currentState(nullptr)
@@ -27,41 +28,17 @@ void Enemy::move() {
 }
 
 void Enemy::update() {
-    this->updateCollisionShape();
-    this->updateModelTransform();
     if (m_currentState) {
         m_currentState->update(this);
     }
+    this->updateCollisionShape();
+    this->updateModelTransform();
+    
 }
 
 void Enemy::determineCollisionType(CollisionEvent& event) {
-    // Check if the collision involves the player
-    if (event.obj1 == this || event.obj2 == this) {
-        CharacterInterface* other = (event.obj1 == this) ? event.obj2 : event.obj1;
-
-        // Check if the other object is the player
-        if (dynamic_cast<Player*>(other)) {
-            btRigidBody* enemy = this->getRigidBody(); // Enemy's collision object
-            btCollisionShape* shape = enemy->getCollisionShape(); // Enemy's collision shape
-
-            // Retrieve the bounding box of the enemy using the collision shape
-            btVector3 enemyMin, enemyMax;
-            shape->getAabb(enemy->getWorldTransform(), enemyMin, enemyMax);
-
-            const float epsilon = 0.01f;
-            // Check if any contact point is at the top of the bounding box
-            bool isHighestPoint = false;
-            for (const auto& contactPoint : event.contactPoints) {
-                btVector3 normal = contactPoint.m_normalWorldOnB;
-                if (normal.getY() > 0.9f && contactPoint.getPositionWorldOnB().getY() >= enemyMax.getY() - epsilon) {
-                    isHighestPoint = true;
-                    break;
-                }
-            }
-
-            // If the enemy is the highest point, it is stomped
-            event.type = isHighestPoint ? CollisionType::Stomped : CollisionType::HitByEnemy;
-        }
+    if (dynamic_cast<Player*>(event.obj1) || dynamic_cast<Player*>(event.obj2)) {
+        CollisionUtils::determineCollisionType(event);
     }
 }
 

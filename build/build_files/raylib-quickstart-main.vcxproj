@@ -281,6 +281,7 @@
     <ClInclude Include="..\..\src\CharacterInterface.h" />
     <ClInclude Include="..\..\src\CollisionEvent.h" />
     <ClInclude Include="..\..\src\CollisionManager.h" />
+    <ClInclude Include="..\..\src\CollisionUtils.h" />
     <ClInclude Include="..\..\src\Enemy.h" />
     <ClInclude Include="..\..\src\EnemyFactory.h" />
     <ClInclude Include="..\..\src\EnemyState.h" />
@@ -301,6 +302,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\CharacterInterface.cpp" />
     <ClCompile Include="..\..\src\CollisionManager.cpp" />
+    <ClCompile Include="..\..\src\CollisionUtils.cpp" />
     <ClCompile Include="..\..\src\Enemy.cpp" />
     <ClCompile Include="..\..\src\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
