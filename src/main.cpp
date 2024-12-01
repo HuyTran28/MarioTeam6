@@ -1,67 +1,91 @@
-#include "raylib.h"
+#include "btBulletDynamicsCommon.h"
+#include <BlockFactory.h>
+#include "Stage1.h"
+#include "Stage2.h"
+#include <iostream>
 
-#include "Game.h"
-////------------------------------------------------------------------------------------
-//// Program main entry point
-////------------------------------------------------------------------------------------
-//int main(void)
-//{
-//    // Initialization
-//    //--------------------------------------------------------------------------------------
-//    const int screenWidth = 800;
-//    const int screenHeight = 450;
-//
-//    InitWindow(screenWidth, screenHeight, "raylib [models] example - loading gltf animations");
-//
-//    // Define the camera to look into our 3d world
-//    Camera camera = { 0 };
-//    camera.position = Vector3{ 6.0f, 6.0f, 6.0f };    // Camera position
-//    camera.target = Vector3{ 0.0f, 2.0f, 0.0f };      // Camera looking at point
-//    camera.up = Vector3{ 0.0f, 1.0f, 0.0f };          // Camera up vector (rotation towards target)
-//    camera.fovy = 45.0f;                                // Camera field-of-view Y
-//    camera.projection = CAMERA_PERSPECTIVE;             // Camera projection type
-//
-//    // Load gltf model
-//    Model model = LoadModel("Assets/Models/SkeletonMario.glb");
-//    Vector3 position = { 0.0f, 0.0f, 0.0f }; // Set model position
-//
-//    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
-//    //--------------------------------------------------------------------------------------
-//    TraceLog(LOG_INFO, "raylib version: %s", RAYLIB_VERSION);
-//    // Main game loop
-//    while (!WindowShouldClose())        // Detect window close button or ESC key
-//    {
-//        // update
-//        //----------------------------------------------------------------------------------
-//        UpdateCamera(&camera, CAMERA_ORBITAL);
-//
-//        // draw
-//        //----------------------------------------------------------------------------------
-//        BeginDrawing();
-//
-//        ClearBackground(RAYWHITE);
-//
-//        BeginMode3D(camera);
-//        DrawModel(model, position, 1.0f, WHITE);    // draw animated model
-//        DrawGrid(10, 1.0f);
-//        EndMode3D();
-//
-//        EndDrawing();
-//        //----------------------------------------------------------------------------------
-//    }
-//
-//    // De-Initialization
-//    //--------------------------------------------------------------------------------------
-//    UnloadModel(model);         // Unload model and meshes/material
-//
-//    CloseWindow();              // Close window and OpenGL context
-//    //--------------------------------------------------------------------------------------
-//
-//    return 0;
-//}
+btDiscreteDynamicsWorld* initializePhysics()
+{
+    btDefaultCollisionConfiguration* collisionConfiguration = new btDefaultCollisionConfiguration();
+    btCollisionDispatcher* dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    btBroadphaseInterface* overlappingPairCache = new btDbvtBroadphase();
+    btSequentialImpulseConstraintSolver* solver = new btSequentialImpulseConstraintSolver;
+    btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
+    dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
+
+    // Create ground (make sure it's static)
+    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1); // A static plane at y = 0
+    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0))); // Set ground position at y = -1
+    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0)); // Mass is 0 to make it static
+    btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
+    groundRigidBody->setFriction(1.0f);
+    dynamicsWorld->addRigidBody(groundRigidBody);
+
+    return dynamicsWorld;
+}
+void renderGround()
+{
+    DrawPlane(Vector3{ 110.0f, 0.0f, 0.0f }, Vector2{ 50.0f, 50.0f }, DARKGRAY);
+}
+
 
 int main()
 {
-	Game::getInstance().run();
-	return 0;
+    const int screenWidth = 1500;
+    const int screenHeight = 600;
+
+    InitWindow(screenWidth, screenHeight, "Bullet and Raylib Example");
+
+
+
+    Camera camera = { 0 };
+    camera.position = { 200.0f, 20.0f, 50.0f };
+    camera.target = { 200.0f, 0.0f, 0.0f };
+
+    camera.up = { 0.0f, 1.0f, 0.0f };
+    camera.fovy = 30.0f;
+    camera.projection = CAMERA_PERSPECTIVE;
+    btDiscreteDynamicsWorld* dynamicsWorld = initializePhysics();
+
+    Stage1 stage1(200, 2, 9, dynamicsWorld);
+    //Stage2 stage2(110, 2, 9, dynamicsWorld);
+
+
+
+
+
+    SetTargetFPS(60);
+
+    float cameraZ = 10.0f;
+    while (!WindowShouldClose())
+    {
+        UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+        // Update
+        dynamicsWorld->stepSimulation(GetFrameTime());
+        /* cameraZ += 0.2;
+         camera.position.x = cameraZ;*/
+
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        BeginMode3D(camera);
+
+
+        //stage2.draw();
+        stage1.draw();
+
+
+
+        //renderGround();
+
+        EndMode3D();
+        EndDrawing();
+    }
+
+    //delete player;
+    delete dynamicsWorld;
+
+    CloseWindow();
+
+    return 0;
 }
