@@ -307,7 +307,6 @@
     <ClCompile Include="..\..\src\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
     <ClCompile Include="..\..\src\Koopa.cpp" />
-    <ClCompile Include="..\..\src\KoopaMovingShellState.cpp" />
     <ClCompile Include="..\..\src\KoopaNormalState.cpp" />
     <ClCompile Include="..\..\src\KoopaShellState.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
@@ -316,7 +315,6 @@
     <ClCompile Include="..\..\src\Stage1.cpp" />
     <ClCompile Include="..\..\src\Stage2.cpp" />
     <ClCompile Include="..\..\src\StageCreator.cpp" />
-    <ClCompile Include="..\..\src\Stompable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">

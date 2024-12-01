@@ -1,7 +1,6 @@
 // KoopaShellState.cpp
 #include "KoopaShellState.h"
 #include "Koopa.h"
-#include "KoopaMovingShellState.h"
 #include <iostream>
 
 void KoopaShellState::move(Enemy* enemy) {
