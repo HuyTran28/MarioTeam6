@@ -65,8 +65,6 @@ Block* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dynami
     {
     case BlockType::BrickBlock:
         return new BrickBlock(blockRigidBody, "BrickBlock", model, startPosition, scale, dynamicsWorld);
-    case BlockType::CastleBlock:
-        return new CastleBlock(blockRigidBody, "CastleBlock", model, startPosition, scale, dynamicsWorld);
     case BlockType::NormalBrickBlock:
         return new NormalBrickBlock(blockRigidBody, "NormalBrickBlock", model, startPosition, scale, dynamicsWorld);
     case BlockType::PipeBlock:
@@ -81,8 +79,6 @@ Block* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dynami
         return new SupportivePipeBLock(blockRigidBody, "SupportivePipeBlock", model, startPosition, scale, dynamicsWorld);
     case BlockType::FlyBlock:
         return new FlyBlock(blockRigidBody, "FlyBlock", model, startPosition, scale, dynamicsWorld);
-    case BlockType::WaterBlock:
-        return new WaterBlock(blockRigidBody, "WaterBlock", model, startPosition, scale, dynamicsWorld);
     default:
         nullptr;
     }

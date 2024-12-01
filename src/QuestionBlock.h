@@ -2,7 +2,6 @@
 
 #include "Block.h"
 #include "btBulletCollisionCommon.h"
-#include "Player.h"
 class QuestionBlock : public Block
 {
 private:
