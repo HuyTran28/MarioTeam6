@@ -17,7 +17,7 @@
 // also a flattened list of three-tuples (16-bit uints).  Triangles are always
 // oriented such that their front face winds counter-clockwise.
 //
-// Optionally, meshes can contain 3D normals (one per vertex), and 2D texture
+// Optionally, meshes can contain 3D normals (one per vertex), and 2D characterModel
 // coordinates (one per vertex).  That's it!  If you need something fancier,
 // look elsewhere.
 //
@@ -73,7 +73,7 @@ par_shapes_mesh* par_shapes_create_cylinder(int slices, int stacks);
 // Again, height and radius are 1.0, but can be changed with par_shapes_scale.
 par_shapes_mesh* par_shapes_create_cone(int slices, int stacks);
 
-// Create a disk of radius 1.0 with texture coordinates and normals by squashing
+// Create a disk of radius 1.0 with characterModel coordinates and normals by squashing
 // a cone flat on the Z=0 plane.
 par_shapes_mesh* par_shapes_create_parametric_disk(int slices, int stacks);
 
@@ -81,11 +81,11 @@ par_shapes_mesh* par_shapes_create_parametric_disk(int slices, int stacks);
 // The outer radius can be controlled with par_shapes_scale.
 par_shapes_mesh* par_shapes_create_torus(int slices, int stacks, float radius);
 
-// Create a sphere with texture coordinates and small triangles near the poles.
+// Create a sphere with characterModel coordinates and small triangles near the poles.
 par_shapes_mesh* par_shapes_create_parametric_sphere(int slices, int stacks);
 
 // Approximate a sphere with a subdivided icosahedron, which produces a nice
-// distribution of triangles, but no texture coordinates.  Each subdivision
+// distribution of triangles, but no characterModel coordinates.  Each subdivision
 // level scales the number of triangles by four, so use a very low number.
 par_shapes_mesh* par_shapes_create_subdivided_sphere(int nsubdivisions);
 
@@ -107,7 +107,7 @@ par_shapes_mesh* par_shapes_create_parametric(par_shapes_fn, int slices,
 par_shapes_mesh* par_shapes_create_icosahedron();
 
 // Generate points for a 12-sided polyhedron that fits in the unit sphere.
-// Again, texture coordinates and normals are not generated.
+// Again, characterModel coordinates and normals are not generated.
 par_shapes_mesh* par_shapes_create_dodecahedron();
 
 // More platonic solids.
@@ -116,7 +116,7 @@ par_shapes_mesh* par_shapes_create_tetrahedron();
 par_shapes_mesh* par_shapes_create_cube();
 
 // Generate an orientable disk shape in 3-space.  Does not include normals or
-// texture coordinates.
+// characterModel coordinates.
 par_shapes_mesh* par_shapes_create_disk(float radius, int slices,
     float const* center, float const* normal);
 
@@ -124,7 +124,7 @@ par_shapes_mesh* par_shapes_create_disk(float radius, int slices,
 par_shapes_mesh* par_shapes_create_empty();
 
 // Generate a rock shape that sits on the Y=0 plane, and sinks into it a bit.
-// This includes smooth normals but no texture coordinates.  Each subdivision
+// This includes smooth normals but no characterModel coordinates.  Each subdivision
 // level scales the number of triangles by four, so use a very low number.
 par_shapes_mesh* par_shapes_create_rock(int seed, int nsubdivisions);
 
@@ -462,7 +462,7 @@ par_shapes_mesh* par_shapes_create_parametric(par_shapes_fn fn,
         }
     }
 
-    // Generate texture coordinates.
+    // Generate characterModel coordinates.
     mesh->tcoords = PAR_CALLOC(float, 2 * mesh->npoints);
     float* uvs = mesh->tcoords;
     for (int stack = 0; stack < stacks + 1; stack++) {
@@ -1302,7 +1302,7 @@ par_shapes_mesh* par_shapes_create_lsystem(char const* text, int slices,
     par_shapes_mesh* tube = par_shapes_create_cylinder(slices, 1);
     par_shapes_mesh* turtle = par_shapes__create_turtle();
 
-    // We're not attempting to support texture coordinates and normals
+    // We're not attempting to support characterModel coordinates and normals
     // with L-systems, so remove them from the template shape.
     PAR_FREE(tube->normals);
     PAR_FREE(tube->tcoords);

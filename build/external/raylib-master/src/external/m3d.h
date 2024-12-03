@@ -117,7 +117,7 @@ typedef uint8_t M3D_VOXEL;
  *  HEAD m3dhdr_t model header chunk
  *  n x m3dchunk_t more chunks follow
  *      CMAP color map chunk (optional)
- *      TMAP texture map chunk (optional)
+ *      TMAP characterModel map chunk (optional)
  *      VRTS vertex data chunk (optional if it's a material library)
  *      BONE bind-pose skeleton, bone hierarchy chunk (optional)
  *          n x m3db_t contains propably more, but at least one bone
@@ -172,9 +172,9 @@ typedef struct {
 } m3dti_t;
 #define m3d_textureindex_t m3dti_t
 
-/* texture */
+/* characterModel */
 typedef struct {
-    char *name;                 /* texture name */
+    char *name;                 /* characterModel name */
     uint8_t *d;                 /* pixels data */
     uint16_t w;                 /* width */
     uint16_t h;                 /* height */
@@ -289,7 +289,7 @@ typedef struct {
         uint32_t color;         /* if value is a color, m3dpf_color */
         uint32_t num;           /* if value is a number, m3dpf_uint8, m3pf_uint16, m3dpf_uint32 */
         float    fnum;          /* if value is a floating point number, m3dpf_float */
-        M3D_INDEX textureid;    /* if value is a texture, m3dpf_map */
+        M3D_INDEX textureid;    /* if value is a characterModel, m3dpf_map */
     } value;
 } m3dp_t;
 #define m3d_property_t m3dp_t
@@ -399,7 +399,7 @@ enum {
     m3dcp_mi_t = 1,             /* material index */
     m3dcp_hi_t,                 /* shape index */
     m3dcp_fi_t,                 /* face index */
-    m3dcp_ti_t,                 /* texture map index */
+    m3dcp_ti_t,                 /* characterModel map index */
     m3dcp_vi_t,                 /* vertex index */
     m3dcp_qi_t,                 /* vertex index for quaternions */
     m3dcp_vc_t,                 /* coordinate or radius, float scalar */
@@ -474,7 +474,7 @@ typedef struct {
 
 /* inlined asset */
 typedef struct {
-    char *name;                 /* asset name (same pointer as in texture[].name) */
+    char *name;                 /* asset name (same pointer as in characterModel[].name) */
     uint8_t *data;              /* compressed asset data */
     uint32_t length;            /* compressed data length */
 } m3di_t;
@@ -499,7 +499,7 @@ typedef struct {
     M3D_INDEX numcmap;
     uint32_t *cmap;             /* color map */
     M3D_INDEX numtmap;
-    m3dti_t *tmap;              /* texture map indices */
+    m3dti_t *tmap;              /* characterModel map indices */
     M3D_INDEX numtexture;
     m3dtx_t *texture;           /* uncompressed textures */
     M3D_INDEX numbone;
@@ -580,7 +580,7 @@ typedef struct {
 /* callbacks */
 typedef unsigned char *(*m3dread_t)(char *filename, unsigned int *size);                        /* read file contents into buffer */
 typedef void (*m3dfree_t)(void *buffer);                                                        /* free file contents buffer */
-typedef int (*m3dtxsc_t)(const char *name, const void *script, uint32_t len, m3dtx_t *output);  /* interpret texture script */
+typedef int (*m3dtxsc_t)(const char *name, const void *script, uint32_t len, m3dtx_t *output);  /* interpret characterModel script */
 typedef int (*m3dprsc_t)(const char *name, const void *script, uint32_t len, m3d_t *model);     /* interpret surface script */
 #endif /* ifndef M3D_APIVERSION */
 
@@ -2162,7 +2162,7 @@ char *_m3d_safestr(char *in, int morelines)
 }
 #endif
 #ifndef M3D_NOIMPORTER
-/* helper function to load and decode/generate a texture */
+/* helper function to load and decode/generate a characterModel */
 M3D_INDEX _m3d_gettx(m3d_t *model, m3dread_t readfilecb, m3dfree_t freecb, char *fn)
 {
     unsigned int i, len = 0;
@@ -2174,7 +2174,7 @@ M3D_INDEX _m3d_gettx(m3d_t *model, m3dread_t readfilecb, m3dfree_t freecb, char 
 
     /* failsafe */
     if(!fn || !*fn) return M3D_UNDEF;
-    /* do we have loaded this texture already? */
+    /* do we have loaded this characterModel already? */
     for(i = 0; i < model->numtexture; i++)
         if(!strcmp(fn, model->texture[i].name)) return i;
     /* see if it's inlined in the model */
@@ -2218,7 +2218,7 @@ M3D_INDEX _m3d_gettx(m3d_t *model, m3dread_t readfilecb, m3dfree_t freecb, char 
             s.read_from_callbacks = 0;
             s.img_buffer = s.img_buffer_original = (unsigned char *) buff;
             s.img_buffer_end = s.img_buffer_original_end = (unsigned char *) buff+len;
-            /* don't use model->texture[i].w directly, it's a uint16_t */
+            /* don't use model->characterModel[i].w directly, it's a uint16_t */
             w = h = len = 0;
             ri.bits_per_channel = 8;
             model->texture[i].d = (uint8_t*)stbi__png_load(&s, (int*)&w, (int*)&h, (int*)&len, 0, &ri);
@@ -2491,7 +2491,7 @@ m3d_t *m3d_load(unsigned char *data, m3dread_t readfilecb, m3dfree_t freecb, m3d
                 while(*ptr && *ptr != '\r' && *ptr != '\n')
                     ptr = _m3d_findnl(ptr);
             } else
-            /* texture map chunk */
+            /* characterModel map chunk */
             if(!memcmp(pe, "Textmap", 7)) {
                 if(model->tmap) { M3D_LOG("More texture map chunks, should be unique"); goto asciiend; }
                 while(*ptr && *ptr != '\r' && *ptr != '\n') {
@@ -3335,7 +3335,7 @@ memerr:         M3D_LOG("Out of memory");
             model->numcmap = len / sizeof(uint32_t);
             model->cmap = (uint32_t*)(data + sizeof(m3dchunk_t));
         } else
-        /* texture map */
+        /* characterModel map */
         if(M3D_CHUNKMAGIC(data, 'T','M','A','P')) {
             M3D_LOG("Texture map");
             if(model->tmap) { M3D_LOG("More texture map chunks, should be unique"); model->errcode = M3D_ERR_TMAP; continue; }
@@ -4990,7 +4990,7 @@ unsigned char *m3d_save(m3d_t *model, int quality, int flags, unsigned int *size
             }
         }
     }
-    /* add colors to color map and texture names to string table */
+    /* add colors to color map and characterModel names to string table */
     if(!(flags & M3D_EXP_NOMATERIAL)) {
         M3D_LOG("Processing materials");
         for(i = k = 0; i < model->nummaterial; i++) {
@@ -5238,7 +5238,7 @@ memerr: if(vrtxidx) M3D_FREE(vrtxidx);
             }
         }
         M3D_FREE(sn);  sn = NULL;
-        /* texture map */
+        /* characterModel map */
         if(numtmap && tmap && !(flags & M3D_EXP_NOTXTCRD) && !(flags & M3D_EXP_NOFACE)) {
 /* interestingly gcc does not complain about "ptr is used after free" here, although the code is 100% the same */
             ptr -= (uintptr_t)out; len = (unsigned int)((uintptr_t)ptr + (uintptr_t)(maxtmap * 32) + (uintptr_t)12);
@@ -5760,7 +5760,7 @@ memerr: if(vrtxidx) M3D_FREE(vrtxidx);
             memcpy((uint8_t*)h + len + 8, cmap, chunklen - 8);
             len += chunklen;
         } else numcmap = 0;
-        /* texture map */
+        /* characterModel map */
         if(numtmap && tmap && !(flags & M3D_EXP_NOTXTCRD) && !(flags & M3D_EXP_NOFACE)) {
             chunklen = 8 + maxtmap * vc_s * 2;
             h = (m3dhdr_t*)M3D_REALLOC(h, len + chunklen);

@@ -625,7 +625,7 @@ void SetWindowMonitor(int monitor)
         {
             TRACELOG(LOG_INFO, "GLFW: Selected monitor: [%i] %s", monitor, glfwGetMonitorName(monitors[monitor]));
 
-            // Here the render width has to be used again in case high dpi flag is enabled
+            // Here the draw width has to be used again in case high dpi flag is enabled
             const int screenWidth = CORE.Window.render.width;
             const int screenHeight = CORE.Window.render.height;
             int monitorWorkareaX = 0;
@@ -1454,8 +1454,8 @@ int InitPlatform(void)
         // by the sides to fit all monitor space...
 
         // Try to setup the most appropriate fullscreen framebuffer for the requested screenWidth/screenHeight
-        // It considers device display resolution mode and setups a framebuffer with black bars if required (render size/offset)
-        // Modified global variables: CORE.Window.screen.width/CORE.Window.screen.height - CORE.Window.render.width/CORE.Window.render.height - CORE.Window.renderOffset.x/CORE.Window.renderOffset.y - CORE.Window.screenScale
+        // It considers device display resolution mode and setups a framebuffer with black bars if required (draw size/offset)
+        // Modified global variables: CORE.Window.screen.width/CORE.Window.screen.height - CORE.Window.draw.width/CORE.Window.draw.height - CORE.Window.renderOffset.x/CORE.Window.renderOffset.y - CORE.Window.screenScale
         // TODO: It is a quite cumbersome solution to display size vs requested size, it should be reviewed or removed...
         // HighDPI monitors are properly considered in a following similar function: SetupViewport()
         SetupFramebuffer(CORE.Window.display.width, CORE.Window.display.height);
@@ -1527,7 +1527,7 @@ int InitPlatform(void)
         // to be activated on web platforms since VSync is enforced there.
         if (CORE.Window.flags & FLAG_VSYNC_HINT)
         {
-            // WARNING: It seems to hit a critical render path in Intel HD Graphics
+            // WARNING: It seems to hit a critical draw path in Intel HD Graphics
             glfwSwapInterval(1);
             TRACELOG(LOG_INFO, "DISPLAY: Trying to enable VSYNC");
         }
@@ -1580,7 +1580,7 @@ int InitPlatform(void)
         int monitorHeight = 0;
         glfwGetMonitorWorkarea(monitor, &monitorX, &monitorY, &monitorWidth, &monitorHeight);
 
-        // Here CORE.Window.render.width/height should be used instead of CORE.Window.screen.width/height to center the window correctly when the high dpi flag is enabled.
+        // Here CORE.Window.draw.width/height should be used instead of CORE.Window.screen.width/height to center the window correctly when the high dpi flag is enabled.
         int posX = monitorX + (monitorWidth - (int)CORE.Window.render.width)/2;
         int posY = monitorY + (monitorHeight - (int)CORE.Window.render.height)/2;
         if (posX < monitorX) posX = monitorX;
@@ -1696,7 +1696,7 @@ static void WindowSizeCallback(GLFWwindow *window, int width, int height)
     CORE.Window.screen.width = width;
     CORE.Window.screen.height = height;
 
-    // NOTE: Postprocessing texture is not scaled to new size
+    // NOTE: Postprocessing characterModel is not scaled to new size
 }
 static void WindowPosCallback(GLFWwindow* window, int x, int y)
 {

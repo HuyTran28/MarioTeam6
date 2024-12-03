@@ -1232,8 +1232,8 @@ int InitPlatform(void)
         // by the sides to fit all monitor space...
 
         // Try to setup the most appropriate fullscreen framebuffer for the requested screenWidth/screenHeight
-        // It considers device display resolution mode and setups a framebuffer with black bars if required (render size/offset)
-        // Modified global variables: CORE.Window.screen.width/CORE.Window.screen.height - CORE.Window.render.width/CORE.Window.render.height - CORE.Window.renderOffset.x/CORE.Window.renderOffset.y - CORE.Window.screenScale
+        // It considers device display resolution mode and setups a framebuffer with black bars if required (draw size/offset)
+        // Modified global variables: CORE.Window.screen.width/CORE.Window.screen.height - CORE.Window.draw.width/CORE.Window.draw.height - CORE.Window.renderOffset.x/CORE.Window.renderOffset.y - CORE.Window.screenScale
         // TODO: It is a quite cumbersome solution to display size vs requested size, it should be reviewed or removed...
         // HighDPI monitors are properly considered in a following similar function: SetupViewport()
         SetupFramebuffer(CORE.Window.display.width, CORE.Window.display.height);
@@ -1413,7 +1413,7 @@ static void WindowSizeCallback(GLFWwindow *window, int width, int height)
         CORE.Window.screen.height = height;
     }
 
-    // NOTE: Postprocessing texture is not scaled to new size
+    // NOTE: Postprocessing characterModel is not scaled to new size
 }
 
 static void WindowContentScaleCallback(GLFWwindow *window, float scalex, float scaley)
@@ -1670,7 +1670,7 @@ static EM_BOOL EmscriptenResizeCallback(int eventType, const EmscriptenUiEvent *
     CORE.Window.screen.width = width;
     CORE.Window.screen.height = height;
 
-    // NOTE: Postprocessing texture is not scaled to new size
+    // NOTE: Postprocessing characterModel is not scaled to new size
 
     return 0;
 }

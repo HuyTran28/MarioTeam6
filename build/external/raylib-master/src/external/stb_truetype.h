@@ -14,8 +14,8 @@
 //        parse files
 //        extract glyph metrics
 //        extract glyph shapes
-//        render glyphs to one-channel bitmaps with antialiasing (box filter)
-//        render glyphs to one-channel SDF bitmaps (signed-distance field/function)
+//        draw glyphs to one-channel bitmaps with antialiasing (box filter)
+//        draw glyphs to one-channel SDF bitmaps (signed-distance field/function)
 //
 //   Todo:
 //        non-MS cmaps
@@ -78,7 +78,7 @@
 //   1.09 (2016-01-16) warning fix; avoid crash on outofmem; use allocation userdata properly
 //   1.08 (2015-09-13) document stbtt_Rasterize(); fixes for vertical & horizontal edges
 //   1.07 (2015-08-01) allow PackFontRanges to accept arrays of sparse codepoints;
-//                     variant PackFontRanges to pack and render in separate phases;
+//                     variant PackFontRanges to pack and draw in separate phases;
 //                     fix stbtt_GetFontOFfsetForIndex (never worked for non-0 input?);
 //                     fixed an assert() bug in the new rasterizer
 //                     replace assert() with STBTT_assert() in new rasterizer
@@ -101,7 +101,7 @@
 //      #define STBTT_STATIC
 //
 //   Simple 3D API (don't ship this, but it's fine for tools and quick start)
-//           stbtt_BakeFontBitmap()               -- bake a font to a bitmap for use as texture
+//           stbtt_BakeFontBitmap()               -- bake a font to a bitmap for use as characterModel
 //           stbtt_GetBakedQuad()                 -- compute quad to draw for a given char
 //
 //   Improved 3D API (more shippable):
@@ -393,8 +393,8 @@ int main(int arg, char **argv)
       stbtt_GetCodepointBitmapBoxSubpixel(&font, text[ch], scale,scale,x_shift,0, &x0,&y0,&x1,&y1);
       stbtt_MakeCodepointBitmapSubpixel(&font, &screen[baseline + y0][(int) xpos + x0], x1-x0,y1-y0, 79, scale,scale,x_shift,0, text[ch]);
       // note that this stomps the old data, so where character boxes overlap (e.g. 'lj') it's wrong
-      // because this API is really for baking character bitmaps into textures. if you want to render
-      // a sequence of characters, you really need to render each bitmap to a temp buffer, then
+      // because this API is really for baking character bitmaps into textures. if you want to draw
+      // a sequence of characters, you really need to draw each bitmap to a temp buffer, then
       // "alpha blend" that into the working buffer
       xpos += (advance * scale);
       if (text[ch+1])
@@ -606,7 +606,7 @@ STBTT_DEF int  stbtt_PackFontRange(stbtt_pack_context *spc, const unsigned char 
 // Creates character bitmaps from the font_index'th font found in fontdata (use
 // font_index=0 if you don't know what that is). It creates num_chars_in_range
 // bitmaps for characters with unicode values starting at first_unicode_char_in_range
-// and increasing. Data for how to render them is stored in chardata_for_range;
+// and increasing. Data for how to draw them is stored in chardata_for_range;
 // pass these to stbtt_GetPackedQuad to get back renderable quads.
 //
 // font_size is the full height of the character from ascender to descender,
@@ -641,7 +641,7 @@ STBTT_DEF void stbtt_PackSetOversampling(stbtt_pack_context *spc, unsigned int h
 // pack context. The default (no oversampling) is achieved by h_oversample=1
 // and v_oversample=1. The total number of pixels required is
 // h_oversample*v_oversample larger than the default; for example, 2x2
-// oversampling requires 4x the storage of 1x1. For best results, render
+// oversampling requires 4x the storage of 1x1. For best results, draw
 // oversampled textures with bilinear filtering. Look at the readme in
 // stb/tests/oversample for information about oversampled fonts
 //
@@ -665,7 +665,7 @@ STBTT_DEF void stbtt_PackFontRangesPackRects(stbtt_pack_context *spc, stbrp_rect
 STBTT_DEF int  stbtt_PackFontRangesRenderIntoRects(stbtt_pack_context *spc, const stbtt_fontinfo *info, stbtt_pack_range *ranges, int num_ranges, stbrp_rect *rects);
 // Calling these functions in sequence is roughly equivalent to calling
 // stbtt_PackFontRanges(). If you more control over the packing of multiple
-// fonts, or if you want to pack custom data into a font texture, take a look
+// fonts, or if you want to pack custom data into a font characterModel, take a look
 // at the source to of stbtt_PackFontRanges() and create a custom version
 // using these functions, e.g. call GatherRects multiple times,
 // building up a single array of rects, then call PackRects once,
@@ -948,7 +948,7 @@ STBTT_DEF void stbtt_FreeSDF(unsigned char *bitmap, void *userdata);
 STBTT_DEF unsigned char * stbtt_GetGlyphSDF(const stbtt_fontinfo *info, float scale, int glyph, int padding, unsigned char onedge_value, float pixel_dist_scale, int *width, int *height, int *xoff, int *yoff);
 STBTT_DEF unsigned char * stbtt_GetCodepointSDF(const stbtt_fontinfo *info, float scale, int codepoint, int padding, unsigned char onedge_value, float pixel_dist_scale, int *width, int *height, int *xoff, int *yoff);
 // These functions compute a discretized SDF field for a single character, suitable for storing
-// in a single-channel texture, sampling with bilinear filtering, and testing against
+// in a single-channel characterModel, sampling with bilinear filtering, and testing against
 // larger than some threshold to produce scalable fonts.
 //        info              --  the font
 //        scale             --  controls the size of the resulting SDF bitmap, same as it would be creating a regular bitmap
@@ -4994,7 +4994,7 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const
 //   1.09 (2016-01-16) warning fix; avoid crash on outofmem; use alloc userdata for PackFontRanges
 //   1.08 (2015-09-13) document stbtt_Rasterize(); fixes for vertical & horizontal edges
 //   1.07 (2015-08-01) allow PackFontRanges to accept arrays of sparse codepoints;
-//                     allow PackFontRanges to pack and render in separate phases;
+//                     allow PackFontRanges to pack and draw in separate phases;
 //                     fix stbtt_GetFontOFfsetForIndex (never worked for non-0 input?);
 //                     fixed an assert() bug in the new rasterizer
 //                     replace assert() with STBTT_assert() in new rasterizer
@@ -5025,7 +5025,7 @@ STBTT_DEF int stbtt_CompareUTF8toUTF16_bigendian(const char *s1, int len1, const
 //                    bugfixes for:
 //                        codepoint-to-glyph conversion using table fmt=12
 //                        codepoint-to-glyph conversion using table fmt=4
-//                        stbtt_GetBakedQuad with non-square texture (Zer)
+//                        stbtt_GetBakedQuad with non-square characterModel (Zer)
 //                    updated Hello World! sample to use kerning and subpixel
 //                    fixed some warnings
 //   0.3  (2009-06-24) cmap fmt=12, compound shapes (MM)

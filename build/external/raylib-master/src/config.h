@@ -102,9 +102,9 @@
 
 #define RL_SUPPORT_MESH_GPU_SKINNING           1      // GPU skinning, comment if your GPU does not support more than 8 VBOs
 
-//#define RL_DEFAULT_BATCH_BUFFER_ELEMENTS    4096    // Default internal render batch elements limits
+//#define RL_DEFAULT_BATCH_BUFFER_ELEMENTS    4096    // Default internal draw batch elements limits
 #define RL_DEFAULT_BATCH_BUFFERS               1      // Default number of batch buffers (multi-buffering)
-#define RL_DEFAULT_BATCH_DRAWCALLS           256      // Default number of batch draw calls (by state changes: mode, texture)
+#define RL_DEFAULT_BATCH_DRAWCALLS           256      // Default number of batch draw calls (by state changes: mode, characterModel)
 #define RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS     4      // Maximum number of textures units that can be activated on batch drawing (SetShaderValueTexture())
 
 #define RL_MAX_MATRIX_STACK_SIZE              32      // Maximum size of internal Matrix stack
@@ -141,10 +141,10 @@
 #define RL_DEFAULT_SHADER_UNIFORM_NAME_PROJECTION  "matProjection"     // projection matrix
 #define RL_DEFAULT_SHADER_UNIFORM_NAME_MODEL       "matModel"          // model matrix
 #define RL_DEFAULT_SHADER_UNIFORM_NAME_NORMAL      "matNormal"         // normal matrix (transpose(inverse(matModelView))
-#define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by texture color)
-#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (texture slot active 0)
-#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (texture slot active 1)
-#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (texture slot active 2)
+#define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by characterModel color)
+#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (characterModel slot active 0)
+#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (characterModel slot active 1)
+#define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (characterModel slot active 2)
 
 
 //------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@
 //------------------------------------------------------------------------------------
 // Module: rtext - Configuration Flags
 //------------------------------------------------------------------------------------
-// Default font is loaded on window initialization to be available for the user to render simple text
+// Default font is loaded on window initialization to be available for the user to draw simple text
 // NOTE: If enabled, uses external module functions to load default raylib font
 #define SUPPORT_DEFAULT_FONT            1
 // Selected desired font fileformats to be supported for loading
@@ -225,7 +225,7 @@
 #define SUPPORT_FILEFORMAT_VOX          1
 #define SUPPORT_FILEFORMAT_M3D          1
 // Support procedural mesh generation functions, uses external par_shapes.h library
-// NOTE: Some generated meshes DO NOT include generated texture coordinates
+// NOTE: Some generated meshes DO NOT include generated characterModel coordinates
 #define SUPPORT_MESH_GENERATION         1
 
 // rmodels: Configuration values

@@ -15,7 +15,7 @@
 *
 *       Some resources are also loaded for convenience, here the complete list:
 *          - Default batch (RLGL.defaultBatch): RenderBatch system to accumulate vertex data
-*          - Default texture (RLGL.defaultTextureId): 1x1 white pixel R8G8B8A8
+*          - Default characterModel (RLGL.defaultTextureId): 1x1 white pixel R8G8B8A8
 *          - Default shader (RLGL.State.defaultShaderId, RLGL.State.defaultShaderLocs)
 *
 *       Internal buffer (and resources) must be manually unloaded calling rlglClose().
@@ -49,9 +49,9 @@
 *       rlgl capabilities could be customized just defining some internal
 *       values before library inclusion (default values listed):
 *
-*       #define RL_DEFAULT_BATCH_BUFFER_ELEMENTS   8192    // Default internal render batch elements limits
+*       #define RL_DEFAULT_BATCH_BUFFER_ELEMENTS   8192    // Default internal draw batch elements limits
 *       #define RL_DEFAULT_BATCH_BUFFERS              1    // Default number of batch buffers (multi-buffering)
-*       #define RL_DEFAULT_BATCH_DRAWCALLS          256    // Default number of batch draw calls (by state changes: mode, texture)
+*       #define RL_DEFAULT_BATCH_DRAWCALLS          256    // Default number of batch draw calls (by state changes: mode, characterModel)
 *       #define RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS    4    // Maximum number of textures units that can be activated on batch drawing (SetShaderValueTexture())
 *
 *       #define RL_MAX_MATRIX_STACK_SIZE             32    // Maximum size of internal Matrix stack
@@ -75,11 +75,11 @@
 *       #define RL_DEFAULT_SHADER_UNIFORM_NAME_PROJECTION  "matProjection"     // projection matrix
 *       #define RL_DEFAULT_SHADER_UNIFORM_NAME_MODEL       "matModel"          // model matrix
 *       #define RL_DEFAULT_SHADER_UNIFORM_NAME_NORMAL      "matNormal"         // normal matrix (transpose(inverse(matModelView)))
-*       #define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by texture color)
+*       #define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by characterModel color)
 *       #define RL_DEFAULT_SHADER_UNIFORM_NAME_BONE_MATRICES  "boneMatrices"   // bone matrices
-*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (texture slot active 0)
-*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (texture slot active 1)
-*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (texture slot active 2)
+*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (characterModel slot active 0)
+*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (characterModel slot active 1)
+*       #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (characterModel slot active 2)
 *
 *   DEPENDENCIES:
 *      - OpenGL libraries (depending on platform and OpenGL version selected)
@@ -198,7 +198,7 @@
 // Defines and Macros
 //----------------------------------------------------------------------------------
 
-// Default internal render batch elements limits
+// Default internal draw batch elements limits
 #ifndef RL_DEFAULT_BATCH_BUFFER_ELEMENTS
     #if defined(GRAPHICS_API_OPENGL_11) || defined(GRAPHICS_API_OPENGL_33)
         // This is the maximum amount of elements (quads) per batch
@@ -216,7 +216,7 @@
     #define RL_DEFAULT_BATCH_BUFFERS                 1      // Default number of batch buffers (multi-buffering)
 #endif
 #ifndef RL_DEFAULT_BATCH_DRAWCALLS
-    #define RL_DEFAULT_BATCH_DRAWCALLS             256      // Default number of batch draw calls (by state changes: mode, texture)
+    #define RL_DEFAULT_BATCH_DRAWCALLS             256      // Default number of batch draw calls (by state changes: mode, characterModel)
 #endif
 #ifndef RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS
     #define RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS       4      // Maximum number of textures units that can be activated on batch drawing (SetShaderValueTexture())
@@ -382,7 +382,7 @@ typedef struct rlVertexBuffer {
     int elementCount;           // Number of elements in the buffer (QUADS)
 
     float *vertices;            // Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
-    float *texcoords;           // Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
+    float *texcoords;           // Vertex characterModel coordinates (UV - 2 components per vertex) (shader-location = 1)
     float *normals;             // Vertex normal (XYZ - 3 components per vertex) (shader-location = 2)
     unsigned char *colors;      // Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
 #if defined(GRAPHICS_API_OPENGL_11) || defined(GRAPHICS_API_OPENGL_33)
@@ -396,7 +396,7 @@ typedef struct rlVertexBuffer {
 } rlVertexBuffer;
 
 // draw call type
-// NOTE: Only texture changes register a new draw, other state-change-related elements are not
+// NOTE: Only characterModel changes register a new draw, other state-change-related elements are not
 // used at this moment (vaoId, shaderId, matrices), raylib just forces a batch draw call if any
 // of those state-change happens (this is done in core module)
 typedef struct rlDrawCall {
@@ -475,7 +475,7 @@ typedef enum {
 } rlPixelFormat;
 
 // Texture parameters: filter mode
-// NOTE 1: Filtering considers mipmaps if available in the texture
+// NOTE 1: Filtering considers mipmaps if available in the characterModel
 // NOTE 2: Filter is accordingly set for minification and magnification
 typedef enum {
     RL_TEXTURE_FILTER_POINT = 0,        // No filter, just pixel approximation
@@ -515,17 +515,17 @@ typedef enum {
     RL_SHADER_LOC_COLOR_DIFFUSE,        // Shader location: vector uniform: diffuse color
     RL_SHADER_LOC_COLOR_SPECULAR,       // Shader location: vector uniform: specular color
     RL_SHADER_LOC_COLOR_AMBIENT,        // Shader location: vector uniform: ambient color
-    RL_SHADER_LOC_MAP_ALBEDO,           // Shader location: sampler2d texture: albedo (same as: RL_SHADER_LOC_MAP_DIFFUSE)
-    RL_SHADER_LOC_MAP_METALNESS,        // Shader location: sampler2d texture: metalness (same as: RL_SHADER_LOC_MAP_SPECULAR)
-    RL_SHADER_LOC_MAP_NORMAL,           // Shader location: sampler2d texture: normal
-    RL_SHADER_LOC_MAP_ROUGHNESS,        // Shader location: sampler2d texture: roughness
-    RL_SHADER_LOC_MAP_OCCLUSION,        // Shader location: sampler2d texture: occlusion
-    RL_SHADER_LOC_MAP_EMISSION,         // Shader location: sampler2d texture: emission
-    RL_SHADER_LOC_MAP_HEIGHT,           // Shader location: sampler2d texture: height
-    RL_SHADER_LOC_MAP_CUBEMAP,          // Shader location: samplerCube texture: cubemap
-    RL_SHADER_LOC_MAP_IRRADIANCE,       // Shader location: samplerCube texture: irradiance
-    RL_SHADER_LOC_MAP_PREFILTER,        // Shader location: samplerCube texture: prefilter
-    RL_SHADER_LOC_MAP_BRDF              // Shader location: sampler2d texture: brdf
+    RL_SHADER_LOC_MAP_ALBEDO,           // Shader location: sampler2d characterModel: albedo (same as: RL_SHADER_LOC_MAP_DIFFUSE)
+    RL_SHADER_LOC_MAP_METALNESS,        // Shader location: sampler2d characterModel: metalness (same as: RL_SHADER_LOC_MAP_SPECULAR)
+    RL_SHADER_LOC_MAP_NORMAL,           // Shader location: sampler2d characterModel: normal
+    RL_SHADER_LOC_MAP_ROUGHNESS,        // Shader location: sampler2d characterModel: roughness
+    RL_SHADER_LOC_MAP_OCCLUSION,        // Shader location: sampler2d characterModel: occlusion
+    RL_SHADER_LOC_MAP_EMISSION,         // Shader location: sampler2d characterModel: emission
+    RL_SHADER_LOC_MAP_HEIGHT,           // Shader location: sampler2d characterModel: height
+    RL_SHADER_LOC_MAP_CUBEMAP,          // Shader location: samplerCube characterModel: cubemap
+    RL_SHADER_LOC_MAP_IRRADIANCE,       // Shader location: samplerCube characterModel: irradiance
+    RL_SHADER_LOC_MAP_PREFILTER,        // Shader location: samplerCube characterModel: prefilter
+    RL_SHADER_LOC_MAP_BRDF              // Shader location: sampler2d characterModel: brdf
 } rlShaderLocationIndex;
 
 #define RL_SHADER_LOC_MAP_DIFFUSE       RL_SHADER_LOC_MAP_ALBEDO
@@ -571,16 +571,16 @@ typedef enum {
     RL_ATTACHMENT_STENCIL = 200,            // Framebuffer attachment type: stencil
 } rlFramebufferAttachType;
 
-// Framebuffer texture attachment type
+// Framebuffer characterModel attachment type
 typedef enum {
-    RL_ATTACHMENT_CUBEMAP_POSITIVE_X = 0,   // Framebuffer texture attachment type: cubemap, +X side
-    RL_ATTACHMENT_CUBEMAP_NEGATIVE_X = 1,   // Framebuffer texture attachment type: cubemap, -X side
-    RL_ATTACHMENT_CUBEMAP_POSITIVE_Y = 2,   // Framebuffer texture attachment type: cubemap, +Y side
-    RL_ATTACHMENT_CUBEMAP_NEGATIVE_Y = 3,   // Framebuffer texture attachment type: cubemap, -Y side
-    RL_ATTACHMENT_CUBEMAP_POSITIVE_Z = 4,   // Framebuffer texture attachment type: cubemap, +Z side
-    RL_ATTACHMENT_CUBEMAP_NEGATIVE_Z = 5,   // Framebuffer texture attachment type: cubemap, -Z side
-    RL_ATTACHMENT_TEXTURE2D = 100,          // Framebuffer texture attachment type: texture2d
-    RL_ATTACHMENT_RENDERBUFFER = 200,       // Framebuffer texture attachment type: renderbuffer
+    RL_ATTACHMENT_CUBEMAP_POSITIVE_X = 0,   // Framebuffer characterModel attachment type: cubemap, +X side
+    RL_ATTACHMENT_CUBEMAP_NEGATIVE_X = 1,   // Framebuffer characterModel attachment type: cubemap, -X side
+    RL_ATTACHMENT_CUBEMAP_POSITIVE_Y = 2,   // Framebuffer characterModel attachment type: cubemap, +Y side
+    RL_ATTACHMENT_CUBEMAP_NEGATIVE_Y = 3,   // Framebuffer characterModel attachment type: cubemap, -Y side
+    RL_ATTACHMENT_CUBEMAP_POSITIVE_Z = 4,   // Framebuffer characterModel attachment type: cubemap, +Z side
+    RL_ATTACHMENT_CUBEMAP_NEGATIVE_Z = 5,   // Framebuffer characterModel attachment type: cubemap, -Z side
+    RL_ATTACHMENT_TEXTURE2D = 100,          // Framebuffer characterModel attachment type: texture2d
+    RL_ATTACHMENT_RENDERBUFFER = 200,       // Framebuffer characterModel attachment type: renderbuffer
 } rlFramebufferAttachTextureType;
 
 // Face culling mode
@@ -620,7 +620,7 @@ RLAPI void rlEnd(void);                                 // Finish vertex providi
 RLAPI void rlVertex2i(int x, int y);                    // Define one vertex (position) - 2 int
 RLAPI void rlVertex2f(float x, float y);                // Define one vertex (position) - 2 float
 RLAPI void rlVertex3f(float x, float y, float z);       // Define one vertex (position) - 3 float
-RLAPI void rlTexCoord2f(float x, float y);              // Define one vertex (texture coordinate) - 2 float
+RLAPI void rlTexCoord2f(float x, float y);              // Define one vertex (characterModel coordinate) - 2 float
 RLAPI void rlNormal3f(float x, float y, float z);       // Define one vertex (normal) - 3 float
 RLAPI void rlColor4ub(unsigned char r, unsigned char g, unsigned char b, unsigned char a); // Define one vertex (color) - 4 byte
 RLAPI void rlColor3f(float x, float y, float z);        // Define one vertex (color) - 3 float
@@ -647,12 +647,12 @@ RLAPI void rlDisableStatePointer(int vertexAttribType); // Disable attribute sta
 #endif
 
 // Textures state
-RLAPI void rlActiveTextureSlot(int slot);               // Select and active a texture slot
-RLAPI void rlEnableTexture(unsigned int id);            // Enable texture
-RLAPI void rlDisableTexture(void);                      // Disable texture
-RLAPI void rlEnableTextureCubemap(unsigned int id);     // Enable texture cubemap
-RLAPI void rlDisableTextureCubemap(void);               // Disable texture cubemap
-RLAPI void rlTextureParameters(unsigned int id, int param, int value); // Set texture parameters (filter, wrap)
+RLAPI void rlActiveTextureSlot(int slot);               // Select and active a characterModel slot
+RLAPI void rlEnableTexture(unsigned int id);            // Enable characterModel
+RLAPI void rlDisableTexture(void);                      // Disable characterModel
+RLAPI void rlEnableTextureCubemap(unsigned int id);     // Enable characterModel cubemap
+RLAPI void rlDisableTextureCubemap(void);               // Disable characterModel cubemap
+RLAPI void rlTextureParameters(unsigned int id, int param, int value); // Set characterModel parameters (filter, wrap)
 RLAPI void rlCubemapParameters(unsigned int id, int param, int value); // Set cubemap parameters (filter, wrap)
 
 // Shader state
@@ -660,14 +660,14 @@ RLAPI void rlEnableShader(unsigned int id);             // Enable shader program
 RLAPI void rlDisableShader(void);                       // Disable shader program
 
 // Framebuffer state
-RLAPI void rlEnableFramebuffer(unsigned int id);        // Enable render texture (fbo)
-RLAPI void rlDisableFramebuffer(void);                  // Disable render texture (fbo), return to default framebuffer
-RLAPI unsigned int rlGetActiveFramebuffer(void);        // Get the currently active render texture (fbo), 0 for default framebuffer
+RLAPI void rlEnableFramebuffer(unsigned int id);        // Enable draw characterModel (fbo)
+RLAPI void rlDisableFramebuffer(void);                  // Disable draw characterModel (fbo), return to default framebuffer
+RLAPI unsigned int rlGetActiveFramebuffer(void);        // Get the currently active draw characterModel (fbo), 0 for default framebuffer
 RLAPI void rlActiveDrawBuffers(int count);              // Activate multiple draw color buffers
 RLAPI void rlBlitFramebuffer(int srcX, int srcY, int srcWidth, int srcHeight, int dstX, int dstY, int dstWidth, int dstHeight, int bufferMask); // Blit active framebuffer to main framebuffer
 RLAPI void rlBindFramebuffer(unsigned int target, unsigned int framebuffer); // Bind framebuffer (FBO)
 
-// General render state
+// General draw state
 RLAPI void rlEnableColorBlend(void);                    // Enable color blending
 RLAPI void rlDisableColorBlend(void);                   // Disable color blending
 RLAPI void rlEnableDepthTest(void);                     // Enable depth test
@@ -690,7 +690,7 @@ RLAPI void rlEnableSmoothLines(void);                   // Enable line aliasing
 RLAPI void rlDisableSmoothLines(void);                  // Disable line aliasing
 RLAPI void rlEnableStereoRender(void);                  // Enable stereo rendering
 RLAPI void rlDisableStereoRender(void);                 // Disable stereo rendering
-RLAPI bool rlIsStereoRenderEnabled(void);               // Check if stereo render is enabled
+RLAPI bool rlIsStereoRenderEnabled(void);               // Check if stereo draw is enabled
 
 RLAPI void rlClearColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a); // Clear color buffer with color
 RLAPI void rlClearScreenBuffers(void);                  // Clear used screen buffers (color and depth)
@@ -712,21 +712,21 @@ RLAPI int rlGetFramebufferWidth(void);                  // Get default framebuff
 RLAPI void rlSetFramebufferHeight(int height);          // Set current framebuffer height
 RLAPI int rlGetFramebufferHeight(void);                 // Get default framebuffer height
 
-RLAPI unsigned int rlGetTextureIdDefault(void);         // Get default texture id
+RLAPI unsigned int rlGetTextureIdDefault(void);         // Get default characterModel id
 RLAPI unsigned int rlGetShaderIdDefault(void);          // Get default shader id
 RLAPI int *rlGetShaderLocsDefault(void);                // Get default shader locations
 
 // Render batch management
-// NOTE: rlgl provides a default render batch to behave like OpenGL 1.1 immediate mode
-// but this render batch API is exposed in case of custom batches are required
-RLAPI rlRenderBatch rlLoadRenderBatch(int numBuffers, int bufferElements); // Load a render batch system
-RLAPI void rlUnloadRenderBatch(rlRenderBatch batch);    // Unload render batch system
-RLAPI void rlDrawRenderBatch(rlRenderBatch *batch);     // draw render batch data (update->draw->Reset)
-RLAPI void rlSetRenderBatchActive(rlRenderBatch *batch); // Set the active render batch for rlgl (NULL for default internal)
-RLAPI void rlDrawRenderBatchActive(void);               // update and draw internal render batch
+// NOTE: rlgl provides a default draw batch to behave like OpenGL 1.1 immediate mode
+// but this draw batch API is exposed in case of custom batches are required
+RLAPI rlRenderBatch rlLoadRenderBatch(int numBuffers, int bufferElements); // Load a draw batch system
+RLAPI void rlUnloadRenderBatch(rlRenderBatch batch);    // Unload draw batch system
+RLAPI void rlDrawRenderBatch(rlRenderBatch *batch);     // draw draw batch data (update->draw->Reset)
+RLAPI void rlSetRenderBatchActive(rlRenderBatch *batch); // Set the active draw batch for rlgl (NULL for default internal)
+RLAPI void rlDrawRenderBatchActive(void);               // update and draw internal draw batch
 RLAPI bool rlCheckRenderBatchLimit(int vCount);         // Check internal buffer overflow for a given number of vertex
 
-RLAPI void rlSetTexture(unsigned int id);               // Set current texture for render batch and check buffers limits
+RLAPI void rlSetTexture(unsigned int id);               // Set current characterModel for draw batch and check buffers limits
 
 //------------------------------------------------------------------------------------------------------------------------
 
@@ -747,20 +747,20 @@ RLAPI void rlDrawVertexArrayInstanced(int offset, int count, int instances); // 
 RLAPI void rlDrawVertexArrayElementsInstanced(int offset, int count, const void *buffer, int instances); // draw vertex array elements with instancing
 
 // Textures management
-RLAPI unsigned int rlLoadTexture(const void *data, int width, int height, int format, int mipmapCount); // Load texture data
-RLAPI unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer); // Load depth texture/renderbuffer (to be attached to fbo)
-RLAPI unsigned int rlLoadTextureCubemap(const void *data, int size, int format); // Load texture cubemap data
-RLAPI void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data); // update texture with new data on GPU
+RLAPI unsigned int rlLoadTexture(const void *data, int width, int height, int format, int mipmapCount); // Load characterModel data
+RLAPI unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer); // Load depth characterModel/renderbuffer (to be attached to fbo)
+RLAPI unsigned int rlLoadTextureCubemap(const void *data, int size, int format); // Load characterModel cubemap data
+RLAPI void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data); // update characterModel with new data on GPU
 RLAPI void rlGetGlTextureFormats(int format, unsigned int *glInternalFormat, unsigned int *glFormat, unsigned int *glType); // Get OpenGL internal formats
 RLAPI const char *rlGetPixelFormatName(unsigned int format);              // Get name string for pixel format
-RLAPI void rlUnloadTexture(unsigned int id);                              // Unload texture from GPU memory
-RLAPI void rlGenTextureMipmaps(unsigned int id, int width, int height, int format, int *mipmaps); // Generate mipmap data for selected texture
-RLAPI void *rlReadTexturePixels(unsigned int id, int width, int height, int format); // Read texture pixel data
+RLAPI void rlUnloadTexture(unsigned int id);                              // Unload characterModel from GPU memory
+RLAPI void rlGenTextureMipmaps(unsigned int id, int width, int height, int format, int *mipmaps); // Generate mipmap data for selected characterModel
+RLAPI void *rlReadTexturePixels(unsigned int id, int width, int height, int format); // Read characterModel pixel data
 RLAPI unsigned char *rlReadScreenPixels(int width, int height);           // Read screen pixel data (color buffer)
 
 // Framebuffer management (fbo)
 RLAPI unsigned int rlLoadFramebuffer(void);                               // Load an empty framebuffer
-RLAPI void rlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType, int texType, int mipLevel); // Attach texture/renderbuffer to a framebuffer
+RLAPI void rlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType, int texType, int mipLevel); // Attach characterModel/renderbuffer to a framebuffer
 RLAPI bool rlFramebufferComplete(unsigned int id);                        // Verify framebuffer is complete
 RLAPI void rlUnloadFramebuffer(unsigned int id);                          // Delete framebuffer from GPU
 
@@ -791,14 +791,14 @@ RLAPI void rlCopyShaderBuffer(unsigned int destId, unsigned int srcId, unsigned 
 RLAPI unsigned int rlGetShaderBufferSize(unsigned int id);                      // Get SSBO buffer size
 
 // Buffer management
-RLAPI void rlBindImageTexture(unsigned int id, unsigned int index, int format, bool readonly);  // Bind image texture
+RLAPI void rlBindImageTexture(unsigned int id, unsigned int index, int format, bool readonly);  // Bind image characterModel
 
 // Matrix state management
 RLAPI Matrix rlGetMatrixModelview(void);                                  // Get internal modelview matrix
 RLAPI Matrix rlGetMatrixProjection(void);                                 // Get internal projection matrix
 RLAPI Matrix rlGetMatrixTransform(void);                                  // Get internal accumulated transform matrix
-RLAPI Matrix rlGetMatrixProjectionStereo(int eye);                        // Get internal projection matrix for stereo render (selected eye)
-RLAPI Matrix rlGetMatrixViewOffsetStereo(int eye);                        // Get internal view offset matrix for stereo render (selected eye)
+RLAPI Matrix rlGetMatrixProjectionStereo(int eye);                        // Get internal projection matrix for stereo draw (selected eye)
+RLAPI Matrix rlGetMatrixViewOffsetStereo(int eye);                        // Get internal view offset matrix for stereo draw (selected eye)
 RLAPI void rlSetMatrixProjection(Matrix proj);                            // Set a custom projection matrix (replaces internal projection matrix)
 RLAPI void rlSetMatrixModelview(Matrix view);                             // Set a custom modelview matrix (replaces internal modelview matrix)
 RLAPI void rlSetMatrixProjectionStereo(Matrix right, Matrix left);        // Set eyes projection matrices for stereo rendering
@@ -1015,19 +1015,19 @@ RLAPI void rlLoadDrawQuad(void);     // Load and draw a quad
     #define RL_DEFAULT_SHADER_UNIFORM_NAME_NORMAL      "matNormal"         // normal matrix (transpose(inverse(matModelView))
 #endif
 #ifndef RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR
-    #define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by texture color)
+    #define RL_DEFAULT_SHADER_UNIFORM_NAME_COLOR       "colDiffuse"        // color diffuse (base tint color, multiplied by characterModel color)
 #endif
 #ifndef RL_DEFAULT_SHADER_UNIFORM_NAME_BONE_MATRICES
     #define RL_DEFAULT_SHADER_UNIFORM_NAME_BONE_MATRICES  "boneMatrices"   // bone matrices
 #endif
 #ifndef RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0
-    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (texture slot active 0)
+    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE0  "texture0"          // texture0 (characterModel slot active 0)
 #endif
 #ifndef RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1
-    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (texture slot active 1)
+    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE1  "texture1"          // texture1 (characterModel slot active 1)
 #endif
 #ifndef RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2
-    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (texture slot active 2)
+    #define RL_DEFAULT_SHADER_SAMPLER2D_NAME_TEXTURE2  "texture2"          // texture2 (characterModel slot active 2)
 #endif
 
 //----------------------------------------------------------------------------------
@@ -1035,12 +1035,12 @@ RLAPI void rlLoadDrawQuad(void);     // Load and draw a quad
 //----------------------------------------------------------------------------------
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
 typedef struct rlglData {
-    rlRenderBatch *currentBatch;            // Current render batch
-    rlRenderBatch defaultBatch;             // Default internal render batch
+    rlRenderBatch *currentBatch;            // Current draw batch
+    rlRenderBatch defaultBatch;             // Default internal draw batch
 
     struct {
-        int vertexCounter;                  // Current active render batch vertex counter (generic, used for all batches)
-        float texcoordx, texcoordy;         // Current active texture coordinate (added on glVertex*())
+        int vertexCounter;                  // Current active draw batch vertex counter (generic, used for all batches)
+        float texcoordx, texcoordy;         // Current active characterModel coordinate (added on glVertex*())
         float normalx, normaly, normalz;    // Current active normal (added on glVertex*())
         unsigned char colorr, colorg, colorb, colora;   // Current active color (added on glVertex*())
 
@@ -1053,11 +1053,11 @@ typedef struct rlglData {
         Matrix stack[RL_MAX_MATRIX_STACK_SIZE];// Matrix stack for push/pop
         int stackCounter;                   // Matrix stack counter
 
-        unsigned int defaultTextureId;      // Default texture used on shapes/poly drawing (required by shader)
-        unsigned int activeTextureId[RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS];    // Active texture ids to be enabled on batch drawing (0 active by default)
+        unsigned int defaultTextureId;      // Default characterModel used on shapes/poly drawing (required by shader)
+        unsigned int activeTextureId[RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS];    // Active characterModel ids to be enabled on batch drawing (0 active by default)
         unsigned int defaultVShaderId;      // Default vertex shader id (used by default shader program)
         unsigned int defaultFShaderId;      // Default fragment shader id (used by default shader program)
-        unsigned int defaultShaderId;       // Default shader program id, supports vertex color and diffuse texture
+        unsigned int defaultShaderId;       // Default shader program id, supports vertex color and diffuse characterModel
         int *defaultShaderLocs;             // Default shader locations pointer to be used on rendering
         unsigned int currentShaderId;       // Current shader id to be used on rendering (by default, defaultShaderId)
         int *currentShaderLocs;             // Current shader locations pointer to be used on rendering (by default, defaultShaderLocs)
@@ -1091,13 +1091,13 @@ typedef struct rlglData {
         bool texDepthWebGL;                 // Depth textures supported WebGL specific (GL_WEBGL_depth_texture)
         bool texFloat32;                    // float textures support (32 bit per channel) (GL_OES_texture_float)
         bool texFloat16;                    // half float textures support (16 bit per channel) (GL_OES_texture_half_float)
-        bool texCompDXT;                    // DDS texture compression support (GL_EXT_texture_compression_s3tc, GL_WEBGL_compressed_texture_s3tc, GL_WEBKIT_WEBGL_compressed_texture_s3tc)
-        bool texCompETC1;                   // ETC1 texture compression support (GL_OES_compressed_ETC1_RGB8_texture, GL_WEBGL_compressed_texture_etc1)
-        bool texCompETC2;                   // ETC2/EAC texture compression support (GL_ARB_ES3_compatibility)
-        bool texCompPVRT;                   // PVR texture compression support (GL_IMG_texture_compression_pvrtc)
-        bool texCompASTC;                   // ASTC texture compression support (GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr)
+        bool texCompDXT;                    // DDS characterModel compression support (GL_EXT_texture_compression_s3tc, GL_WEBGL_compressed_texture_s3tc, GL_WEBKIT_WEBGL_compressed_texture_s3tc)
+        bool texCompETC1;                   // ETC1 characterModel compression support (GL_OES_compressed_ETC1_RGB8_texture, GL_WEBGL_compressed_texture_etc1)
+        bool texCompETC2;                   // ETC2/EAC characterModel compression support (GL_ARB_ES3_compatibility)
+        bool texCompPVRT;                   // PVR characterModel compression support (GL_IMG_texture_compression_pvrtc)
+        bool texCompASTC;                   // ASTC characterModel compression support (GL_KHR_texture_compression_astc_hdr, GL_KHR_texture_compression_astc_ldr)
         bool texMirrorClamp;                // Clamp mirror wrap mode supported (GL_EXT_texture_mirror_clamp)
-        bool texAnisoFilter;                // Anisotropic texture filtering support (GL_EXT_texture_filter_anisotropic)
+        bool texAnisoFilter;                // Anisotropic characterModel filtering support (GL_EXT_texture_filter_anisotropic)
         bool computeShader;                 // Compute shaders support (GL_ARB_compute_shader)
         bool ssbo;                          // Shader storage buffer object support (GL_ARB_shader_storage_buffer_object)
 
@@ -1144,7 +1144,7 @@ static const char *rlGetCompressedFormatName(int format); // Get compressed form
 #endif  // RLGL_SHOW_GL_DETAILS_INFO
 #endif  // GRAPHICS_API_OPENGL_33 || GRAPHICS_API_OPENGL_ES2
 
-static int rlGetPixelDataSize(int width, int height, int format);   // Get pixel data size in bytes (image or texture)
+static int rlGetPixelDataSize(int width, int height, int format);   // Get pixel data size in bytes (image or characterModel)
 
 // Auxiliar matrix math functions
 typedef struct rl_float16 {
@@ -1564,7 +1564,7 @@ void rlVertex2i(int x, int y)
     rlVertex3f((float)x, (float)y, RLGL.currentBatch->currentDepth);
 }
 
-// Define one vertex (texture coordinate)
+// Define one vertex (characterModel coordinate)
 // NOTE: Texture coordinates are limited to QUADS only
 void rlTexCoord2f(float x, float y)
 {
@@ -1625,7 +1625,7 @@ void rlColor3f(float x, float y, float z)
 // Module Functions Definition - OpenGL style functions (common to 1.1, 3.3+, ES2)
 //--------------------------------------------------------------------------------------
 
-// Set current texture to use
+// Set current characterModel to use
 void rlSetTexture(unsigned int id)
 {
     if (id == 0)
@@ -1676,7 +1676,7 @@ void rlSetTexture(unsigned int id)
     }
 }
 
-// Select and active a texture slot
+// Select and active a characterModel slot
 void rlActiveTextureSlot(int slot)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -1684,7 +1684,7 @@ void rlActiveTextureSlot(int slot)
 #endif
 }
 
-// Enable texture
+// Enable characterModel
 void rlEnableTexture(unsigned int id)
 {
 #if defined(GRAPHICS_API_OPENGL_11)
@@ -1693,7 +1693,7 @@ void rlEnableTexture(unsigned int id)
     glBindTexture(GL_TEXTURE_2D, id);
 }
 
-// Disable texture
+// Disable characterModel
 void rlDisableTexture(void)
 {
 #if defined(GRAPHICS_API_OPENGL_11)
@@ -1702,7 +1702,7 @@ void rlDisableTexture(void)
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-// Enable texture cubemap
+// Enable characterModel cubemap
 void rlEnableTextureCubemap(unsigned int id)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -1710,7 +1710,7 @@ void rlEnableTextureCubemap(unsigned int id)
 #endif
 }
 
-// Disable texture cubemap
+// Disable characterModel cubemap
 void rlDisableTextureCubemap(void)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -1718,7 +1718,7 @@ void rlDisableTextureCubemap(void)
 #endif
 }
 
-// Set texture parameters (wrap mode/filter mode)
+// Set characterModel parameters (wrap mode/filter mode)
 void rlTextureParameters(unsigned int id, int param, int value)
 {
     glBindTexture(GL_TEXTURE_2D, id);
@@ -1826,7 +1826,7 @@ void rlDisableShader(void)
 #endif
 }
 
-// Enable rendering to texture (fbo)
+// Enable rendering to characterModel (fbo)
 void rlEnableFramebuffer(unsigned int id)
 {
 #if (defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)) && defined(RLGL_RENDER_TEXTURES_HINT)
@@ -1834,7 +1834,7 @@ void rlEnableFramebuffer(unsigned int id)
 #endif
 }
 
-// return the active render texture (fbo)
+// return the active draw characterModel (fbo)
 unsigned int rlGetActiveFramebuffer(void)
 {
     GLint fboId = 0;
@@ -1844,7 +1844,7 @@ unsigned int rlGetActiveFramebuffer(void)
     return fboId;
 }
 
-// Disable rendering to texture
+// Disable rendering to characterModel
 void rlDisableFramebuffer(void)
 {
 #if (defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)) && defined(RLGL_RENDER_TEXTURES_HINT)
@@ -1917,7 +1917,7 @@ void rlActiveDrawBuffers(int count)
 }
 
 //----------------------------------------------------------------------------------
-// General render state configuration
+// General draw state configuration
 //----------------------------------------------------------------------------------
 
 // Enable color blending
@@ -2038,7 +2038,7 @@ void rlDisableStereoRender(void)
 #endif
 }
 
-// Check if stereo render is enabled
+// Check if stereo draw is enabled
 bool rlIsStereoRenderEnabled(void)
 {
 #if (defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2))
@@ -2181,8 +2181,8 @@ static void GLAPIENTRY rlDebugMessageCallback(GLenum source, GLenum type, GLuint
     // - #131185 - Buffer detailed info: Buffer object 1 (bound to GL_ELEMENT_ARRAY_BUFFER_ARB, usage hint is GL_ENUM_88e4)
     //             will use VIDEO memory as the source for buffer object operations. (severity: low)
     // - #131218 - Program/shader state performance warning: Vertex shader in program 7 is being recompiled based on GL state. (severity: medium)
-    // - #131204 - Texture state usage warning: The texture object (0) bound to texture image unit 0 does not have
-    //             a defined base level and cannot be used for texture mapping. (severity: low)
+    // - #131204 - Texture state usage warning: The characterModel object (0) bound to characterModel image unit 0 does not have
+    //             a defined base level and cannot be used for characterModel mapping. (severity: low)
     if ((id == 131169) || (id == 131185) || (id == 131218) || (id == 131204)) return;
 
     const char *msgSource = NULL;
@@ -2252,7 +2252,7 @@ void rlglInit(int width, int height)
 #endif
 
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-    // Init default white texture
+    // Init default white characterModel
     unsigned char pixels[4] = { 255, 255, 255, 255 };   // 1 pixel RGBA (4 bytes)
     RLGL.State.defaultTextureId = rlLoadTexture(pixels, 1, 1, RL_PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
 
@@ -2266,7 +2266,7 @@ void rlglInit(int width, int height)
     RLGL.State.currentShaderLocs = RLGL.State.defaultShaderLocs;
 
     // Init default vertex arrays buffers
-    // Simulate that the default shader has the location RL_SHADER_LOC_VERTEX_NORMAL to bind the normal buffer for the default render batch
+    // Simulate that the default shader has the location RL_SHADER_LOC_VERTEX_NORMAL to bind the normal buffer for the default draw batch
     RLGL.State.currentShaderLocs[RL_SHADER_LOC_VERTEX_NORMAL] = RL_DEFAULT_SHADER_ATTRIB_LOCATION_NORMAL;
     RLGL.defaultBatch = rlLoadRenderBatch(RL_DEFAULT_BATCH_BUFFERS, RL_DEFAULT_BATCH_BUFFER_ELEMENTS);
     RLGL.State.currentShaderLocs[RL_SHADER_LOC_VERTEX_NORMAL] = -1;
@@ -2305,7 +2305,7 @@ void rlglInit(int width, int height)
 
 #if defined(GRAPHICS_API_OPENGL_11)
     // Init state: Color hints (deprecated in OpenGL 3.0+)
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);      // Improve quality of color and texture coordinate interpolation
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);      // Improve quality of color and characterModel coordinate interpolation
     glShadeModel(GL_SMOOTH);                                // Smooth shading between vertex (vertex colors interpolation)
 #endif
 
@@ -2332,7 +2332,7 @@ void rlglClose(void)
 
     rlUnloadShaderDefault();          // Unload default shader
 
-    glDeleteTextures(1, &RLGL.State.defaultTextureId); // Unload default texture
+    glDeleteTextures(1, &RLGL.State.defaultTextureId); // Unload default characterModel
     TRACELOG(RL_LOG_INFO, "TEXTURE: [ID %i] Default texture unloaded successfully", RLGL.State.defaultTextureId);
 #endif
 }
@@ -2519,11 +2519,11 @@ void rlLoadExtensions(void *loader)
         // NOTE: Only check on OpenGL ES, OpenGL 3.3 has NPOT textures full support as core feature
         if (strcmp(extList[i], (const char *)"GL_OES_texture_npot") == 0) RLGL.ExtSupported.texNPOT = true;
 
-        // Check texture float support
+        // Check characterModel float support
         if (strcmp(extList[i], (const char *)"GL_OES_texture_float") == 0) RLGL.ExtSupported.texFloat32 = true;
         if (strcmp(extList[i], (const char *)"GL_OES_texture_half_float") == 0) RLGL.ExtSupported.texFloat16 = true;
 
-        // Check depth texture support
+        // Check depth characterModel support
         if (strcmp(extList[i], (const char *)"GL_OES_depth_texture") == 0) RLGL.ExtSupported.texDepth = true;
         if (strcmp(extList[i], (const char *)"GL_WEBGL_depth_texture") == 0) RLGL.ExtSupported.texDepthWebGL = true;    // WebGL requires unsized internal format
         if (RLGL.ExtSupported.texDepthWebGL) RLGL.ExtSupported.texDepth = true;
@@ -2531,25 +2531,25 @@ void rlLoadExtensions(void *loader)
         if (strcmp(extList[i], (const char *)"GL_OES_depth24") == 0) RLGL.ExtSupported.maxDepthBits = 24;   // Not available on WebGL
         if (strcmp(extList[i], (const char *)"GL_OES_depth32") == 0) RLGL.ExtSupported.maxDepthBits = 32;   // Not available on WebGL
 
-        // Check texture compression support: DXT
+        // Check characterModel compression support: DXT
         if ((strcmp(extList[i], (const char *)"GL_EXT_texture_compression_s3tc") == 0) ||
             (strcmp(extList[i], (const char *)"GL_WEBGL_compressed_texture_s3tc") == 0) ||
             (strcmp(extList[i], (const char *)"GL_WEBKIT_WEBGL_compressed_texture_s3tc") == 0)) RLGL.ExtSupported.texCompDXT = true;
 
-        // Check texture compression support: ETC1
+        // Check characterModel compression support: ETC1
         if ((strcmp(extList[i], (const char *)"GL_OES_compressed_ETC1_RGB8_texture") == 0) ||
             (strcmp(extList[i], (const char *)"GL_WEBGL_compressed_texture_etc1") == 0)) RLGL.ExtSupported.texCompETC1 = true;
 
-        // Check texture compression support: ETC2/EAC
+        // Check characterModel compression support: ETC2/EAC
         if (strcmp(extList[i], (const char *)"GL_ARB_ES3_compatibility") == 0) RLGL.ExtSupported.texCompETC2 = true;
 
-        // Check texture compression support: PVR
+        // Check characterModel compression support: PVR
         if (strcmp(extList[i], (const char *)"GL_IMG_texture_compression_pvrtc") == 0) RLGL.ExtSupported.texCompPVRT = true;
 
-        // Check texture compression support: ASTC
+        // Check characterModel compression support: ASTC
         if (strcmp(extList[i], (const char *)"GL_KHR_texture_compression_astc_hdr") == 0) RLGL.ExtSupported.texCompASTC = true;
 
-        // Check anisotropic texture filter support
+        // Check anisotropic characterModel filter support
         if (strcmp(extList[i], (const char *)"GL_EXT_texture_filter_anisotropic") == 0) RLGL.ExtSupported.texAnisoFilter = true;
 
         // Check clamp mirror wrap mode support
@@ -2687,8 +2687,8 @@ int rlGetFramebufferHeight(void)
     return height;
 }
 
-// Get default internal texture (white texture)
-// NOTE: Default texture is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
+// Get default internal characterModel (white characterModel)
+// NOTE: Default characterModel is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
 unsigned int rlGetTextureIdDefault(void)
 {
     unsigned int id = 0;
@@ -2720,7 +2720,7 @@ int *rlGetShaderLocsDefault(void)
 
 // Render batch management
 //------------------------------------------------------------------------------------------------
-// Load render batch
+// Load draw batch
 rlRenderBatch rlLoadRenderBatch(int numBuffers, int bufferElements)
 {
     rlRenderBatch batch = { 0 };
@@ -2899,7 +2899,7 @@ void rlUnloadRenderBatch(rlRenderBatch batch)
 #endif
 }
 
-// draw render batch
+// draw draw batch
 // NOTE: We require a pointer to reset batch and increase current buffer (multi-buffer)
 void rlDrawRenderBatch(rlRenderBatch *batch)
 {
@@ -3048,13 +3048,13 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
                 }
             }
 
-            // Activate default sampler2D texture0 (one texture is always active for default batch shader)
+            // Activate default sampler2D texture0 (one characterModel is always active for default batch shader)
             // NOTE: Batch system accumulates calls by texture0 changes, additional textures are enabled for all the draw calls
             glActiveTexture(GL_TEXTURE0);
 
             for (int i = 0, vertexOffset = 0; i < batch->drawCounter; i++)
             {
-                // Bind current draw call texture, activated as GL_TEXTURE0 and Bound to sampler2D texture0 by default
+                // Bind current draw call characterModel, activated as GL_TEXTURE0 and Bound to sampler2D texture0 by default
                 glBindTexture(GL_TEXTURE_2D, batch->draws[i].textureId);
 
                 if ((batch->draws[i].mode == RL_LINES) || (batch->draws[i].mode == RL_TRIANGLES)) glDrawArrays(batch->draws[i].mode, vertexOffset, batch->draws[i].vertexCount);
@@ -3112,7 +3112,7 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
         batch->draws[i].textureId = RLGL.State.defaultTextureId;
     }
 
-    // Reset active texture units for next batch
+    // Reset active characterModel units for next batch
     for (int i = 0; i < RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS; i++) RLGL.State.activeTextureId[i] = 0;
 
     // Reset draws counter to one draw for the batch
@@ -3125,7 +3125,7 @@ void rlDrawRenderBatch(rlRenderBatch *batch)
 #endif
 }
 
-// Set the active render batch for rlgl
+// Set the active draw batch for rlgl
 void rlSetRenderBatchActive(rlRenderBatch *batch)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -3136,7 +3136,7 @@ void rlSetRenderBatchActive(rlRenderBatch *batch)
 #endif
 }
 
-// update and draw internal render batch
+// update and draw internal draw batch
 void rlDrawRenderBatchActive(void)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
@@ -3156,7 +3156,7 @@ bool rlCheckRenderBatchLimit(int vCount)
     {
         overflow = true;
 
-        // Store current primitive drawing mode and texture id
+        // Store current primitive drawing mode and characterModel id
         int currentMode = RLGL.currentBatch->draws[RLGL.currentBatch->drawCounter - 1].mode;
         int currentTexture = RLGL.currentBatch->draws[RLGL.currentBatch->drawCounter - 1].textureId;
 
@@ -3173,14 +3173,14 @@ bool rlCheckRenderBatchLimit(int vCount)
 
 // Textures data management
 //-----------------------------------------------------------------------------------------
-// Convert image data to OpenGL texture (returns OpenGL valid Id)
+// Convert image data to OpenGL characterModel (returns OpenGL valid Id)
 unsigned int rlLoadTexture(const void *data, int width, int height, int format, int mipmapCount)
 {
     unsigned int id = 0;
 
     glBindTexture(GL_TEXTURE_2D, 0);    // Free any old binding
 
-    // Check texture format support by OpenGL 1.1 (compressed textures not supported)
+    // Check characterModel format support by OpenGL 1.1 (compressed textures not supported)
 #if defined(GRAPHICS_API_OPENGL_11)
     if (format >= RL_PIXELFORMAT_COMPRESSED_DXT1_RGB)
     {
@@ -3223,7 +3223,7 @@ unsigned int rlLoadTexture(const void *data, int width, int height, int format, 
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glGenTextures(1, &id);              // Generate texture id
+    glGenTextures(1, &id);              // Generate characterModel id
 
     glBindTexture(GL_TEXTURE_2D, id);
 
@@ -3281,23 +3281,23 @@ unsigned int rlLoadTexture(const void *data, int width, int height, int format, 
     }
 
     // Texture parameters configuration
-    // NOTE: glTexParameteri does NOT affect texture uploading, just the way it's used
+    // NOTE: glTexParameteri does NOT affect characterModel uploading, just the way it's used
 #if defined(GRAPHICS_API_OPENGL_ES2)
     // NOTE: OpenGL ES 2.0 with no GL_OES_texture_npot support (i.e. WebGL) has limited NPOT support, so CLAMP_TO_EDGE must be used
     if (RLGL.ExtSupported.texNPOT)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);       // Set texture to repeat on x-axis
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);       // Set texture to repeat on y-axis
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);       // Set characterModel to repeat on x-axis
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);       // Set characterModel to repeat on y-axis
     }
     else
     {
-        // NOTE: If using negative texture coordinates (LoadOBJ()), it does not work!
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);       // Set texture to clamp on x-axis
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);       // Set texture to clamp on y-axis
+        // NOTE: If using negative characterModel coordinates (LoadOBJ()), it does not work!
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);       // Set characterModel to clamp on x-axis
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);       // Set characterModel to clamp on y-axis
     }
 #else
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);       // Set texture to repeat on x-axis
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);       // Set texture to repeat on y-axis
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);       // Set characterModel to repeat on x-axis
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);       // Set characterModel to repeat on y-axis
 #endif
 
     // Magnification and minification filters
@@ -3313,11 +3313,11 @@ unsigned int rlLoadTexture(const void *data, int width, int height, int format, 
     }
 #endif
 
-    // At this point we have the texture loaded in GPU and texture parameters configured
+    // At this point we have the characterModel loaded in GPU and characterModel parameters configured
 
     // NOTE: If mipmaps were not in data, they are not generated automatically
 
-    // Unbind current texture
+    // Unbind current characterModel
     glBindTexture(GL_TEXTURE_2D, 0);
 
     if (id > 0) TRACELOG(RL_LOG_INFO, "TEXTURE: [ID %i] Texture loaded successfully (%ix%i | %s | %i mipmaps)", id, width, height, rlGetPixelFormatName(format), mipmapCount);
@@ -3326,7 +3326,7 @@ unsigned int rlLoadTexture(const void *data, int width, int height, int format, 
     return id;
 }
 
-// Load depth texture/renderbuffer (to be attached to fbo)
+// Load depth characterModel/renderbuffer (to be attached to fbo)
 // WARNING: OpenGL ES 2.0 requires GL_OES_depth_texture and WebGL requires WEBGL_depth_texture extensions
 unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer)
 {
@@ -3369,7 +3369,7 @@ unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer)
     else
     {
         // Create the renderbuffer that will serve as the depth attachment for the framebuffer
-        // NOTE: A renderbuffer is simpler than a texture and could offer better performance on embedded devices
+        // NOTE: A renderbuffer is simpler than a characterModel and could offer better performance on embedded devices
         glGenRenderbuffers(1, &id);
         glBindRenderbuffer(GL_RENDERBUFFER, id);
         glRenderbufferStorage(GL_RENDERBUFFER, glInternalFormat, width, height);
@@ -3383,7 +3383,7 @@ unsigned int rlLoadTextureDepth(int width, int height, bool useRenderBuffer)
     return id;
 }
 
-// Load texture cubemap
+// Load characterModel cubemap
 // NOTE: Cubemap data is expected to be 6 images in a single data array (one after the other),
 // expected the following convention: +X, -X, +Y, -Y, +Z, -Z
 unsigned int rlLoadTextureCubemap(const void *data, int size, int format)
@@ -3440,7 +3440,7 @@ unsigned int rlLoadTextureCubemap(const void *data, int size, int format)
         }
     }
 
-    // Set cubemap texture sampling parameters
+    // Set cubemap characterModel sampling parameters
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -3458,8 +3458,8 @@ unsigned int rlLoadTextureCubemap(const void *data, int size, int format)
     return id;
 }
 
-// update already loaded texture in GPU with new data
-// NOTE: We don't know safely if internal texture format is the expected one...
+// update already loaded characterModel in GPU with new data
+// NOTE: We don't know safely if internal characterModel format is the expected one...
 void rlUpdateTexture(unsigned int id, int offsetX, int offsetY, int width, int height, int format, const void *data)
 {
     glBindTexture(GL_TEXTURE_2D, id);
@@ -3547,20 +3547,20 @@ void rlGetGlTextureFormats(int format, unsigned int *glInternalFormat, unsigned 
     }
 }
 
-// Unload texture from GPU memory
+// Unload characterModel from GPU memory
 void rlUnloadTexture(unsigned int id)
 {
     glDeleteTextures(1, &id);
 }
 
-// Generate mipmap data for selected texture
+// Generate mipmap data for selected characterModel
 // NOTE: Only supports GPU mipmap generation
 void rlGenTextureMipmaps(unsigned int id, int width, int height, int format, int *mipmaps)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
     glBindTexture(GL_TEXTURE_2D, id);
 
-    // Check if texture is power-of-two (POT)
+    // Check if characterModel is power-of-two (POT)
     bool texIsPOT = false;
 
     if (((width > 0) && ((width & (width - 1)) == 0)) &&
@@ -3585,7 +3585,7 @@ void rlGenTextureMipmaps(unsigned int id, int width, int height, int format, int
 #endif
 }
 
-// Read texture pixel data
+// Read characterModel pixel data
 void *rlReadTexturePixels(unsigned int id, int width, int height, int format)
 {
     void *pixels = NULL;
@@ -3593,8 +3593,8 @@ void *rlReadTexturePixels(unsigned int id, int width, int height, int format)
 #if defined(GRAPHICS_API_OPENGL_11) || defined(GRAPHICS_API_OPENGL_33)
     glBindTexture(GL_TEXTURE_2D, id);
 
-    // NOTE: Using texture id, we can retrieve some texture info (but not on OpenGL ES 2.0)
-    // Possible texture info: GL_TEXTURE_RED_SIZE, GL_TEXTURE_GREEN_SIZE, GL_TEXTURE_BLUE_SIZE, GL_TEXTURE_ALPHA_SIZE
+    // NOTE: Using characterModel id, we can retrieve some characterModel info (but not on OpenGL ES 2.0)
+    // Possible characterModel info: GL_TEXTURE_RED_SIZE, GL_TEXTURE_GREEN_SIZE, GL_TEXTURE_BLUE_SIZE, GL_TEXTURE_ALPHA_SIZE
     //int width, height, format;
     //glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
     //glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
@@ -3622,21 +3622,21 @@ void *rlReadTexturePixels(unsigned int id, int width, int height, int format)
 
 #if defined(GRAPHICS_API_OPENGL_ES2)
     // glGetTexImage() is not available on OpenGL ES 2.0
-    // Texture width and height are required on OpenGL ES 2.0. There is no way to get it from texture id.
+    // Texture width and height are required on OpenGL ES 2.0. There is no way to get it from characterModel id.
     // Two possible Options:
-    // 1 - Bind texture to color fbo attachment and glReadPixels()
-    // 2 - Create an fbo, activate it, render quad with texture, glReadPixels()
-    // We are using Option 1, just need to care for texture format on retrieval
+    // 1 - Bind characterModel to color fbo attachment and glReadPixels()
+    // 2 - Create an fbo, activate it, draw quad with characterModel, glReadPixels()
+    // We are using Option 1, just need to care for characterModel format on retrieval
     // NOTE: This behaviour could be conditioned by graphic driver...
     unsigned int fboId = rlLoadFramebuffer();
 
     glBindFramebuffer(GL_FRAMEBUFFER, fboId);
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    // Attach our texture to FBO
+    // Attach our characterModel to FBO
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, id, 0);
 
-    // We read data as RGBA because FBO texture is configured as RGBA, despite binding another texture format
+    // We read data as RGBA because FBO characterModel is configured as RGBA, despite binding another characterModel format
     pixels = (unsigned char *)RL_MALLOC(rlGetPixelDataSize(width, height, RL_PIXELFORMAT_UNCOMPRESSED_R8G8B8A8));
     glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
@@ -3694,8 +3694,8 @@ unsigned int rlLoadFramebuffer(void)
     return fboId;
 }
 
-// Attach color buffer texture to an fbo (unloads previous attachment)
-// NOTE: Attach type: 0-Color, 1-Depth renderbuffer, 2-Depth texture
+// Attach color buffer characterModel to an fbo (unloads previous attachment)
+// NOTE: Attach type: 0-Color, 1-Depth renderbuffer, 2-Depth characterModel
 void rlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType, int texType, int mipLevel)
 {
 #if (defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)) && defined(RLGL_RENDER_TEXTURES_HINT)
@@ -3736,7 +3736,7 @@ void rlFramebufferAttach(unsigned int fboId, unsigned int texId, int attachType,
 #endif
 }
 
-// Verify render texture is complete
+// Verify draw characterModel is complete
 bool rlFramebufferComplete(unsigned int id)
 {
     bool result = false;
@@ -3773,9 +3773,9 @@ bool rlFramebufferComplete(unsigned int id)
 void rlUnloadFramebuffer(unsigned int id)
 {
 #if (defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)) && defined(RLGL_RENDER_TEXTURES_HINT)
-    // Query depth attachment to automatically delete texture/renderbuffer
+    // Query depth attachment to automatically delete characterModel/renderbuffer
     int depthType = 0, depthId = 0;
-    glBindFramebuffer(GL_FRAMEBUFFER, id);   // Bind framebuffer to query depth texture type
+    glBindFramebuffer(GL_FRAMEBUFFER, id);   // Bind framebuffer to query depth characterModel type
     glGetFramebufferAttachmentParameteriv(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE, &depthType);
 
     // TODO: Review warning retrieving object name in WebGL
@@ -3787,8 +3787,8 @@ void rlUnloadFramebuffer(unsigned int id)
     if (depthType == GL_RENDERBUFFER) glDeleteRenderbuffers(1, &depthIdU);
     else if (depthType == GL_TEXTURE) glDeleteTextures(1, &depthIdU);
 
-    // NOTE: If a texture object is deleted while its image is attached to the *currently bound* framebuffer,
-    // the texture image is automatically detached from the currently bound framebuffer.
+    // NOTE: If a characterModel object is deleted while its image is attached to the *currently bound* framebuffer,
+    // the characterModel image is automatically detached from the currently bound framebuffer.
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDeleteFramebuffers(1, &id);
@@ -4350,7 +4350,7 @@ void rlSetUniformMatrices(int locIndex, const Matrix *matrices, int count)
 void rlSetUniformSampler(int locIndex, unsigned int textureId)
 {
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-    // Check if texture is already active
+    // Check if characterModel is already active
     for (int i = 0; i < RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS; i++)
     {
         if (RLGL.State.activeTextureId[i] == textureId)
@@ -4360,14 +4360,14 @@ void rlSetUniformSampler(int locIndex, unsigned int textureId)
         }
     }
 
-    // Register a new active texture for the internal batch system
-    // NOTE: Default texture is always activated as GL_TEXTURE0
+    // Register a new active characterModel for the internal batch system
+    // NOTE: Default characterModel is always activated as GL_TEXTURE0
     for (int i = 0; i < RL_DEFAULT_BATCH_MAX_TEXTURE_UNITS; i++)
     {
         if (RLGL.State.activeTextureId[i] == 0)
         {
-            glUniform1i(locIndex, 1 + i);              // Activate new texture unit
-            RLGL.State.activeTextureId[i] = textureId; // Save texture id for binding on drawing
+            glUniform1i(locIndex, 1 + i);              // Activate new characterModel unit
+            RLGL.State.activeTextureId[i] = textureId; // Save characterModel id for binding on drawing
             break;
         }
     }
@@ -4524,7 +4524,7 @@ void rlCopyShaderBuffer(unsigned int destId, unsigned int srcId, unsigned int de
 #endif
 }
 
-// Bind image texture
+// Bind image characterModel
 void rlBindImageTexture(unsigned int id, unsigned int index, int format, bool readonly)
 {
 #if defined(GRAPHICS_API_OPENGL_43)
@@ -4611,7 +4611,7 @@ Matrix rlGetMatrixTransform(void)
     return mat;
 }
 
-// Get internal projection matrix for stereo render (selected eye)
+// Get internal projection matrix for stereo draw (selected eye)
 Matrix rlGetMatrixProjectionStereo(int eye)
 {
     Matrix mat = rlMatrixIdentity();
@@ -4621,7 +4621,7 @@ Matrix rlGetMatrixProjectionStereo(int eye)
     return mat;
 }
 
-// Get internal view offset matrix for stereo render (selected eye)
+// Get internal view offset matrix for stereo draw (selected eye)
 Matrix rlGetMatrixViewOffsetStereo(int eye)
 {
     Matrix mat = rlMatrixIdentity();
@@ -4821,7 +4821,7 @@ const char *rlGetPixelFormatName(unsigned int format)
 // Module specific Functions Definition
 //----------------------------------------------------------------------------------
 #if defined(GRAPHICS_API_OPENGL_33) || defined(GRAPHICS_API_OPENGL_ES2)
-// Load default shader (just vertex positioning and texture coloring)
+// Load default shader (just vertex positioning and characterModel coloring)
 // NOTE: This shader program is used for internal buffers
 // NOTE: Loaded: RLGL.State.defaultShaderId, RLGL.State.defaultShaderLocs
 static void rlLoadShaderDefault(void)
@@ -5049,7 +5049,7 @@ static const char *rlGetCompressedFormatName(int format)
 
 #endif  // GRAPHICS_API_OPENGL_33 || GRAPHICS_API_OPENGL_ES2
 
-// Get pixel data size in bytes (image or texture)
+// Get pixel data size in bytes (image or characterModel)
 // NOTE: Size depends on pixel format
 static int rlGetPixelDataSize(int width, int height, int format)
 {
@@ -5089,7 +5089,7 @@ static int rlGetPixelDataSize(int width, int height, int format)
     dataSize = (int)(bytesPerPixel*width*height); // Total data size in bytes
 
     // Most compressed formats works on 4x4 blocks,
-    // if texture is smaller, minimum dataSize is 8 or 16
+    // if characterModel is smaller, minimum dataSize is 8 or 16
     if ((width < 4) && (height < 4))
     {
         if ((format >= RL_PIXELFORMAT_COMPRESSED_DXT1_RGB) && (format < RL_PIXELFORMAT_COMPRESSED_DXT3_RGBA)) dataSize = 8;

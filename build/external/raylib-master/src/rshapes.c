@@ -7,11 +7,11 @@
 *       Some functions implement two drawing options: TRIANGLES and QUADS, by default TRIANGLES
 *       are used but QUADS implementation can be selected with SUPPORT_QUADS_DRAW_MODE define
 *
-*       Some functions define texture coordinates (rlTexCoord2f()) for the shapes and use a
-*       user-provided texture with SetShapesTexture(), the pourpouse of this implementation
-*       is allowing to reduce draw calls when combined with a texture-atlas.
+*       Some functions define characterModel coordinates (rlTexCoord2f()) for the shapes and use a
+*       user-provided characterModel with SetShapesTexture(), the pourpouse of this implementation
+*       is allowing to reduce draw calls when combined with a characterModel-atlas.
 *
-*       By default, raylib sets the default texture and rectangle at InitWindow()[rcore] to one
+*       By default, raylib sets the default characterModel and rectangle at InitWindow()[rcore] to one
 *       white character of default font [rtext], this way, raylib text and shapes can be draw with
 *       a single draw call and it also allows users to configure it the same way with their own fonts.
 *
@@ -91,13 +91,13 @@ static float EaseCubicInOut(float t, float b, float c, float d);    // Cubic eas
 // Module Functions Definition
 //----------------------------------------------------------------------------------
 
-// Set texture and rectangle to be used on shapes drawing
+// Set characterModel and rectangle to be used on shapes drawing
 // NOTE: It can be useful when using basic shapes and one single font,
 // defining a font char white rectangle would allow drawing everything in a single draw call
 void SetShapesTexture(Texture2D texture, Rectangle source)
 {
-    // Reset texture to default pixel if required
-    // WARNING: Shapes texture should be probably better validated,
+    // Reset characterModel to default pixel if required
+    // WARNING: Shapes characterModel should be probably better validated,
     // it can break the rendering of all shapes if misused
     if ((texture.id == 0) || (source.width == 0) || (source.height == 0))
     {
@@ -111,13 +111,13 @@ void SetShapesTexture(Texture2D texture, Rectangle source)
     }
 }
 
-// Get texture that is used for shapes drawing
+// Get characterModel that is used for shapes drawing
 Texture2D GetShapesTexture(void)
 {
     return texShapes;
 }
 
-// Get texture source rectangle that is used for shapes drawing
+// Get characterModel source rectangle that is used for shapes drawing
 Rectangle GetShapesTextureRectangle(void)
 {
     return texShapesRec;

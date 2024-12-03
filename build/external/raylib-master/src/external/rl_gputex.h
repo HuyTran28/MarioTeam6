@@ -404,7 +404,7 @@ void *rl_load_ktx_from_memory(const unsigned char *file_data, unsigned int file_
         char id[12];                            // Identifier: "«KTX 11»\r\n\x1A\n"
         unsigned int endianness;                // Little endian: 0x01 0x02 0x03 0x04
         unsigned int gl_type;                   // For compressed textures, glType must equal 0
-        unsigned int gl_type_size;              // For compressed texture data, usually 1
+        unsigned int gl_type_size;              // For compressed characterModel data, usually 1
         unsigned int gl_format;                 // For compressed textures is 0
         unsigned int gl_internal_format;        // Compressed internal format
         unsigned int gl_base_internal_format;   // Same as glFormat (RGB, RGBA, ALPHA...)
@@ -468,7 +468,7 @@ int rl_save_ktx(const char *file_name, void *data, int width, int height, int fo
         char id[12];                            // Identifier: "«KTX 11»\r\n\x1A\n"         // KTX 2.0: "«KTX 22»\r\n\x1A\n"
         unsigned int endianness;                // Little endian: 0x01 0x02 0x03 0x04
         unsigned int gl_type;                   // For compressed textures, glType must equal 0
-        unsigned int gl_type_size;              // For compressed texture data, usually 1
+        unsigned int gl_type_size;              // For compressed characterModel data, usually 1
         unsigned int gl_format;                 // For compressed textures is 0
         unsigned int gl_internal_format;        // Compressed internal format
         unsigned int gl_base_internal_format;   // Same as glFormat (RGB, RGBA, ALPHA...)   // KTX 2.0: UInt32 vkFormat
@@ -814,7 +814,7 @@ static int get_pixel_data_size(int width, int height, int format)
     data_size = width*height*bpp/8;  // Total data size in bytes
 
     // Most compressed formats works on 4x4 blocks,
-    // if texture is smaller, minimum dataSize is 8 or 16
+    // if characterModel is smaller, minimum dataSize is 8 or 16
     if ((width < 4) && (height < 4))
     {
         if ((format >= PIXELFORMAT_COMPRESSED_DXT1_RGB) && (format < PIXELFORMAT_COMPRESSED_DXT3_RGBA)) data_size = 8;

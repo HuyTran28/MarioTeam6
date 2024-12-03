@@ -898,10 +898,10 @@ static int InitGraphicsDevice(void)
     // As soon as we picked a EGLConfig, we can safely reconfigure the ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID
     eglGetConfigAttrib(platform.device, platform.config, EGL_NATIVE_VISUAL_ID, &displayFormat);
 
-    // At this point we need to manage render size vs screen size
+    // At this point we need to manage draw size vs screen size
     // NOTE: This function use and modify global module variables:
     //  -> CORE.Window.screen.width/CORE.Window.screen.height
-    //  -> CORE.Window.render.width/CORE.Window.render.height
+    //  -> CORE.Window.draw.width/CORE.Window.draw.height
     //  -> CORE.Window.screenScale
     SetupFramebuffer(CORE.Window.display.width, CORE.Window.display.height);
 
@@ -991,7 +991,7 @@ static void AndroidCommandCallback(struct android_app *app, int32_t cmd)
                     isGpuReady = true;
 
                     // Setup default viewport
-                    // NOTE: It updated CORE.Window.render.width and CORE.Window.render.height
+                    // NOTE: It updated CORE.Window.draw.width and CORE.Window.draw.height
                     SetupViewport(CORE.Window.currentFbo.width, CORE.Window.currentFbo.height);
 
                     // Initialize hi-res timer
@@ -1018,8 +1018,8 @@ static void AndroidCommandCallback(struct android_app *app, int32_t cmd)
                     #endif
                 #else
                     #if defined(SUPPORT_MODULE_RSHAPES)
-                    // Set default texture and rectangle to be used for shapes drawing
-                    // NOTE: rlgl default texture is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
+                    // Set default characterModel and rectangle to be used for shapes drawing
+                    // NOTE: rlgl default characterModel is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
                     Texture2D texture = { rlGetTextureIdDefault(), 1, 1, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
                     SetShapesTexture(texture, (Rectangle){ 0.0f, 0.0f, 1.0f, 1.0f });    // WARNING: Module required: rshapes
                     #endif
@@ -1037,7 +1037,7 @@ static void AndroidCommandCallback(struct android_app *app, int32_t cmd)
                         {
                             // TODO: Unload old asset if required
 
-                            // Load texture again to pointed texture
+                            // Load characterModel again to pointed characterModel
                             (*textureAsset + i) = LoadTexture(assetPath[i]);
                         }
                     }

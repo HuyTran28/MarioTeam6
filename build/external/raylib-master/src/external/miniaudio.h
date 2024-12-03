@@ -33511,7 +33511,7 @@ static OSStatus ma_on_input__coreaudio(void* pUserData, AudioUnitRenderActionFla
     /*
     When you call AudioUnitRender(), Core Audio tries to be helpful by setting the mDataByteSize to the number of bytes
     that were actually rendered. The problem with this is that the next call can fail with -50 due to the size no longer
-    being set to the capacity of the buffer, but instead the size in bytes of the previous render. This will cause a
+    being set to the capacity of the buffer, but instead the size in bytes of the previous draw. This will cause a
     problem when a future call to this callback specifies a larger number of frames.
 
     To work around this we need to explicitly set the size of each buffer to their respective size in bytes.
@@ -34392,7 +34392,7 @@ static ma_result ma_device_init_internal__coreaudio(ma_context* pContext, ma_dev
 
     pData->periodSizeInFramesOut = (ma_uint32)actualPeriodSizeInFrames;
 
-    /* We need a buffer list if this is an input device. We render into this in the input callback. */
+    /* We need a buffer list if this is an input device. We draw into this in the input callback. */
     if (deviceType == ma_device_type_capture) {
         ma_bool32 isInterleaved = (bestFormat.mFormatFlags & kAudioFormatFlagIsNonInterleaved) == 0;
         AudioBufferList* pBufferList;

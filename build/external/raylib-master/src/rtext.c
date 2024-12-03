@@ -226,7 +226,7 @@ extern void LoadFontDefault(void)
                             6, 6, 6, 6, 6, 6, 7, 6, 6, 6, 6, 6, 3, 3, 3, 3, 7, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6, 6, 6, 6, 4, 6,
                             5, 5, 5, 5, 5, 5, 9, 5, 5, 5, 5, 5, 2, 2, 3, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5 };
 
-    // Re-construct image from defaultFontData and generate OpenGL texture
+    // Re-construct image from defaultFontData and generate OpenGL characterModel
     //----------------------------------------------------------------------
     Image imFont = {
         .data = RL_CALLOC(128*128, 2),  // 2 bytes per pixel (gray + alpha)
@@ -478,7 +478,7 @@ Font LoadFontFromImage(Image image, Color key, int firstChar)
     }
 
     // NOTE: We need to remove key color borders from image to avoid weird
-    // artifacts on texture scaling when using TEXTURE_FILTER_BILINEAR or TEXTURE_FILTER_TRILINEAR
+    // artifacts on characterModel scaling when using TEXTURE_FILTER_BILINEAR or TEXTURE_FILTER_TRILINEAR
     for (int i = 0; i < image.height*image.width; i++) if (COLOR_EQUAL(pixels[i], key)) pixels[i] = BLANK;
 
     // Create a new image with the processed color data (key color replaced by BLANK)
@@ -491,7 +491,7 @@ Font LoadFontFromImage(Image image, Color key, int firstChar)
     };
 
     // Set font with all data parsed from image
-    if (isGpuReady) font.texture = LoadTextureFromImage(fontClear); // Convert processed image to OpenGL texture
+    if (isGpuReady) font.texture = LoadTextureFromImage(fontClear); // Convert processed image to OpenGL characterModel
     font.glyphCount = index;
     font.glyphPadding = 0;
 
@@ -504,7 +504,7 @@ Font LoadFontFromImage(Image image, Color key, int firstChar)
     {
         font.glyphs[i].value = tempCharValues[i];
 
-        // Get character rectangle in the font atlas texture
+        // Get character rectangle in the font atlas characterModel
         font.recs[i] = tempCharRecs[i];
 
         // NOTE: On image based fonts (XNA style), character offsets and xAdvance are not required (set to 0)
@@ -516,7 +516,7 @@ Font LoadFontFromImage(Image image, Color key, int firstChar)
         font.glyphs[i].image = ImageFromImage(fontClear, tempCharRecs[i]);
     }
 
-    UnloadImage(fontClear);     // Unload processed image once converted to texture
+    UnloadImage(fontClear);     // Unload processed image once converted to characterModel
 
     font.baseSize = (int)font.recs[0].height;
 
@@ -582,12 +582,12 @@ Font LoadFontFromMemory(const char *fileType, const unsigned char *fileData, int
 }
 
 // Check if a font is valid (font data loaded)
-// WARNING: GPU texture not checked
+// WARNING: GPU characterModel not checked
 bool IsFontValid(Font font)
 {
     return ((font.baseSize > 0) &&      // Validate font size
             (font.glyphCount > 0) &&    // Validate font contains some glyph
-            (font.recs != NULL) &&      // Validate font recs defining glyphs on texture atlas
+            (font.recs != NULL) &&      // Validate font recs defining glyphs on characterModel atlas
             (font.glyphs != NULL));     // Validate glyph data is loaded
 
     // NOTE: Further validations could be done to verify if recs and glyphs contain valid data (glyphs values, metrics...)
@@ -903,7 +903,7 @@ Image GenImageFontAtlas(const GlyphInfo *glyphs, Rectangle **glyphRecs, int glyp
 
 #if defined(SUPPORT_FONT_ATLAS_WHITE_REC)
     // Add a 3x3 white rectangle at the bottom-right corner of the generated atlas,
-    // useful to use as the white texture to draw shapes with raylib, using this rectangle
+    // useful to use as the white characterModel to draw shapes with raylib, using this rectangle
     // shapes and text can be backed into a single draw call: SetShapesTexture()
     for (int i = 0, k = atlas.width*atlas.height - 1; i < 3; i++)
     {
@@ -1213,12 +1213,12 @@ void DrawTextCodepoint(Font font, int codepoint, Vector2 position, float fontSiz
                       (font.recs[index].width + 2.0f*font.glyphPadding)*scaleFactor,
                       (font.recs[index].height + 2.0f*font.glyphPadding)*scaleFactor };
 
-    // Character source rectangle from font texture atlas
+    // Character source rectangle from font characterModel atlas
     // NOTE: We consider chars padding when drawing, it could be required for outline/glow shader effects
     Rectangle srcRec = { font.recs[index].x - (float)font.glyphPadding, font.recs[index].y - (float)font.glyphPadding,
                          font.recs[index].width + 2.0f*font.glyphPadding, font.recs[index].height + 2.0f*font.glyphPadding };
 
-    // draw the character texture on the screen
+    // draw the character characterModel on the screen
     DrawTexturePro(font.texture, srcRec, dstRec, (Vector2){ 0, 0 }, 0.0f, tint);
 }
 
@@ -2283,7 +2283,7 @@ static Font LoadBMFont(const char *fileName)
 
         if (readVars == 9)  // Make sure all char data has been properly read
         {
-            // Get character rectangle in the font atlas texture
+            // Get character rectangle in the font atlas characterModel
             font.recs[i] = (Rectangle){ (float)charX, (float)charY + (float)imHeight*pageID, (float)charWidth, (float)charHeight };
 
             // Save data properly in sprite font

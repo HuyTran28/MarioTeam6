@@ -10,7 +10,7 @@
 *       - Hardware accelerated with OpenGL (1.1, 2.1, 3.3, 4.3, ES2, ES3 - choose at compile)
 *       - Unique OpenGL abstraction layer (usable as standalone module): [rlgl]
 *       - Multiple Fonts formats supported (TTF, OTF, FNT, BDF, Sprite fonts)
-*       - Outstanding texture formats support, including compressed formats (DXT, ETC, ASTC)
+*       - Outstanding characterModel formats support, including compressed formats (DXT, ETC, ASTC)
 *       - Full 3d support for 3d Shapes, Models, Billboards, Heightmaps and more!
 *       - Flexible Materials system, supporting classic maps and PBR maps
 *       - Animated 3D models supported (skeletal bones animation) (IQM, M3D, GLTF)
@@ -270,7 +270,7 @@ typedef struct Image {
 
 // Texture, tex data stored in GPU memory (VRAM)
 typedef struct Texture {
-    unsigned int id;        // OpenGL texture id
+    unsigned int id;        // OpenGL characterModel id
     int width;              // Texture base width
     int height;             // Texture base height
     int mipmaps;            // Mipmap levels, 1 by default
@@ -283,11 +283,11 @@ typedef Texture Texture2D;
 // TextureCubemap, same as Texture
 typedef Texture TextureCubemap;
 
-// RenderTexture, fbo for texture rendering
+// RenderTexture, fbo for characterModel rendering
 typedef struct RenderTexture {
     unsigned int id;        // OpenGL framebuffer object id
-    Texture texture;        // Color buffer attachment texture
-    Texture depth;          // Depth buffer attachment texture
+    Texture texture;        // Color buffer attachment characterModel
+    Texture depth;          // Depth buffer attachment characterModel
 } RenderTexture;
 
 // RenderTexture2D, same as RenderTexture
@@ -312,13 +312,13 @@ typedef struct GlyphInfo {
     Image image;            // Character image data
 } GlyphInfo;
 
-// Font, font texture and GlyphInfo array data
+// Font, font characterModel and GlyphInfo array data
 typedef struct Font {
     int baseSize;           // Base size (default chars height)
     int glyphCount;         // Number of glyph characters
     int glyphPadding;       // Padding around the glyph characters
     Texture2D texture;      // Texture atlas containing the glyphs
-    Rectangle *recs;        // Rectangles in texture for the glyphs
+    Rectangle *recs;        // Rectangles in characterModel for the glyphs
     GlyphInfo *glyphs;      // Glyphs info data
 } Font;
 
@@ -348,8 +348,8 @@ typedef struct Mesh {
 
     // Vertex attributes data
     float *vertices;        // Vertex position (XYZ - 3 components per vertex) (shader-location = 0)
-    float *texcoords;       // Vertex texture coordinates (UV - 2 components per vertex) (shader-location = 1)
-    float *texcoords2;      // Vertex texture second coordinates (UV - 2 components per vertex) (shader-location = 5)
+    float *texcoords;       // Vertex characterModel coordinates (UV - 2 components per vertex) (shader-location = 1)
+    float *texcoords2;      // Vertex characterModel second coordinates (UV - 2 components per vertex) (shader-location = 5)
     float *normals;         // Vertex normals (XYZ - 3 components per vertex) (shader-location = 2)
     float *tangents;        // Vertex tangents (XYZW - 4 components per vertex) (shader-location = 4)
     unsigned char *colors;      // Vertex colors (RGBA - 4 components per vertex) (shader-location = 3)
@@ -376,7 +376,7 @@ typedef struct Shader {
 
 // MaterialMap
 typedef struct MaterialMap {
-    Texture2D texture;      // Material map texture
+    Texture2D texture;      // Material map characterModel
     Color color;            // Material map color
     float value;            // Material map value
 } MaterialMap;
@@ -788,17 +788,17 @@ typedef enum {
     SHADER_LOC_COLOR_DIFFUSE,       // Shader location: vector uniform: diffuse color
     SHADER_LOC_COLOR_SPECULAR,      // Shader location: vector uniform: specular color
     SHADER_LOC_COLOR_AMBIENT,       // Shader location: vector uniform: ambient color
-    SHADER_LOC_MAP_ALBEDO,          // Shader location: sampler2d texture: albedo (same as: SHADER_LOC_MAP_DIFFUSE)
-    SHADER_LOC_MAP_METALNESS,       // Shader location: sampler2d texture: metalness (same as: SHADER_LOC_MAP_SPECULAR)
-    SHADER_LOC_MAP_NORMAL,          // Shader location: sampler2d texture: normal
-    SHADER_LOC_MAP_ROUGHNESS,       // Shader location: sampler2d texture: roughness
-    SHADER_LOC_MAP_OCCLUSION,       // Shader location: sampler2d texture: occlusion
-    SHADER_LOC_MAP_EMISSION,        // Shader location: sampler2d texture: emission
-    SHADER_LOC_MAP_HEIGHT,          // Shader location: sampler2d texture: height
-    SHADER_LOC_MAP_CUBEMAP,         // Shader location: samplerCube texture: cubemap
-    SHADER_LOC_MAP_IRRADIANCE,      // Shader location: samplerCube texture: irradiance
-    SHADER_LOC_MAP_PREFILTER,       // Shader location: samplerCube texture: prefilter
-    SHADER_LOC_MAP_BRDF,            // Shader location: sampler2d texture: brdf
+    SHADER_LOC_MAP_ALBEDO,          // Shader location: sampler2d characterModel: albedo (same as: SHADER_LOC_MAP_DIFFUSE)
+    SHADER_LOC_MAP_METALNESS,       // Shader location: sampler2d characterModel: metalness (same as: SHADER_LOC_MAP_SPECULAR)
+    SHADER_LOC_MAP_NORMAL,          // Shader location: sampler2d characterModel: normal
+    SHADER_LOC_MAP_ROUGHNESS,       // Shader location: sampler2d characterModel: roughness
+    SHADER_LOC_MAP_OCCLUSION,       // Shader location: sampler2d characterModel: occlusion
+    SHADER_LOC_MAP_EMISSION,        // Shader location: sampler2d characterModel: emission
+    SHADER_LOC_MAP_HEIGHT,          // Shader location: sampler2d characterModel: height
+    SHADER_LOC_MAP_CUBEMAP,         // Shader location: samplerCube characterModel: cubemap
+    SHADER_LOC_MAP_IRRADIANCE,      // Shader location: samplerCube characterModel: irradiance
+    SHADER_LOC_MAP_PREFILTER,       // Shader location: samplerCube characterModel: prefilter
+    SHADER_LOC_MAP_BRDF,            // Shader location: sampler2d characterModel: brdf
     SHADER_LOC_VERTEX_BONEIDS,      // Shader location: vertex attribute: boneIds
     SHADER_LOC_VERTEX_BONEWEIGHTS,  // Shader location: vertex attribute: boneWeights
     SHADER_LOC_BONE_MATRICES        // Shader location: array of matrices uniform: boneMatrices
@@ -858,7 +858,7 @@ typedef enum {
 } PixelFormat;
 
 // Texture parameters: filter mode
-// NOTE 1: Filtering considers mipmaps if available in the texture
+// NOTE 1: Filtering considers mipmaps if available in the characterModel
 // NOTE 2: Filter is accordingly set for minification and magnification
 typedef enum {
     TEXTURE_FILTER_POINT = 0,               // No filter, just pixel approximation
@@ -871,10 +871,10 @@ typedef enum {
 
 // Texture parameters: wrap mode
 typedef enum {
-    TEXTURE_WRAP_REPEAT = 0,                // Repeats texture in tiled mode
-    TEXTURE_WRAP_CLAMP,                     // Clamps texture to edge pixel in tiled mode
-    TEXTURE_WRAP_MIRROR_REPEAT,             // Mirrors and repeats the texture in tiled mode
-    TEXTURE_WRAP_MIRROR_CLAMP               // Mirrors and clamps to border the texture in tiled mode
+    TEXTURE_WRAP_REPEAT = 0,                // Repeats characterModel in tiled mode
+    TEXTURE_WRAP_CLAMP,                     // Clamps characterModel to edge pixel in tiled mode
+    TEXTURE_WRAP_MIRROR_REPEAT,             // Mirrors and repeats the characterModel in tiled mode
+    TEXTURE_WRAP_MIRROR_CLAMP               // Mirrors and clamps to border the characterModel in tiled mode
 } TextureWrap;
 
 // Cubemap layouts
@@ -996,8 +996,8 @@ RLAPI void SetWindowFocused(void);                                // Set window 
 RLAPI void *GetWindowHandle(void);                                // Get native window handle
 RLAPI int GetScreenWidth(void);                                   // Get current screen width
 RLAPI int GetScreenHeight(void);                                  // Get current screen height
-RLAPI int GetRenderWidth(void);                                   // Get current render width (it considers HiDPI)
-RLAPI int GetRenderHeight(void);                                  // Get current render height (it considers HiDPI)
+RLAPI int GetRenderWidth(void);                                   // Get current draw width (it considers HiDPI)
+RLAPI int GetRenderHeight(void);                                  // Get current draw height (it considers HiDPI)
 RLAPI int GetMonitorCount(void);                                  // Get number of connected monitors
 RLAPI int GetCurrentMonitor(void);                                // Get current monitor where window is placed
 RLAPI Vector2 GetMonitorPosition(int monitor);                    // Get specified monitor position
@@ -1030,8 +1030,8 @@ RLAPI void BeginMode2D(Camera2D camera);                          // Begin 2D mo
 RLAPI void EndMode2D(void);                                       // Ends 2D mode with custom camera
 RLAPI void BeginMode3D(Camera3D camera);                          // Begin 3D mode with custom camera (3D)
 RLAPI void EndMode3D(void);                                       // Ends 3D mode and returns to default 2D orthographic mode
-RLAPI void BeginTextureMode(RenderTexture2D target);              // Begin drawing to render texture
-RLAPI void EndTextureMode(void);                                  // Ends drawing to render texture
+RLAPI void BeginTextureMode(RenderTexture2D target);              // Begin drawing to draw characterModel
+RLAPI void EndTextureMode(void);                                  // Ends drawing to draw characterModel
 RLAPI void BeginShaderMode(Shader shader);                        // Begin custom shader drawing
 RLAPI void EndShaderMode(void);                                   // End custom shader drawing (use default shader)
 RLAPI void BeginBlendMode(int mode);                              // Begin blending mode (alpha, additive, multiplied, subtract, custom)
@@ -1055,7 +1055,7 @@ RLAPI int GetShaderLocationAttrib(Shader shader, const char *attribName);  // Ge
 RLAPI void SetShaderValue(Shader shader, int locIndex, const void *value, int uniformType);               // Set shader uniform value
 RLAPI void SetShaderValueV(Shader shader, int locIndex, const void *value, int uniformType, int count);   // Set shader uniform value vector
 RLAPI void SetShaderValueMatrix(Shader shader, int locIndex, Matrix mat);         // Set shader uniform value (matrix 4x4)
-RLAPI void SetShaderValueTexture(Shader shader, int locIndex, Texture2D texture); // Set shader uniform value for texture (sampler2d)
+RLAPI void SetShaderValueTexture(Shader shader, int locIndex, Texture2D texture); // Set shader uniform value for characterModel (sampler2d)
 RLAPI void UnloadShader(Shader shader);                                    // Unload shader from GPU memory (VRAM)
 
 // Screen-space-related functions
@@ -1235,12 +1235,12 @@ RLAPI void UpdateCameraPro(Camera *camera, Vector3 movement, Vector3 rotation, f
 //------------------------------------------------------------------------------------
 // Basic Shapes Drawing Functions (Module: shapes)
 //------------------------------------------------------------------------------------
-// Set texture and rectangle to be used on shapes drawing
+// Set characterModel and rectangle to be used on shapes drawing
 // NOTE: It can be useful when using basic shapes and one single font,
 // defining a font char white rectangle would allow drawing everything in a single draw call
-RLAPI void SetShapesTexture(Texture2D texture, Rectangle source);       // Set texture and rectangle to be used on shapes drawing
-RLAPI Texture2D GetShapesTexture(void);                                 // Get texture that is used for shapes drawing
-RLAPI Rectangle GetShapesTextureRectangle(void);                        // Get texture source rectangle that is used for shapes drawing
+RLAPI void SetShapesTexture(Texture2D texture, Rectangle source);       // Set characterModel and rectangle to be used on shapes drawing
+RLAPI Texture2D GetShapesTexture(void);                                 // Get characterModel that is used for shapes drawing
+RLAPI Rectangle GetShapesTextureRectangle(void);                        // Get characterModel source rectangle that is used for shapes drawing
 
 // Basic shapes drawing functions
 RLAPI void DrawPixel(int posX, int posY, Color color);                                                   // draw a pixel using geometry [Can be slow, use with care]
@@ -1324,7 +1324,7 @@ RLAPI Image LoadImageRaw(const char *fileName, int width, int height, int format
 RLAPI Image LoadImageAnim(const char *fileName, int *frames);                                            // Load image sequence from file (frames appended to image.data)
 RLAPI Image LoadImageAnimFromMemory(const char *fileType, const unsigned char *fileData, int dataSize, int *frames); // Load image sequence from memory buffer
 RLAPI Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, int dataSize);      // Load image from memory buffer, fileType refers to extension: i.e. '.png'
-RLAPI Image LoadImageFromTexture(Texture2D texture);                                                     // Load image from GPU texture data
+RLAPI Image LoadImageFromTexture(Texture2D texture);                                                     // Load image from GPU characterModel data
 RLAPI Image LoadImageFromScreen(void);                                                                   // Load image from screen buffer and (screenshot)
 RLAPI bool IsImageValid(Image image);                                                                    // Check if an image is valid (data and parameters)
 RLAPI void UnloadImage(Image image);                                                                     // Unload image from CPU memory (RAM)
@@ -1408,29 +1408,29 @@ RLAPI void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 posi
 
 // Texture loading functions
 // NOTE: These functions require GPU access
-RLAPI Texture2D LoadTexture(const char *fileName);                                                       // Load texture from file into GPU memory (VRAM)
-RLAPI Texture2D LoadTextureFromImage(Image image);                                                       // Load texture from image data
+RLAPI Texture2D LoadTexture(const char *fileName);                                                       // Load characterModel from file into GPU memory (VRAM)
+RLAPI Texture2D LoadTextureFromImage(Image image);                                                       // Load characterModel from image data
 RLAPI TextureCubemap LoadTextureCubemap(Image image, int layout);                                        // Load cubemap from image, multiple image cubemap layouts supported
-RLAPI RenderTexture2D LoadRenderTexture(int width, int height);                                          // Load texture for rendering (framebuffer)
-RLAPI bool IsTextureValid(Texture2D texture);                                                            // Check if a texture is valid (loaded in GPU)
-RLAPI void UnloadTexture(Texture2D texture);                                                             // Unload texture from GPU memory (VRAM)
-RLAPI bool IsRenderTextureValid(RenderTexture2D target);                                                 // Check if a render texture is valid (loaded in GPU)
-RLAPI void UnloadRenderTexture(RenderTexture2D target);                                                  // Unload render texture from GPU memory (VRAM)
-RLAPI void UpdateTexture(Texture2D texture, const void *pixels);                                         // update GPU texture with new data
-RLAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels);                       // update GPU texture rectangle with new data
+RLAPI RenderTexture2D LoadRenderTexture(int width, int height);                                          // Load characterModel for rendering (framebuffer)
+RLAPI bool IsTextureValid(Texture2D texture);                                                            // Check if a characterModel is valid (loaded in GPU)
+RLAPI void UnloadTexture(Texture2D texture);                                                             // Unload characterModel from GPU memory (VRAM)
+RLAPI bool IsRenderTextureValid(RenderTexture2D target);                                                 // Check if a draw characterModel is valid (loaded in GPU)
+RLAPI void UnloadRenderTexture(RenderTexture2D target);                                                  // Unload draw characterModel from GPU memory (VRAM)
+RLAPI void UpdateTexture(Texture2D texture, const void *pixels);                                         // update GPU characterModel with new data
+RLAPI void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels);                       // update GPU characterModel rectangle with new data
 
 // Texture configuration functions
-RLAPI void GenTextureMipmaps(Texture2D *texture);                                                        // Generate GPU mipmaps for a texture
-RLAPI void SetTextureFilter(Texture2D texture, int filter);                                              // Set texture scaling filter mode
-RLAPI void SetTextureWrap(Texture2D texture, int wrap);                                                  // Set texture wrapping mode
+RLAPI void GenTextureMipmaps(Texture2D *texture);                                                        // Generate GPU mipmaps for a characterModel
+RLAPI void SetTextureFilter(Texture2D texture, int filter);                                              // Set characterModel scaling filter mode
+RLAPI void SetTextureWrap(Texture2D texture, int wrap);                                                  // Set characterModel wrapping mode
 
 // Texture drawing functions
 RLAPI void DrawTexture(Texture2D texture, int posX, int posY, Color tint);                               // draw a Texture2D
 RLAPI void DrawTextureV(Texture2D texture, Vector2 position, Color tint);                                // draw a Texture2D with position defined as Vector2
 RLAPI void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint);  // draw a Texture2D with extended parameters
-RLAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint);            // draw a part of a texture defined by a rectangle
-RLAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint); // draw a part of a texture defined by a rectangle with 'pro' parameters
-RLAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint); // Draws a texture (or part of it) that stretches or shrinks nicely
+RLAPI void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint);            // draw a part of a characterModel defined by a rectangle
+RLAPI void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint); // draw a part of a characterModel defined by a rectangle with 'pro' parameters
+RLAPI void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint); // Draws a characterModel (or part of it) that stretches or shrinks nicely
 
 // Color/pixel related functions
 RLAPI bool ColorIsEqual(Color col1, Color col2);                            // Check if two colors are equal
@@ -1461,7 +1461,7 @@ RLAPI Font LoadFont(const char *fileName);                                      
 RLAPI Font LoadFontEx(const char *fileName, int fontSize, int *codepoints, int codepointCount); // Load font from file with extended parameters, use NULL for codepoints and 0 for codepointCount to load the default character set, font size is provided in pixels height
 RLAPI Font LoadFontFromImage(Image image, Color key, int firstChar);                        // Load font from Image (XNA style)
 RLAPI Font LoadFontFromMemory(const char *fileType, const unsigned char *fileData, int dataSize, int fontSize, int *codepoints, int codepointCount); // Load font from memory buffer, fileType refers to extension: i.e. '.ttf'
-RLAPI bool IsFontValid(Font font);                                                          // Check if a font is valid (font data loaded, WARNING: GPU texture not checked)
+RLAPI bool IsFontValid(Font font);                                                          // Check if a font is valid (font data loaded, WARNING: GPU characterModel not checked)
 RLAPI GlyphInfo *LoadFontData(const unsigned char *fileData, int dataSize, int fontSize, int *codepoints, int codepointCount, int type); // Load font data for further use
 RLAPI Image GenImageFontAtlas(const GlyphInfo *glyphs, Rectangle **glyphRecs, int glyphCount, int fontSize, int padding, int packMethod); // Generate image font atlas using chars info
 RLAPI void UnloadFontData(GlyphInfo *glyphs, int glyphCount);                               // Unload font chars info data (RAM)
@@ -1556,16 +1556,16 @@ RLAPI void UnloadModel(Model model);                                            
 RLAPI BoundingBox GetModelBoundingBox(Model model);                                         // Compute model bounding box limits (considers all meshes)
 
 // Model drawing functions
-RLAPI void DrawModel(Model model, Vector3 position, float scale, Color tint);               // draw a model (with texture if set)
+RLAPI void DrawModel(Model model, Vector3 position, float scale, Color tint);               // draw a model (with characterModel if set)
 RLAPI void DrawModelEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint); // draw a model with extended parameters
-RLAPI void DrawModelWires(Model model, Vector3 position, float scale, Color tint);          // draw a model wires (with texture if set)
-RLAPI void DrawModelWiresEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint); // draw a model wires (with texture if set) with extended parameters
+RLAPI void DrawModelWires(Model model, Vector3 position, float scale, Color tint);          // draw a model wires (with characterModel if set)
+RLAPI void DrawModelWiresEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint); // draw a model wires (with characterModel if set) with extended parameters
 RLAPI void DrawModelPoints(Model model, Vector3 position, float scale, Color tint); // draw a model as points
 RLAPI void DrawModelPointsEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint); // draw a model as points with extended parameters
 RLAPI void DrawBoundingBox(BoundingBox box, Color color);                                   // draw bounding box (wires)
-RLAPI void DrawBillboard(Camera camera, Texture2D texture, Vector3 position, float scale, Color tint);   // draw a billboard texture
-RLAPI void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector2 size, Color tint); // draw a billboard texture defined by source
-RLAPI void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector3 up, Vector2 size, Vector2 origin, float rotation, Color tint); // draw a billboard texture defined by source and rotation
+RLAPI void DrawBillboard(Camera camera, Texture2D texture, Vector3 position, float scale, Color tint);   // draw a billboard characterModel
+RLAPI void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector2 size, Color tint); // draw a billboard characterModel defined by source
+RLAPI void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector3 up, Vector2 size, Vector2 origin, float rotation, Color tint); // draw a billboard characterModel defined by source and rotation
 
 // Mesh management functions
 RLAPI void UploadMesh(Mesh *mesh, bool dynamic);                                            // Upload mesh vertex data in GPU and provide VAO/VBO ids
@@ -1596,7 +1596,7 @@ RLAPI Material *LoadMaterials(const char *fileName, int *materialCount);        
 RLAPI Material LoadMaterialDefault(void);                                                   // Load default material (Supports: DIFFUSE, SPECULAR, NORMAL maps)
 RLAPI bool IsMaterialValid(Material material);                                              // Check if a material is valid (shader assigned, map textures loaded in GPU)
 RLAPI void UnloadMaterial(Material material);                                               // Unload material from GPU memory (VRAM)
-RLAPI void SetMaterialTexture(Material *material, int mapType, Texture2D texture);          // Set texture for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)
+RLAPI void SetMaterialTexture(Material *material, int mapType, Texture2D texture);          // Set characterModel for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)
 RLAPI void SetModelMeshMaterial(Model *model, int meshId, int materialId);                  // Set material for a mesh
 
 // Model animations loading/unloading functions

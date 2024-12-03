@@ -309,8 +309,8 @@
 #define RGFW_SCALE_TO_MONITOR (1L << 13) /* scale the window to the screen */
 #define RGFW_NO_INIT_API (1L << 2) /* DO not init an API (mostly for bindings, you should use `#define RGFW_NO_API` in C */
 
-#define RGFW_NO_GPU_RENDER (1L<<14) /* don't render (using the GPU based API)*/
-#define RGFW_NO_CPU_RENDER (1L<<15) /* don't render (using the CPU based buffer rendering)*/
+#define RGFW_NO_GPU_RENDER (1L<<14) /* don't draw (using the GPU based API)*/
+#define RGFW_NO_CPU_RENDER (1L<<15) /* don't draw (using the CPU based buffer rendering)*/
 #define RGFW_WINDOW_HIDE (1L <<  16)/* the window is hidden */
 
 typedef RGFW_ENUM(u8, RGFW_event_types) {
@@ -1928,7 +1928,7 @@ void RGFW_updateLockState(RGFW_window* win, b8 capital, b8 numlock) {
 	#define WGL_TRANSPARENT_ARB   					  0x200A
 #endif
 	
-/*  The window'ing api needs to know how to render the data we (or opengl) give it 
+/*  The window'ing api needs to know how to draw the data we (or opengl) give it 
 	MacOS and Windows do this using a structure called a "pixel format" 
 	X11 calls it a "Visual"
 	This function returns the attributes for the format we want */

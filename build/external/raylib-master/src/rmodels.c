@@ -16,7 +16,7 @@
 *
 *       #define SUPPORT_MESH_GENERATION
 *           Support procedural mesh generation functions, uses external par_shapes.h library
-*           NOTE: Some generated meshes DO NOT include generated texture coordinates
+*           NOTE: Some generated meshes DO NOT include generated characterModel coordinates
 *
 *
 *   LICENSE: zlib/libpng
@@ -771,7 +771,7 @@ void DrawCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices, int
     rlBegin(RL_TRIANGLES);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        // render both caps
+        // draw both caps
         for (int c = 0; c < 2; c++)
         {
             for (int i = 0; i < rings; i++)
@@ -841,7 +841,7 @@ void DrawCapsule(Vector3 startPos, Vector3 endPos, float radius, int slices, int
             capCenter = startPos;
             b0 = Vector3Scale(b0, -1.0f);
         }
-        // render middle
+        // draw middle
         if (!sphereCase)
         {
             for (int j = 0; j < slices; j++)
@@ -914,7 +914,7 @@ void DrawCapsuleWires(Vector3 startPos, Vector3 endPos, float radius, int slices
     rlBegin(RL_LINES);
         rlColor4ub(color.r, color.g, color.b, color.a);
 
-        // render both caps
+        // draw both caps
         for (int c = 0; c < 2; c++)
         {
             for (int i = 0; i < rings; i++)
@@ -977,7 +977,7 @@ void DrawCapsuleWires(Vector3 startPos, Vector3 endPos, float radius, int slices
             capCenter = startPos;
             b0 = Vector3Scale(b0, -1.0f);
         }
-        // render middle
+        // draw middle
         if (!sphereCase)
         {
             for (int j = 0; j < slices; j++)
@@ -1479,7 +1479,7 @@ void DrawMesh(Mesh mesh, Material material, Matrix transform)
     }
 
     // Get a copy of current matrices to work with,
-    // just in case stereo render is required, and we need to modify them
+    // just in case stereo draw is required, and we need to modify them
     // NOTE: At this point the modelview matrix just contains the view matrix (camera)
     // That's because BeginMode3D() sets it and there is no model-drawing function
     // that modifies it, all use rlPushMatrix() and rlPopMatrix()
@@ -1515,15 +1515,15 @@ void DrawMesh(Mesh mesh, Material material, Matrix transform)
 #endif
     //-----------------------------------------------------
 
-    // Bind active texture maps (if available)
+    // Bind active characterModel maps (if available)
     for (int i = 0; i < MAX_MATERIAL_MAPS; i++)
     {
         if (material.maps[i].texture.id > 0)
         {
-            // Select current shader texture slot
+            // Select current shader characterModel slot
             rlActiveTextureSlot(i);
 
-            // Enable texture for active slot
+            // Enable characterModel for active slot
             if ((i == MATERIAL_MAP_IRRADIANCE) ||
                 (i == MATERIAL_MAP_PREFILTER) ||
                 (i == MATERIAL_MAP_CUBEMAP)) rlEnableTextureCubemap(material.maps[i].texture.id);
@@ -1636,15 +1636,15 @@ void DrawMesh(Mesh mesh, Material material, Matrix transform)
         else rlDrawVertexArray(0, mesh.vertexCount);
     }
 
-    // Unbind all bound texture maps
+    // Unbind all bound characterModel maps
     for (int i = 0; i < MAX_MATERIAL_MAPS; i++)
     {
         if (material.maps[i].texture.id > 0)
         {
-            // Select current shader texture slot
+            // Select current shader characterModel slot
             rlActiveTextureSlot(i);
 
-            // Disable texture for active slot
+            // Disable characterModel for active slot
             if ((i == MATERIAL_MAP_IRRADIANCE) ||
                 (i == MATERIAL_MAP_PREFILTER) ||
                 (i == MATERIAL_MAP_CUBEMAP)) rlDisableTextureCubemap();
@@ -1706,7 +1706,7 @@ void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, i
     }
 
     // Get a copy of current matrices to work with,
-    // just in case stereo render is required, and we need to modify them
+    // just in case stereo draw is required, and we need to modify them
     // NOTE: At this point the modelview matrix just contains the view matrix (camera)
     // That's because BeginMode3D() sets it and there is no model-drawing function
     // that modifies it, all use rlPushMatrix() and rlPopMatrix()
@@ -1762,15 +1762,15 @@ void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, i
 
     //-----------------------------------------------------
 
-    // Bind active texture maps (if available)
+    // Bind active characterModel maps (if available)
     for (int i = 0; i < MAX_MATERIAL_MAPS; i++)
     {
         if (material.maps[i].texture.id > 0)
         {
-            // Select current shader texture slot
+            // Select current shader characterModel slot
             rlActiveTextureSlot(i);
 
-            // Enable texture for active slot
+            // Enable characterModel for active slot
             if ((i == MATERIAL_MAP_IRRADIANCE) ||
                 (i == MATERIAL_MAP_PREFILTER) ||
                 (i == MATERIAL_MAP_CUBEMAP)) rlEnableTextureCubemap(material.maps[i].texture.id);
@@ -1881,15 +1881,15 @@ void DrawMeshInstanced(Mesh mesh, Material material, const Matrix *transforms, i
         else rlDrawVertexArrayInstanced(0, mesh.vertexCount, instances);
     }
 
-    // Unbind all bound texture maps
+    // Unbind all bound characterModel maps
     for (int i = 0; i < MAX_MATERIAL_MAPS; i++)
     {
         if (material.maps[i].texture.id > 0)
         {
-            // Select current shader texture slot
+            // Select current shader characterModel slot
             rlActiveTextureSlot(i);
 
-            // Disable texture for active slot
+            // Disable characterModel for active slot
             if ((i == MATERIAL_MAP_IRRADIANCE) ||
                 (i == MATERIAL_MAP_PREFILTER) ||
                 (i == MATERIAL_MAP_CUBEMAP)) rlDisableTextureCubemap();
@@ -2058,14 +2058,14 @@ bool ExportMeshAsCode(Mesh mesh, const char *fileName)
         byteCount += sprintf(txtData + byteCount, "%.3ff };\n\n", mesh.vertices[mesh.vertexCount*3 - 1]);
     }
 
-    if (mesh.texcoords != NULL)      // Vertex texture coordinates (UV - 2 components per vertex - float)
+    if (mesh.texcoords != NULL)      // Vertex characterModel coordinates (UV - 2 components per vertex - float)
     {
         byteCount += sprintf(txtData + byteCount, "static float %s_TEXCOORD_DATA[%i] = { ", varFileName, mesh.vertexCount*2);
         for (int i = 0; i < mesh.vertexCount*2 - 1; i++) byteCount += sprintf(txtData + byteCount, ((i%TEXT_BYTES_PER_LINE == 0)? "%.3ff,\n" : "%.3ff, "), mesh.texcoords[i]);
         byteCount += sprintf(txtData + byteCount, "%.3ff };\n\n", mesh.texcoords[mesh.vertexCount*2 - 1]);
     }
 
-    if (mesh.texcoords2 != NULL)      // Vertex texture coordinates (UV - 2 components per vertex - float)
+    if (mesh.texcoords2 != NULL)      // Vertex characterModel coordinates (UV - 2 components per vertex - float)
     {
         byteCount += sprintf(txtData + byteCount, "static float %s_TEXCOORD2_DATA[%i] = { ", varFileName, mesh.vertexCount*2);
         for (int i = 0; i < mesh.vertexCount*2 - 1; i++) byteCount += sprintf(txtData + byteCount, ((i%TEXT_BYTES_PER_LINE == 0)? "%.3ff,\n" : "%.3ff, "), mesh.texcoords2[i]);
@@ -2125,8 +2125,8 @@ static void ProcessMaterialsOBJ(Material *materials, tinyobj_material_t *mats, i
 
         if (mats == NULL) continue;
 
-        // Get default texture, in case no texture is defined
-        // NOTE: rlgl default texture is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
+        // Get default characterModel, in case no characterModel is defined
+        // NOTE: rlgl default characterModel is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
         materials[m].maps[MATERIAL_MAP_DIFFUSE].texture = (Texture2D){ rlGetTextureIdDefault(), 1, 1, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
 
         if (mats[m].diffuse_texname != NULL) materials[m].maps[MATERIAL_MAP_DIFFUSE].texture = LoadTexture(mats[m].diffuse_texname);  //char *diffuse_texname; // map_Kd
@@ -2187,10 +2187,10 @@ Material LoadMaterialDefault(void)
     material.shader.id = rlGetShaderIdDefault();
     material.shader.locs = rlGetShaderLocsDefault();
 
-    // Using rlgl default texture (1x1 pixel, UNCOMPRESSED_R8G8B8A8, 1 mipmap)
+    // Using rlgl default characterModel (1x1 pixel, UNCOMPRESSED_R8G8B8A8, 1 mipmap)
     material.maps[MATERIAL_MAP_DIFFUSE].texture = (Texture2D){ rlGetTextureIdDefault(), 1, 1, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
-    //material.maps[MATERIAL_MAP_NORMAL].texture;         // NOTE: By default, not set
-    //material.maps[MATERIAL_MAP_SPECULAR].texture;       // NOTE: By default, not set
+    //material.maps[MATERIAL_MAP_NORMAL].characterModel;         // NOTE: By default, not set
+    //material.maps[MATERIAL_MAP_SPECULAR].characterModel;       // NOTE: By default, not set
 
     material.maps[MATERIAL_MAP_DIFFUSE].color = WHITE;    // Diffuse color
     material.maps[MATERIAL_MAP_SPECULAR].color = WHITE;   // Specular color
@@ -2217,7 +2217,7 @@ void UnloadMaterial(Material material)
     // Unload material shader (avoid unloading default shader, managed by raylib)
     if (material.shader.id != rlGetShaderIdDefault()) UnloadShader(material.shader);
 
-    // Unload loaded texture maps (avoid unloading default texture, managed by raylib)
+    // Unload loaded characterModel maps (avoid unloading default characterModel, managed by raylib)
     if (material.maps != NULL)
     {
         for (int i = 0; i < MAX_MATERIAL_MAPS; i++)
@@ -2229,8 +2229,8 @@ void UnloadMaterial(Material material)
     RL_FREE(material.maps);
 }
 
-// Set texture for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)
-// NOTE: Previous texture should be manually unloaded
+// Set characterModel for a material map type (MATERIAL_MAP_DIFFUSE, MATERIAL_MAP_SPECULAR...)
+// NOTE: Previous characterModel should be manually unloaded
 void SetMaterialTexture(Material *material, int mapType, Texture2D texture)
 {
     material->maps[mapType].texture = texture;
@@ -3273,7 +3273,7 @@ Mesh GenMeshCubicmap(Image cubicmap, Vector3 cubeSize)
     Vector3 n5 = { 0.0f, 0.0f, -1.0f };
     Vector3 n6 = { 0.0f, 0.0f, 1.0f };
 
-    // NOTE: We use texture rectangles to define different textures for top-bottom-front-back-right-left (6)
+    // NOTE: We use characterModel rectangles to define different textures for top-bottom-front-back-right-left (6)
     typedef struct RectangleF {
         float x;
         float y;
@@ -3618,7 +3618,7 @@ BoundingBox GetMeshBoundingBox(Mesh mesh)
 }
 
 // Compute mesh tangents
-// NOTE: To calculate mesh tangents and binormals we need mesh vertex positions and texture coordinates
+// NOTE: To calculate mesh tangents and binormals we need mesh vertex positions and characterModel coordinates
 // Implementation based on: https://answers.unity.com/questions/7789/calculating-tangents-vector4.html
 void GenMeshTangents(Mesh *mesh)
 {
@@ -3730,7 +3730,7 @@ void GenMeshTangents(Mesh *mesh)
     TRACELOG(LOG_INFO, "MESH: Tangents data computed and uploaded for provided mesh");
 }
 
-// draw a model (with texture if set)
+// draw a model (with characterModel if set)
 void DrawModel(Model model, Vector3 position, float scale, Color tint)
 {
     Vector3 vScale = { scale, scale, scale };
@@ -3769,7 +3769,7 @@ void DrawModelEx(Model model, Vector3 position, Vector3 rotationAxis, float rota
     }
 }
 
-// draw a model wires (with texture if set)
+// draw a model wires (with characterModel if set)
 void DrawModelWires(Model model, Vector3 position, float scale, Color tint)
 {
     rlEnableWireMode();
@@ -3779,7 +3779,7 @@ void DrawModelWires(Model model, Vector3 position, float scale, Color tint)
     rlDisableWireMode();
 }
 
-// draw a model wires (with texture if set) with extended parameters
+// draw a model wires (with characterModel if set) with extended parameters
 void DrawModelWiresEx(Model model, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 scale, Color tint)
 {
     rlEnableWireMode();
@@ -3821,7 +3821,7 @@ void DrawBillboard(Camera camera, Texture2D texture, Vector3 position, float sca
     DrawBillboardRec(camera, texture, source, position, (Vector2) { scale*fabsf((float)source.width/source.height), scale }, tint);
 }
 
-// draw a billboard (part of a texture defined by a rectangle)
+// draw a billboard (part of a characterModel defined by a rectangle)
 void DrawBillboardRec(Camera camera, Texture2D texture, Rectangle source, Vector3 position, Vector2 size, Color tint)
 {
     // NOTE: Billboard locked on axis-Y
@@ -3855,7 +3855,7 @@ void DrawBillboardPro(Camera camera, Texture2D texture, Rectangle source, Vector
         origin.y *= -1.0f;
     }
 
-    // draw the texture region described by source on the following rectangle in 3D space:
+    // draw the characterModel region described by source on the following rectangle in 3D space:
     //
     //                size.x          <--.
     //  3 ^---------------------------+ 2 \ rotation
@@ -5225,7 +5225,7 @@ static Model LoadGLTF(const char *fileName)
           - Supports .gltf and .glb files
           - Supports embedded (base64) or external textures
           - Supports PBR metallic/roughness flow, loads material textures, values and colors
-                     PBR specular/glossiness flow and extended texture flows not supported
+                     PBR specular/glossiness flow and extended characterModel flows not supported
           - Supports multiple meshes per model (every primitives is loaded as a separate mesh)
           - Supports basic animations
           - Transforms, including parent-child relations, are applied on the mesh data, but the
@@ -5336,7 +5336,7 @@ static Model LoadGLTF(const char *fileName)
             // NOTE: Alternatively, materials can follow PBR specular/glossiness flow
             if (data->materials[i].has_pbr_metallic_roughness)
             {
-                // Load base color texture (albedo)
+                // Load base color characterModel (albedo)
                 if (data->materials[i].pbr_metallic_roughness.base_color_texture.texture)
                 {
                     Image imAlbedo = LoadImageFromCgltfImage(data->materials[i].pbr_metallic_roughness.base_color_texture.texture->image, texPath);
@@ -5352,7 +5352,7 @@ static Model LoadGLTF(const char *fileName)
                 model.materials[j].maps[MATERIAL_MAP_ALBEDO].color.b = (unsigned char)(data->materials[i].pbr_metallic_roughness.base_color_factor[2]*255);
                 model.materials[j].maps[MATERIAL_MAP_ALBEDO].color.a = (unsigned char)(data->materials[i].pbr_metallic_roughness.base_color_factor[3]*255);
 
-                // Load metallic/roughness texture
+                // Load metallic/roughness characterModel
                 if (data->materials[i].pbr_metallic_roughness.metallic_roughness_texture.texture)
                 {
                     Image imMetallicRoughness = LoadImageFromCgltfImage(data->materials[i].pbr_metallic_roughness.metallic_roughness_texture.texture->image, texPath);
@@ -5370,7 +5370,7 @@ static Model LoadGLTF(const char *fileName)
                     model.materials[j].maps[MATERIAL_MAP_METALNESS].value = metallic;
                 }
 
-                // Load normal texture
+                // Load normal characterModel
                 if (data->materials[i].normal_texture.texture)
                 {
                     Image imNormal = LoadImageFromCgltfImage(data->materials[i].normal_texture.texture->image, texPath);
@@ -5381,7 +5381,7 @@ static Model LoadGLTF(const char *fileName)
                     }
                 }
 
-                // Load ambient occlusion texture
+                // Load ambient occlusion characterModel
                 if (data->materials[i].occlusion_texture.texture)
                 {
                     Image imOcclusion = LoadImageFromCgltfImage(data->materials[i].occlusion_texture.texture->image, texPath);
@@ -5392,7 +5392,7 @@ static Model LoadGLTF(const char *fileName)
                     }
                 }
 
-                // Load emissive texture
+                // Load emissive characterModel
                 if (data->materials[i].emissive_texture.texture)
                 {
                     Image imEmissive = LoadImageFromCgltfImage(data->materials[i].emissive_texture.texture->image, texPath);
@@ -5533,7 +5533,7 @@ static Model LoadGLTF(const char *fileName)
                     }
                     else if (mesh->primitives[p].attributes[j].type == cgltf_attribute_type_texcoord) // TEXCOORD_n, vec2, float/u8n/u16n
                     {
-                        // Support up to 2 texture coordinates attributes
+                        // Support up to 2 characterModel coordinates attributes
                         float *texcoordPtr = NULL;
 
                         cgltf_accessor *attribute = mesh->primitives[p].attributes[j].data;

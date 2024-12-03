@@ -854,7 +854,7 @@ int InitPlatform(void)
         (platform.connector->modes[platform.modeIndex].flags & DRM_MODE_FLAG_INTERLACE)? 'i' : 'p',
         platform.connector->modes[platform.modeIndex].vrefresh);
 
-    // Use the width and height of the surface for render
+    // Use the width and height of the surface for draw
     CORE.Window.render.width = CORE.Window.screen.width;
     CORE.Window.render.height = CORE.Window.screen.height;
 
@@ -999,10 +999,10 @@ int InitPlatform(void)
         return -1;
     }
 
-    // At this point we need to manage render size vs screen size
+    // At this point we need to manage draw size vs screen size
     // NOTE: This function use and modify global module variables:
     //  -> CORE.Window.screen.width/CORE.Window.screen.height
-    //  -> CORE.Window.render.width/CORE.Window.render.height
+    //  -> CORE.Window.draw.width/CORE.Window.draw.height
     //  -> CORE.Window.screenScale
     SetupFramebuffer(CORE.Window.display.width, CORE.Window.display.height);
 

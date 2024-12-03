@@ -22,7 +22,7 @@
 *
 *   CONFIGURATION:
 *       #define SUPPORT_DEFAULT_FONT (default)
-*           Default font is loaded on window initialization to be available for the user to render simple text.
+*           Default font is loaded on window initialization to be available for the user to draw simple text.
 *           NOTE: If enabled, uses external module functions to load default raylib font (module: text)
 *
 *       #define SUPPORT_CAMERA_SYSTEM
@@ -284,11 +284,11 @@ typedef struct CoreData {
         Point position;                     // Window position (required on fullscreen toggle)
         Point previousPosition;             // Window previous position (required on borderless windowed toggle)
         Size display;                       // Display width and height (monitor, device-screen, LCD, ...)
-        Size screen;                        // Screen width and height (used render area)
+        Size screen;                        // Screen width and height (used draw area)
         Size previousScreen;                // Screen previous width and height (required on borderless windowed toggle)
-        Size currentFbo;                    // Current render width and height (depends on active fbo)
-        Size render;                        // Framebuffer width and height (render area, including black bars if required)
-        Point renderOffset;                 // Offset from render area (must be divided by 2)
+        Size currentFbo;                    // Current draw width and height (depends on active fbo)
+        Size render;                        // Framebuffer width and height (draw area, including black bars if required)
+        Point renderOffset;                 // Offset from draw area (must be divided by 2)
         Size screenMin;                     // Screen minimum width and height (for resizable window)
         Size screenMax;                     // Screen maximum width and height (for resizable window)
         Matrix screenScale;                 // Matrix to scale screen (framebuffer rendering)
@@ -374,7 +374,7 @@ CoreData CORE = { 0 };                      // Global CORE state context
 
 // Flag to note GPU acceleration is available,
 // referenced from other modules to support GPU data loading
-// NOTE: Useful to allow Texture, RenderTexture, Font.texture, Mesh.vaoId/vboId, Shader loading
+// NOTE: Useful to allow Texture, RenderTexture, Font.characterModel, Mesh.vaoId/vboId, Shader loading
 bool isGpuReady = false;
 
 #if defined(SUPPORT_SCREEN_CAPTURE)
@@ -679,8 +679,8 @@ void InitWindow(int width, int height, const char *title)
     #endif
 #else
     #if defined(SUPPORT_MODULE_RSHAPES)
-    // Set default texture and rectangle to be used for shapes drawing
-    // NOTE: rlgl default texture is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
+    // Set default characterModel and rectangle to be used for shapes drawing
+    // NOTE: rlgl default characterModel is a 1x1 pixel UNCOMPRESSED_R8G8B8A8
     Texture2D texture = { rlGetTextureIdDefault(), 1, 1, 1, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8 };
     SetShapesTexture(texture, (Rectangle){ 0.0f, 0.0f, 1.0f, 1.0f });    // WARNING: Module required: rshapes
     #endif
@@ -782,7 +782,7 @@ int GetScreenHeight(void)
     return CORE.Window.screen.height;
 }
 
-// Get current render width which is equal to screen width*dpi scale
+// Get current draw width which is equal to screen width*dpi scale
 int GetRenderWidth(void)
 {
     int width = 0;
@@ -846,7 +846,7 @@ void ClearBackground(Color color)
 // Setup canvas (framebuffer) to start drawing
 void BeginDrawing(void)
 {
-    // WARNING: Previously to BeginDrawing() other render textures drawing could happen,
+    // WARNING: Previously to BeginDrawing() other draw textures drawing could happen,
     // consequently the measure for update vs draw is not accurate (only the total frame time is accurate)
 
     CORE.Time.current = GetTime();      // Number of elapsed seconds since InitTimer()
@@ -863,7 +863,7 @@ void BeginDrawing(void)
 // End canvas drawing and swap buffers (double buffering)
 void EndDrawing(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
 #if defined(SUPPORT_GIF_RECORDING)
     // draw record indicator
@@ -902,7 +902,7 @@ void EndDrawing(void)
         }
     #endif
 
-        rlDrawRenderBatchActive();  // update and draw internal render batch
+        rlDrawRenderBatchActive();  // update and draw internal draw batch
     }
 #endif
 
@@ -979,7 +979,7 @@ void EndDrawing(void)
 // Initialize 2D mode with custom camera (2D)
 void BeginMode2D(Camera2D camera)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
     rlLoadIdentity();               // Reset current matrix (modelview)
 
@@ -990,7 +990,7 @@ void BeginMode2D(Camera2D camera)
 // Ends 2D mode with custom camera
 void EndMode2D(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
     rlLoadIdentity();               // Reset current matrix (modelview)
 
@@ -1000,7 +1000,7 @@ void EndMode2D(void)
 // Initializes 3D mode with custom camera (3D)
 void BeginMode3D(Camera camera)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
     rlMatrixMode(RL_PROJECTION);    // Switch to projection matrix
     rlPushMatrix();                 // Save previous matrix, which contains the settings for the 2d ortho projection
@@ -1039,7 +1039,7 @@ void BeginMode3D(Camera camera)
 // Ends 3D mode and returns to default 2D orthographic mode
 void EndMode3D(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
     rlMatrixMode(RL_PROJECTION);    // Switch to projection matrix
     rlPopMatrix();                  // Restore previous matrix (projection) from matrix stack
@@ -1052,12 +1052,12 @@ void EndMode3D(void)
     rlDisableDepthTest();           // Disable DEPTH_TEST for 2D
 }
 
-// Initializes render texture for drawing
+// Initializes draw characterModel for drawing
 void BeginTextureMode(RenderTexture2D target)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
-    rlEnableFramebuffer(target.id); // Enable render target
+    rlEnableFramebuffer(target.id); // Enable draw target
 
     // Set viewport and RLGL internal framebuffer size
     rlViewport(0, 0, target.texture.width, target.texture.height);
@@ -1083,12 +1083,12 @@ void BeginTextureMode(RenderTexture2D target)
     CORE.Window.usingFbo = true;
 }
 
-// Ends drawing to render texture
+// Ends drawing to draw characterModel
 void EndTextureMode(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
-    rlDisableFramebuffer();         // Disable render target (fbo)
+    rlDisableFramebuffer();         // Disable draw target (fbo)
 
     // Set viewport to default framebuffer size
     SetupViewport(CORE.Window.render.width, CORE.Window.render.height);
@@ -1133,7 +1133,7 @@ void EndBlendMode(void)
 // NOTE: Scissor rec refers to bottom-left corner, we change it to upper-left
 void BeginScissorMode(int x, int y, int width, int height)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
 
     rlEnableScissorTest();
 
@@ -1159,7 +1159,7 @@ void BeginScissorMode(int x, int y, int width, int height)
 // End scissor mode
 void EndScissorMode(void)
 {
-    rlDrawRenderBatchActive();      // update and draw internal render batch
+    rlDrawRenderBatchActive();      // update and draw internal draw batch
     rlDisableScissorTest();
 }
 
@@ -1172,7 +1172,7 @@ void BeginVrStereoMode(VrStereoConfig config)
 {
     rlEnableStereoRender();
 
-    // Set stereo render matrices
+    // Set stereo draw matrices
     rlSetMatrixProjectionStereo(config.projection[0], config.projection[1]);
     rlSetMatrixViewOffsetStereo(config.viewOffset[0], config.viewOffset[1]);
 }
@@ -1426,7 +1426,7 @@ void SetShaderValueMatrix(Shader shader, int locIndex, Matrix mat)
     }
 }
 
-// Set shader uniform value for texture
+// Set shader uniform value for characterModel
 void SetShaderValueTexture(Shader shader, int locIndex, Texture2D texture)
 {
     if (locIndex > -1)
@@ -1549,7 +1549,7 @@ Vector2 GetWorldToScreen(Vector3 position, Camera camera)
     return screenPosition;
 }
 
-// Get size position for a 3d world space position (useful for texture drawing)
+// Get size position for a 3d world space position (useful for characterModel drawing)
 Vector2 GetWorldToScreenEx(Vector3 position, Camera camera, int width, int height)
 {
     // Calculate projection matrix (from perspective instead of frustum
@@ -3451,7 +3451,7 @@ int GetTouchY(void)
 }
 
 // Get touch position XY for a touch point index (relative to screen size)
-// TODO: Touch position should be scaled depending on display size and render size
+// TODO: Touch position should be scaled depending on display size and draw size
 Vector2 GetTouchPosition(int index)
 {
     Vector2 position = { -1.0f, -1.0f };
@@ -3517,8 +3517,8 @@ void SetupViewport(int width, int height)
     CORE.Window.render.height = height;
 
     // Set viewport width and height
-    // NOTE: We consider render size (scaled) and offset in case black bars are required and
-    // render area does not match full display area (this situation is only applicable on fullscreen mode)
+    // NOTE: We consider draw size (scaled) and offset in case black bars are required and
+    // draw area does not match full display area (this situation is only applicable on fullscreen mode)
 #if defined(__APPLE__)
     Vector2 scale = GetWindowScaleDPI();
     rlViewport(CORE.Window.renderOffset.x/2*scale.x, CORE.Window.renderOffset.y/2*scale.y, (CORE.Window.render.width)*scale.x, (CORE.Window.render.height)*scale.y);
@@ -3538,10 +3538,10 @@ void SetupViewport(int width, int height)
 }
 
 // Compute framebuffer size relative to screen size and display size
-// NOTE: Global variables CORE.Window.render.width/CORE.Window.render.height and CORE.Window.renderOffset.x/CORE.Window.renderOffset.y can be modified
+// NOTE: Global variables CORE.Window.draw.width/CORE.Window.draw.height and CORE.Window.renderOffset.x/CORE.Window.renderOffset.y can be modified
 void SetupFramebuffer(int width, int height)
 {
-    // Calculate CORE.Window.render.width and CORE.Window.render.height, we have the display size (input params) and the desired screen size (global var)
+    // Calculate CORE.Window.draw.width and CORE.Window.draw.height, we have the display size (input params) and the desired screen size (global var)
     if ((CORE.Window.screen.width > CORE.Window.display.width) || (CORE.Window.screen.height > CORE.Window.display.height))
     {
         TRACELOG(LOG_WARNING, "DISPLAY: Downscaling required: Screen size (%ix%i) is bigger than display size (%ix%i)", CORE.Window.screen.width, CORE.Window.screen.height, CORE.Window.display.width, CORE.Window.display.height);
@@ -3569,7 +3569,7 @@ void SetupFramebuffer(int width, int height)
         float scaleRatio = (float)CORE.Window.render.width/(float)CORE.Window.screen.width;
         CORE.Window.screenScale = MatrixScale(scaleRatio, scaleRatio, 1.0f);
 
-        // NOTE: We render to full display resolution!
+        // NOTE: We draw to full display resolution!
         // We just need to calculate above parameters for downscale matrix and offsets
         CORE.Window.render.width = CORE.Window.display.width;
         CORE.Window.render.height = CORE.Window.display.height;

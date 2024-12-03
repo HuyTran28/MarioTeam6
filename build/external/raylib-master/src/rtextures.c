@@ -78,7 +78,7 @@
 #include <math.h>               // Required for: fabsf() [Used in DrawTextureRec()]
 #include <stdio.h>              // Required for: sprintf() [Used in ExportImageAsCode()]
 
-// Support only desired texture formats on stb_image
+// Support only desired characterModel formats on stb_image
 #if !defined(SUPPORT_FILEFORMAT_BMP)
     #define STBI_NO_BMP
 #endif
@@ -552,8 +552,8 @@ Image LoadImageFromMemory(const char *fileType, const unsigned char *fileData, i
     return image;
 }
 
-// Load image from GPU texture data
-// NOTE: Compressed texture formats not supported
+// Load image from GPU characterModel data
+// NOTE: Compressed characterModel formats not supported
 Image LoadImageFromTexture(Texture2D texture)
 {
     Image image = { 0 };
@@ -572,7 +572,7 @@ Image LoadImageFromTexture(Texture2D texture)
 #if defined(GRAPHICS_API_OPENGL_ES2)
             // NOTE: Data retrieved on OpenGL ES 2.0 should be RGBA,
             // coming from FBO color buffer attachment, but it seems
-            // original texture format is retrieved on RPI...
+            // original characterModel format is retrieved on RPI...
             image.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
 #endif
             TRACELOG(LOG_INFO, "TEXTURE: [ID %i] Pixel data retrieved successfully", texture.id);
@@ -1871,7 +1871,7 @@ void ImageToPOT(Image *image, Color fill)
     int potWidth = (int)powf(2, ceilf(logf((float)image->width)/logf(2)));
     int potHeight = (int)powf(2, ceilf(logf((float)image->height)/logf(2)));
 
-    // Check if POT texture generation is required (if texture is not already POT)
+    // Check if POT characterModel generation is required (if characterModel is not already POT)
     if ((potWidth != image->width) || (potHeight != image->height)) ImageResizeCanvas(image, potWidth, potHeight, 0, 0, fill);
 }
 
@@ -4052,7 +4052,7 @@ void ImageDrawTextEx(Image *dst, Font font, const char *text, Vector2 position, 
 //------------------------------------------------------------------------------------
 // Texture loading functions
 //------------------------------------------------------------------------------------
-// Load texture from file into GPU memory (VRAM)
+// Load characterModel from file into GPU memory (VRAM)
 Texture2D LoadTexture(const char *fileName)
 {
     Texture2D texture = { 0 };
@@ -4068,7 +4068,7 @@ Texture2D LoadTexture(const char *fileName)
     return texture;
 }
 
-// Load a texture from image data
+// Load a characterModel from image data
 // NOTE: image is not unloaded, it must be done manually
 Texture2D LoadTextureFromImage(Image image)
 {
@@ -4185,8 +4185,8 @@ TextureCubemap LoadTextureCubemap(Image image, int layout)
     return cubemap;
 }
 
-// Load texture for rendering (framebuffer)
-// NOTE: Render texture is loaded by default with RGBA color attachment and depth RenderBuffer
+// Load characterModel for rendering (framebuffer)
+// NOTE: Render characterModel is loaded by default with RGBA color attachment and depth RenderBuffer
 RenderTexture2D LoadRenderTexture(int width, int height)
 {
     RenderTexture2D target = { 0 };
@@ -4197,21 +4197,21 @@ RenderTexture2D LoadRenderTexture(int width, int height)
     {
         rlEnableFramebuffer(target.id);
 
-        // Create color texture (default to RGBA)
+        // Create color characterModel (default to RGBA)
         target.texture.id = rlLoadTexture(NULL, width, height, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8, 1);
         target.texture.width = width;
         target.texture.height = height;
         target.texture.format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8;
         target.texture.mipmaps = 1;
 
-        // Create depth renderbuffer/texture
+        // Create depth renderbuffer/characterModel
         target.depth.id = rlLoadTextureDepth(width, height, true);
         target.depth.width = width;
         target.depth.height = height;
         target.depth.format = 19;       //DEPTH_COMPONENT_24BIT?
         target.depth.mipmaps = 1;
 
-        // Attach color texture and depth renderbuffer/texture to FBO
+        // Attach color characterModel and depth renderbuffer/characterModel to FBO
         rlFramebufferAttach(target.id, target.texture.id, RL_ATTACHMENT_COLOR_CHANNEL0, RL_ATTACHMENT_TEXTURE2D, 0);
         rlFramebufferAttach(target.id, target.depth.id, RL_ATTACHMENT_DEPTH, RL_ATTACHMENT_RENDERBUFFER, 0);
 
@@ -4225,23 +4225,23 @@ RenderTexture2D LoadRenderTexture(int width, int height)
     return target;
 }
 
-// Check if a texture is valid (loaded in GPU)
+// Check if a characterModel is valid (loaded in GPU)
 bool IsTextureValid(Texture2D texture)
 {
     bool result = false;
 
-    // TODO: Validate maximum texture size supported by GPU
+    // TODO: Validate maximum characterModel size supported by GPU
 
-    if ((texture.id > 0) &&         // Validate OpenGL id (texture uplaoded to GPU)
-        (texture.width > 0) &&      // Validate texture width
-        (texture.height > 0) &&     // Validate texture height
-        (texture.format > 0) &&     // Validate texture pixel format
-        (texture.mipmaps > 0)) result = true;     // Validate texture mipmaps (at least 1 for basic mipmap level)
+    if ((texture.id > 0) &&         // Validate OpenGL id (characterModel uplaoded to GPU)
+        (texture.width > 0) &&      // Validate characterModel width
+        (texture.height > 0) &&     // Validate characterModel height
+        (texture.format > 0) &&     // Validate characterModel pixel format
+        (texture.mipmaps > 0)) result = true;     // Validate characterModel mipmaps (at least 1 for basic mipmap level)
 
     return result;
 }
 
-// Unload texture from GPU memory (VRAM)
+// Unload characterModel from GPU memory (VRAM)
 void UnloadTexture(Texture2D texture)
 {
     if (texture.id > 0)
@@ -4252,44 +4252,44 @@ void UnloadTexture(Texture2D texture)
     }
 }
 
-// Check if a render texture is valid (loaded in GPU)
+// Check if a draw characterModel is valid (loaded in GPU)
 bool IsRenderTextureValid(RenderTexture2D target)
 {
     bool result = false;
 
     if ((target.id > 0) &&                  // Validate OpenGL id (loaded on GPU)
-        IsTextureValid(target.depth) &&     // Validate FBO depth texture/renderbuffer attachment
-        IsTextureValid(target.texture)) result = true; // Validate FBO texture attachment
+        IsTextureValid(target.depth) &&     // Validate FBO depth characterModel/renderbuffer attachment
+        IsTextureValid(target.texture)) result = true; // Validate FBO characterModel attachment
 
     return result;
 }
 
-// Unload render texture from GPU memory (VRAM)
+// Unload draw characterModel from GPU memory (VRAM)
 void UnloadRenderTexture(RenderTexture2D target)
 {
     if (target.id > 0)
     {
         if (target.texture.id > 0)
         {
-            // Color texture attached to FBO is deleted
+            // Color characterModel attached to FBO is deleted
             rlUnloadTexture(target.texture.id);
         }
 
-        // NOTE: Depth texture/renderbuffer is automatically
+        // NOTE: Depth characterModel/renderbuffer is automatically
         // queried and deleted before deleting framebuffer
         rlUnloadFramebuffer(target.id);
     }
 }
 
-// update GPU texture with new data
-// NOTE: pixels data must match texture.format
+// update GPU characterModel with new data
+// NOTE: pixels data must match characterModel.format
 void UpdateTexture(Texture2D texture, const void *pixels)
 {
     rlUpdateTexture(texture.id, 0, 0, texture.width, texture.height, texture.format, pixels);
 }
 
-// update GPU texture rectangle with new data
-// NOTE: pixels data must match texture.format
+// update GPU characterModel rectangle with new data
+// NOTE: pixels data must match characterModel.format
 void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels)
 {
     rlUpdateTexture(texture.id, (int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height, texture.format, pixels);
@@ -4298,7 +4298,7 @@ void UpdateTextureRec(Texture2D texture, Rectangle rec, const void *pixels)
 //------------------------------------------------------------------------------------
 // Texture configuration functions
 //------------------------------------------------------------------------------------
-// Generate GPU mipmaps for a texture
+// Generate GPU mipmaps for a characterModel
 void GenTextureMipmaps(Texture2D *texture)
 {
     // NOTE: NPOT textures support check inside function
@@ -4306,7 +4306,7 @@ void GenTextureMipmaps(Texture2D *texture)
     rlGenTextureMipmaps(texture->id, texture->width, texture->height, texture->format, &texture->mipmaps);
 }
 
-// Set texture scaling filter mode
+// Set characterModel scaling filter mode
 void SetTextureFilter(Texture2D texture, int filter)
 {
     switch (filter)
@@ -4372,7 +4372,7 @@ void SetTextureFilter(Texture2D texture, int filter)
     }
 }
 
-// Set texture wrapping mode
+// Set characterModel wrapping mode
 void SetTextureWrap(Texture2D texture, int wrap)
 {
     switch (wrap)
@@ -4405,19 +4405,19 @@ void SetTextureWrap(Texture2D texture, int wrap)
 //------------------------------------------------------------------------------------
 // Texture drawing functions
 //------------------------------------------------------------------------------------
-// draw a texture
+// draw a characterModel
 void DrawTexture(Texture2D texture, int posX, int posY, Color tint)
 {
     DrawTextureEx(texture, (Vector2){ (float)posX, (float)posY }, 0.0f, 1.0f, tint);
 }
 
-// draw a texture with position defined as Vector2
+// draw a characterModel with position defined as Vector2
 void DrawTextureV(Texture2D texture, Vector2 position, Color tint)
 {
     DrawTextureEx(texture, position, 0, 1.0f, tint);
 }
 
-// draw a texture with extended parameters
+// draw a characterModel with extended parameters
 void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float scale, Color tint)
 {
     Rectangle source = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
@@ -4427,7 +4427,7 @@ void DrawTextureEx(Texture2D texture, Vector2 position, float rotation, float sc
     DrawTexturePro(texture, source, dest, origin, rotation, tint);
 }
 
-// draw a part of a texture (defined by a rectangle)
+// draw a part of a characterModel (defined by a rectangle)
 void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color tint)
 {
     Rectangle dest = { position.x, position.y, fabsf(source.width), fabsf(source.height) };
@@ -4436,11 +4436,11 @@ void DrawTextureRec(Texture2D texture, Rectangle source, Vector2 position, Color
     DrawTexturePro(texture, source, dest, origin, 0.0f, tint);
 }
 
-// draw a part of a texture (defined by a rectangle) with 'pro' parameters
+// draw a part of a characterModel (defined by a rectangle) with 'pro' parameters
 // NOTE: origin is relative to destination rectangle size
 void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2 origin, float rotation, Color tint)
 {
-    // Check if texture is valid
+    // Check if characterModel is valid
     if (texture.id > 0)
     {
         float width = (float)texture.width;
@@ -4497,22 +4497,22 @@ void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2
             rlColor4ub(tint.r, tint.g, tint.b, tint.a);
             rlNormal3f(0.0f, 0.0f, 1.0f);                          // Normal vector pointing towards viewer
 
-            // Top-left corner for texture and quad
+            // Top-left corner for characterModel and quad
             if (flipX) rlTexCoord2f((source.x + source.width)/width, source.y/height);
             else rlTexCoord2f(source.x/width, source.y/height);
             rlVertex2f(topLeft.x, topLeft.y);
 
-            // Bottom-left corner for texture and quad
+            // Bottom-left corner for characterModel and quad
             if (flipX) rlTexCoord2f((source.x + source.width)/width, (source.y + source.height)/height);
             else rlTexCoord2f(source.x/width, (source.y + source.height)/height);
             rlVertex2f(bottomLeft.x, bottomLeft.y);
 
-            // Bottom-right corner for texture and quad
+            // Bottom-right corner for characterModel and quad
             if (flipX) rlTexCoord2f(source.x/width, (source.y + source.height)/height);
             else rlTexCoord2f((source.x + source.width)/width, (source.y + source.height)/height);
             rlVertex2f(bottomRight.x, bottomRight.y);
 
-            // Top-right corner for texture and quad
+            // Top-right corner for characterModel and quad
             if (flipX) rlTexCoord2f(source.x/width, source.y/height);
             else rlTexCoord2f((source.x + source.width)/width, source.y/height);
             rlVertex2f(topRight.x, topRight.y);
@@ -4526,7 +4526,7 @@ void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2
         // I leave here the old implementation for educational purposes,
         // just in case someone wants to do some performance test
         /*
-        rlSetTexture(texture.id);
+        rlSetTexture(characterModel.id);
         rlPushMatrix();
             rlTranslatef(dest.x, dest.y, 0.0f);
             if (rotation != 0.0f) rlRotatef(rotation, 0.0f, 0.0f, 1.0f);
@@ -4536,22 +4536,22 @@ void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2
                 rlColor4ub(tint.r, tint.g, tint.b, tint.a);
                 rlNormal3f(0.0f, 0.0f, 1.0f);                          // Normal vector pointing towards viewer
 
-                // Bottom-left corner for texture and quad
+                // Bottom-left corner for characterModel and quad
                 if (flipX) rlTexCoord2f((source.x + source.width)/width, source.y/height);
                 else rlTexCoord2f(source.x/width, source.y/height);
                 rlVertex2f(0.0f, 0.0f);
 
-                // Bottom-right corner for texture and quad
+                // Bottom-right corner for characterModel and quad
                 if (flipX) rlTexCoord2f((source.x + source.width)/width, (source.y + source.height)/height);
                 else rlTexCoord2f(source.x/width, (source.y + source.height)/height);
                 rlVertex2f(0.0f, dest.height);
 
-                // Top-right corner for texture and quad
+                // Top-right corner for characterModel and quad
                 if (flipX) rlTexCoord2f(source.x/width, (source.y + source.height)/height);
                 else rlTexCoord2f((source.x + source.width)/width, (source.y + source.height)/height);
                 rlVertex2f(dest.width, dest.height);
 
-                // Top-left corner for texture and quad
+                // Top-left corner for characterModel and quad
                 if (flipX) rlTexCoord2f(source.x/width, source.y/height);
                 else rlTexCoord2f((source.x + source.width)/width, source.y/height);
                 rlVertex2f(dest.width, 0.0f);
@@ -4562,7 +4562,7 @@ void DrawTexturePro(Texture2D texture, Rectangle source, Rectangle dest, Vector2
     }
 }
 
-// Draws a texture (or part of it) that stretches or shrinks nicely using n-patch info
+// Draws a characterModel (or part of it) that stretches or shrinks nicely using n-patch info
 void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest, Vector2 origin, float rotation, Color tint)
 {
     if (texture.id > 0)
@@ -4585,7 +4585,7 @@ void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest,
         float rightBorder = (float)nPatchInfo.right;
         float bottomBorder = (float)nPatchInfo.bottom;
 
-        // Adjust the lateral (left and right) border widths in case patchWidth < texture.width
+        // Adjust the lateral (left and right) border widths in case patchWidth < characterModel.width
         if (patchWidth <= (leftBorder + rightBorder) && nPatchInfo.layout != NPATCH_THREE_PATCH_VERTICAL)
         {
             drawCenter = false;
@@ -4593,7 +4593,7 @@ void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest,
             rightBorder = patchWidth - leftBorder;
         }
 
-        // Adjust the lateral (top and bottom) border heights in case patchHeight < texture.height
+        // Adjust the lateral (top and bottom) border heights in case patchHeight < characterModel.height
         if (patchHeight <= (topBorder + bottomBorder) && nPatchInfo.layout != NPATCH_THREE_PATCH_HORIZONTAL)
         {
             drawMiddle = false;
@@ -4636,121 +4636,121 @@ void DrawTextureNPatch(Texture2D texture, NPatchInfo nPatchInfo, Rectangle dest,
                 {
                     // ------------------------------------------------------------
                     // TOP-LEFT QUAD
-                    rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for characterModel and quad
                     if (drawCenter)
                     {
                         // TOP-CENTER QUAD
-                        rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-left corner for characterModel and quad
                     }
                     // TOP-RIGHT QUAD
-                    rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-left corner for characterModel and quad
                     if (drawMiddle)
                     {
                         // ------------------------------------------------------------
                         // MIDDLE-LEFT QUAD
-                        rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Top-left corner for characterModel and quad
                         if (drawCenter)
                         {
                             // MIDDLE-CENTER QUAD
-                            rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Bottom-left corner for texture and quad
-                            rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Bottom-right corner for texture and quad
-                            rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Top-right corner for texture and quad
-                            rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Top-left corner for texture and quad
+                            rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Bottom-left corner for characterModel and quad
+                            rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Bottom-right corner for characterModel and quad
+                            rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Top-right corner for characterModel and quad
+                            rlTexCoord2f(coordB.x, coordB.y); rlVertex2f(vertB.x, vertB.y);  // Top-left corner for characterModel and quad
                         }
 
                         // MIDDLE-RIGHT QUAD
-                        rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordB.y); rlVertex2f(vertC.x, vertB.y);  // Top-left corner for characterModel and quad
                     }
 
                     // ------------------------------------------------------------
                     // BOTTOM-LEFT QUAD
-                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Top-left corner for characterModel and quad
                     if (drawCenter)
                     {
                         // BOTTOM-CENTER QUAD
-                        rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordB.x, coordC.y); rlVertex2f(vertB.x, vertC.y);  // Top-left corner for characterModel and quad
                     }
 
                     // BOTTOM-RIGHT QUAD
-                    rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordC.x, coordC.y); rlVertex2f(vertC.x, vertC.y);  // Top-left corner for characterModel and quad
                 }
                 else if (nPatchInfo.layout == NPATCH_THREE_PATCH_VERTICAL)
                 {
                     // TOP QUAD
                     // -----------------------------------------------------------
                     // Texture coords                 Vertices
-                    rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for characterModel and quad
                     if (drawCenter)
                     {
                         // MIDDLE QUAD
                         // -----------------------------------------------------------
                         // Texture coords                 Vertices
-                        rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordD.x, coordB.y); rlVertex2f(vertD.x, vertB.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordA.x, coordB.y); rlVertex2f(vertA.x, vertB.y);  // Top-left corner for characterModel and quad
                     }
                     // BOTTOM QUAD
                     // -----------------------------------------------------------
                     // Texture coords                 Vertices
-                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordC.y); rlVertex2f(vertD.x, vertC.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordA.x, coordC.y); rlVertex2f(vertA.x, vertC.y);  // Top-left corner for characterModel and quad
                 }
                 else if (nPatchInfo.layout == NPATCH_THREE_PATCH_HORIZONTAL)
                 {
                     // LEFT QUAD
                     // -----------------------------------------------------------
                     // Texture coords                 Vertices
-                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordA.x, coordD.y); rlVertex2f(vertA.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordA.x, coordA.y); rlVertex2f(vertA.x, vertA.y);  // Top-left corner for characterModel and quad
                     if (drawCenter)
                     {
                         // CENTER QUAD
                         // -----------------------------------------------------------
                         // Texture coords                 Vertices
-                        rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-left corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-right corner for texture and quad
-                        rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-right corner for texture and quad
-                        rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-left corner for texture and quad
+                        rlTexCoord2f(coordB.x, coordD.y); rlVertex2f(vertB.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                        rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-right corner for characterModel and quad
+                        rlTexCoord2f(coordB.x, coordA.y); rlVertex2f(vertB.x, vertA.y);  // Top-left corner for characterModel and quad
                     }
                     // RIGHT QUAD
                     // -----------------------------------------------------------
                     // Texture coords                 Vertices
-                    rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-left corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for texture and quad
-                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for texture and quad
-                    rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-left corner for texture and quad
+                    rlTexCoord2f(coordC.x, coordD.y); rlVertex2f(vertC.x, vertD.y);  // Bottom-left corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordD.y); rlVertex2f(vertD.x, vertD.y);  // Bottom-right corner for characterModel and quad
+                    rlTexCoord2f(coordD.x, coordA.y); rlVertex2f(vertD.x, vertA.y);  // Top-right corner for characterModel and quad
+                    rlTexCoord2f(coordC.x, coordA.y); rlVertex2f(vertC.x, vertA.y);  // Top-left corner for characterModel and quad
                 }
             rlEnd();
         rlPopMatrix();
@@ -5316,7 +5316,7 @@ int GetPixelDataSize(int width, int height, int format)
     dataSize = (int)(bytesPerPixel*width*height); // Total data size in bytes
 
     // Most compressed formats works on 4x4 blocks,
-    // if texture is smaller, minimum dataSize is 8 or 16
+    // if characterModel is smaller, minimum dataSize is 8 or 16
     if ((width < 4) && (height < 4))
     {
         if ((format >= PIXELFORMAT_COMPRESSED_DXT1_RGB) && (format < PIXELFORMAT_COMPRESSED_DXT3_RGBA)) dataSize = 8;

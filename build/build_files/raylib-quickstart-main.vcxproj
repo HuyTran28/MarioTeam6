@@ -266,26 +266,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\resource_dir.h" />
-    <ClInclude Include="..\..\src\Game.h" />
-    <ClInclude Include="..\..\src\LogIn.h" />
-    <ClInclude Include="..\..\src\Menu.h" />
-    <ClInclude Include="..\..\src\Observer.h" />
-    <ClInclude Include="..\..\src\Stage.h" />
-    <ClInclude Include="..\..\src\Stage1.h" />
-    <ClInclude Include="..\..\src\Stage2.h" />
-    <ClInclude Include="..\..\src\StageCreator.h" />
-    <ClInclude Include="..\..\src\UI.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\Game.cpp" />
-    <ClCompile Include="..\..\src\LogIn.cpp" />
-    <ClCompile Include="..\..\src\main.cpp" />
-    <ClCompile Include="..\..\src\Menu.cpp" />
-    <ClCompile Include="..\..\src\Stage1.cpp" />
-    <ClCompile Include="..\..\src\Stage2.cpp" />
-    <ClCompile Include="..\..\src\StageCreator.cpp" />
-    <ClCompile Include="..\..\src\UI.cpp" />
+    <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
+    <ClInclude Include="..\..\src\Controller\MenuController.h" />
+    <ClInclude Include="..\..\src\Controller\StateController.h" />
+    <ClInclude Include="..\..\src\Event\Event.h" />
+    <ClInclude Include="..\..\src\Event\EventManager.h" />
+    <ClInclude Include="..\..\src\Event\InitializeEvent.h" />
+    <ClInclude Include="..\..\src\Event\KeyboardEvent.h" />
+    <ClInclude Include="..\..\src\Event\MouseClickedEvent.h" />
+    <ClInclude Include="..\..\src\Event\QuitEvent.h" />
+    <ClInclude Include="..\..\src\Event\StateChangeEvent.h" />
+    <ClInclude Include="..\..\src\Event\TickEvent.h" />
+    <ClInclude Include="..\..\src\Factory\Factory.h" />
+    <ClInclude Include="..\..\src\GameEngine.h" />
+    <ClInclude Include="..\..\src\InputHandler\InputHandler.h" />
+    <ClInclude Include="..\..\src\Model\MapData.h" />
+    <ClInclude Include="..\..\src\Model\MenuModel.h" />
+    <ClInclude Include="..\..\src\Model\ModelEngine.h" />
+    <ClInclude Include="..\..\src\Model\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\StateModel.h" />
+    <ClInclude Include="..\..\src\Observer\IObserver.h" />
+    <ClInclude Include="..\..\src\Observer\Subject.h" />
+    <ClInclude Include="..\..\src\View\MenuView.h" />
+    <ClInclude Include="..\..\src\View\StateView.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="raylib.vcxproj">
@@ -294,6 +297,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
+    <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
+    <ClCompile Include="..\..\src\Event\Event.cpp" />
+    <ClCompile Include="..\..\src\Event\EventManager.cpp" />
+    <ClCompile Include="..\..\src\Factory\Factory.cpp" />
+    <ClCompile Include="..\..\src\GameEngine.cpp" />
+    <ClCompile Include="..\..\src\InputHandler\InputHandler.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
+    <ClCompile Include="..\..\src\Model\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\View\MenuView.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,9 +1,9 @@
 #include "raylib.h"
-
-#include "Game.h"
+#include "GameEngine.h"
 
 int main()
 {
-	Game::getInstance().run();
-	return 0;
+	std::shared_ptr<GameEngine> gameEngine = std::make_shared<GameEngine>();
+	gameEngine->run();
+    return 0;
 }

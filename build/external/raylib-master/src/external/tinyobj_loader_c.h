@@ -889,56 +889,56 @@ static int tinyobj_parse_and_index_mtl_file(tinyobj_material_t **materials_out,
       continue;
     }
 
-    /* ambient texture */
+    /* ambient characterModel */
     if ((0 == strncmp(token, "map_Ka", 6)) && IS_SPACE(token[6])) {
       token += 7;
       material.ambient_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* diffuse texture */
+    /* diffuse characterModel */
     if ((0 == strncmp(token, "map_Kd", 6)) && IS_SPACE(token[6])) {
       token += 7;
       material.diffuse_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* specular texture */
+    /* specular characterModel */
     if ((0 == strncmp(token, "map_Ks", 6)) && IS_SPACE(token[6])) {
       token += 7;
       material.specular_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* specular highlight texture */
+    /* specular highlight characterModel */
     if ((0 == strncmp(token, "map_Ns", 6)) && IS_SPACE(token[6])) {
       token += 7;
       material.specular_highlight_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* bump texture */
+    /* bump characterModel */
     if ((0 == strncmp(token, "map_bump", 8)) && IS_SPACE(token[8])) {
       token += 9;
       material.bump_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* alpha texture */
+    /* alpha characterModel */
     if ((0 == strncmp(token, "map_d", 5)) && IS_SPACE(token[5])) {
       token += 6;
       material.alpha_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* bump texture */
+    /* bump characterModel */
     if ((0 == strncmp(token, "bump", 4)) && IS_SPACE(token[4])) {
       token += 5;
       material.bump_texname = my_strdup(token, (unsigned int) (line_end - token));
       continue;
     }
 
-    /* displacement texture */
+    /* displacement characterModel */
     if ((0 == strncmp(token, "disp", 4)) && IS_SPACE(token[4])) {
       token += 5;
       material.displacement_texname = my_strdup(token, (unsigned int) (line_end - token));
