@@ -50,7 +50,7 @@ int main()
     Stage1 stage1(200, 2, 9, dynamicsWorld);
     //Stage2 stage2(110, 2, 9, dynamicsWorld);
 
-
+	Model brick = LoadModel("Assets/Models/Platforms/BrickBlock.glb");
 
 
 
@@ -59,7 +59,7 @@ int main()
     float cameraZ = 10.0f;
     while (!WindowShouldClose())
     {
-        UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+        UpdateCamera(&camera, CAMERA_FREE);
         // Update
         dynamicsWorld->stepSimulation(GetFrameTime());
         /* cameraZ += 0.2;
@@ -73,7 +73,7 @@ int main()
 
         //stage2.draw();
         stage1.draw();
-
+		DrawModel(brick, Vector3{ 0.0f, 5.0f, 0.0f }, 10.0f, WHITE);
 
 
         //renderGround();
