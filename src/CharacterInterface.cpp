@@ -14,6 +14,7 @@ CharacterInterface::CharacterInterface(btRigidBody* rigidBody, Model model, cons
     m_position = { physicalPosition.x(), physicalPosition.y(), physicalPosition.z() };
 	// Set the rigid body's user pointer to this character
 	m_rigidBody->setUserPointer(this);
+	m_rigidBody->setGravity(btVector3(0, -9.81 * m_rigidBody->getMass(), 0));
 }
 
 void CharacterInterface::render() {
@@ -75,7 +76,7 @@ bool CharacterInterface::checkGroundCollision() {
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 1.5f, 0);
+        btVector3 end = start - btVector3(0, 2.0f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         m_dynamicsWorld->rayTest(start, end, rayCallback);
@@ -90,57 +91,53 @@ bool CharacterInterface::checkGroundCollision() {
 }
 
 void CharacterInterface::updateCollisionShape() {
-	// Update the collision shape's scale based on the model's scale
-	btVector3 bulletScale(m_scale, m_scale, m_scale);
-	m_rigidBody->getCollisionShape()->setLocalScaling(bulletScale);
+    // Get the rigid body's current transform
+    btTransform transform = m_rigidBody->getWorldTransform();
 
-	// Create a new transformation for the collision shape
-	btTransform transform;
-	transform.setOrigin(m_rigidBody->getWorldTransform().getOrigin());
+    // Reset the rotation to identity to keep the capsule upright
+    transform.setRotation(btQuaternion(0, 0, 0, 1));
 
-	// Convert the model's rotation matrix into a Bullet quaternion
-	Matrix rotationMatrix = MatrixRotateY(m_rotationAngle); // Assumes Y-axis rotation
-	Quaternion modelQuaternion = QuaternionFromMatrix(rotationMatrix);
-	transform.setRotation(btQuaternion(modelQuaternion.x, modelQuaternion.y, modelQuaternion.z, modelQuaternion.w));
+    // Update the rigid body's transformation
+    m_rigidBody->setWorldTransform(transform);
+    m_rigidBody->getMotionState()->setWorldTransform(transform);
 
-	// Update the rigid body's transformation
-	m_rigidBody->setWorldTransform(transform);
-	m_rigidBody->getMotionState()->setWorldTransform(transform);
-
-	// Activate the rigid body to ensure changes take effect
-	m_rigidBody->activate(true);
+    // Ensure the rigid body is active
+    m_rigidBody->activate(true);
 }
+
+
 
 void CharacterInterface::updateModelTransform() {
-    btTransform transform;
-    transform = m_rigidBody->getWorldTransform();
-
-    BoundingBox modelBounds = GetModelBoundingBox(m_model);
-    btCollisionShape* shape = m_rigidBody->getCollisionShape();
-    float minY = modelBounds.min.y;
-
-    if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
-        btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
-        btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();
-        minY = halfExtents.getY();
-    } else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
-       
-    }
-
+    // Get the rigid body's transform
+    btTransform transform = m_rigidBody->getWorldTransform();
     btVector3 origin = transform.getOrigin();
-    float yOffset = modelBounds.min.y * m_scale - minY;
+
+    // Get the bounding box of the model
+    BoundingBox modelBounds = GetModelBoundingBox(m_model);
+    float modelHeight = (modelBounds.max.y - modelBounds.min.y) * m_scale;
+
+    // Retrieve the collision shape and calculate capsule dimensions
+    btCollisionShape* collisionShape = m_rigidBody->getCollisionShape();
+    btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(collisionShape);
+    float capsuleRadius = capsuleShape->getRadius();
+    float capsuleHeight = capsuleShape->getHalfHeight() * 2.0f + capsuleRadius * 2.0f;
+
+    // Calculate the vertical offset to align the model's center with the capsule's center
+    float yOffset = (capsuleHeight / 2) - capsuleRadius * 1.7f - (modelHeight / 2);
+
+    // Update the model position
     m_position = { origin.getX(), origin.getY() + yOffset, origin.getZ() };
 
-    // Update the model's rotation
-    btQuaternion rotation = transform.getRotation();
-    Quaternion modelRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
-
-     // Apply scaling to the transformation matrix
+    // Apply rotation and scale to the model
+    Matrix rotationMatrix = MatrixRotateY(m_rotationAngle);
     Matrix scaleMatrix = MatrixScale(m_scale, m_scale, m_scale);
-    Matrix rotationMatrix = QuaternionToMatrix(modelRotation);
-    m_model.transform = MatrixMultiply(scaleMatrix, rotationMatrix);
 
+    // Combine the transformations and apply to the model
+    m_model.transform = MatrixMultiply(scaleMatrix, rotationMatrix);
 }
+
+
+
 
 
 CharacterInterface::~CharacterInterface()

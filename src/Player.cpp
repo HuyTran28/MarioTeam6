@@ -14,28 +14,34 @@ Player::Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, c
 
 Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
     const Vector3& forwardDir, float speed, float scale, float jumpForce, int health) {
-    // Load the player model first to get dimensions
+    
     Model playerModel = LoadModel(modelPath.c_str());
     BoundingBox modelBounds = GetModelBoundingBox(playerModel);
-    
-    // Calculate dimensions for collision shape
-    Vector3 dimensions = {
-        (modelBounds.max.x - modelBounds.min.x) * scale,
-        (modelBounds.max.y - modelBounds.min.y) * scale,
-        (modelBounds.max.z - modelBounds.min.z) * scale
-    };
-   
+
+    // Calculate the arm span (distance along the X-axis)
+    float armSpan = (modelBounds.max.x - modelBounds.min.x) * scale;
+
+    // Set the capsule radius to half the arm span
+    float radius = armSpan * 0.5f - 0.2f;
+
+    // Calculate height of the capsule based on the model's bounding box
+    float height = (modelBounds.max.y - modelBounds.min.y) * scale; // Height of the model
+
+    // Adjust height to exclude spherical parts of the capsule
+    float capsuleHeight = height - radius;
+    if (capsuleHeight < 0) {
+        capsuleHeight = 0; // Prevent negative height
+    }
+
+    // Define initial transformation for the player
     btTransform startTransform;
     startTransform.setIdentity();
-    startTransform.setOrigin(btVector3(startPosition.x, startPosition.y + 1.0f, startPosition.z));
-    
-    // Create box shape based on model dimensions
-    btCollisionShape* playerShape = new btBoxShape(btVector3(
-        dimensions.x * 0.3f,  // Half-extents
-        dimensions.y * 0.4f,
-        dimensions.z * 0.3f
-    ));
+    startTransform.setOrigin(btVector3(startPosition.x, startPosition.y, startPosition.z));
 
+    // Create capsule shape
+    btCollisionShape* playerShape = new btCapsuleShape(radius, capsuleHeight);
+
+    // Physics body setup remains the same
     btScalar mass = 75.0f;
     btVector3 localInertia(0, 0, 0);
     playerShape->calculateLocalInertia(mass, localInertia);
@@ -44,11 +50,12 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, playerShape, localInertia);
 
     btRigidBody* playerRigidBody = new btRigidBody(rbInfo);
-    
-    // Add player to the world
+
+    // Add the player to the physics world
     world->addRigidBody(playerRigidBody);
-    
+
     return new Player(playerRigidBody, playerModel, forwardDir, startPosition, speed, scale, jumpForce, health, world);
+
 }
 
 void Player::move() {
@@ -59,7 +66,7 @@ void Player::move() {
         desiredVelocity = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
     }
     // Smooth acceleration towards the desired velocity
-    const float accelerationFactor = 5.0f; // Higher values mean faster acceleration
+    const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
     btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
     btVector3 acceleration = (desiredVelocity - currentVelocity) * accelerationFactor * GetFrameTime();
 
@@ -98,9 +105,6 @@ void Player::rotate() {
     if (IsKeyDown(KEY_D)) {
         angularVelocity = -1.0f;  // Negative for clockwise rotation
     }
-
-    // Apply angular velocity around the Y-axis for rotation
-    m_rigidBody->setAngularVelocity(btVector3(0, angularVelocity, 0));
     
 	if (angularVelocity == 0) {
         return;
@@ -113,48 +117,64 @@ void Player::rotate() {
 }
 
 void Player::jump() {
-    if (m_isOnGround) {
-        // Predefined jump velocity magnitude (tweak for gameplay feel)
-        const float jumpVelocityMagnitude = 50.0f;
+    if (m_isOnGround && IsKeyDown(KEY_SPACE)) {
+        m_isJumping = true;      // Start the jump
+        m_jumpTimer = 0.0f;      // Reset the jump timer
+        m_isOnGround = false;    // Player is now airborne
 
-        // Apply the impulse for the jump
-        float mass = (m_rigidBody->getInvMass() > 0) ? 1.0f / m_rigidBody->getInvMass() : 1.0f;
-        btVector3 jumpImpulse(0, jumpVelocityMagnitude * mass, 0);
+        // Calculate max jump duration based on jump force
+        float acceleration = m_jumpForce / m_rigidBody->getMass();  // a = F / m
+        float initialVelocity = acceleration * GetFrameTime(); // Initial velocity based on force and frame time
 
-        m_rigidBody->applyCentralImpulse(jumpImpulse);
+        // Max jump duration based on velocity and gravity (ignoring air resistance)
+        float gravity = 9.81f;  // Gravity acceleration
+        m_maxJumpDuration = initialVelocity / gravity / 10.0f;
+    }
 
-        // Set ground flag
-        m_isOnGround = false;
+    // Apply continuous jump force while the timer is below max duration
+    if (m_isJumping && m_jumpTimer < m_maxJumpDuration) 
+    {
+        // Apply upward force during the jump duration
+        m_rigidBody->applyCentralForce(btVector3(0, m_jumpForce, 0));
+        m_jumpTimer += GetFrameTime();  // Increment the jump timer
+    }
+    else 
+    {
+        m_isJumping = false;  // Stop applying force once the timer expires
     }
 }
 
 
-void Player::update() {
-    m_isOnGround = checkGroundCollision();
-    if (!m_isOnGround) {
-        btVector3 velocity = m_rigidBody->getLinearVelocity();
-        float gravityFactor = 2.0f; // Increase fall acceleration (tweak this value)
-        btVector3 additionalGravity(0, gravityFactor * m_dynamicsWorld->getGravity().getY(), 0);
 
-        if (velocity.getY() < 0.0f) { // Apply additional force only when falling
+void Player::update() {
+    m_isOnGround = checkGroundCollision();  // Update grounded state
+	
+    if (!m_isOnGround) {
+        // Apply extra gravity for faster falling if needed
+        btVector3 velocity = m_rigidBody->getLinearVelocity();
+        const float extraGravityFactor = 2.0f;
+        btVector3 additionalGravity(0, extraGravityFactor * m_dynamicsWorld->getGravity().getY(), 0);
+
+        if (velocity.getY() < 0.0f) {  // Only apply extra gravity when falling
             m_rigidBody->applyCentralForce(additionalGravity);
         }
 
-        // Reduce damping for smooth movement while airborne
+        // Reduce damping for smooth motion in the air
         m_rigidBody->setDamping(0.1f, m_rigidBody->getAngularDamping());
     }
     else {
         // Restore damping when on the ground
         m_rigidBody->setDamping(0.5f, m_rigidBody->getAngularDamping());
     }
-    move();
-    rotate();
-    if (IsKeyDown(KEY_SPACE))
-        jump();
 
-    updateModelTransform();
-	updateCollisionShape();
+    move();    // Update movement
+    rotate();  // Update rotation
+    jump();  // Handle jumping
+
+    updateCollisionShape();  // Update collision shape
+    updateModelTransform();  // Synchronize model with physics body
 }
+
 
 
 void Player::determineCollisionType(CollisionEvent& event) {
@@ -181,12 +201,6 @@ void Player::handleTouchEnemy() {
     //std::cout << "Handling touch with enemy." << std::endl;
     
 }
-
-void Player::setLastCollisionEvent(const CollisionEvent& event) {
-	m_lastCollisionEvent = event;
-}
-
-
 
 Player::~Player() {
 	// Free the player model

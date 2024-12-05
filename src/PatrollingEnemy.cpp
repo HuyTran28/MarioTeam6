@@ -15,7 +15,7 @@ void PatrollingEnemy::patrol() {
 
     // Check if the enemy has reached the target position with some tolerance
     float distance = Vector3Distance(m_position, m_targetPosition);
-
+	
     if (distance < 2.0f) {
         m_movingToA = !m_movingToA; // Switch target point after reaching current point
         m_targetPosition = m_movingToA ? m_patrolPointA : m_patrolPointB;
@@ -65,44 +65,41 @@ void PatrollingEnemy::move() {
 }
 
 void PatrollingEnemy::rotate() {
-    // Step 1: Calculate the desired direction
+    // Step 1: Calculate the desired horizontal direction
+    btTransform transform = m_rigidBody->getWorldTransform();
+    btQuaternion currentRotation = transform.getRotation();
     Vector3 desiredDirection = Vector3Subtract(m_targetPosition, m_position);
+    desiredDirection.y = 0; // Ignore vertical component
     if (Vector3Length(desiredDirection) < 0.001f) return; // Avoid division by zero
     desiredDirection = Vector3Normalize(desiredDirection);
 
-    // Step 2: Get the current forward direction
+    // Step 2: Get the current forward direction (projected on the horizontal plane)
     Vector3 normalizedForwardDir = Vector3Normalize(m_forwardDir);
-    btTransform transform;
-    m_rigidBody->getMotionState()->getWorldTransform(transform);
-    btQuaternion currentRotation = transform.getRotation();
-    btVector3 worldForward = quatRotate(currentRotation, btVector3(normalizedForwardDir.x, normalizedForwardDir.y, normalizedForwardDir.z));
-    Vector3 currentForwardDir = Vector3Normalize({ worldForward.getX(), worldForward.getY(), worldForward.getZ() });
+    Vector3 currentForwardDir = { normalizedForwardDir.x, 0.0f, normalizedForwardDir.z };
+    currentForwardDir = Vector3Normalize(currentForwardDir);
 
     // Step 3: Calculate the rotation axis
-    Vector3 rotationAxis = Vector3CrossProduct(currentForwardDir, desiredDirection);
-    if (Vector3Length(rotationAxis) < 0.001f) {
-        if (Vector3DotProduct(currentForwardDir, desiredDirection) < -0.999f) {
-            rotationAxis = { 0.0f, -1.0f, 0.0f }; // Arbitrary perpendicular axis
-        }
-        else {
-            return; // Already aligned, no rotation needed
-        }
-    }
-    rotationAxis = Vector3Normalize(rotationAxis);
+    Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f }; // Constrain rotation to the Y-axis
 
     // Step 4: Calculate the rotation angle
     float dot = Vector3DotProduct(currentForwardDir, desiredDirection);
     float angle = acosf(Clamp(dot, -1.0f, 1.0f)); // Clamp for safety
 
+    // Determine the sign of the angle using the cross product
+    Vector3 cross = Vector3CrossProduct(currentForwardDir, desiredDirection);
+    if (cross.y < 0) angle = -angle; // Clockwise rotation
 
+    // Step 5: Apply the rotation
+    if (fabs(angle) > 0.01f) { // Skip tiny rotations
+        // Calculate smooth interpolation factor based on the angle
+        float rotationSpeedFactor = fminf(fabs(angle) / 3.14159f, 1.0f); // Cap at 1.0 for maximum speed
+        float slerpFactor = 0.1f + (rotationSpeedFactor * 0.4f); // Smooth factor (adjust as needed)
 
-    // Step 5: Create and apply the rotation
-    if (angle > 0.01f) { // Skip tiny rotations
         btQuaternion rotation(btVector3(rotationAxis.x, rotationAxis.y, rotationAxis.z), angle);
         btQuaternion newRotation = rotation * currentRotation;
 
         // Smoothly interpolate the rotation
-        btQuaternion interpolatedRotation = slerp(currentRotation, newRotation, 0.1f);
+        btQuaternion interpolatedRotation = slerp(currentRotation, newRotation, slerpFactor); // Adjust factor as needed
         interpolatedRotation.normalize(); // Normalize to avoid numerical errors
 
         // Update transform (preserve position)
@@ -113,8 +110,9 @@ void PatrollingEnemy::rotate() {
         // Apply to rigid body
         m_rigidBody->setWorldTransform(transform);
     }
-	m_rotationAngle = angle;
+    m_rotationAngle = angle;
 }
+
 
 void PatrollingEnemy::onCollision(const CollisionEvent& event) {
     if (event.type == CollisionType::Stomped) {

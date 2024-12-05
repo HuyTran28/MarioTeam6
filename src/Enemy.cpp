@@ -33,7 +33,6 @@ void Enemy::update() {
     }
     this->updateCollisionShape();
     this->updateModelTransform();
-    
 }
 
 void Enemy::determineCollisionType(CollisionEvent& event) {

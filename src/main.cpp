@@ -1,6 +1,9 @@
 #include "btBulletDynamicsCommon.h"
 #include <BlockFactory.h>
 #include "Stage1.h"
+#include "Player.h"
+#include "CollisionManager.h"
+#include "EnemyFactory.h"
 #include "Stage2.h"
 #include <iostream>
 
@@ -13,19 +16,18 @@ btDiscreteDynamicsWorld* initializePhysics()
     btDiscreteDynamicsWorld* dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
     dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
-    // Create ground (make sure it's static)
-    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1); // A static plane at y = 0
-    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0))); // Set ground position at y = -1
-    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0)); // Mass is 0 to make it static
+    // Create ground shape
+    btCollisionShape* groundShape = new btStaticPlaneShape(btVector3(0, 1, 0), 1);
+    btDefaultMotionState* groundMotionState = new btDefaultMotionState(btTransform(btQuaternion(0, 0, 0, 1), btVector3(0, 0, 0)));
+    btRigidBody::btRigidBodyConstructionInfo groundRigidBodyCI(0, groundMotionState, groundShape, btVector3(0, 0, 0));
     btRigidBody* groundRigidBody = new btRigidBody(groundRigidBodyCI);
-    groundRigidBody->setFriction(1.0f);
     dynamicsWorld->addRigidBody(groundRigidBody);
 
     return dynamicsWorld;
 }
 void renderGround()
 {
-    DrawPlane(Vector3{ 110.0f, 0.0f, 0.0f }, Vector2{ 50.0f, 50.0f }, DARKGRAY);
+    DrawPlane(Vector3{ 0.0f, -1.0f, 0.0f }, Vector2{ 1000.0f, 1000.0f }, DARKGRAY);
 }
 
 
@@ -43,40 +45,57 @@ int main()
     camera.target = { 200.0f, 0.0f, 0.0f };
 
     camera.up = { 0.0f, 1.0f, 0.0f };
-    camera.fovy = 30.0f;
+    camera.fovy = 45.0f;
     camera.projection = CAMERA_PERSPECTIVE;
     btDiscreteDynamicsWorld* dynamicsWorld = initializePhysics();
 
     Stage1 stage1(200, 2, 9, dynamicsWorld);
     //Stage2 stage2(110, 2, 9, dynamicsWorld);
 
-	Model brick = LoadModel("Assets/Models/Platforms/BrickBlock.glb");
-
-
-
-    SetTargetFPS(60);
-
-    float cameraZ = 10.0f;
+	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/SkeletonMario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 1.4f, 150000.0f, 100);
+	
+	PatrollingEnemyAttributes patrolling1({ 0, 5, 10 }, { 0, 5, 20 });
+    Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.8f, &patrolling1);
+    
+    PatrollingEnemyAttributes patrolling({ 10, 5, 0 }, { 20, 5, 0 });
+    Enemy* goomba = EnemyFactory::createEnemy(EnemyType::Patrolling, dynamicsWorld, "Assets/Models/Characters/Goomba.glb", { 10, 5, 0 }, { 0, 0, 1 }, 5.0f, 1.1f, &patrolling);
+    
+    SetTargetFPS(60);;
     while (!WindowShouldClose())
     {
         UpdateCamera(&camera, CAMERA_FREE);
         // Update
-        dynamicsWorld->stepSimulation(GetFrameTime());
-        /* cameraZ += 0.2;
-         camera.position.x = cameraZ;*/
+        dynamicsWorld->stepSimulation(1.0f / 60.0f, 10);
+        Vector3 cameraOffset = { 0.0f, 5.0f, 10.0f }; // Offset behind and above the player
+        camera.position = Vector3Add(mario->getPosition(), cameraOffset);
+        camera.target = mario->getPosition(); // Camera always looks at the player
+        float zoomSpeed = 5.0f; // How fast the zoom changes
+        camera.fovy -= GetMouseWheelMove() * zoomSpeed;
 
+        // Clamp FOV to prevent extreme zoom
+        if (camera.fovy < 10.0f) camera.fovy = 10.0f; // Minimum zoom-in
+        if (camera.fovy > 90.0f) camera.fovy = 90.0f; // Maximum zoom-out
+        
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
         BeginMode3D(camera);
 
+		// Update
+        CollisionManager collisionManager(dynamicsWorld);
+        collisionManager.detectCollisions();
+        mario->update();
+		
+		koopa->update();
+		goomba->update();
 
         //stage2.draw();
         stage1.draw();
-		DrawModel(brick, Vector3{ 0.0f, 5.0f, 0.0f }, 10.0f, WHITE);
-
-
-        //renderGround();
+		mario->render();
+		
+		goomba->render();
+		koopa->render();
+		renderGround();
 
         EndMode3D();
         EndDrawing();

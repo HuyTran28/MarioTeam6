@@ -24,15 +24,14 @@ void Koopa::onCollision(const CollisionEvent& event)
 void Koopa::changeToShellModel() {
     // Load or switch to the shell model
     UnloadModel(this->m_model);
-    this->m_model = LoadModel("../../Assets/Models/Characters/KoopaShell.glb");
+    this->m_model = LoadModel("Assets/Models/Characters/KoopaShell.glb");
 	m_scale = 0.5f;
 	updateModelTransform();
 }
 
 void Koopa::recalculatePhysicsForShell() {
-    // Remove the rigid body from the physics world if it exists
-    if (m_dynamicsWorld && m_rigidBody) {
-        m_dynamicsWorld->removeRigidBody(m_rigidBody);
+    if (m_rigidBody == nullptr || m_dynamicsWorld == nullptr) {
+        return; // Safety check
     }
 
     // Preserve the current transform
@@ -50,50 +49,44 @@ void Koopa::recalculatePhysicsForShell() {
         (modelBounds.max.z - modelBounds.min.z) * m_scale
     };
 
-    // Use the smallest axis for radius and the height for the capsule
-    float radius = std::min(dimensions.x, dimensions.z) * 0.5f;
-    float height = dimensions.y; // Use the full height of the model
+    // Calculate capsule dimensions
+    float radius = std::min(dimensions.x, dimensions.z) * 0.5f; // Smallest dimension in X/Z
+    float height = dimensions.y - 2.0 * radius; // Subtract spherical caps
 
-    // Create a capsule collision shape (height is along the Y-axis in Bullet Physics)
+    if (height < 0) {
+        height = 0; // Ensure height is non-negative, in case dimensions are spherical
+    }
+
+    // Create a new capsule collision shape (height is along the Y-axis in Bullet Physics)
     btCollisionShape* newShape = new btCapsuleShape(radius, height);
 
     // Recalculate mass and inertia
-    btScalar shellMass = 30.0f;
+    btScalar shellMass = 50.0f;
     btVector3 shellInertia(0, 0, 0);
     newShape->calculateLocalInertia(shellMass, shellInertia);
 
-    // Set up the rigid body construction info
-    btDefaultMotionState* motionState = new btDefaultMotionState(currentTransform);
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(shellMass, motionState, newShape, shellInertia);
+    // Update the rigid body
+    m_rigidBody->setCollisionShape(newShape);
+    m_rigidBody->setMassProps(shellMass, shellInertia);
 
-    // Delete the old rigid body and create a new one
-    delete m_rigidBody;
-    m_rigidBody = new btRigidBody(rbInfo);
-
-    // Reapply the preserved position and orientation
+    // Reapply preserved position and orientation
     m_rigidBody->setWorldTransform(btTransform(currentRotation, currentPosition));
 
     // Reset velocities
     m_rigidBody->setLinearVelocity(btVector3(0, 0, 0));
     m_rigidBody->setAngularVelocity(btVector3(0, 0, 0));
 
-    // Set damping factors
+    // Set damping, friction, and restitution
     m_rigidBody->setDamping(0.1f, 0.1f);
+    m_rigidBody->setFriction(0.5f);
+    m_rigidBody->setRollingFriction(0.5f);
+    m_rigidBody->setSpinningFriction(0.5f);
+    m_rigidBody->setRestitution(0.2f);
 
-    // Set friction and restitution
-    m_rigidBody->setFriction(0.1f);
-	m_rigidBody->setRollingFriction(0.1f);
-	m_rigidBody->setSpinningFriction(0.1f);
-
-    m_rigidBody->setRestitution(0.2f); // Adjust for desired bounciness
-
-
-    // Add the rigid body back to the physics world
-    if (m_dynamicsWorld) {
-        m_dynamicsWorld->addRigidBody(m_rigidBody);
-    }
-
+    // Update user pointer
     m_rigidBody->setUserPointer(this);
 }
+
+
 
 

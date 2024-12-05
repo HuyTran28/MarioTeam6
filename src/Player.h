@@ -11,8 +11,10 @@ private:
 	Vector3 m_forwardDir;
     int m_health;
     bool m_isCrouching;
+	bool m_isJumping = false;
     float m_jumpForce;
-    CollisionEvent m_lastCollisionEvent; // Store the latest collision event for this player
+    float m_jumpTimer = 0.0f;  // Timer to control jump force duration
+    float m_maxJumpDuration;  // Maximum time to apply jump force (in seconds)
 
 
 public:
@@ -33,6 +35,5 @@ public:
 	void update() override;
 
     void jump();
-    void setLastCollisionEvent(const CollisionEvent& event);
 
 };

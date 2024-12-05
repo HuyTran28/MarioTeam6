@@ -8,6 +8,7 @@ void CollisionManager::detectCollisions() {
     dynamicsWorld->performDiscreteCollisionDetection();
 
     int numManifolds = dynamicsWorld->getDispatcher()->getNumManifolds();
+ 
     for (int i = 0; i < numManifolds; ++i) {
         btPersistentManifold* contactManifold = dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
 
@@ -16,6 +17,9 @@ void CollisionManager::detectCollisions() {
 
         CharacterInterface* obj1 = static_cast<CharacterInterface*>(body0->getUserPointer());
         CharacterInterface* obj2 = static_cast<CharacterInterface*>(body1->getUserPointer());
+
+        // Delegate to objects to determine type
+        if (!obj1 || !obj2) continue;
 
         // Create a collision event
         CollisionEvent event = { obj1, obj2, {}, CollisionType::Idle, {0, 0, 0} };
@@ -26,9 +30,8 @@ void CollisionManager::detectCollisions() {
             event.contactPoints.push_back(pt);
         }
 
-        // Delegate to objects to determine type
-        if (obj1) obj1->determineCollisionType(event);
-        if (obj2) obj2->determineCollisionType(event);
+        obj1->determineCollisionType(event);
+        obj2->determineCollisionType(event);
 
         // Dispatch event
         dispatch(event);
@@ -38,6 +41,6 @@ void CollisionManager::detectCollisions() {
 
 
 void CollisionManager::dispatch(const CollisionEvent& event) {
-    if (event.obj1) event.obj1->onCollision(event);
-    if (event.obj2) event.obj2->onCollision(event);
+    event.obj1->onCollision(event);
+    event.obj2->onCollision(event);
 }
