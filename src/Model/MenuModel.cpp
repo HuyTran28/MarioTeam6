@@ -12,6 +12,14 @@ MenuModel::MenuModel()
     lobbyRotationAngle = 0.0f;
     lobbyRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
+	joyStickModelPath = "../../Assets\\Models\\joystick2.obj";
+	joyStickModel = LoadModel(joyStickModelPath.c_str());
+
+	joyStickPos = Vector3{ 110.0f, 10.0f, 0.0f };
+	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
+	joyStickRotationAngle = 180.0f;
+	joyStickRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
+
     cameraInitialPosition = Vector3{ 0.0f, 20.0f, 0.0f };
     camera.position = cameraInitialPosition;
     camera.target = Vector3{ -20.0f, 30.0f, 0.0f };
@@ -124,4 +132,36 @@ Vector3 MenuModel::getCameraInitialPosition()
 {
 	return cameraInitialPosition;
 }
+
+Model MenuModel::getJoyStickModel()
+{
+	return joyStickModel;
+}
+
+Vector3 MenuModel::getJoyStickPos()
+{
+	return joyStickPos;
+}
+
+Vector3 MenuModel::getJoyStickScale()
+{
+	return joyStickScale;
+}
+
+Vector3 MenuModel::getJoyStickRotationAxis()
+{
+	return joyStickRotationAxis;
+}
+
+float MenuModel::getJoyStickRotationAngle()
+{
+	return joyStickRotationAngle;
+}
+
+std::string MenuModel::getJoyStickModelPath()
+{
+	return joyStickModelPath;
+}
+
+
 

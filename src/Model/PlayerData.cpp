@@ -2,10 +2,12 @@
 
 PlayerData::PlayerData()
 {
-	playerModelPath = "../../Assets\\Models\\Platforms\\Prop_Block_Brick.obj";
+	//playerModelPath = "../../Assets\\Models\\Platforms\\Prop_Block_Brick.obj";
+	playerModelPath = "../../Assets\\Models\\joystick2.obj";
 	playerModel = LoadModel(playerModelPath.c_str());
 	playerPos = Vector3{ 0.0f, 0.0f, 0.0f };
 	playerHealth = 100;
+	//playerScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	playerScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	playerRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 	playerRotationAngle = 0.0f;

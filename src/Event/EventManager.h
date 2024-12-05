@@ -19,4 +19,6 @@ public:
 	void removeObserver(std::shared_ptr<IObserver> ob) override;
 
 	void notify(std::shared_ptr<Event> event) override;
+
+	void pop_back();
 };

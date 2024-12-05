@@ -1,4 +1,5 @@
 #include "EventManager.h"
+#include <iostream>
 
 EventManager& EventManager::getInstance()
 {
@@ -18,8 +19,16 @@ void EventManager::removeObserver(std::shared_ptr<IObserver> ob)
 
 void EventManager::notify(std::shared_ptr<Event> event)
 {
-	for (auto ob : observers)
+	for (auto &ob : observers)
 	{
-		ob->update(event);
+		if (ob)
+		{
+			ob->update(event);
+		}
 	}
+}
+
+void EventManager::pop_back()
+{
+	observers.pop_back();
 }

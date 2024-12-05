@@ -3,8 +3,6 @@
 GameEngine::GameEngine()
 {
 	isRunning = false;
-	inputHandler = std::make_shared<InputHandler>();
-	inputHandler->registerSelf();
 }
 
 void GameEngine::run()
@@ -27,6 +25,8 @@ void GameEngine::run()
 	}
 }
 
+#include <iostream>
+
 void GameEngine::update(std::shared_ptr<Event> event)
 {
 	if (event->getType() == "Quit Event")
@@ -35,12 +35,12 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "State Change Event")
 	{
+		EventManager::getInstance().removeObserver(stateView);
+		EventManager::getInstance().removeObserver(stateController);
+
 		auto specificEvent = std::dynamic_pointer_cast<StateChangeEvent>(event);
 		std::string curState = specificEvent->getNewState();
 		StateFactory::createMVC(curState, stateModel, stateView, stateController);
-
-		std::shared_ptr<InitializeEvent> initEvent = std::make_shared<InitializeEvent>();
-		EventManager::getInstance().notify(initEvent);
 	}
 }
 

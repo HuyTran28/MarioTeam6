@@ -22,6 +22,14 @@ private:
 	Vector3 lobbyRotationAxis;
 	float lobbyRotationAngle;
 	std::string lobbyModelPath;
+
+	Model joyStickModel;
+	Vector3 joyStickPos;
+	Vector3 joyStickScale;
+	Vector3 joyStickRotationAxis;
+	float joyStickRotationAngle;
+	std::string joyStickModelPath;
+
 	BoundingBox lobbyBoundingBox[8];
 public:
 	MenuModel();
@@ -38,6 +46,14 @@ public:
 	Vector3 getLobbyRotationAxis();
 	float getLobbyRotationAngle();
 	std::string getLobbyModelPath();
+
+	Model getJoyStickModel();
+	Vector3 getJoyStickPos();
+	Vector3 getJoyStickScale();
+	Vector3 getJoyStickRotationAxis();
+	float getJoyStickRotationAngle();
+	std::string getJoyStickModelPath();
+
 	BoundingBox* getLobbyBoundingBox();
 	Vector3 getCameraInitialPosition();
 

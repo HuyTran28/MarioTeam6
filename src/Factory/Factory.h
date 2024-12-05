@@ -7,9 +7,12 @@
 #include "../View/MenuView.h"
 #include "../Model/MenuModel.h"
 #include "../Controller/MenuController.h"
+#include "../View/LogInView.h"
+#include "../Model/LogInModel.h"
+#include "../Controller/LogInController.h"
 
 class StateFactory
 {
 public:
-	static void createMVC(std::string state, std::shared_ptr<StateModel> stateModel, std::shared_ptr<StateView> stateView, std::shared_ptr<StateController> stateController);
+	static void createMVC(std::string state, std::shared_ptr<StateModel> &stateModel, std::shared_ptr<StateView> &stateView, std::shared_ptr<StateController> &stateController);
 };

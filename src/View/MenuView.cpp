@@ -6,6 +6,7 @@ MenuView::MenuView() : MenuView(std::make_shared<MenuModel>())
 
 MenuView::MenuView(std::shared_ptr<MenuModel> model)
 {
+	DisableCursor();
 	this->model = model;
 }
 
@@ -25,6 +26,8 @@ void MenuView::render()
 
 	DrawModelEx(model->getLobbyModel(), model->getLobbyPos(), model->getLobbyRotationAxis(), model->getLobbyRotationAngle(), model->getLobbyScale(), WHITE);
 
+	DrawModelEx(model->getJoyStickModel(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+
 	std::shared_ptr<PlayerData> playerData = model->getPlayerData();
 	DrawModelEx(playerData->getPlayerModel(), playerData->getPlayerPos(), playerData->getPlayerRotationAxis(), playerData->getPlayerRotationAngle(), playerData->getPlayerScale(), WHITE);
 
@@ -36,7 +39,7 @@ void MenuView::update(std::shared_ptr<Event> event)
 {
 	if (event->getType() == "State Change Event")
 	{
-		//changeState();
+		EventManager::getInstance().removeObserver(shared_from_this());
 	}
 	else if (event->getType() == "Tick Event")
 	{
@@ -50,3 +53,6 @@ void MenuView::registerSelf()
 	EventManager::getInstance().addObserver(shared_from_this());
 }
 
+MenuView::~MenuView()
+{
+}

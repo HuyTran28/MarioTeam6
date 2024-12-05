@@ -9,8 +9,8 @@
 #include "Event/InitializeEvent.h"
 #include "Event/StateChangeEvent.h"
 #include "Controller/StateController.h"
-#include "InputHandler/InputHandler.h"
 #include <raylib.h>
+#include <stack>
 
 class GameEngine : public IObserver, public std::enable_shared_from_this<GameEngine>
 {
@@ -21,7 +21,14 @@ private:
 	std::shared_ptr<StateModel> stateModel;
 	std::shared_ptr<StateView> stateView;
 	std::shared_ptr<StateController> stateController;
-	std::shared_ptr<InputHandler> inputHandler;
+
+	std::shared_ptr<StateModel> tempModel;
+	std::shared_ptr<StateView> tempView;
+	std::shared_ptr<StateController> tempController;
+
+	std::stack<std::shared_ptr<StateModel>> stateModelStack;
+	std::stack<std::shared_ptr<StateView>> stateViewStack;
+	std::stack<std::shared_ptr<StateController>> stateControllerStack;
 public:
 	GameEngine();
 	void run();

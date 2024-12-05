@@ -20,11 +20,19 @@ void MenuController::update(std::shared_ptr<Event> event)
 {
 	if (event->getType() == "Initialize Event")
 	{
-		DisableCursor();
 	}
 	else if (event->getType() == "Tick Event")
 	{
 		updatePlayerMovement();
+
+		if (IsKeyDown(KEY_G))
+		{
+			updateGameState();
+		}
+	}
+	else if (event->getType() == "State Change Event")
+	{
+		EventManager::getInstance().removeObserver(shared_from_this());
 	}
 }
 
@@ -83,4 +91,14 @@ void MenuController::updatePlayerMovement()
 	// Update the camera target to avoid NaN values
 	camera.target = Vector3Add(camera.position, direction);
 	model->setCamera(camera);
+}
+
+void MenuController::updateGameState()
+{
+	std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("LogIn");
+	EventManager::getInstance().notify(event);
+}
+
+MenuController::~MenuController()
+{
 }

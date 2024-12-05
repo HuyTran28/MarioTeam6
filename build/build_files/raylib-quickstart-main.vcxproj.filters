@@ -90,7 +90,13 @@
     <ClInclude Include="..\..\src\Controller\MenuController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\InputHandler\InputHandler.h">
+    <ClInclude Include="..\..\src\Model\LogInModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\View\LogInView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Controller\LogInController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -130,7 +136,13 @@
     <ClCompile Include="..\..\src\Controller\MenuController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\InputHandler\InputHandler.cpp">
+    <ClCompile Include="..\..\src\Model\LogInModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\View\LogInView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Controller\LogInController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

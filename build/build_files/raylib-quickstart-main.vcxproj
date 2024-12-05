@@ -267,6 +267,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
+    <ClInclude Include="..\..\src\Controller\LogInController.h" />
     <ClInclude Include="..\..\src\Controller\MenuController.h" />
     <ClInclude Include="..\..\src\Controller\StateController.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
@@ -279,7 +280,7 @@
     <ClInclude Include="..\..\src\Event\TickEvent.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
-    <ClInclude Include="..\..\src\InputHandler\InputHandler.h" />
+    <ClInclude Include="..\..\src\Model\LogInModel.h" />
     <ClInclude Include="..\..\src\Model\MapData.h" />
     <ClInclude Include="..\..\src\Model\MenuModel.h" />
     <ClInclude Include="..\..\src\Model\ModelEngine.h" />
@@ -287,6 +288,7 @@
     <ClInclude Include="..\..\src\Model\StateModel.h" />
     <ClInclude Include="..\..\src\Observer\IObserver.h" />
     <ClInclude Include="..\..\src\Observer\Subject.h" />
+    <ClInclude Include="..\..\src\View\LogInView.h" />
     <ClInclude Include="..\..\src\View\MenuView.h" />
     <ClInclude Include="..\..\src\View\StateView.h" />
   </ItemGroup>
@@ -300,15 +302,17 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
+    <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
     <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
     <ClCompile Include="..\..\src\Event\Event.cpp" />
     <ClCompile Include="..\..\src\Event\EventManager.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
-    <ClCompile Include="..\..\src\InputHandler\InputHandler.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
     <ClCompile Include="..\..\src\Model\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\View\LogInView.cpp" />
     <ClCompile Include="..\..\src\View\MenuView.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

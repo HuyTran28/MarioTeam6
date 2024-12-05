@@ -15,6 +15,8 @@ public:
 	MenuView();
 	MenuView(const MenuView& menuView);
 
+	~MenuView();
+
 	void render() override;
 	void update(std::shared_ptr<Event> event) override;
 
