@@ -278,6 +278,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\resource_dir.h" />
+    <ClInclude Include="..\..\src\AnimationManager.h" />
     <ClInclude Include="..\..\src\Block.h" />
     <ClInclude Include="..\..\src\BlockFactory.h" />
     <ClInclude Include="..\..\src\BrickBlock.h" />
@@ -311,6 +312,7 @@
     <ClInclude Include="..\..\src\SupportivePipeBlock.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\AnimationManager.cpp" />
     <ClCompile Include="..\..\src\Block.cpp" />
     <ClCompile Include="..\..\src\BlockFactory.cpp" />
     <ClCompile Include="..\..\src\CharacterInterface.cpp" />

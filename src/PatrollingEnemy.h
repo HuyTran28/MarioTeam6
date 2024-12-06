@@ -12,7 +12,7 @@ private:
     Vector3 m_targetPosition; // Player's position to chase
 
 public:
-    PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir,
+    PatrollingEnemy(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const Vector3& forwardDir,
         const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world);
     ~PatrollingEnemy() override = default;
 

@@ -9,7 +9,7 @@ protected:
     std::unique_ptr<EnemyState> m_currentState;
 
 public:
-    Enemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, btDynamicsWorld* world);
+    Enemy(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, btDynamicsWorld* world);
 
     virtual void move() override;
     virtual void rotate() override {};

@@ -2,8 +2,8 @@
 #include "Player.h"
 
 
-PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world)
-    :Enemy(rigidBody, model, position, forwardDir, speed, scale, world), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
+PatrollingEnemy::PatrollingEnemy(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world)
+    : Enemy(rigidBody, modelPath, position, forwardDir, speed, scale, world), m_patrolPointA(patrolPointA), m_patrolPointB(patrolPointB),
     m_movingToA(true), m_detectionRange(10.0f), m_attackSpeed(2.0f), m_isChasing(false), m_targetPosition(Vector3())
 {}
 

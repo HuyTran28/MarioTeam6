@@ -45,19 +45,17 @@ Enemy* EnemyFactory::createEnemy(EnemyType type, btDiscreteDynamicsWorld* world,
     // Add player to the world
     world->addRigidBody(rigidBody);
 
-
     // Create enemy based on type
     switch (type) {
     case EnemyType::Patrolling:
     {
         auto patrollingAttributes = dynamic_cast<PatrollingEnemyAttributes*>(attributes);
-        return new PatrollingEnemy(rigidBody, model, startPosition, forwardDir, speed, scale, patrollingAttributes->point_A, patrollingAttributes->point_B, world);
+        return new PatrollingEnemy(rigidBody, modelPath, startPosition, forwardDir, speed, scale, patrollingAttributes->point_A, patrollingAttributes->point_B, world);
     }
-	case EnemyType::Koopa:
+    case EnemyType::Koopa:
     {
         auto patrollingAttributes = dynamic_cast<PatrollingEnemyAttributes*>(attributes);
-        return new Koopa(rigidBody, model, startPosition, forwardDir, speed, scale, patrollingAttributes->point_A, patrollingAttributes->point_B, world);
-
+        return new Koopa(rigidBody, modelPath, startPosition, forwardDir, speed, scale, patrollingAttributes->point_A, patrollingAttributes->point_B, world);
     }
     default:
         return nullptr;

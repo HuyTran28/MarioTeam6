@@ -2,8 +2,8 @@
 #include "Player.h"
 #include "CollisionUtils.h"
 
-Enemy::Enemy(btRigidBody* rigidBody, Model model, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, btDynamicsWorld* world)
-    : CharacterInterface(rigidBody, model, position, speed, scale, world), m_forwardDir(forwardDir), m_currentState(nullptr)
+Enemy::Enemy(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const Vector3& forwardDir, const float& speed, const float& scale, btDynamicsWorld* world)
+    : CharacterInterface(rigidBody, modelPath, position, speed, scale, world), m_forwardDir(forwardDir), m_currentState(nullptr)
 {}
 
 void Enemy::kill() {

@@ -52,7 +52,7 @@ int main()
     Stage1 stage1(200, 2, 9, dynamicsWorld);
     //Stage2 stage2(110, 2, 9, dynamicsWorld);
 
-	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/SkeletonMario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 1.4f, 150000.0f, 100);
+	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Mario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 1.0f, 150000.0f, 100);
 	
 	PatrollingEnemyAttributes patrolling1({ 0, 5, 10 }, { 0, 5, 20 });
     Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.8f, &patrolling1);

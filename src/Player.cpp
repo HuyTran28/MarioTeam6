@@ -7,9 +7,9 @@
 using namespace std;
 
 // Constructor: Initialize player attributes and Bullet RigidBody
-Player::Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
+Player::Player(btRigidBody* rigidBody, string modelPath, const Vector3& forwardDir, const Vector3& position,
     const float& speed, const float& scale, const float& jumpForce, const int& health, btDynamicsWorld* world)
-    : CharacterInterface(rigidBody, model, position, speed, scale, world), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false), m_forwardDir(forwardDir) 
+    : CharacterInterface(rigidBody, modelPath, position, speed, scale, world), m_jumpForce(jumpForce), m_health(health), m_isCrouching(false), m_forwardDir(forwardDir) 
 {}
 
 Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
@@ -54,8 +54,7 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     // Add the player to the physics world
     world->addRigidBody(playerRigidBody);
 
-    return new Player(playerRigidBody, playerModel, forwardDir, startPosition, speed, scale, jumpForce, health, world);
-
+    return new Player(playerRigidBody, modelPath, forwardDir, startPosition, speed, scale, jumpForce, health, world);
 }
 
 void Player::move() {
@@ -89,13 +88,14 @@ void Player::move() {
     m_rigidBody->getMotionState()->getWorldTransform(trans);
     btVector3 pos = trans.getOrigin();
 
-    // Add a threshold to ignore very small position changes
-    const float positionThreshold = 0.001f;
+    // Increase the threshold to ignore very small position changes
+    const float positionThreshold = 1.0f; // Increased from 0.001f
     if (btVector3(m_position.x, m_position.y, m_position.z).distance(pos) > positionThreshold) {
         m_position = { pos.x(), pos.y(), pos.z() };
     }
-}
 
+	m_animationManager->playAnimation(1);  // Play the player's idle animation (index 0
+}
 
 void Player::rotate() {
     float angularVelocity = 0.0f;
@@ -109,12 +109,13 @@ void Player::rotate() {
 	if (angularVelocity == 0) {
         return;
     }
-
+	
     // Update the forward direction based on rotation
     m_rotationAngle += angularVelocity * GetFrameTime();
     Matrix rotationMatrix = MatrixRotateY(m_rotationAngle);
     m_forwardDir = Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix));
 }
+
 
 void Player::jump() {
     if (m_isOnGround && IsKeyDown(KEY_SPACE)) {
@@ -173,6 +174,8 @@ void Player::update() {
 
     updateCollisionShape();  // Update collision shape
     updateModelTransform();  // Synchronize model with physics body
+
+	m_animationManager->updateAnimation(GetFrameTime());  // Update the player's animation
 }
 
 

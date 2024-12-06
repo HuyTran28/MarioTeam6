@@ -1,12 +1,17 @@
 #include "CharacterInterface.h"
 #include <algorithm>
+#include <memory>
 
-CharacterInterface::CharacterInterface(btRigidBody* rigidBody, Model model, const Vector3& position,
+CharacterInterface::CharacterInterface(btRigidBody* rigidBody, std::string modelPath, const Vector3& position,
     const float& speed, const float& scale, btDynamicsWorld* world)
-    : m_rigidBody(rigidBody), m_model(model), m_position(position), 
-      m_speed(speed), m_scale(scale), m_isOnGround(true), m_velocity({0.0f, 0.0f, 0.0f}),
-      m_dynamicsWorld(world), m_rotationAngle(0.0f) 
+    : m_rigidBody(rigidBody), m_position(position), m_speed(speed), m_scale(scale), m_isOnGround(true),
+    m_velocity({ 0.0f, 0.0f, 0.0f }), m_dynamicsWorld(world), m_rotationAngle(0.0f)
 {
+	// Load the model from the specified path
+	m_model = LoadModel(modelPath.c_str());
+    m_model.transform = MatrixScale(scale, scale, scale);
+    m_animationManager = std::make_unique<AnimationManager>(m_model, modelPath.c_str());
+
     btTransform trans;
     m_rigidBody->getMotionState()->getWorldTransform(trans);
 
@@ -76,7 +81,7 @@ bool CharacterInterface::checkGroundCollision() {
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 2.0f, 0);
+        btVector3 end = start - btVector3(0, 3.0f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         m_dynamicsWorld->rayTest(start, end, rayCallback);
@@ -94,8 +99,10 @@ void CharacterInterface::updateCollisionShape() {
     // Get the rigid body's current transform
     btTransform transform = m_rigidBody->getWorldTransform();
 
-    // Reset the rotation to identity to keep the capsule upright
+    // Force the rotation to align with the Y-axis (capsule's up-axis)
+
     transform.setRotation(btQuaternion(0, 0, 0, 1));
+
 
     // Update the rigid body's transformation
     m_rigidBody->setWorldTransform(transform);
@@ -104,7 +111,6 @@ void CharacterInterface::updateCollisionShape() {
     // Ensure the rigid body is active
     m_rigidBody->activate(true);
 }
-
 
 
 void CharacterInterface::updateModelTransform() {
@@ -136,10 +142,6 @@ void CharacterInterface::updateModelTransform() {
     m_model.transform = MatrixMultiply(scaleMatrix, rotationMatrix);
 }
 
-
-
-
-
 CharacterInterface::~CharacterInterface()
 {
     // Remove the rigid body from the dynamics world
@@ -157,4 +159,7 @@ CharacterInterface::~CharacterInterface()
 
     // Delete the rigid body
     delete m_rigidBody;
+
+	// Unload the model
+	UnloadModel(m_model);
 }

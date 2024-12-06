@@ -18,7 +18,7 @@ private:
 
 
 public:
-    Player(btRigidBody* rigidBody, Model model, const Vector3& forwardDir, const Vector3& position,
+    Player(btRigidBody* rigidBody, string modelPath, const Vector3& forwardDir, const Vector3& position,
         const float& speed, const float& scale, const float& jumpForce, const int& health, btDynamicsWorld* world);
 
     ~Player();

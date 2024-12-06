@@ -5,10 +5,10 @@
 #include "KoopaShellState.h"
 #include "CollisionEvent.h"
 
-Koopa::Koopa(btRigidBody* rigidBody, Model model, const Vector3& position,
+Koopa::Koopa(btRigidBody* rigidBody, std::string modelPath, const Vector3& position,
     const Vector3& forwardDir, float speed, float scale,
     const Vector3& patrolPointA, const Vector3& patrolPointB, btDynamicsWorld* world)
-    : PatrollingEnemy(rigidBody, model, position, forwardDir, speed, scale, patrolPointA, patrolPointB, world) {
+    : PatrollingEnemy(rigidBody, modelPath, position, forwardDir, speed, scale, patrolPointA, patrolPointB, world) {
     setState(std::make_unique<KoopaNormalState>());
 }
 
