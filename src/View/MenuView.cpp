@@ -32,7 +32,23 @@ void MenuView::render()
 	DrawModelEx(playerData->getPlayerModel(), playerData->getPlayerPos(), playerData->getPlayerRotationAxis(), playerData->getPlayerRotationAngle(), playerData->getPlayerScale(), WHITE);
 
 	EndMode3D();
+
+	drawCrosshair();
+	
 	EndDrawing();
+}
+
+void MenuView::drawCrosshair()
+{
+	// Draw crosshair at the center of the screen
+	int screenWidth = GetScreenWidth();
+	int screenHeight = GetScreenHeight();
+	int centerX = screenWidth / 2;
+	int centerY = screenHeight / 2;
+	int crosshairSize = 20;
+
+	DrawLine(centerX - crosshairSize, centerY, centerX + crosshairSize, centerY, BLACK); // Horizontal line
+	DrawLine(centerX, centerY - crosshairSize, centerX, centerY + crosshairSize, BLACK); // Vertical line
 }
 
 void MenuView::update(std::shared_ptr<Event> event)

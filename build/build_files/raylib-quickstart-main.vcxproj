@@ -280,6 +280,7 @@
     <ClInclude Include="..\..\src\Event\TickEvent.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
+    <ClInclude Include="..\..\src\Model\GameData.h" />
     <ClInclude Include="..\..\src\Model\LogInModel.h" />
     <ClInclude Include="..\..\src\Model\MapData.h" />
     <ClInclude Include="..\..\src\Model\MenuModel.h" />

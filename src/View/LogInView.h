@@ -14,4 +14,5 @@ public:
 	void registerSelf() override;
 private:
 	std::shared_ptr<LogInModel> model;
+	void renderUsernameAndPassword();
 };

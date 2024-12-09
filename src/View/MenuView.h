@@ -19,6 +19,6 @@ public:
 
 	void render() override;
 	void update(std::shared_ptr<Event> event) override;
-
+	void drawCrosshair();
 	void registerSelf() override;
 };

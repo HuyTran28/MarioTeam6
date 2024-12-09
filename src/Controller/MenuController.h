@@ -19,4 +19,6 @@ public:
 	~MenuController();
 private:
 	std::shared_ptr<MenuModel> model;
+	bool CheckCollisionRayBox(Ray ray, BoundingBox box);
+	bool IsMouseOver3DObject(Camera3D camera, BoundingBox box);
 };

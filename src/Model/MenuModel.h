@@ -31,6 +31,8 @@ private:
 	std::string joyStickModelPath;
 
 	BoundingBox lobbyBoundingBox[8];
+
+
 public:
 	MenuModel();
 
