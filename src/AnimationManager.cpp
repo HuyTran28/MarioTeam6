@@ -19,18 +19,21 @@ AnimationManager::~AnimationManager() {
 
 void AnimationManager::playAnimation(int animationIndex) {
     if (animationIndex >= 0 && animationIndex < m_animationCount) {
-        m_currentAnimation = animationIndex;
-        m_animationFrame = 0.0f;
+        if (m_currentAnimation != animationIndex) {
+            m_currentAnimation = animationIndex;
+            m_animationFrame = 0.0f; // Reset frame only when switching animations
+        }
     }
 }
 
 void AnimationManager::updateAnimation(float deltaTime) {
     if (m_animationCount > 0) {
         UpdateModelAnimation(m_model, m_animations[m_currentAnimation], m_animationFrame);
-        m_animationFrame += deltaTime;
+
+        m_animationFrame += deltaTime * 30.0f; // Ensure a reasonable frame rate multiplier (30 FPS)
 
         if (m_animationFrame >= m_animations[m_currentAnimation].frameCount) {
-            m_animationFrame = 0.0f; // Loop
+            m_animationFrame = 0.0f; // Loop the animation
         }
     }
 }

@@ -38,8 +38,6 @@ int main()
 
     InitWindow(screenWidth, screenHeight, "Bullet and Raylib Example");
 
-
-
     Camera camera = { 0 };
     camera.position = { 200.0f, 20.0f, 50.0f };
     camera.target = { 200.0f, 0.0f, 0.0f };
@@ -52,20 +50,19 @@ int main()
     Stage1 stage1(200, 2, 9, dynamicsWorld);
     //Stage2 stage2(110, 2, 9, dynamicsWorld);
 
-	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Mario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 1.0f, 150000.0f, 100);
+	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Mario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 0.9f, 150000.0f, 100);
 	
 	PatrollingEnemyAttributes patrolling1({ 0, 5, 10 }, { 0, 5, 20 });
-    Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.8f, &patrolling1);
+    Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.7f, &patrolling1);
     
     PatrollingEnemyAttributes patrolling({ 10, 5, 0 }, { 20, 5, 0 });
-    Enemy* goomba = EnemyFactory::createEnemy(EnemyType::Patrolling, dynamicsWorld, "Assets/Models/Characters/Goomba.glb", { 10, 5, 0 }, { 0, 0, 1 }, 5.0f, 1.1f, &patrolling);
+    Enemy* goomba = EnemyFactory::createEnemy(EnemyType::Patrolling, dynamicsWorld, "Assets/Models/Characters/Goomba.glb", { 10, 5, 0 }, { 0, 0, 1 }, 5.0f, 1.0f, &patrolling);
     
-    SetTargetFPS(60);;
     while (!WindowShouldClose())
     {
         UpdateCamera(&camera, CAMERA_FREE);
         // Update
-        dynamicsWorld->stepSimulation(1.0f / 60.0f, 10);
+        dynamicsWorld->stepSimulation(GetFrameTime());
         Vector3 cameraOffset = { 0.0f, 5.0f, 10.0f }; // Offset behind and above the player
         camera.position = Vector3Add(mario->getPosition(), cameraOffset);
         camera.target = mario->getPosition(); // Camera always looks at the player

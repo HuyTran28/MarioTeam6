@@ -25,7 +25,7 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     float radius = armSpan * 0.5f - 0.2f;
 
     // Calculate height of the capsule based on the model's bounding box
-    float height = (modelBounds.max.y - modelBounds.min.y) * scale; // Height of the model
+    float height = (modelBounds.max.y - modelBounds.min.y) * scale - 0.5f; // Height of the model
 
     // Adjust height to exclude spherical parts of the capsule
     float capsuleHeight = height - radius;
@@ -63,6 +63,7 @@ void Player::move() {
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
         desiredVelocity = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
+        m_animationManager->playAnimation(4); // Play the walking animation
     }
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
@@ -81,29 +82,27 @@ void Player::move() {
     const float velocityThreshold = 0.01f;
     if (newVelocity.length() > velocityThreshold) {
         m_rigidBody->setLinearVelocity(newVelocity);
+
+    }
+    else {
+        m_animationManager->playAnimation(7); // Play the idle animation
     }
 
     // Update the player's position from the rigid body's transform
     btTransform trans;
     m_rigidBody->getMotionState()->getWorldTransform(trans);
-    btVector3 pos = trans.getOrigin();
 
-    // Increase the threshold to ignore very small position changes
-    const float positionThreshold = 1.0f; // Increased from 0.001f
-    if (btVector3(m_position.x, m_position.y, m_position.z).distance(pos) > positionThreshold) {
-        m_position = { pos.x(), pos.y(), pos.z() };
-    }
-
-	m_animationManager->playAnimation(1);  // Play the player's idle animation (index 0
+    // Update the animation frame based on the player's movement
+    m_animationManager->updateAnimation(GetFrameTime());
 }
 
 void Player::rotate() {
     float angularVelocity = 0.0f;
     if (IsKeyDown(KEY_A)) {
-        angularVelocity = 1.0f;  // Positive for counterclockwise rotation
+        angularVelocity = 5.0f;  // Positive for counterclockwise rotation
     }
     if (IsKeyDown(KEY_D)) {
-        angularVelocity = -1.0f;  // Negative for clockwise rotation
+        angularVelocity = -5.0f;  // Negative for clockwise rotation
     }
     
 	if (angularVelocity == 0) {
@@ -123,26 +122,19 @@ void Player::jump() {
         m_jumpTimer = 0.0f;      // Reset the jump timer
         m_isOnGround = false;    // Player is now airborne
 
+        // Play the jump animation
+        m_animationManager->playAnimation(9); // Assuming 5 is the index for the jump animation
+
         // Calculate max jump duration based on jump force
-        float acceleration = m_jumpForce / m_rigidBody->getMass();  // a = F / m
-        float initialVelocity = acceleration * GetFrameTime(); // Initial velocity based on force and frame time
+        float acceleration = m_jumpForce / m_rigidBody->getMass();
+        m_maxJumpDuration = sqrt(2.0f * acceleration / 9.8f); // Simplified physics calculation
 
-        // Max jump duration based on velocity and gravity (ignoring air resistance)
-        float gravity = 9.81f;  // Gravity acceleration
-        m_maxJumpDuration = initialVelocity / gravity / 10.0f;
+        // Apply the jump force
+        m_rigidBody->applyCentralImpulse(btVector3(0, m_jumpForce, 0));
     }
 
-    // Apply continuous jump force while the timer is below max duration
-    if (m_isJumping && m_jumpTimer < m_maxJumpDuration) 
-    {
-        // Apply upward force during the jump duration
-        m_rigidBody->applyCentralForce(btVector3(0, m_jumpForce, 0));
-        m_jumpTimer += GetFrameTime();  // Increment the jump timer
-    }
-    else 
-    {
-        m_isJumping = false;  // Stop applying force once the timer expires
-    }
+    // Update the animation frame based on the player's movement
+    m_animationManager->updateAnimation(GetFrameTime());
 }
 
 
@@ -174,8 +166,6 @@ void Player::update() {
 
     updateCollisionShape();  // Update collision shape
     updateModelTransform();  // Synchronize model with physics body
-
-	m_animationManager->updateAnimation(GetFrameTime());  // Update the player's animation
 }
 
 
