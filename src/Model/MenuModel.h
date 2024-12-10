@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StateModel.h"
-#include "PlayerData.h"
+#include "Player/PlayerData.h"
 #include <string>
 #include <vector>
 #include <raylib.h>
@@ -32,6 +32,12 @@ private:
 
 	BoundingBox lobbyBoundingBox[8];
 
+	Model marioStatueModel;
+	Vector3 marioStatuePos;
+	Vector3 marioStatueScale;
+	Vector3 marioStatueRotationAxis;
+	float marioStatueRotationAngle;
+	std::string marioStatueModelPath;
 
 public:
 	MenuModel();
@@ -48,15 +54,19 @@ public:
 	Vector3 getLobbyRotationAxis();
 	float getLobbyRotationAngle();
 	std::string getLobbyModelPath();
-
 	Model getJoyStickModel();
 	Vector3 getJoyStickPos();
 	Vector3 getJoyStickScale();
 	Vector3 getJoyStickRotationAxis();
 	float getJoyStickRotationAngle();
 	std::string getJoyStickModelPath();
-
 	BoundingBox* getLobbyBoundingBox();
 	Vector3 getCameraInitialPosition();
+	Model getMarioStatueModel();
+	Vector3 getMarioStatuePos();
+	Vector3 getMarioStatueScale();
+	Vector3 getMarioStatueRotationAxis();
+	float getMarioStatueRotationAngle();
+	std::string getMarioStatueModelPath();
 
 };

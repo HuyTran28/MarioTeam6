@@ -14,11 +14,19 @@ MenuModel::MenuModel()
 
 	joyStickModelPath = "../../Assets\\Models\\joystick2.obj";
 	joyStickModel = LoadModel(joyStickModelPath.c_str());
-
 	joyStickPos = Vector3{ 110.0f, 10.0f, 0.0f };
 	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	joyStickRotationAngle = 180.0f;
 	joyStickRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
+
+	marioStatueModelPath = "../../Assets\\Models\\Princess Peach\\Peach2.obj";
+	marioStatueModel = LoadModel(marioStatueModelPath.c_str());
+	marioStatuePos = Vector3{ 90.0f, 0.0f, 30.0f };
+	marioStatueScale = Vector3{ 0.25f, 0.25f, 0.25f };
+	marioStatueRotationAngle = 225.0f;
+	marioStatueRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
+
+
 
     cameraInitialPosition = Vector3{ 0.0f, 20.0f, 0.0f };
     camera.position = cameraInitialPosition;
@@ -161,6 +169,36 @@ float MenuModel::getJoyStickRotationAngle()
 std::string MenuModel::getJoyStickModelPath()
 {
 	return joyStickModelPath;
+}
+
+Model MenuModel::getMarioStatueModel()
+{
+	return marioStatueModel;
+}
+
+Vector3 MenuModel::getMarioStatuePos()
+{
+	return marioStatuePos;
+}
+
+Vector3 MenuModel::getMarioStatueScale()
+{
+	return marioStatueScale;
+}
+
+Vector3 MenuModel::getMarioStatueRotationAxis()
+{
+	return marioStatueRotationAxis;
+}
+
+float MenuModel::getMarioStatueRotationAngle()
+{
+	return marioStatueRotationAngle;
+}
+
+std::string MenuModel::getMarioStatueModelPath()
+{
+	return marioStatueModelPath;
 }
 
 

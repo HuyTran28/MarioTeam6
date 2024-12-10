@@ -1,5 +1,6 @@
-#include "raylib.h"
+﻿#include "raylib.h"
 #include "GameEngine.h"
+#include "btBulletDynamicsCommon.h"
 
 int main()
 {
@@ -7,3 +8,4 @@ int main()
 	gameEngine->run();
     return 0;
 }
+
