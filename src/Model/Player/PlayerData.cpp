@@ -112,5 +112,3 @@ PlayerData::PlayerData(Vector3 playerPos, int playerHealth, Model& playerModel, 
 	playerRotationAngle = 0.0f;
 	this->moveSpeed = moveSpeed;
 }
-
-
