@@ -12,7 +12,7 @@ MenuModel::MenuModel()
     lobbyRotationAngle = 0.0f;
     lobbyRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
-	joyStickModelPath = "../../Assets\\Models\\joystick2.obj";
+	joyStickModelPath = "../../Assets\\Models\\joystick3.glb";
 	joyStickModel = LoadModel(joyStickModelPath.c_str());
 	joyStickPos = Vector3{ 110.0f, 10.0f, 0.0f };
 	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
