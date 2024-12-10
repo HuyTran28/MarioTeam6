@@ -17,6 +17,8 @@ void GameEngine::run()
 	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
 	EventManager::getInstance().notify(stateChangeEvent);
 
+
+
 	while (isRunning == true && !WindowShouldClose())
 	{
 		std::shared_ptr<Event> newEvent = std::make_shared<TickEvent>();
@@ -24,8 +26,6 @@ void GameEngine::run()
 		newEvent.reset();
 	}
 }
-
-#include <iostream>
 
 void GameEngine::update(std::shared_ptr<Event> event)
 {
@@ -37,6 +37,10 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	{
 		EventManager::getInstance().removeObserver(stateView);
 		EventManager::getInstance().removeObserver(stateController);
+
+		stateModelStack.push(stateModel);
+		stateViewStack.push(stateView);
+		stateControllerStack.push(stateController);
 
 		auto specificEvent = std::dynamic_pointer_cast<StateChangeEvent>(event);
 		std::string curState = specificEvent->getNewState();

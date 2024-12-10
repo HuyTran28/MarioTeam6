@@ -22,10 +22,6 @@ private:
 	std::shared_ptr<StateView> stateView;
 	std::shared_ptr<StateController> stateController;
 
-	std::shared_ptr<StateModel> tempModel;
-	std::shared_ptr<StateView> tempView;
-	std::shared_ptr<StateController> tempController;
-
 	std::stack<std::shared_ptr<StateModel>> stateModelStack;
 	std::stack<std::shared_ptr<StateView>> stateViewStack;
 	std::stack<std::shared_ptr<StateController>> stateControllerStack;

@@ -30,10 +30,6 @@ void MenuController::update(std::shared_ptr<Event> event)
 			updateGameState();
 		}
 	}
-	else if (event->getType() == "State Change Event")
-	{
-		EventManager::getInstance().removeObserver(shared_from_this());
-	}
 }
 
 void MenuController::updatePlayerMovement()

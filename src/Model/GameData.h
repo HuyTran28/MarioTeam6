@@ -5,13 +5,8 @@
 
 class GameData
 {
-private:
-	std::string playerName;
-	int playerScore;
-	bool isLogIn;
 public:
 	static GameData& getInstance();
-	GameData() = delete;
 	GameData(const GameData&) = delete;
 	GameData& operator=(const GameData&) = delete;
 
@@ -21,5 +16,9 @@ public:
 	void setPlayerName(std::string playerName);
 	void setPlayerScore(int playerScore);
 	void setIsLogIn(bool isLogIn);
-
+private:
+	std::string playerName;
+	int playerScore;
+	bool isLogIn;
+	GameData();
 };

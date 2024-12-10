@@ -14,6 +14,8 @@ void LogInController::update(std::shared_ptr<Event> event)
 	updateKeyboard();
 
 	updateMouse();
+
+
 }
 
 void LogInController::updateKeyboard()
@@ -68,6 +70,21 @@ void LogInController::updateMouse()
 	{
 		model->setIsHidenPassword(!model->getIsHidenPassword());
 	}
+	if (isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
+	{
+		EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
+	}
+	if (isIconClicked(model->getNextArrow(), model->getNextArrowPosition(), model->getNextArrowScale()))
+	{
+		if (checkCredentials())
+		{
+			GameData::getInstance().setIsLogIn(true);
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
+		}
+		else
+		{
+		}
+	}
 }
 
 void LogInController::updateGameState()
@@ -90,6 +107,21 @@ bool LogInController::isIconClicked(Texture2D icon, Vector2 position, float scal
 void LogInController::registerSelf()
 {
 	EventManager::getInstance().addObserver(shared_from_this());
+}
+
+bool LogInController::checkCredentials()
+{
+	std::ifstream file;
+	std::string filename = "..\\..\\account\\" + model->getUsername() + ".txt";
+	file.open(filename);
+	if (file.is_open())
+	{
+		std::string password;
+		std::getline(file, password);
+		file.close();
+		return password == model->getPassword();
+	}
+	return false;
 }
 
 

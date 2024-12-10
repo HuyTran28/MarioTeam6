@@ -2,6 +2,7 @@
 
 #include "StateView.h"
 #include "../Model/MenuModel.h"
+#include "../Model/GameData.h"
 #include <raylib.h>
 #include <memory>
 

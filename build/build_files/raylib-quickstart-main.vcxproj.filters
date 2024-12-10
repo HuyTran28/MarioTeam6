@@ -148,5 +148,8 @@
     <ClCompile Include="..\..\src\Model\Player\PlayerData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Model\GameData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

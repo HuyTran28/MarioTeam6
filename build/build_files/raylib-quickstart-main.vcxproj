@@ -312,6 +312,7 @@
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Model\GameData.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
     <ClCompile Include="..\..\src\Model\Player\PlayerData.cpp" />

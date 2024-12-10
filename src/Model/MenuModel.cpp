@@ -4,7 +4,7 @@ MenuModel::MenuModel()
 {
 	playerData = std::make_shared<PlayerData>();
 
-    lobbyModelPath = "../../Assets\\Models\\Lobby\\lobby.obj";
+    lobbyModelPath = "../../Assets\\Models\\Lobby\\lobby.glb";
     lobbyModel = LoadModel(lobbyModelPath.c_str());
 
     lobbyPos = Vector3{ 0.0f, 0.0f, 0.0f };
@@ -13,13 +13,15 @@ MenuModel::MenuModel()
     lobbyRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
 	joyStickModelPath = "../../Assets\\Models\\joystick3.glb";
-	joyStickModel = LoadModel(joyStickModelPath.c_str());
+	joyStickModelPath2 = "../../Assets\\Models\\joystick2.glb";
+	joystickModelLogIn = LoadModel(joyStickModelPath.c_str());
+	joystickModelNoLogIn = LoadModel(joyStickModelPath2.c_str());
 	joyStickPos = Vector3{ 110.0f, 10.0f, 0.0f };
 	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	joyStickRotationAngle = 180.0f;
 	joyStickRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
-	marioStatueModelPath = "../../Assets\\Models\\Princess Peach\\Peach2.obj";
+	marioStatueModelPath = "../../Assets\\Models\\Princess Peach\\Peach2.glb";
 	marioStatueModel = LoadModel(marioStatueModelPath.c_str());
 	marioStatuePos = Vector3{ 90.0f, 0.0f, 30.0f };
 	marioStatueScale = Vector3{ 0.25f, 0.25f, 0.25f };
@@ -79,10 +81,19 @@ MenuModel::MenuModel()
     };
 }
 
+MenuModel::MenuModel(bool isLoggingIn) : MenuModel()
+{
+	this->isLoggingIn = isLoggingIn;
+}
 
 Camera3D& MenuModel::getCamera()
 {
 	return camera;
+}
+
+Model MenuModel::getJoyStickModelNoLogIn()
+{
+	return joystickModelNoLogIn;
 }
 
 
@@ -143,7 +154,7 @@ Vector3 MenuModel::getCameraInitialPosition()
 
 Model MenuModel::getJoyStickModel()
 {
-	return joyStickModel;
+	return joystickModelLogIn;
 }
 
 Vector3 MenuModel::getJoyStickPos()

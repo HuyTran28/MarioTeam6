@@ -1,7 +1,11 @@
 #pragma once
 
 #include "StateController.h"
+#include "Event/StateChangeEvent.h"
 #include "../Model/LogInModel.h"
+#include <fstream>
+#include <string>
+#include "../Model/GameData.h"
 
 class LogInController : public StateController, public std::enable_shared_from_this<LogInController>
 {
@@ -16,4 +20,6 @@ private:
 	bool isIconClicked(Texture2D icon, Vector2 position, float scale);
 	void updateKeyboard();
 	void updateMouse();
+
+	bool checkCredentials();
 };

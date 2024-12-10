@@ -39,6 +39,16 @@ public:
 	Texture2D& getHidePassword();
 	Texture2D& getShowPassword();
 	float getHidePasswordScale();
+	Texture2D& getBackArrow();
+	Vector2 getBackArrowPosition();
+	float getBackArrowScale();
+	Texture2D& getNextArrow();
+	Vector2 getNextArrowPosition();
+	float getNextArrowScale();
+	std::string getFailedLoginMessage();
+	std::string getSuccessLoginMessage();
+
+
 private:
 	std::string username;
 	std::string password;
@@ -62,6 +72,10 @@ private:
 	bool isPasswordActive;
 
 	Texture2D backArrow;
-	Texture2D nextArrow;
+	Vector2 backArrowPosition;
+	float backArrowScale;
 
+	Texture2D nextArrow;
+	Vector2 nextArrowPosition;
+	float nextArrowScale;
 };

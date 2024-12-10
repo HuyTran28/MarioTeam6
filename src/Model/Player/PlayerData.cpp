@@ -2,8 +2,8 @@
 
 PlayerData::PlayerData()
 {
-	//playerModelPath = "../../Assets\\Models\\Platforms\\Prop_Block_Brick.obj";
-	playerModelPath = "../../Assets\\Models\\joystick2.obj";
+	//playerModelPath = "../../Assets\\Models\\Platforms\\Prop_Block_Brick.glb";
+	playerModelPath = "../../Assets\\Models\\joystick2.glb";
 	playerModel = LoadModel(playerModelPath.c_str());
 	playerPos = Vector3{ 0.0f, 0.0f, 0.0f };
 	playerHealth = 100;

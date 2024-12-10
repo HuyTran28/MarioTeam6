@@ -26,7 +26,13 @@ void MenuView::render()
 
 	DrawModelEx(model->getLobbyModel(), model->getLobbyPos(), model->getLobbyRotationAxis(), model->getLobbyRotationAngle(), model->getLobbyScale(), WHITE);
 
-	DrawModelEx(model->getJoyStickModel(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+	if (GameData::getInstance().getIsLogIn())
+	{
+		DrawModelEx(model->getJoyStickModel(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+	}
+	else {
+		DrawModelEx(model->getJoyStickModelNoLogIn(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+	}
 
 	DrawModelEx(model->getMarioStatueModel(), model->getMarioStatuePos(), model->getMarioStatueRotationAxis(), model->getMarioStatueRotationAngle(), model->getMarioStatueScale(), WHITE);
 
@@ -55,11 +61,7 @@ void MenuView::drawCrosshair()
 
 void MenuView::update(std::shared_ptr<Event> event)
 {
-	if (event->getType() == "State Change Event")
-	{
-		EventManager::getInstance().removeObserver(shared_from_this());
-	}
-	else if (event->getType() == "Tick Event")
+	if (event->getType() == "Tick Event")
 	{
 		render();
 	}

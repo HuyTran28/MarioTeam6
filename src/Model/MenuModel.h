@@ -23,12 +23,14 @@ private:
 	float lobbyRotationAngle;
 	std::string lobbyModelPath;
 
-	Model joyStickModel;
+	Model joystickModelLogIn;
+	Model joystickModelNoLogIn;
 	Vector3 joyStickPos;
 	Vector3 joyStickScale;
 	Vector3 joyStickRotationAxis;
 	float joyStickRotationAngle;
 	std::string joyStickModelPath;
+	std::string joyStickModelPath2;
 
 	BoundingBox lobbyBoundingBox[8];
 
@@ -39,8 +41,12 @@ private:
 	float marioStatueRotationAngle;
 	std::string marioStatueModelPath;
 
+	bool isLoggingIn = false;
+
 public:
 	MenuModel();
+
+	MenuModel(bool isLoggingIn);
 
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
@@ -55,6 +61,7 @@ public:
 	float getLobbyRotationAngle();
 	std::string getLobbyModelPath();
 	Model getJoyStickModel();
+	Model getJoyStickModelNoLogIn();
 	Vector3 getJoyStickPos();
 	Vector3 getJoyStickScale();
 	Vector3 getJoyStickRotationAxis();

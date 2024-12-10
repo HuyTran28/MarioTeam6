@@ -22,7 +22,13 @@ LogInModel::LogInModel()
 	hidePassword = LoadTexture("..\\..\\Assets\\Icons\\show.png");
 	showPassword = LoadTexture("..\\..\\Assets\\Icons\\eye.png");
 	backArrow = LoadTexture("..\\..\\Assets\\Icons\\back-arrow.png");
+	backArrowPosition = { 50.0f, 50.0f };
+	backArrowScale = 0.2f;
+
 	nextArrow = LoadTexture("..\\..\\Assets\\Icons\\next-arrow.png");
+	nextArrowScale = 0.2f;
+	nextArrowPosition = { GetScreenWidth() - nextArrow.width * nextArrowScale - 50.0f, 50.0f };
+
 	hidePasswordScale = (float)passwordBox.height / (float)hidePassword.height;
 	hidePasswordPosition = { passwordBox.x + passwordBox.width - hidePasswordScale * hidePassword.width, passwordBox.y};
 }
@@ -116,6 +122,48 @@ float LogInModel::getHidePasswordScale()
 {
 	return hidePasswordScale;
 }
+
+Texture2D& LogInModel::getBackArrow()
+{
+	return backArrow;
+}
+
+Vector2 LogInModel::getBackArrowPosition()
+{
+	return backArrowPosition;
+}
+
+float LogInModel::getBackArrowScale()
+{
+	return backArrowScale;
+}
+
+Texture2D& LogInModel::getNextArrow()
+{
+	return nextArrow;
+}
+
+Vector2 LogInModel::getNextArrowPosition()
+{
+	return nextArrowPosition;
+}
+
+float LogInModel::getNextArrowScale()
+{
+	return nextArrowScale;
+}
+
+std::string LogInModel::getFailedLoginMessage()
+{
+	return failedLoginMessage;
+}
+
+std::string LogInModel::getSuccessLoginMessage()
+{
+	return successLoginMessage;
+}
+
+
 
 
 
