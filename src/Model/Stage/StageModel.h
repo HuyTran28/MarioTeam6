@@ -1,0 +1,26 @@
+#pragma once
+
+#include <raylib.h>
+#include "../../Model/Block/BlockData.h"
+#include "../../Factory/BlockFactory.h"
+#include <vector>
+
+constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
+constexpr char PATH_CASTLEBLOCK[] = "../../Assets\\Models\\Platforms\\CastleBlock.glb";
+constexpr char PATH_MANMABLOCK[] = "../../Assets\\Models\\Platforms\\ManmaBlock.glb";
+constexpr char PATH_NORMALBRICKBLOCK[] = "../../Assets\\Models\\Platforms\\NormalBrickBlock.glb";
+constexpr char PATH_QUESTIONBLOCK[] = "../../Assets\\Models\\Platforms\\QuestionBlock.glb";
+constexpr char PATH_PIPEBLOCK[] = "../../Assets\\Models\\Platforms\\PipeBlock.glb";
+constexpr char PATH_EMPTYBLOCK[] = "../../Assets\\Models\\Platforms\\EmptyBlock.glb";
+constexpr char PATH_ROULETTEBLOCK[] = "../../Assets\\Models\\Platforms\\RouletteBlock.glb";
+constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\SupportivePipeBlock.glb";
+constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
+constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
+
+
+
+class StageModel
+{
+public:
+	virtual ~StageModel() = default;
+};
