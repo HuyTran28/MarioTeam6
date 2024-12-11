@@ -29,6 +29,11 @@ void MenuController::update(std::shared_ptr<Event> event)
 		{
 			updateGameState();
 		}
+		else if (IsKeyDown(KEY_H))
+		{
+			std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("Level Select");
+			EventManager::getInstance().notify(event);
+		}
 	}
 }
 

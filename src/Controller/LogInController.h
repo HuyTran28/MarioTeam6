@@ -17,7 +17,6 @@ public:
 	void updateGameState();
 private:
 	std::shared_ptr<LogInModel> model;
-	bool isIconClicked(Texture2D icon, Vector2 position, float scale);
 	void updateKeyboard();
 	void updateMouse();
 
