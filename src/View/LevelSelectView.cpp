@@ -30,9 +30,10 @@ void LevelSelectView::render()
 	Rectangle level1 = model->getDestRecLevel1();
 	DrawRectangleRec(level1, model->getDestRecColorLevel1());
 	DrawTexturePro(model->getLevel1Texture(), model->getSrcRecLevel1(), model->getDestRecLevel1(), model->getOriginLevel1(), 0.0f, WHITE);
-	EndDrawing();
 
 	DrawTextureEx(model->getBackArrow(), model->getBackArrowPosition(), 0.0f, model->getBackArrowScale(), WHITE);
+
+	EndDrawing();
 }
 
 void LevelSelectView::update(std::shared_ptr<Event> event)

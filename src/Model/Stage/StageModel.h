@@ -4,6 +4,7 @@
 #include "../../Model/Block/BlockData.h"
 #include "../../Factory/BlockFactory.h"
 #include <vector>
+#include "../StateModel.h"
 
 constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
 constexpr char PATH_CASTLEBLOCK[] = "../../Assets\\Models\\Platforms\\CastleBlock.glb";
@@ -19,7 +20,7 @@ constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.
 
 
 
-class StageModel
+class StageModel : public StateModel
 {
 public:
 	virtual ~StageModel() = default;

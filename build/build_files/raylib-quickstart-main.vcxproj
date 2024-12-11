@@ -272,6 +272,7 @@
     <ClInclude Include="..\..\src\Controller\LevelSelectController.h" />
     <ClInclude Include="..\..\src\Controller\LogInController.h" />
     <ClInclude Include="..\..\src\Controller\MenuController.h" />
+    <ClInclude Include="..\..\src\Controller\Stage1Controller.h" />
     <ClInclude Include="..\..\src\Controller\StateController.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
@@ -281,8 +282,19 @@
     <ClInclude Include="..\..\src\Event\QuitEvent.h" />
     <ClInclude Include="..\..\src\Event\StateChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\TickEvent.h" />
+    <ClInclude Include="..\..\src\Factory\BlockFactory.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
+    <ClInclude Include="..\..\src\Model\Block\BlockData.h" />
+    <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\FlyBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\ModelStage.h" />
+    <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\PipeBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
     <ClInclude Include="..\..\src\Model\LevelSelectModel.h" />
     <ClInclude Include="..\..\src\Model\LogInModel.h" />
@@ -290,12 +302,17 @@
     <ClInclude Include="..\..\src\Model\MenuModel.h" />
     <ClInclude Include="..\..\src\Model\ModelEngine.h" />
     <ClInclude Include="..\..\src\Model\Player\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h" />
+    <ClInclude Include="..\..\src\Model\Stage\StageModel.h" />
     <ClInclude Include="..\..\src\Model\StateModel.h" />
     <ClInclude Include="..\..\src\Observer\IObserver.h" />
     <ClInclude Include="..\..\src\Observer\Subject.h" />
     <ClInclude Include="..\..\src\View\LevelSelectView.h" />
     <ClInclude Include="..\..\src\View\LogInView.h" />
     <ClInclude Include="..\..\src\View\MenuView.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage1View.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage2View.h" />
     <ClInclude Include="..\..\src\View\StateView.h" />
   </ItemGroup>
   <ItemGroup>
@@ -311,19 +328,27 @@
     <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp" />
     <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
     <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp" />
     <ClCompile Include="..\..\src\Event\Event.cpp" />
     <ClCompile Include="..\..\src\Event\EventManager.cpp" />
+    <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
+    <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp" />
     <ClCompile Include="..\..\src\Model\GameData.cpp" />
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
     <ClCompile Include="..\..\src\Model\Player\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
     <ClCompile Include="..\..\src\View\LevelSelectView.cpp" />
     <ClCompile Include="..\..\src\View\LogInView.cpp" />
     <ClCompile Include="..\..\src\View\MenuView.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

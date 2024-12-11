@@ -13,6 +13,10 @@
 #include "../View/LevelSelectView.h"
 #include "../Model/LevelSelectModel.h"
 #include "../Controller/LevelSelectController.h"
+#include "../View/Stage/Stage1View.h"
+#include "../Model/Stage/Stage1Model.h"
+#include "../Controller/Stage1Controller.h"
+
 
 class StateFactory
 {
