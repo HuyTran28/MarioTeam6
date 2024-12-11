@@ -34,6 +34,8 @@ void MenuView::render()
 		DrawModelEx(model->getJoyStickModelNoLogIn(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
 	}
 
+	DrawModelEx(model->getPlayModel(), model->getPlayPos(), model->getPlayRotationAxis(), model->getPlayRotationAngle(), model->getPlayScale(), WHITE);
+
 	DrawModelEx(model->getMarioStatueModel(), model->getMarioStatuePos(), model->getMarioStatueRotationAxis(), model->getMarioStatueRotationAngle(), model->getMarioStatueScale(), WHITE);
 
 	std::shared_ptr<PlayerData> playerData = model->getPlayerData();

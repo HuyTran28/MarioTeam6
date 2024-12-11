@@ -11,10 +11,12 @@ LogInController::LogInController(std::shared_ptr<LogInModel> model)
 
 void LogInController::update(std::shared_ptr<Event> event)
 {
-	updateKeyboard();
+	if (event->getType() == "Tick Event")
+	{
+		updateKeyboard();
 
-	updateMouse();
-
+		updateMouse();
+	}
 
 }
 
@@ -66,15 +68,15 @@ void LogInController::updateMouse()
 			model->setPasswordActive(false);
 		}
 	}
-	if (isIconClicked(model->getHidePassword(), model->getHidePasswordPosition(), model->getHidePasswordScale()))
+	if (StateController::isIconClicked(model->getHidePassword(), model->getHidePasswordPosition(), model->getHidePasswordScale()))
 	{
 		model->setIsHidenPassword(!model->getIsHidenPassword());
 	}
-	if (isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
+	if (StateController::isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
 	{
 		EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
 	}
-	if (isIconClicked(model->getNextArrow(), model->getNextArrowPosition(), model->getNextArrowScale()))
+	if (StateController::isIconClicked(model->getNextArrow(), model->getNextArrowPosition(), model->getNextArrowScale()))
 	{
 		if (checkCredentials())
 		{
@@ -83,6 +85,7 @@ void LogInController::updateMouse()
 		}
 		else
 		{
+
 		}
 	}
 }
@@ -90,18 +93,6 @@ void LogInController::updateMouse()
 void LogInController::updateGameState()
 {
 
-}
-
-bool LogInController::isIconClicked(Texture2D icon, Vector2 position, float scale)
-{
-	// Define the destination rectangle (where the icon is drawn on the screen)
-	Rectangle destRec = { position.x, position.y, icon.width * scale, icon.height * scale };
-
-	// Get the current mouse position
-	Vector2 mousePosition = GetMousePosition();
-
-	// Check if the mouse is over the icon and if the left mouse button is pressed
-	return CheckCollisionPointRec(mousePosition, destRec) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 }
 
 void LogInController::registerSelf()

@@ -18,4 +18,12 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 		stateController->registerSelf();
 		stateView->registerSelf();
 	}
+	else if (state == "Level Select")
+	{
+		stateModel = std::make_shared<LevelSelectModel>();
+		stateView = std::make_shared<LevelSelectView>(std::dynamic_pointer_cast<LevelSelectModel> (stateModel));
+		stateController = std::make_shared<LevelSelectController>(std::dynamic_pointer_cast<LevelSelectModel> (stateModel));
+		stateController->registerSelf();
+		stateView->registerSelf();
+	}
 }

@@ -10,6 +10,9 @@
 #include "../View/LogInView.h"
 #include "../Model/LogInModel.h"
 #include "../Controller/LogInController.h"
+#include "../View/LevelSelectView.h"
+#include "../Model/LevelSelectModel.h"
+#include "../Controller/LevelSelectController.h"
 
 class StateFactory
 {

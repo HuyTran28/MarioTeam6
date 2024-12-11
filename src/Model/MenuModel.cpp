@@ -16,17 +16,24 @@ MenuModel::MenuModel()
 	joyStickModelPath2 = "../../Assets\\Models\\joystick2.glb";
 	joystickModelLogIn = LoadModel(joyStickModelPath.c_str());
 	joystickModelNoLogIn = LoadModel(joyStickModelPath2.c_str());
-	joyStickPos = Vector3{ 110.0f, 10.0f, 0.0f };
+	joyStickPos = Vector3{ 110.0f, 10.0f, 10.0f };
 	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	joyStickRotationAngle = 180.0f;
 	joyStickRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
 	marioStatueModelPath = "../../Assets\\Models\\Princess Peach\\Peach2.glb";
 	marioStatueModel = LoadModel(marioStatueModelPath.c_str());
-	marioStatuePos = Vector3{ 90.0f, 0.0f, 30.0f };
+	marioStatuePos = Vector3{ 80.0f, 0.0f, 40.0f };
 	marioStatueScale = Vector3{ 0.25f, 0.25f, 0.25f };
 	marioStatueRotationAngle = 225.0f;
 	marioStatueRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
+
+	playModelPath = "../../Assets\\Models\\joystick.glb";
+	playModel = LoadModel(playModelPath.c_str());
+	playPos = Vector3{ 110.0f, 0.0f, -20.0f };
+	playScale = Vector3{ 1.0f, 1.0f, 1.0f };
+	playRotationAngle = 180.0f;
+	playRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 
 
 
@@ -79,11 +86,6 @@ MenuModel::MenuModel()
         Vector3{ modelBox.max.x - 1800.0f, modelBox.max.y + 400.0f, modelBox.max.z - 1000.0f},
         Vector3{ modelBox.max.x - 1400.0f, modelBox.max.y + 600.0f, modelBox.min.z + 250.0f }
     };
-}
-
-MenuModel::MenuModel(bool isLoggingIn) : MenuModel()
-{
-	this->isLoggingIn = isLoggingIn;
 }
 
 Camera3D& MenuModel::getCamera()
@@ -211,6 +213,39 @@ std::string MenuModel::getMarioStatueModelPath()
 {
 	return marioStatueModelPath;
 }
+
+Model MenuModel::getPlayModel()
+{
+	return playModel;
+}
+
+Vector3 MenuModel::getPlayPos()
+{
+	return playPos;
+}
+
+Vector3 MenuModel::getPlayScale()
+{
+	return playScale;
+}
+
+Vector3 MenuModel::getPlayRotationAxis()
+{
+	return playRotationAxis;
+}
+
+float MenuModel::getPlayRotationAngle()
+{
+	return playRotationAngle;
+}
+
+std::string MenuModel::getPlayModelPath()
+{
+	return playModelPath;
+}
+
+
+
 
 
 

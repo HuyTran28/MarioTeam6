@@ -41,12 +41,15 @@ private:
 	float marioStatueRotationAngle;
 	std::string marioStatueModelPath;
 
-	bool isLoggingIn = false;
+	Model playModel;
+	Vector3 playPos;
+	Vector3 playScale;
+	Vector3 playRotationAxis;
+	float playRotationAngle;
+	std::string playModelPath;
 
 public:
 	MenuModel();
-
-	MenuModel(bool isLoggingIn);
 
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
@@ -75,5 +78,10 @@ public:
 	Vector3 getMarioStatueRotationAxis();
 	float getMarioStatueRotationAngle();
 	std::string getMarioStatueModelPath();
-
+	Model getPlayModel();
+	Vector3 getPlayPos();
+	Vector3 getPlayScale();
+	Vector3 getPlayRotationAxis();
+	float getPlayRotationAngle();
+	std::string getPlayModelPath();
 };
