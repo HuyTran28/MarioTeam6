@@ -1,7 +1,6 @@
 #pragma once
 #include "StageModel.h"
 #include <vector>
-#include <memory>
 #include "btBulletDynamicsCommon.h"
 
 class Stage1Model : public StageModel

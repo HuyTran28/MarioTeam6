@@ -1,5 +1,5 @@
-#include "GameEngine.h"
-
+﻿#include "GameEngine.h"
+#include <iostream>
 GameEngine::GameEngine()
 {
 	isRunning = false;
@@ -9,7 +9,7 @@ void GameEngine::run()
 {
 	isRunning = true;
 
-	InitWindow(2000, 1200, "Game Engine");
+	InitWindow(1900, 1000, "Game Engine");
 	SetTargetFPS(90);
 
 	this->registerSelf();
@@ -17,14 +17,20 @@ void GameEngine::run()
 	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
 	EventManager::getInstance().notify(stateChangeEvent);
 
+	GameData& gameData = GameData::getInstance();
+
+	btDiscreteDynamicsWorld* dynamicsWorld = gameData.getDynamicsWorld();
 
 
 	while (isRunning == true && !WindowShouldClose())
 	{
+		dynamicsWorld->stepSimulation(GetFrameTime());
+
 		std::shared_ptr<Event> newEvent = std::make_shared<TickEvent>();
 		EventManager::getInstance().notify(newEvent);
 		newEvent.reset();
 	}
+
 }
 
 void GameEngine::update(std::shared_ptr<Event> event)

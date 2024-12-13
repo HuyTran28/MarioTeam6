@@ -1,9 +1,11 @@
 #include "BlockData.h"
+#include <iostream>
 
 BlockData::~BlockData()
 {
     if (m_rigidBodyOfBlock && m_dynamicsWorld)
     {
+        std::cout << "1\n";
         m_dynamicsWorld->removeRigidBody(m_rigidBodyOfBlock);
     }
 
@@ -21,9 +23,11 @@ BlockData::~BlockData()
     }
 }
 
+
+
 btDiscreteDynamicsWorld* BlockData::getDynamicsWorld() const
 {
-	return m_dynamicsWorld;
+    return m_dynamicsWorld;
 }
 
 btRigidBody* BlockData::getRigidBody() const

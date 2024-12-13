@@ -1,9 +1,11 @@
 #pragma once
-#pragma once
+
 #include "raylib.h"
 #include "btBulletDynamicsCommon.h"
 #include <string>
 #include "ModelStage.h"
+
+
 class BlockData
 {
 protected:

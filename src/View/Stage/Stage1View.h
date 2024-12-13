@@ -9,6 +9,7 @@ class Stage1View : public StateView, public std::enable_shared_from_this<Stage1V
 private:
 	std::shared_ptr<Stage1Model> m_model;
 public:
+	Stage1View();
 	Stage1View(std::shared_ptr<Stage1Model> model);
 	void render();
 	void update(std::shared_ptr<Event> event);

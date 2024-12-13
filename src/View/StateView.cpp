@@ -2,8 +2,6 @@
 
 void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
 {
-    /*BeginDrawing();
-    ClearBackground(RAYWHITE);*/
     for (const auto& block : map)
     {
         btRigidBody* rigidBodyOfBlock = block->getRigidBody();
@@ -40,5 +38,4 @@ void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
         }
 
     }
-   // EndDrawing();
 }

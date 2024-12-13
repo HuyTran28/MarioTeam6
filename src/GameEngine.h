@@ -11,6 +11,8 @@
 #include "Controller/StateController.h"
 #include <raylib.h>
 #include <stack>
+#include "Model/GameData.h"
+#include "btBulletDynamicsCommon.h"
 
 class GameEngine : public IObserver, public std::enable_shared_from_this<GameEngine>
 {

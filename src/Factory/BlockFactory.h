@@ -11,7 +11,7 @@
 #include "../Model/Block/RouletteBlock.h"
 #include "../Model/Block/SupportivePipeBlock.h"
 #include "../Model/Block/FlyBlock.h"
-
+#include <memory>
 
 
 enum class BlockType

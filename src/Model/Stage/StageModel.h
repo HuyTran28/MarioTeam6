@@ -23,5 +23,13 @@ constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.
 class StageModel : public StateModel
 {
 public:
+
 	virtual ~StageModel() = default;
+	StageModel();
+	Camera3D& getCamera();
+	void setCamera(Camera3D camera);
+
+private:
+	Camera3D m_camera;
+	Vector3 m_cameraInitialPosition;
 };
