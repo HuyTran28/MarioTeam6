@@ -25,7 +25,7 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     float radius = armSpan * 0.5f - 0.2f;
 
     // Calculate height of the capsule based on the model's bounding box
-    float height = (modelBounds.max.y - modelBounds.min.y) * scale - 0.5f; // Height of the model
+    float height = (modelBounds.max.y - modelBounds.min.y) * scale - 1.0f; // Height of the model
 
     // Adjust height to exclude spherical parts of the capsule
     float capsuleHeight = height - radius;
