@@ -27,6 +27,8 @@ void Enemy::move() {
     }
 }
 
+
+
 void Enemy::update() {
     if (m_currentState) {
         m_currentState->update(this);

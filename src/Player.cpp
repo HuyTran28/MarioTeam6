@@ -63,7 +63,6 @@ void Player::move() {
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
         desiredVelocity = btVector3(m_forwardDir.x, 0, m_forwardDir.z).normalized() * m_speed;
-        m_animationManager->playAnimation(4); // Play the walking animation
     }
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
@@ -80,20 +79,8 @@ void Player::move() {
 
     // Apply the new velocity if significant
     const float velocityThreshold = 0.01f;
-    if (newVelocity.length() > velocityThreshold) {
+    if (newVelocity.length() > velocityThreshold)
         m_rigidBody->setLinearVelocity(newVelocity);
-
-    }
-    else {
-        m_animationManager->playAnimation(7); // Play the idle animation
-    }
-
-    // Update the player's position from the rigid body's transform
-    btTransform trans;
-    m_rigidBody->getMotionState()->getWorldTransform(trans);
-
-    // Update the animation frame based on the player's movement
-    m_animationManager->updateAnimation(GetFrameTime());
 }
 
 void Player::rotate() {
@@ -117,20 +104,72 @@ void Player::rotate() {
 
 
 void Player::jump() {
+    float invGravity = 1.0f / -m_dynamicsWorld->getGravity().getY();
+
     if (m_isOnGround && IsKeyDown(KEY_SPACE)) {
         m_isJumping = true;      // Start the jump
         m_jumpTimer = 0.0f;      // Reset the jump timer
         m_isOnGround = false;    // Player is now airborne
 
-        // Play the jump animation
-        m_animationManager->playAnimation(9); // Assuming 5 is the index for the jump animation
+        // Increase the jump force for a higher jump
+        float acceleration = (m_jumpForce * 1.5f) / m_rigidBody->getMass();
+        m_maxJumpDuration = sqrt(acceleration / m_rigidBody->getMass() * invGravity); // Simplified physics calculation
+    }
 
-        // Calculate max jump duration based on jump force
-        float acceleration = m_jumpForce / m_rigidBody->getMass();
-        m_maxJumpDuration = sqrt(2.0f * acceleration / 9.8f); // Simplified physics calculation
+    if (m_isJumping) {
+        // Increment the jump timer
+        m_jumpTimer += GetFrameTime();
 
-        // Apply the jump force
-        m_rigidBody->applyCentralImpulse(btVector3(0, m_jumpForce, 0));
+        // Calculate the current jump force based on the elapsed time
+        float currentJumpForce = m_jumpForce * 2.0f * (1.0f - (m_jumpTimer / m_maxJumpDuration));
+
+        // Apply the current jump force
+        m_rigidBody->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
+
+        // End the jump if the max jump duration is reached
+        if (m_jumpTimer >= m_maxJumpDuration) {
+            m_isJumping = false;
+        }
+    }
+
+    // Apply additional gravity to make the player fall faster
+    if (!m_isOnGround && !m_isJumping) {
+        btVector3 additionalGravity(0, -9.8f * 2.0f * GetFrameTime(), 0); // Increase gravity effect
+        m_rigidBody->applyCentralImpulse(additionalGravity);
+
+        // Ensure the velocity is negative to trigger fall animation
+        btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
+        if (currentVelocity.getY() > 0.01) {
+            m_rigidBody->setLinearVelocity(btVector3(currentVelocity.getX(), -fabs(currentVelocity.getY()), currentVelocity.getZ()));
+        }
+    }
+}
+
+void Player::updateAnimationState() {
+    btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
+
+    if (!m_isOnGround) {
+        // Check if the player is moving horizontally while airborne
+        if (currentVelocity.length2() > 0.1f && fabs(currentVelocity.getY()) > 0.01f) {
+         
+            m_animationManager->playAnimation(3); // Play the jump move animation
+        }
+        else if (currentVelocity.getY() > 0.0f) {
+       
+            m_animationManager->playAnimation(3); // Play the jump animation
+        }
+    }
+    else {
+        
+        // Player is grounded
+        if (currentVelocity.length() > 0.1f) {
+            
+            m_animationManager->playAnimation(4); // Play the walking animation
+        }
+        else {
+            
+            m_animationManager->playAnimation(2); // Play the idle animation
+        }
     }
 
     // Update the animation frame based on the player's movement
@@ -143,10 +182,14 @@ void Player::update() {
     m_isOnGround = checkGroundCollision();  // Update grounded state
 	
     if (!m_isOnGround) {
-        // Apply extra gravity for faster falling if needed
+        // Apply gravity
         btVector3 velocity = m_rigidBody->getLinearVelocity();
+        btVector3 gravity = m_dynamicsWorld->getGravity();
+        m_rigidBody->applyCentralForce(gravity);
+
+        // Apply extra gravity for faster falling if needed
         const float extraGravityFactor = 2.0f;
-        btVector3 additionalGravity(0, extraGravityFactor * m_dynamicsWorld->getGravity().getY(), 0);
+        btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
 
         if (velocity.getY() < 0.0f) {  // Only apply extra gravity when falling
             m_rigidBody->applyCentralForce(additionalGravity);
@@ -166,6 +209,9 @@ void Player::update() {
 
     updateCollisionShape();  // Update collision shape
     updateModelTransform();  // Synchronize model with physics body
+
+	btVector3 playerVelocity = m_rigidBody->getLinearVelocity();
+	updateAnimationState();  // Update animation state
 }
 
 
@@ -191,8 +237,10 @@ void Player::handleJumpOnEnemy() {
 }
 
 void Player::handleTouchEnemy() {
-    //std::cout << "Handling touch with enemy." << std::endl;
-    
+	m_health -= 10;
+    if (m_health <= 0) {
+		// Player is dead
+	}
 }
 
 Player::~Player() {

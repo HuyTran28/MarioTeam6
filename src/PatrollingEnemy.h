@@ -26,5 +26,6 @@ public:
     void move() override;
     void rotate() override;
     void update() override;
+	void updateAnimationState();
     virtual void onCollision(const CollisionEvent& event) override;
 };

@@ -5,7 +5,7 @@ AnimationManager::AnimationManager(Model& model, const char* modelPath)
     : m_model(model), m_animationFrame(0.0f), m_currentAnimation(0)
 {
     m_animations = LoadModelAnimations(modelPath, &m_animationCount);
-	std::cout << "Loaded " << m_animationCount << " animations\n";
+    std::cout << "Loaded " << m_animationCount << " animations\n";
     if (m_animationCount == 0) {
         m_animations = nullptr;
     }
@@ -36,4 +36,18 @@ void AnimationManager::updateAnimation(float deltaTime) {
             m_animationFrame = 0.0f; // Loop the animation
         }
     }
+}
+
+int AnimationManager::getCurrentFrame() const {
+    if (m_animationCount > 0) {
+        return static_cast<int>(m_animationFrame);
+    }
+    return 0; // Default to frame 0 if no animations loaded
+}
+
+bool AnimationManager::isAnimationFinished() const {
+    if (m_animationCount > 0) {
+        return m_animationFrame >= m_animations[m_currentAnimation].frameCount;
+    }
+    return true; // Return true if no animations are loaded
 }

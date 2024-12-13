@@ -14,6 +14,8 @@ public:
     ~AnimationManager();
 
     void playAnimation(int animationIndex);
+    int getCurrentFrame() const;          // Get the current frame of the animation
+    bool isAnimationFinished() const;    // Check if the animation has finished
     void updateAnimation(float deltaTime);
     bool hasAnimations() const { return m_animationCount > 0; }
 };

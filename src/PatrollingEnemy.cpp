@@ -12,6 +12,7 @@ void PatrollingEnemy::patrol() {
     // Select the target position based on whether the enemy is moving to A or B
     m_targetPosition = m_movingToA ? m_patrolPointA : m_patrolPointB;
     moveTo();
+	
 
     // Check if the enemy has reached the target position with some tolerance
     float distance = Vector3Distance(m_position, m_targetPosition);
@@ -124,8 +125,22 @@ void PatrollingEnemy::isStamped() {
 	"Enemy stamped!";
 }
 
+void PatrollingEnemy::updateAnimationState() {
+    // Check if the enemy is moving or rotating
+    btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
+
+    // Check if the enemy is moving between patrol points
+    if (currentVelocity.length() > 0.1f) {
+        m_animationManager->playAnimation(0); // Move animation
+    }
+
+	m_animationManager->updateAnimation(GetFrameTime());
+}
+
+
 void PatrollingEnemy::update() {
     move();
 	updateCollisionShape();
 	updateModelTransform();
+	updateAnimationState();
 }

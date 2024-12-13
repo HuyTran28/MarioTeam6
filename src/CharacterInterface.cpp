@@ -25,51 +25,51 @@ CharacterInterface::CharacterInterface(btRigidBody* rigidBody, std::string model
 void CharacterInterface::render() {
     DrawModel(m_model, m_position, m_scale, WHITE);
 
-    // Get the collision shape from the rigid body
-    btCollisionShape* shape = m_rigidBody->getCollisionShape();
+    //// Get the collision shape from the rigid body
+    //btCollisionShape* shape = m_rigidBody->getCollisionShape();
 
-    // Get the transform of the rigid body
-    btTransform transform;
-    m_rigidBody->getMotionState()->getWorldTransform(transform);
+    //// Get the transform of the rigid body
+    //btTransform transform;
+    //m_rigidBody->getMotionState()->getWorldTransform(transform);
 
-    // Convert Bullet's transform to your rendering library's format
-    btVector3 origin = transform.getOrigin();
-    btQuaternion rotation = transform.getRotation();
-    Vector3 boxPosition = { origin.getX(), origin.getY(), origin.getZ() };
-    Quaternion boxRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
+    //// Convert Bullet's transform to your rendering library's format
+    //btVector3 origin = transform.getOrigin();
+    //btQuaternion rotation = transform.getRotation();
+    //Vector3 boxPosition = { origin.getX(), origin.getY(), origin.getZ() };
+    //Quaternion boxRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
 
-    if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
-        btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
-        btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();
-        Vector3 boxSize = { halfExtents.getX() * 2, halfExtents.getY() * 2, halfExtents.getZ() * 2 };
+    //if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
+    //    btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
+    //    btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();
+    //    Vector3 boxSize = { halfExtents.getX() * 2, halfExtents.getY() * 2, halfExtents.getZ() * 2 };
 
-        //DrawCube(boxPosition, boxSize.x, boxSize.y, boxSize.z, RED); // Draw the box in red
-        DrawCubeWires(boxPosition, boxSize.x, boxSize.y, boxSize.z, BLACK); // Draw the box wireframe in black
-    }
-    else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
-        btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(shape);
+    //    //DrawCube(boxPosition, boxSize.x, boxSize.y, boxSize.z, RED); // Draw the box in red
+    //    DrawCubeWires(boxPosition, boxSize.x, boxSize.y, boxSize.z, BLACK); // Draw the box wireframe in black
+    //}
+    //else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
+    //    btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(shape);
 
-        // Get the bounding box of the model
-        BoundingBox modelBounds = GetModelBoundingBox(m_model);
-        float modelHeight = (modelBounds.max.y - modelBounds.min.y) * m_scale;
-        float modelRadius = std::max((modelBounds.max.x - modelBounds.min.x), (modelBounds.max.z - modelBounds.min.z)) * m_scale / 2.0f;
+    //    // Get the bounding box of the model
+    //    BoundingBox modelBounds = GetModelBoundingBox(m_model);
+    //    float modelHeight = (modelBounds.max.y - modelBounds.min.y) * m_scale;
+    //    float modelRadius = std::max((modelBounds.max.x - modelBounds.min.x), (modelBounds.max.z - modelBounds.min.z)) * m_scale / 2.0f;
 
-        // Adjust the capsule size to wrap around the model
-        float radius = modelRadius * 1.1f; // Slightly larger than the model radius
-        float halfHeight = (modelHeight / 2.0f) - radius;
+    //    // Adjust the capsule size to wrap around the model
+    //    float radius = modelRadius * 1.1f; // Slightly larger than the model radius
+    //    float halfHeight = (modelHeight / 2.0f) - radius;
 
-        Vector3 startPos = { boxPosition.x, boxPosition.y - halfHeight, boxPosition.z };
-        Vector3 endPos = { boxPosition.x, boxPosition.y + halfHeight, boxPosition.z };
-        //DrawCapsule(startPos, endPos, radius, RED); // Draw the capsule in red
-        DrawCapsuleWires(startPos, endPos, radius, 16, 16, BLACK); // Draw the capsule wireframe in black
-    }
-    // Add handling for other shape types here
-    else if (shape->getShapeType() == SPHERE_SHAPE_PROXYTYPE) {
-        btSphereShape* sphereShape = static_cast<btSphereShape*>(shape);
-        float radius = sphereShape->getMargin(); // Assuming margin is the radius
-        //DrawSphere(boxPosition, radius, RED); // Draw the sphere in red
-        DrawSphereWires(boxPosition, radius, 16, 16, BLACK); // Draw the sphere wireframe in black
-    }
+    //    Vector3 startPos = { boxPosition.x, boxPosition.y - halfHeight, boxPosition.z };
+    //    Vector3 endPos = { boxPosition.x, boxPosition.y + halfHeight, boxPosition.z };
+    //    //DrawCapsule(startPos, endPos, radius, RED); // Draw the capsule in red
+    //    DrawCapsuleWires(startPos, endPos, radius, 16, 16, BLACK); // Draw the capsule wireframe in black
+    //}
+    //// Add handling for other shape types here
+    //else if (shape->getShapeType() == SPHERE_SHAPE_PROXYTYPE) {
+    //    btSphereShape* sphereShape = static_cast<btSphereShape*>(shape);
+    //    float radius = sphereShape->getMargin(); // Assuming margin is the radius
+    //    //DrawSphere(boxPosition, radius, RED); // Draw the sphere in red
+    //    DrawSphereWires(boxPosition, radius, 16, 16, BLACK); // Draw the sphere wireframe in black
+    //}
     // Add more shape types as needed
 }
 

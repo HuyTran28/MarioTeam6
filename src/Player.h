@@ -30,10 +30,12 @@ public:
     void rotate() override;
     void determineCollisionType(CollisionEvent& event) override;
     void onCollision(const CollisionEvent& event) override;
+
     void handleJumpOnEnemy();
     void handleTouchEnemy();
 	void update() override;
 
     void jump();
 
+    void updateAnimationState();
 };
