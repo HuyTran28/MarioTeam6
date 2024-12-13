@@ -50,46 +50,46 @@ MenuModel::MenuModel()
 
     BoundingBox modelBox = GetModelBoundingBox(lobbyModel);
     this->playerData = playerData;
-    // Left wall
-    lobbyBoundingBox[0] = BoundingBox{
-        Vector3{ modelBox.min.x , modelBox.min.y, modelBox.min.z },
-        Vector3{ modelBox.min.x, modelBox.max.y + 4000.0f, modelBox.max.z }
-    };
+    //// Left wall
+    //lobbyBoundingBox[0] = BoundingBox{
+    //    Vector3{ modelBox.min.x , modelBox.min.y, modelBox.min.z },
+    //    Vector3{ modelBox.min.x, modelBox.max.y + 4000.0f, modelBox.max.z }
+    //};
 
-    // Right wall
-    lobbyBoundingBox[1] = BoundingBox{
-        Vector3{ modelBox.max.x - 70.0f, modelBox.min.y, modelBox.min.z },
-        Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f, modelBox.max.z }
-    };
+    //// Right wall
+    //lobbyBoundingBox[1] = BoundingBox{
+    //    Vector3{ modelBox.max.x - 70.0f, modelBox.min.y, modelBox.min.z },
+    //    Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f, modelBox.max.z }
+    //};
 
-    // Front wall
-    lobbyBoundingBox[2] = BoundingBox{
-        Vector3{ modelBox.min.x, modelBox.min.y, modelBox.min.z + 30.0f },
-        Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f, modelBox.min.z }
-    };
+    //// Front wall
+    //lobbyBoundingBox[2] = BoundingBox{
+    //    Vector3{ modelBox.min.x, modelBox.min.y, modelBox.min.z + 30.0f },
+    //    Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f, modelBox.min.z }
+    //};
 
-    lobbyBoundingBox[4] = modelBox;
-    lobbyBoundingBox[4].max.x -= 450.0f;
-    lobbyBoundingBox[4].min.x += 450.0f;
+    //lobbyBoundingBox[4] = modelBox;
+    //lobbyBoundingBox[4].max.x -= 450.0f;
+    //lobbyBoundingBox[4].min.x += 450.0f;
 
-    lobbyBoundingBox[5] = modelBox;
-    lobbyBoundingBox[5].max.z -= 400.0f;
-    lobbyBoundingBox[5].min.z += 400.0f;
+    //lobbyBoundingBox[5] = modelBox;
+    //lobbyBoundingBox[5].max.z -= 400.0f;
+    //lobbyBoundingBox[5].min.z += 400.0f;
 
-    // Back wall
-    lobbyBoundingBox[3] = BoundingBox{
-        Vector3{ modelBox.min.x, modelBox.min.y, modelBox.max.z - 70.0f},
-        Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f , modelBox.max.z }
-    };
-    lobbyBoundingBox[6] = BoundingBox{
-        Vector3{ modelBox.max.x - 2300.0f, modelBox.max.y, modelBox.max.z - 1000.0f},
-        Vector3{ modelBox.max.x - 1800.0f, modelBox.max.y + 600.0f, modelBox.min.z + 250.0f }
-    };
+    //// Back wall
+    //lobbyBoundingBox[3] = BoundingBox{
+    //    Vector3{ modelBox.min.x, modelBox.min.y, modelBox.max.z - 70.0f},
+    //    Vector3{ modelBox.max.x, modelBox.max.y + 4000.0f , modelBox.max.z }
+    //};
+    //lobbyBoundingBox[6] = BoundingBox{
+    //    Vector3{ modelBox.max.x - 2300.0f, modelBox.max.y, modelBox.max.z - 1000.0f},
+    //    Vector3{ modelBox.max.x - 1800.0f, modelBox.max.y + 600.0f, modelBox.min.z + 250.0f }
+    //};
 
-    lobbyBoundingBox[7] = BoundingBox{
-        Vector3{ modelBox.max.x - 1800.0f, modelBox.max.y + 400.0f, modelBox.max.z - 1000.0f},
-        Vector3{ modelBox.max.x - 1400.0f, modelBox.max.y + 600.0f, modelBox.min.z + 250.0f }
-    };
+    //lobbyBoundingBox[7] = BoundingBox{
+    //    Vector3{ modelBox.max.x - 1800.0f, modelBox.max.y + 400.0f, modelBox.max.z - 1000.0f},
+    //    Vector3{ modelBox.max.x - 1400.0f, modelBox.max.y + 600.0f, modelBox.min.z + 250.0f }
+    //};
 }
 
 Camera3D& MenuModel::getCamera()
@@ -158,10 +158,6 @@ std::string MenuModel::getLobbyModelPath()
 	return lobbyModelPath;
 }
 
-BoundingBox* MenuModel::getLobbyBoundingBox()
-{
-	return lobbyBoundingBox;
-}
 
 Vector3 MenuModel::getCameraInitialPosition()
 {

@@ -34,7 +34,6 @@ private:
 	std::string joyStickModelPath2;
 	BoundingBox joystickBoundingBox;
 
-	BoundingBox lobbyBoundingBox[8];
 
 	Model marioStatueModel;
 	Vector3 marioStatuePos;
@@ -73,7 +72,6 @@ public:
 	Vector3 getJoyStickRotationAxis();
 	float getJoyStickRotationAngle();
 	std::string getJoyStickModelPath();
-	BoundingBox* getLobbyBoundingBox();
 	Vector3 getCameraInitialPosition();
 	Model getMarioStatueModel();
 	Vector3 getMarioStatuePos();

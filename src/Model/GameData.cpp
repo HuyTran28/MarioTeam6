@@ -61,5 +61,22 @@ std::shared_ptr<btDiscreteDynamicsWorld> GameData::getDynamicsWorld() const
 
 GameData::~GameData()
 {
-	std::cout << "2\n";
+    // Get the number of collision objects
+    int numObjects = m_dynamicsWorld->getNumCollisionObjects();
+
+    // Iterate backward to safely remove all rigid bodies
+    for (int i = numObjects - 1; i >= 0; i--) {
+        btCollisionObject* obj = m_dynamicsWorld->getCollisionObjectArray()[i];
+
+        // Cast to btRigidBody (optional, if you only care about rigid bodies)
+        btRigidBody* body = btRigidBody::upcast(obj);
+        if (body) {
+            // Remove the rigid body from the world
+            m_dynamicsWorld->removeRigidBody(body); 
+        }
+        else {
+            // If not a rigid body, remove the collision object
+            m_dynamicsWorld->removeCollisionObject(obj);
+        }
+    }
 }

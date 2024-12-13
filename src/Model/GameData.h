@@ -32,10 +32,4 @@ private:
 	std::shared_ptr<btCollisionDispatcher> m_dispatcher;
 	std::shared_ptr<btBroadphaseInterface> m_overlappingPairCache;
 	std::shared_ptr<btSequentialImpulseConstraintSolver> m_solver;
-
-	//btDiscreteDynamicsWorld* m_dynamicsWorld;
-	//btDefaultCollisionConfiguration* m_collisionConfiguration;
-	//btCollisionDispatcher* m_dispatcher;
-	//btBroadphaseInterface* m_overlappingPairCache;
-	//btSequentialImpulseConstraintSolver* m_solver;
 };

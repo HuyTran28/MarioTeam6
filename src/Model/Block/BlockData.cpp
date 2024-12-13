@@ -3,15 +3,6 @@
 
 BlockData::~BlockData()
 {
-    if (m_rigidBodyOfBlock && m_dynamicsWorld)
-    {
-        std::cout << "1\n";
-        btRigidBody* tmp = m_rigidBodyOfBlock.get();
-        m_dynamicsWorld->removeRigidBody(tmp);
-    }
-
-    m_rigidBodyOfBlock = nullptr;
-
     auto it = std::find_if(
         ModelStage::listModels.begin(),
         ModelStage::listModels.end(),

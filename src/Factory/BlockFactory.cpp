@@ -93,5 +93,6 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
     default:
         nullptr;
     }
+
     return nullptr;
 }

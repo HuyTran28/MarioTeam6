@@ -5,6 +5,7 @@ GameEngine::GameEngine()
 	isRunning = false;
 }
 
+
 void GameEngine::run()
 {
 	isRunning = true;

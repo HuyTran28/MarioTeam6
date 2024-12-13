@@ -13,7 +13,6 @@ private:
 
 public:
 	Stage1Model();
-	Stage1Model(int width, int depth, int height, btDiscreteDynamicsWorld* dynamicsWorld);
 	~Stage1Model();
 	const std::vector<std::shared_ptr<BlockData>>& getMap() const;
 };

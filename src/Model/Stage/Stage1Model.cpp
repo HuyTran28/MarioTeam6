@@ -319,6 +319,7 @@ Stage1Model::Stage1Model()
     //createSpecificNormalBlocks();
 //}
 
+#include <iostream>
 Stage1Model::~Stage1Model()
 {
 
