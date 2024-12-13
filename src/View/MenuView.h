@@ -11,6 +11,8 @@ class MenuView : public StateView, public std::enable_shared_from_this<MenuView>
 private:
 	std::shared_ptr<MenuModel> model;
 	bool isInit = false;
+
+	void drawAccessories();
 public:
 	MenuView(std::shared_ptr<MenuModel> model);
 	MenuView();

@@ -25,11 +25,16 @@ void MenuController::update(std::shared_ptr<Event> event)
 	{
 		updatePlayerMovement();
 
-		if (IsKeyDown(KEY_G))
+		Camera3D camera = model->getCamera();
+
+		Ray ray = { 0 };
+		ray.position = camera.position; // Origin of the ray is the camera's position
+		ray.direction = Vector3Normalize(Vector3Subtract(camera.target, camera.position)); // Direction from camera to target
+		if (GetRayCollisionBox(ray, model->getJoystickBoundingBox()).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 		{
 			updateGameState();
 		}
-		else if (IsKeyDown(KEY_H))
+		else if (GetRayCollisionBox(ray, model->getPlayModelBoundingBox()).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 		{
 			std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("Level Select");
 			EventManager::getInstance().notify(event);
@@ -98,53 +103,6 @@ void MenuController::updateGameState()
 {
 	std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("LogIn");
 	EventManager::getInstance().notify(event);
-}
-
-bool MenuController::CheckCollisionRayBox(Ray ray, BoundingBox box)
-{
-    float tmin = (box.min.x - ray.position.x) / ray.direction.x;
-    float tmax = (box.max.x - ray.position.x) / ray.direction.x;
-
-    if (tmin > tmax) std::swap(tmin, tmax);
-
-    float tymin = (box.min.y - ray.position.y) / ray.direction.y;
-    float tymax = (box.max.y - ray.position.y) / ray.direction.y;
-
-    if (tymin > tymax) std::swap(tymin, tymax);
-
-    if ((tmin > tymax) || (tymin > tmax))
-        return false;
-
-    if (tymin > tmin)
-        tmin = tymin;
-
-    if (tymax < tmax)
-        tmax = tymax;
-
-    float tzmin = (box.min.z - ray.position.z) / ray.direction.z;
-    float tzmax = (box.max.z - ray.position.z) / ray.direction.z;
-
-    if (tzmin > tzmax) std::swap(tzmin, tzmax);
-
-    if ((tmin > tzmax) || (tzmin > tmax))
-        return false;
-
-    if (tzmin > tmin)
-        tmin = tzmin;
-
-    if (tzmax < tmax)
-        tmax = tzmax;
-
-    return ((tmin < 0) && (tmax > 0)) || ((tmin > 0) && (tmax > 0));
-}
-
-bool MenuController::IsMouseOver3DObject(Camera3D camera, BoundingBox box)
-{
-	// Get the mouse ray
-	Ray mouseRay = GetMouseRay(GetMousePosition(), camera);
-
-	// Check for collision between the mouse ray and the bounding box
-	return CheckCollisionRayBox(mouseRay, box);
 }
 
 MenuController::~MenuController()

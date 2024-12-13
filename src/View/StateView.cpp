@@ -1,11 +1,13 @@
 #include "StateView.h"
 
+
 void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
 {
     for (const auto& block : map)
     {
-        btRigidBody* rigidBodyOfBlock = block->getRigidBody();
+        std::shared_ptr<btRigidBody> rigidBodyOfBlock = block->getRigidBody();
         btTransform blockTransform;
+
         rigidBodyOfBlock->getMotionState()->getWorldTransform(blockTransform);
 
         btVector3 position = blockTransform.getOrigin();

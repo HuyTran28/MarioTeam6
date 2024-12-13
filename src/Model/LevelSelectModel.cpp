@@ -8,7 +8,7 @@ LevelSelectModel::LevelSelectModel()
 
 	level1Texture = LoadTexture("../../Assets\\Images\\island.png");
 	srcRecLevel1 = { 0.0f, 0.0f, (float)level1Texture.width, (float)level1Texture.height };
-	destRecLevel1 = { 463.0f, 169.0f, 765.0f - 463.0f, 386.0f - 169.0f };
+	destRecLevel1 = { 503.0f, 141.0f, 752.0f - 503.0f, 321.0f - 141.0f };
 	destRecColorLevel1 = WHITE;
 	originLevel1 = { 0.0f, 0.0f };
 

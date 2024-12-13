@@ -29,6 +29,6 @@ enum class BlockType
 class BlockFactory : public BlockData
 {
 public:
-	static BlockData* createBlock(BlockType type, btDiscreteDynamicsWorld* world, const std::string& modelPath,
+	static std::shared_ptr<BlockData> createBlock(BlockType type, std::shared_ptr<btDiscreteDynamicsWorld> world, const std::string& modelPath,
 		const Vector3& startPosition, const Vector3& scale, const Vector3& rotationAxis, const float& rotationAngle);
 };

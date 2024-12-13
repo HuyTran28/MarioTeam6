@@ -19,7 +19,7 @@ void GameEngine::run()
 
 	GameData& gameData = GameData::getInstance();
 
-	btDiscreteDynamicsWorld* dynamicsWorld = gameData.getDynamicsWorld();
+	std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = gameData.getDynamicsWorld();
 
 
 	while (isRunning == true && !WindowShouldClose())

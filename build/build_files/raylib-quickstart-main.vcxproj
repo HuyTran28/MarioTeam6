@@ -344,11 +344,13 @@
     <ClCompile Include="..\..\src\Model\Player\PlayerData.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
     <ClCompile Include="..\..\src\View\LevelSelectView.cpp" />
     <ClCompile Include="..\..\src\View\LogInView.cpp" />
     <ClCompile Include="..\..\src\View\MenuView.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp" />
+    <ClCompile Include="..\..\src\View\StateView.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

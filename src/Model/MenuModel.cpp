@@ -20,6 +20,8 @@ MenuModel::MenuModel()
 	joyStickScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	joyStickRotationAngle = 180.0f;
 	joyStickRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
+	joystickBoundingBox.min = Vector3{ joyStickPos.x, joyStickPos.y - 10.0f, joyStickPos.z - 6.8f };
+	joystickBoundingBox.max = Vector3{ joyStickPos.x + 16.0f, joyStickPos.y + 9.0f, joyStickPos.z + 10.0f };
 
 	marioStatueModelPath = "../../Assets\\Models\\Princess Peach\\Peach2.glb";
 	marioStatueModel = LoadModel(marioStatueModelPath.c_str());
@@ -34,7 +36,9 @@ MenuModel::MenuModel()
 	playScale = Vector3{ 1.0f, 1.0f, 1.0f };
 	playRotationAngle = 180.0f;
 	playRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
-
+	playModelBoundingBox = GetModelBoundingBox(playModel);
+	playModelBoundingBox.min = Vector3Add(playModelBoundingBox.min, playPos);
+	playModelBoundingBox.max = Vector3Add(playModelBoundingBox.max, playPos);
 
 
     cameraInitialPosition = Vector3{ 0.0f, 20.0f, 0.0f };
@@ -91,6 +95,16 @@ MenuModel::MenuModel()
 Camera3D& MenuModel::getCamera()
 {
 	return camera;
+}
+
+BoundingBox& MenuModel::getJoystickBoundingBox()
+{
+	return joystickBoundingBox;
+}
+
+BoundingBox& MenuModel::getPlayModelBoundingBox()
+{
+	return playModelBoundingBox;
 }
 
 Model MenuModel::getJoyStickModelNoLogIn()

@@ -13,11 +13,10 @@ void Stage1View::render()
 
 	BeginDrawing();
 	ClearBackground(RAYWHITE);
-
 	
 	BeginMode3D(m_model->getCamera());
 
-	renderBlocks(map);
+	StateView::renderBlocks(map);
 	m_model->setCamera(m_model->getCamera());
 
 	EndMode3D();

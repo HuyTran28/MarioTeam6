@@ -17,7 +17,7 @@ public:
 	void setPlayerName(std::string playerName);
 	void setPlayerScore(int playerScore);
 	void setIsLogIn(bool isLogIn);
-	btDiscreteDynamicsWorld* getDynamicsWorld() const;
+	std::shared_ptr<btDiscreteDynamicsWorld> getDynamicsWorld() const;
 
 	~GameData();
 
@@ -27,9 +27,15 @@ private:
 	bool isLogIn;
 	GameData();
 
-	btDiscreteDynamicsWorld* m_dynamicsWorld;
-	btDefaultCollisionConfiguration* m_collisionConfiguration;
-	btCollisionDispatcher* m_dispatcher;
-	btBroadphaseInterface* m_overlappingPairCache;
-	btSequentialImpulseConstraintSolver* m_solver;
+	std::shared_ptr<btDiscreteDynamicsWorld> m_dynamicsWorld;
+	std::shared_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
+	std::shared_ptr<btCollisionDispatcher> m_dispatcher;
+	std::shared_ptr<btBroadphaseInterface> m_overlappingPairCache;
+	std::shared_ptr<btSequentialImpulseConstraintSolver> m_solver;
+
+	//btDiscreteDynamicsWorld* m_dynamicsWorld;
+	//btDefaultCollisionConfiguration* m_collisionConfiguration;
+	//btCollisionDispatcher* m_dispatcher;
+	//btBroadphaseInterface* m_overlappingPairCache;
+	//btSequentialImpulseConstraintSolver* m_solver;
 };

@@ -244,5 +244,7 @@
     <ClCompile Include="..\..\src\Factory\BlockFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
+    <ClCompile Include="..\..\src\View\StateView.cpp" />
   </ItemGroup>
 </Project>

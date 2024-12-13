@@ -26,20 +26,12 @@ void MenuView::render()
 
 	DrawModelEx(model->getLobbyModel(), model->getLobbyPos(), model->getLobbyRotationAxis(), model->getLobbyRotationAngle(), model->getLobbyScale(), WHITE);
 
-	if (GameData::getInstance().getIsLogIn())
-	{
-		DrawModelEx(model->getJoyStickModel(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
-	}
-	else {
-		DrawModelEx(model->getJoyStickModelNoLogIn(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
-	}
 
-	DrawModelEx(model->getPlayModel(), model->getPlayPos(), model->getPlayRotationAxis(), model->getPlayRotationAngle(), model->getPlayScale(), WHITE);
-
-	DrawModelEx(model->getMarioStatueModel(), model->getMarioStatuePos(), model->getMarioStatueRotationAxis(), model->getMarioStatueRotationAngle(), model->getMarioStatueScale(), WHITE);
 
 	std::shared_ptr<PlayerData> playerData = model->getPlayerData();
 	DrawModelEx(playerData->getPlayerModel(), playerData->getPlayerPos(), playerData->getPlayerRotationAxis(), playerData->getPlayerRotationAngle(), playerData->getPlayerScale(), WHITE);
+
+	drawAccessories();
 
 	EndMode3D();
 
@@ -68,6 +60,23 @@ void MenuView::update(std::shared_ptr<Event> event)
 		render();
 	}
 	render();
+}
+
+void MenuView::drawAccessories()
+{
+	if (GameData::getInstance().getIsLogIn())
+	{
+		Vector3 joyStickPos = model->getJoyStickPos();
+		joyStickPos.z += 2.0f;
+		DrawModelEx(model->getJoyStickModel(), joyStickPos, model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+	}
+	else {
+		DrawModelEx(model->getJoyStickModelNoLogIn(), model->getJoyStickPos(), model->getJoyStickRotationAxis(), model->getJoyStickRotationAngle(), model->getJoyStickScale(), WHITE);
+	}
+
+	DrawModelEx(model->getPlayModel(), model->getPlayPos(), model->getPlayRotationAxis(), model->getPlayRotationAngle(), model->getPlayScale(), WHITE);
+
+	DrawModelEx(model->getMarioStatueModel(), model->getMarioStatuePos(), model->getMarioStatueRotationAxis(), model->getMarioStatueRotationAngle(), model->getMarioStatueScale(), WHITE);
 }
 
 void MenuView::registerSelf()

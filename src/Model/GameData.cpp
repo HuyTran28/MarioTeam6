@@ -8,12 +8,12 @@ GameData::GameData()
 	isLogIn = false;
 
 
-	m_collisionConfiguration = new btDefaultCollisionConfiguration();
-	m_dispatcher = new btCollisionDispatcher(m_collisionConfiguration);
-	m_overlappingPairCache = new btDbvtBroadphase();
-	m_solver = new btSequentialImpulseConstraintSolver;
+	m_collisionConfiguration = std::make_shared<btDefaultCollisionConfiguration>();
+	m_dispatcher = std::make_shared<btCollisionDispatcher>(m_collisionConfiguration.get());
+	m_overlappingPairCache = std::make_shared<btDbvtBroadphase>();
+	m_solver = std::make_shared<btSequentialImpulseConstraintSolver>();
+	m_dynamicsWorld = std::make_shared<btDiscreteDynamicsWorld>(m_dispatcher.get(), m_overlappingPairCache.get(), m_solver.get(), m_collisionConfiguration.get());
 
-	m_dynamicsWorld = new btDiscreteDynamicsWorld(m_dispatcher, m_overlappingPairCache, m_solver, m_collisionConfiguration);
 	m_dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 }
 
@@ -53,7 +53,7 @@ void GameData::setIsLogIn(bool isLogIn)
 	this->isLogIn = isLogIn;
 }
 
-btDiscreteDynamicsWorld* GameData::getDynamicsWorld() const
+std::shared_ptr<btDiscreteDynamicsWorld> GameData::getDynamicsWorld() const
 {
 	return m_dynamicsWorld;
 }
@@ -62,9 +62,4 @@ btDiscreteDynamicsWorld* GameData::getDynamicsWorld() const
 GameData::~GameData()
 {
 	std::cout << "2\n";
-	delete m_dynamicsWorld;
-	delete m_solver;
-	delete m_overlappingPairCache;
-	delete m_dispatcher;
-	delete m_collisionConfiguration;
 }

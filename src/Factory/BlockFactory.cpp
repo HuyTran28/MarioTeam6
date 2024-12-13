@@ -1,6 +1,6 @@
 #include "BlockFactory.h"
 
-BlockData* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dynamicsWorld, const std::string& modelPath, const Vector3& startPosition, const Vector3& scale, const Vector3& rotationAxis, const float& rotationAngle)
+std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, const std::string& modelPath, const Vector3& startPosition, const Vector3& scale, const Vector3& rotationAxis, const float& rotationAngle)
 {
     auto it = ModelStage::listModels.find(modelPath);
     Model model = {};
@@ -31,7 +31,6 @@ BlockData* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dy
         (modelBounds.max.z - modelBounds.min.z) * scale.z * 0.5f
     };
 
-    // Thi?t l?p transform ban ??u và bù v? trí b?ng tâm Bounding Box
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setOrigin(btVector3(
@@ -41,16 +40,16 @@ BlockData* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dy
     ));
 
     // Create box shape based on model dimensions
-    btCollisionShape* blockShape = nullptr;
+    std::shared_ptr<btCollisionShape> blockShape = nullptr;
     if (type == BlockType::PipeBlock)
     {
-        blockShape = new btCylinderShape(btVector3(
+        blockShape = std::make_shared<btCylinderShape>(btVector3(
             halfExtents.x, halfExtents.y, halfExtents.z));
         blockShape->setMargin(0.05f);
     }
     else
     {
-        blockShape = new btBoxShape(btVector3(
+        blockShape = std::make_shared<btBoxShape> (btVector3(
             halfExtents.x, halfExtents.y, halfExtents.z
         ));
         blockShape->setMargin(0.1f);
@@ -63,33 +62,34 @@ BlockData* BlockFactory::createBlock(BlockType type, btDiscreteDynamicsWorld* dy
     blockShape->calculateLocalInertia(mass, localInertia);
 
 
-    btDefaultMotionState* motionState = new btDefaultMotionState(startTransform);
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState, blockShape, localInertia);
+    std::shared_ptr<btDefaultMotionState> motionState = std::make_shared<btDefaultMotionState>(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState.get(), blockShape.get(), localInertia);
 
-    btRigidBody* blockRigidBody = new btRigidBody(rbInfo);
+    std::shared_ptr<btRigidBody> blockRigidBody = std::make_shared<btRigidBody>(rbInfo);
 
     // Add block to the world
-    dynamicsWorld->addRigidBody(blockRigidBody);
+    dynamicsWorld->addRigidBody(blockRigidBody.get());
 
 
     switch (type)
     {
-    case BlockType::BrickBlock:
-        return new BrickBlock(blockRigidBody, "BrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::NormalBrickBlock:
-        return new NormalBrickBlock(blockRigidBody, "NormalBrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::PipeBlock:
-        return new PipeBlock(blockRigidBody, "PipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::QuestionBlock:
-        return new QuestionBlock(blockRigidBody, "QuestionBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::EmptyBlock:
-        return new EmptyBlock(blockRigidBody, "EmptyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::RouletteBlock:
-        return new RouletteBlock(blockRigidBody, "FakeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::SupportivePipeBlock:
-        return new SupportivePipeBLock(blockRigidBody, "SupportivePipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
-    case BlockType::FlyBlock:
-        return new FlyBlock(blockRigidBody, "FlyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::BrickBlock:
+		return std::make_shared<BrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "BrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::NormalBrickBlock:
+		return std::make_shared<NormalBrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "NormalBrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::PipeBlock:
+		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "PipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::QuestionBlock:
+		return std::make_shared<QuestionBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "QuestionBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::EmptyBlock:
+		return std::make_shared<EmptyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "EmptyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::RouletteBlock:
+		return std::make_shared<RouletteBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "RouletteBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::SupportivePipeBlock:
+		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "SupportivePipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+	case BlockType::FlyBlock:
+		return std::make_shared<FlyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "FlyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+
     default:
         nullptr;
     }

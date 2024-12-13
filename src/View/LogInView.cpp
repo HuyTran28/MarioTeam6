@@ -21,7 +21,7 @@ void LogInView::render()
 	BeginDrawing();
 	ClearBackground(RAYWHITE);
 
-	DrawTexture(model->getBackground(), 0, 0, WHITE);
+	DrawTexturePro(model->getBackground(), { 0.0f, 0.0f, (float)model->getBackground().width, (float)model->getBackground().height }, { 0.0f, 0.0f, 1900.0f, 1000.0f }, { 0.0f, 0.0f }, 0.0f, WHITE);
 
 	renderUsernameAndPassword();
 

@@ -6,11 +6,10 @@ BlockData::~BlockData()
     if (m_rigidBodyOfBlock && m_dynamicsWorld)
     {
         std::cout << "1\n";
-        m_dynamicsWorld->removeRigidBody(m_rigidBodyOfBlock);
+        btRigidBody* tmp = m_rigidBodyOfBlock.get();
+        m_dynamicsWorld->removeRigidBody(tmp);
     }
 
-    if(m_rigidBodyOfBlock)
-        delete m_rigidBodyOfBlock;
     m_rigidBodyOfBlock = nullptr;
 
     auto it = std::find_if(
@@ -25,12 +24,12 @@ BlockData::~BlockData()
 
 
 
-btDiscreteDynamicsWorld* BlockData::getDynamicsWorld() const
+std::shared_ptr<btDiscreteDynamicsWorld> BlockData::getDynamicsWorld() const
 {
     return m_dynamicsWorld;
 }
 
-btRigidBody* BlockData::getRigidBody() const
+std::shared_ptr<btRigidBody> BlockData::getRigidBody() const
 {
 	return m_rigidBodyOfBlock;
 }

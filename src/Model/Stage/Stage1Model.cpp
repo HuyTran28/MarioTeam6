@@ -5,7 +5,7 @@ Stage1Model::Stage1Model()
     m_width = 200;
     m_height = 2;
     m_depth = 9;
-    btDiscreteDynamicsWorld* dynamicsWorld = GameData::getInstance().getDynamicsWorld();
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
 
     const float size = 2.5f;
     const int middle = m_depth / 2;

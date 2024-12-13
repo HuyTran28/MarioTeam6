@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <raylib.h>
+#include <raymath.h>
 #include <memory>
 
 class MenuModel : public StateModel
@@ -31,6 +32,7 @@ private:
 	float joyStickRotationAngle;
 	std::string joyStickModelPath;
 	std::string joyStickModelPath2;
+	BoundingBox joystickBoundingBox;
 
 	BoundingBox lobbyBoundingBox[8];
 
@@ -47,6 +49,7 @@ private:
 	Vector3 playRotationAxis;
 	float playRotationAngle;
 	std::string playModelPath;
+	BoundingBox playModelBoundingBox;
 
 public:
 	MenuModel();
@@ -84,4 +87,6 @@ public:
 	Vector3 getPlayRotationAxis();
 	float getPlayRotationAngle();
 	std::string getPlayModelPath();
+	BoundingBox& getJoystickBoundingBox();
+	BoundingBox& getPlayModelBoundingBox();
 };
