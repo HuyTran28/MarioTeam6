@@ -27,6 +27,7 @@ private:
 	std::stack<std::shared_ptr<StateModel>> stateModelStack;
 	std::stack<std::shared_ptr<StateView>> stateViewStack;
 	std::stack<std::shared_ptr<StateController>> stateControllerStack;
+	std::stack<std::string> stateStack;
 public:
 	GameEngine();
 	void run();

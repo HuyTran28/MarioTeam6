@@ -253,6 +253,9 @@ std::shared_ptr<PlayerData> Stage1Model::getPlayerData() const
     return StageModel::getPlayerData();
 }
 
-
+std::shared_ptr<Button> Stage1Model::getPauseButton() const
+{
+	return StageModel::getPauseButton();
+}
 
 

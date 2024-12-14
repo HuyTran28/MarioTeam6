@@ -3,6 +3,11 @@
 GameEngine::GameEngine()
 {
 	isRunning = false;
+	isInit = false;
+	stateModel = nullptr;
+	stateView = nullptr;
+	stateController = nullptr;
+	curState = "";
 }
 
 
@@ -42,16 +47,49 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "State Change Event")
 	{
-		EventManager::getInstance().removeObserver(stateView);
-		EventManager::getInstance().removeObserver(stateController);
+		GameData::getInstance().setLastState(curState);
 
-		stateModelStack.push(stateModel);
-		stateViewStack.push(stateView);
-		stateControllerStack.push(stateController);
+		if (stateView != nullptr)
+			EventManager::getInstance().removeObserver(stateView);
+		if (stateController != nullptr)
+			EventManager::getInstance().removeObserver(stateController);
+
+		if (stateModel != nullptr)
+			stateModelStack.push(stateModel);
+		if (stateView != nullptr)
+			stateViewStack.push(stateView);
+		if (stateController != nullptr)
+		{
+			stateControllerStack.push(stateController);
+			stateStack.push(curState);
+		}
 
 		auto specificEvent = std::dynamic_pointer_cast<StateChangeEvent>(event);
-		std::string curState = specificEvent->getNewState();
+		curState = specificEvent->getNewState();
+
 		StateFactory::createMVC(curState, stateModel, stateView, stateController);
+	}
+	else if (event->getType() == "Back Event")
+	{
+		EventManager::getInstance().removeObserver(stateView);
+		EventManager::getInstance().removeObserver(stateController);
+		stateModel = stateModelStack.top();
+		stateView = stateViewStack.top();
+		stateController = stateControllerStack.top();
+		curState = stateStack.top();
+
+		stateModelStack.pop();
+		stateViewStack.pop();
+		stateControllerStack.pop();
+		stateStack.pop();
+
+		if (curState == "Menu")
+		{
+			DisableCursor();
+		}
+
+		EventManager::getInstance().addObserver(stateView);
+		EventManager::getInstance().addObserver(stateController);
 	}
 }
 

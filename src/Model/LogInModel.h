@@ -4,6 +4,7 @@
 #include <memory>
 #include "StateModel.h"
 #include <raylib.h>
+#include "../Button/Button.h"
 
 class LogInModel : public StateModel
 {
@@ -39,12 +40,8 @@ public:
 	Texture2D& getHidePassword();
 	Texture2D& getShowPassword();
 	float getHidePasswordScale();
-	Texture2D& getBackArrow();
-	Vector2 getBackArrowPosition();
-	float getBackArrowScale();
-	Texture2D& getNextArrow();
-	Vector2 getNextArrowPosition();
-	float getNextArrowScale();
+	std::shared_ptr<Button> getBackArrow();
+	std::shared_ptr<Button> getNextArrow();
 	std::string getFailedLoginMessage();
 	std::string getSuccessLoginMessage();
 
@@ -71,11 +68,7 @@ private:
 	bool isUsernameActive;
 	bool isPasswordActive;
 
-	Texture2D backArrow;
-	Vector2 backArrowPosition;
-	float backArrowScale;
+	std::shared_ptr<Button> backArrow;
 
-	Texture2D nextArrow;
-	Vector2 nextArrowPosition;
-	float nextArrowScale;
+	std::shared_ptr<Button> nextArrow;
 };

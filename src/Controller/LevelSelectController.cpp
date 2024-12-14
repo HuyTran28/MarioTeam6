@@ -50,7 +50,7 @@ void LevelSelectController::updateMouse()
 		}
 		if (StateController::isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
 		{
-			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
+			EventManager::getInstance().notify(std::make_shared<BackEvent>());
 			return;
 		}
 	}

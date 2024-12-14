@@ -16,6 +16,9 @@
 #include "../View/Stage/Stage1View.h"
 #include "../Model/Stage/Stage1Model.h"
 #include "../Controller/Stage1Controller.h"
+#include "../View/PauseView.h"
+#include "../Model/Pause.h"
+#include "../Controller/PauseController.h"
 
 
 class StateFactory

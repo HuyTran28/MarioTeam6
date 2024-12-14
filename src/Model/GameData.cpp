@@ -58,6 +58,16 @@ std::shared_ptr<btDiscreteDynamicsWorld> GameData::getDynamicsWorld() const
 	return m_dynamicsWorld;
 }
 
+std::string GameData::getLastState()
+{
+	return lastState;
+}
+
+void GameData::setLastState(std::string lastState)
+{
+	this->lastState = lastState;
+}
+
 
 GameData::~GameData()
 {

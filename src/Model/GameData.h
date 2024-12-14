@@ -18,6 +18,8 @@ public:
 	void setPlayerScore(int playerScore);
 	void setIsLogIn(bool isLogIn);
 	std::shared_ptr<btDiscreteDynamicsWorld> getDynamicsWorld() const;
+	std::string getLastState();
+	void setLastState(std::string lastState);
 
 	~GameData();
 
@@ -25,6 +27,7 @@ private:
 	std::string playerName;
 	int playerScore;
 	bool isLogIn;
+	std::string lastState;
 	GameData();
 
 	std::shared_ptr<btDiscreteDynamicsWorld> m_dynamicsWorld;

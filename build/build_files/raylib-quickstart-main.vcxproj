@@ -268,13 +268,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Button\Button.h" />
     <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
     <ClInclude Include="..\..\src\Controller\LevelSelectController.h" />
     <ClInclude Include="..\..\src\Controller\LogInController.h" />
     <ClInclude Include="..\..\src\Controller\MenuController.h" />
+    <ClInclude Include="..\..\src\Controller\PauseController.h" />
     <ClInclude Include="..\..\src\Controller\Stage1Controller.h" />
     <ClInclude Include="..\..\src\Controller\StageController.h" />
     <ClInclude Include="..\..\src\Controller\StateController.h" />
+    <ClInclude Include="..\..\src\Event\BackEvent.h" />
     <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
@@ -306,6 +309,7 @@
     <ClInclude Include="..\..\src\Model\MapData.h" />
     <ClInclude Include="..\..\src\Model\MenuModel.h" />
     <ClInclude Include="..\..\src\Model\ModelEngine.h" />
+    <ClInclude Include="..\..\src\Model\Pause.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h" />
     <ClInclude Include="..\..\src\Model\Stage\StageModel.h" />
@@ -315,6 +319,7 @@
     <ClInclude Include="..\..\src\View\LevelSelectView.h" />
     <ClInclude Include="..\..\src\View\LogInView.h" />
     <ClInclude Include="..\..\src\View\MenuView.h" />
+    <ClInclude Include="..\..\src\View\PauseView.h" />
     <ClInclude Include="..\..\src\View\Stage\Stage1View.h" />
     <ClInclude Include="..\..\src\View\Stage\Stage2View.h" />
     <ClInclude Include="..\..\src\View\StateView.h" />
@@ -328,10 +333,12 @@
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Button\Button.cpp" />
     <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
     <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp" />
     <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
     <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
+    <ClCompile Include="..\..\src\Controller\PauseController.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp" />
     <ClCompile Include="..\..\src\Controller\StageController.cpp" />
     <ClCompile Include="..\..\src\Controller\StateController.cpp" />
@@ -350,12 +357,14 @@
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
+    <ClCompile Include="..\..\src\Model\Pause.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
     <ClCompile Include="..\..\src\View\LevelSelectView.cpp" />
     <ClCompile Include="..\..\src\View\LogInView.cpp" />
     <ClCompile Include="..\..\src\View\MenuView.cpp" />
+    <ClCompile Include="..\..\src\View\PauseView.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp" />
     <ClCompile Include="..\..\src\View\StateView.cpp" />

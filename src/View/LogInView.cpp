@@ -25,10 +25,8 @@ void LogInView::render()
 
 	renderUsernameAndPassword();
 
-	DrawTextureEx(model->getBackArrow(), model->getBackArrowPosition(), 0.0f, model->getBackArrowScale(), WHITE);
-
-	DrawTextureEx(model->getNextArrow(), model->getNextArrowPosition(), 0.0f, model->getNextArrowScale(), WHITE);
-
+	model->getBackArrow()->draw();
+	model->getNextArrow()->draw();
 	EndDrawing();
 }
 

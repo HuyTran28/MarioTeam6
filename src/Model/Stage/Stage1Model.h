@@ -20,4 +20,5 @@ public:
 	std::shared_ptr<Mario> createMarioModel();
 	const std::vector<std::shared_ptr<BlockData>>& getMap() const;
 	std::shared_ptr<PlayerData> getPlayerData() const;
+	std::shared_ptr<Button> getPauseButton() const;
 };

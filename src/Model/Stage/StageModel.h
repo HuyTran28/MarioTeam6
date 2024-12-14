@@ -6,6 +6,8 @@
 #include <vector>
 #include "../StateModel.h"
 #include "../../Model/Character/PlayerData.h"
+#include "../../Button/Button.h"
+
 constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
 constexpr char PATH_CASTLEBLOCK[] = "../../Assets\\Models\\Platforms\\CastleBlock.glb";
 constexpr char PATH_MANMABLOCK[] = "../../Assets\\Models\\Platforms\\ManmaBlock.glb";
@@ -29,9 +31,11 @@ public:
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
 	std::shared_ptr<PlayerData> getPlayerData() const;
+	std::shared_ptr<Button> getPauseButton() const;
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 
 	std::shared_ptr<PlayerData> m_playerData;
+	std::shared_ptr<Button> m_pause;
 };

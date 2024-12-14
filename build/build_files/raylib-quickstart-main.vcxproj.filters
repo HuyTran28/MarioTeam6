@@ -99,9 +99,6 @@
     <ClInclude Include="..\..\src\Model\GameData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Model\Player\PlayerData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Model\LevelSelectModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -162,6 +159,16 @@
     <ClInclude Include="..\..\src\Factory\BlockFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Controller\StageController.h" />
+    <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
+    <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
+    <ClInclude Include="..\..\src\Model\Character\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\Character\Player\Mario.h" />
+    <ClInclude Include="..\..\src\Event\BackEvent.h" />
+    <ClInclude Include="..\..\src\Model\Pause.h" />
+    <ClInclude Include="..\..\src\Button\Button.h" />
+    <ClInclude Include="..\..\src\View\PauseView.h" />
+    <ClInclude Include="..\..\src\Controller\PauseController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb">
@@ -205,9 +212,6 @@
     <ClCompile Include="..\..\src\Controller\LogInController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Model\Player\PlayerData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Model\GameData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -246,5 +250,14 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
     <ClCompile Include="..\..\src\View\StateView.cpp" />
+    <ClCompile Include="..\..\src\Controller\StageController.cpp" />
+    <ClCompile Include="..\..\src\Controller\StateController.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\Player\Mario.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\Button\Button.cpp" />
+    <ClCompile Include="..\..\src\Model\Pause.cpp" />
+    <ClCompile Include="..\..\src\View\PauseView.cpp" />
+    <ClCompile Include="..\..\src\Controller\PauseController.cpp" />
   </ItemGroup>
 </Project>

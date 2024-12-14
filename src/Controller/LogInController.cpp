@@ -72,16 +72,18 @@ void LogInController::updateMouse()
 	{
 		model->setIsHidenPassword(!model->getIsHidenPassword());
 	}
-	if (StateController::isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
+	if (model->getBackArrow()->isClicked(GetMousePosition()) == true)
 	{
-		EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
+		EventManager::getInstance().notify(std::make_shared<BackEvent>());
+		return;
 	}
-	if (StateController::isIconClicked(model->getNextArrow(), model->getNextArrowPosition(), model->getNextArrowScale()))
+	if (model->getNextArrow()->isClicked(GetMousePosition()) == true)
 	{
 		if (checkCredentials())
 		{
 			GameData::getInstance().setIsLogIn(true);
-			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Menu"));
+			EventManager::getInstance().notify(std::make_shared<BackEvent>());
+			return;
 		}
 		else
 		{

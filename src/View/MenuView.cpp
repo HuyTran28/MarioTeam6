@@ -7,6 +7,7 @@ MenuView::MenuView() : MenuView(std::make_shared<MenuModel>())
 MenuView::MenuView(std::shared_ptr<MenuModel> model)
 {
 	DisableCursor();
+
 	this->model = model;
 }
 
