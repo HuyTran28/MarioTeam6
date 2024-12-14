@@ -1,4 +1,4 @@
-#include "Stage1View.h"
+﻿#include "Stage1View.h"
 #include <iostream>
 
 Stage1View::Stage1View()
@@ -17,6 +17,25 @@ void Stage1View::render()
     std::shared_ptr<Mario> marioModel = std::dynamic_pointer_cast<Mario>(m_model->getPlayerData());
     UpdateCamera(&(m_model->getCamera()), CAMERA_FIRST_PERSON);
 
+    Camera3D& camera = m_model->getCamera();
+
+    // Cập nhật vị trí camera dựa trên vị trí của Mario
+    Vector3 cameraOffset = { 10.0f, 15.0f, 30.0f }; // Offset phía sau và trên đầu người chơi
+    camera.position = Vector3Add(marioModel->getPlayerPos(), cameraOffset);
+    camera.target = marioModel->getPlayerPos();  // Camera luôn hướng về Mario
+
+    // Zoom camera theo chuột
+    float zoomSpeed = 5.0f;
+    camera.fovy -= GetMouseWheelMove() * zoomSpeed;
+
+    // Giới hạn góc nhìn FOV (Field of View)
+    if (camera.fovy < 10.0f) camera.fovy = 10.0f; // Giới hạn zoom gần
+    if (camera.fovy > 90.0f) camera.fovy = 90.0f; // Giới hạn zoom xa
+
+    // Cập nhật camera
+    UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+
+
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
@@ -25,27 +44,20 @@ void Stage1View::render()
 
     StateView::renderBlocks(map);
 
-    renderBlocks(map);
-
     DrawModelEx(marioModel->getPlayerModel(), marioModel->getPlayerPos(), marioModel->getPlayerRotationAxis(), marioModel->getPlayerRotationAngle(),
         marioModel->getPlayerScale(), WHITE);
 
     m_model->setCamera(m_model->getCamera());
-    m_model->getPlayerData()->getRigidBody();
+    
 
 
     btCollisionShape* shape = m_model->getPlayerData()->getRigidBody()->getCollisionShape();
-
-
     btTransform transform;
     m_model->getPlayerData()->getRigidBody()->getMotionState()->getWorldTransform(transform);
-
-
     btVector3 origin = transform.getOrigin();
     btQuaternion rotation = transform.getRotation();
     Vector3 boxPosition = { origin.getX(), origin.getY(), origin.getZ() };
     Quaternion boxRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
-
     if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
         btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
         btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();

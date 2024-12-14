@@ -218,3 +218,35 @@ bool StageController::checkGroundCollision(std::shared_ptr<Mario> marioData)
 void StageController::playAnimation(int animationIndex)
 {
 }
+
+
+void StageController::updateAnimationState(std::shared_ptr<Mario> marioData)
+{
+    btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
+
+    if (!(marioData->getIsOnGround())) {
+        // Check if the player is moving horizontally while airborne
+        if (currentVelocity.length2() > 0.1f && fabs(currentVelocity.getY()) > 0.01f) {
+            marioData->getAnimarionManager()->playAnimation(3);
+        }
+        else if (currentVelocity.getY() > 0.0f) {
+
+            marioData->getAnimarionManager()->playAnimation(3);
+        }
+    }
+    else {
+
+        // Player is grounded
+        if (currentVelocity.length() > 0.1f) {
+
+            marioData->getAnimarionManager()->playAnimation(4); // Play the walking animation
+        }
+        else {
+
+            marioData->getAnimarionManager()->playAnimation(2); // Play the idle animation
+        }
+    }
+
+    // Update the animation frame based on the player's movement
+    marioData->getAnimarionManager()->updateAnimation(GetFrameTime());
+}

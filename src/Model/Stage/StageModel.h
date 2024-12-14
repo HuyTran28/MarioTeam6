@@ -19,7 +19,7 @@ constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb"
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
 
 
-
+#include <iostream>
 class StageModel : public StateModel
 {
 public:
@@ -32,6 +32,14 @@ public:
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
-
 	std::shared_ptr<PlayerData> m_playerData;
+
+	void initializeCamera() {		
+		m_cameraInitialPosition = m_playerData->getPlayerPos();
+		m_camera.position = m_cameraInitialPosition;
+		m_camera.target = m_playerData->getPlayerPos();
+		m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };
+		m_camera.fovy = 45.0f;
+		m_camera.projection = CAMERA_PERSPECTIVE;
+	}
 };

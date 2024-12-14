@@ -1,19 +1,20 @@
 #include "StageModel.h"
 #include <iostream>
-StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
+StageModel::StageModel(std::shared_ptr<PlayerData> playerData) 
 {
     m_playerData = playerData;
+    initializeCamera();
 }
 
 StageModel::StageModel()
 {
 
-    m_cameraInitialPosition = Vector3{ 0.0f, 20.0f, 20.0f };
-    m_camera.position = m_cameraInitialPosition;
-    m_camera.target = Vector3{ 0.0f, 0.0f, 0.0f };
-    m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };
-    m_camera.fovy = 30.0f;
-    m_camera.projection = CAMERA_PERSPECTIVE;
+    //m_cameraInitialPosition = m_playerData->getPlayerPos();
+    //m_camera.position = m_cameraInitialPosition;
+    //m_camera.target = m_playerData->getPlayerPos();
+    //m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };
+    //m_camera.fovy = 30.0f;
+    //m_camera.projection = CAMERA_PERSPECTIVE;
 }
 
 Camera3D& StageModel::getCamera()

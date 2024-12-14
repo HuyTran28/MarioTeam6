@@ -17,7 +17,7 @@ protected:
 	std::shared_ptr<btDefaultMotionState> m_motionState;
 	Vector3 m_velocity;
 	bool m_isOnGround;
-	std::unique_ptr<AnimationManager> m_animationManager; // Composition
+	std::shared_ptr<AnimationManager> m_animationManager; // Composition
 
 
 	Vector3 playerPos;
@@ -50,7 +50,7 @@ public:
 	Vector3 getVelocity() const;
 	std::shared_ptr<btRigidBody> getRigidBody() const;
 	std::shared_ptr<btDynamicsWorld> getWorld() const;
-
+	std::shared_ptr<AnimationManager> getAnimarionManager() const;
 
 	void setPlayerPos(Vector3 playerPos);
 	void setPlayerHealth(int playerHealth);

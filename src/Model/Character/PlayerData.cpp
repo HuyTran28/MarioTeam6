@@ -76,6 +76,11 @@ std::shared_ptr<btDynamicsWorld> PlayerData::getWorld() const
 	return m_dynamicsWorld;
 }
 
+std::shared_ptr<AnimationManager> PlayerData::getAnimarionManager() const
+{
+	return m_animationManager;
+}
+
 void PlayerData::setPlayerScale(Vector3 playerScale)
 {
 	this->playerScale = playerScale;
@@ -203,7 +208,7 @@ PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<b
 
 
 	playerModel.transform = MatrixScale(scale.x, scale.y, scale.z);
-	//m_animationManager = std::make_unique<AnimationManager>(playerModel, modelPath.c_str());
+	m_animationManager = std::make_unique<AnimationManager>(playerModel, modelPath.c_str());
 
 	btTransform trans;
 	m_rigidBody->getMotionState()->getWorldTransform(trans);
