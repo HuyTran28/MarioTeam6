@@ -21,7 +21,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	if (event->getType() == "Tick Event")
 	{
 		updateMovementOfMario(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
-		//updateAnimationState(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
+		updateAnimationState(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
 		updateMouse();
 	}
 

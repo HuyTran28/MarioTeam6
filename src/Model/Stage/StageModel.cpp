@@ -8,7 +8,7 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
 
 StageModel::StageModel()
 {
-    m_cameraInitialPosition = Vector3{ 0.0f, 20.0f, 20.0f };
+    m_cameraInitialPosition = Vector3{ 0.0f, 20.0f, 40.0f };
     m_camera.position = m_cameraInitialPosition;
     m_camera.target = Vector3{ 0.0f, 0.0f, 0.0f };
     m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };

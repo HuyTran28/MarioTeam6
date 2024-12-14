@@ -3,6 +3,46 @@
 Stage1Model::Stage1Model() : StageModel(createMarioModel())
 {
     m_map = createMap();
+
+	cloudScales = { 1.0f, 1.0f, 1.0f };
+	cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
+    Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
+
+
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, 25.0f, -60.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, -120.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 12; i++)
+    {
+        Vector3 cloud1Position = { -60.0f + 30.0f * i, 40.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+
+	hills = LoadModel("../../Assets\\Models\\mountain.glb");
+	hillsPosition = { 80.0f, -80.0f, -100.0f };
+	hillsScale = { 2.0f, 2.0f, 2.0f };
+	hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
+	hillsRotationAngle = 0.0f;
+
 }
 
 
@@ -257,5 +297,59 @@ std::shared_ptr<Button> Stage1Model::getPauseButton() const
 {
 	return StageModel::getPauseButton();
 }
+
+std::vector<Model> Stage1Model::getClouds() const
+{
+	return clouds;
+}
+
+std::vector<Vector3> Stage1Model::getCloudPositions() const
+{
+	return cloudPositions;
+}
+
+Vector3 Stage1Model::getCloudScales() const
+{
+	return cloudScales;
+}
+
+Vector3 Stage1Model::getCloudRotationsAxis() const
+{
+	return cloudRotationsAxis;
+}
+
+std::vector<float> Stage1Model::getCloudRotationsAngle() const
+{
+	return cloudRotationsAngle;
+}
+
+Model Stage1Model::getHills() const
+{
+	return hills;
+}
+
+Vector3 Stage1Model::getHillsPosition() const
+{
+	return hillsPosition;
+}
+
+Vector3 Stage1Model::getHillsScale() const
+{
+	return hillsScale;
+}
+
+Vector3 Stage1Model::getHillsRotationAxis() const
+{
+	return hillsRotationAxis;
+}
+
+float Stage1Model::getHillsRotationAngle() const
+{
+	return hillsRotationAngle;
+}
+
+
+
+
 
 

@@ -15,36 +15,39 @@ void Stage1View::render()
 
     std::vector<std::shared_ptr<BlockData>> map = m_model->getMap();
     std::shared_ptr<Mario> marioModel = std::dynamic_pointer_cast<Mario>(m_model->getPlayerData());
-    UpdateCamera(&(m_model->getCamera()), CAMERA_FIRST_PERSON);
+    //UpdateCamera(&(m_model->getCamera()), CAMERA_FIRST_PERSON);
 
     Camera3D& camera = m_model->getCamera();
 
-    // Cập nhật vị trí camera dựa trên vị trí của Mario
-    Vector3 cameraOffset = { 10.0f, 15.0f, 30.0f }; // Offset phía sau và trên đầu người chơi
+    Vector3 cameraOffset = { 0.0f, 10.0f, 40.0f };
     camera.position = Vector3Add(marioModel->getPlayerPos(), cameraOffset);
-    camera.target = marioModel->getPlayerPos();  // Camera luôn hướng về Mario
+    camera.target = marioModel->getPlayerPos();  
 
-    // Zoom camera theo chuột
     float zoomSpeed = 5.0f;
     camera.fovy -= GetMouseWheelMove() * zoomSpeed;
 
-    // Giới hạn góc nhìn FOV (Field of View)
-    if (camera.fovy < 10.0f) camera.fovy = 10.0f; // Giới hạn zoom gần
-    if (camera.fovy > 90.0f) camera.fovy = 90.0f; // Giới hạn zoom xa
+    if (camera.fovy < 10.0f) camera.fovy = 10.0f; 
+    if (camera.fovy > 90.0f) camera.fovy = 90.0f; 
 
-    // Cập nhật camera
-    UpdateCamera(&camera, CAMERA_FIRST_PERSON);
+    UpdateCamera(&camera, CAMERA_CUSTOM);
 
 
     BeginDrawing();
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLUE);
 
     BeginMode3D(m_model->getCamera());
 
 
     StateView::renderBlocks(map);
 
-	std::cout << "Mario position: " << marioModel->getPlayerPos().x << " " << marioModel->getPlayerPos().y << " " << marioModel->getPlayerPos().z << std::endl;
+    for (int i = 0; i < m_model->getClouds().size(); i++) {
+		DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
+    }
+
+	DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
+
+	std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << std::endl;
+
 
     DrawModelEx(marioModel->getPlayerModel(), marioModel->getPlayerPos(), marioModel->getPlayerRotationAxis(), marioModel->getPlayerRotationAngle(),
         marioModel->getPlayerScale(), WHITE);
