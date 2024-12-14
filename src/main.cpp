@@ -56,7 +56,7 @@ int main()
     Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.7f, &patrolling1);
     
     PatrollingEnemyAttributes patrolling({ 10, 4, 3 }, { 20, 4, 3 });
-    Enemy* goomba = EnemyFactory::createEnemy(EnemyType::Patrolling, dynamicsWorld, "Assets/Models/Characters/Goomba.glb", { 10, 4, 3}, { 0, 0, 1 }, 5.0f, 0.7f, &patrolling);
+    Enemy* goomba = EnemyFactory::createEnemy(EnemyType::Patrolling, dynamicsWorld, "Assets/Models/Characters/Goomba.glb", { 10, 4, 3}, { 0, 0, 1 }, 5.0f, 0.8f, &patrolling);
     
     while (!WindowShouldClose())
     {

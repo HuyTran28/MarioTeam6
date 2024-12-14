@@ -14,23 +14,23 @@ Player::Player(btRigidBody* rigidBody, string modelPath, const Vector3& forwardD
 
 Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& modelPath, const Vector3& startPosition,
     const Vector3& forwardDir, float speed, float scale, float jumpForce, int health) {
-    
+
+    // Load the model
     Model playerModel = LoadModel(modelPath.c_str());
     BoundingBox modelBounds = GetModelBoundingBox(playerModel);
 
-    // Calculate the arm span (distance along the X-axis)
-    float armSpan = (modelBounds.max.x - modelBounds.min.x) * scale;
+    // Calculate dimensions of the model's bounding box
+    float width = (modelBounds.max.x - modelBounds.min.x) * scale;  // Width (X-axis)
+    float height = (modelBounds.max.y - modelBounds.min.y) * scale; // Height (Y-axis)
+    float depth = (modelBounds.max.z - modelBounds.min.z) * scale;  // Depth (Z-axis)
 
-    // Set the capsule radius to half the arm span
-    float radius = armSpan * 0.5f - 0.2f;
+    // Determine the capsule radius and height
+    float radius = std::min(width, depth) * 0.5f; // Use the smaller of width or depth for a tighter fit
+    float capsuleHeight = height - 1.2f * radius; // Exclude the spherical caps from the height
 
-    // Calculate height of the capsule based on the model's bounding box
-    float height = (modelBounds.max.y - modelBounds.min.y) * scale - 1.0f; // Height of the model
-
-    // Adjust height to exclude spherical parts of the capsule
-    float capsuleHeight = height - radius;
-    if (capsuleHeight < 0) {
-        capsuleHeight = 0; // Prevent negative height
+    // Ensure capsule height is non-negative
+    if (capsuleHeight < 0.0f) {
+        capsuleHeight = 0.0f;
     }
 
     // Define initial transformation for the player
@@ -40,8 +40,9 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
 
     // Create capsule shape
     btCollisionShape* playerShape = new btCapsuleShape(radius, capsuleHeight);
+    playerShape->setMargin(0.05f); // Collision margin for stability
 
-    // Physics body setup remains the same
+    // Set up the physics body
     btScalar mass = 75.0f;
     btVector3 localInertia(0, 0, 0);
     playerShape->calculateLocalInertia(mass, localInertia);
@@ -54,8 +55,10 @@ Player* Player::createPlayer(btDiscreteDynamicsWorld* world, const std::string& 
     // Add the player to the physics world
     world->addRigidBody(playerRigidBody);
 
+    // Return a new player instance
     return new Player(playerRigidBody, modelPath, forwardDir, startPosition, speed, scale, jumpForce, health, world);
 }
+
 
 void Player::move() {
     btVector3 desiredVelocity(0, 0, 0);
@@ -106,7 +109,7 @@ void Player::rotate() {
 void Player::jump() {
     float invGravity = 1.0f / -m_dynamicsWorld->getGravity().getY();
 
-    if (m_isOnGround && IsKeyDown(KEY_SPACE)) {
+    if (m_isOnGround && IsKeyPressed(KEY_SPACE)) {
         m_isJumping = true;      // Start the jump
         m_jumpTimer = 0.0f;      // Reset the jump timer
         m_isOnGround = false;    // Player is now airborne
@@ -146,41 +149,93 @@ void Player::jump() {
 }
 
 void Player::updateAnimationState() {
-    btVector3 currentVelocity = m_rigidBody->getLinearVelocity();
+    switch (m_animationState) {
+    case PlayerAnimationState::IDLE:
+        m_animationManager->playAnimation(3); // Idle animation
+        break;
+
+    case PlayerAnimationState::WALKING:
+        m_animationManager->playAnimation(6); // Walking animation
+        break;
+
+    case PlayerAnimationState::JUMPING:
+        m_animationManager->playAnimation(4); // Jumping animation
+        break;
+
+    case PlayerAnimationState::FALLING:
+        m_animationManager->playAnimation(1); // Falling animation
+        break;
+
+    case PlayerAnimationState::HIT:
+        m_animationManager->playAnimation(2); // Hit reaction animation
+        break;
+    case PlayerAnimationState::DIE:
+        m_animationManager->playAnimation(0); // Death animation
+        break;
+    }
+    // Update the animation frame
+    m_animationManager->updateAnimation(GetFrameTime());
+}
+
+void Player::updatePlayerAnimationState() {
+    if (m_animationState == PlayerAnimationState::DIE) {
+        return;
+    }
+
+    btVector3 velocity = m_rigidBody->getLinearVelocity();
+
+    if (m_isInvincible && m_animationState == PlayerAnimationState::HIT) {
+        return; // Stay in HIT animation during invincibility
+    }
 
     if (!m_isOnGround) {
-        // Check if the player is moving horizontally while airborne
-        if (currentVelocity.length2() > 0.1f && fabs(currentVelocity.getY()) > 0.01f) {
-         
-            m_animationManager->playAnimation(3); // Play the jump move animation
+        if (velocity.getY() > 0.0f) {
+            m_animationState = PlayerAnimationState::JUMPING;
         }
-        else if (currentVelocity.getY() > 0.0f) {
-       
-            m_animationManager->playAnimation(3); // Play the jump animation
+        else {
+            m_animationState = PlayerAnimationState::FALLING;
         }
     }
     else {
-        
-        // Player is grounded
-        if (currentVelocity.length() > 0.1f) {
-            
-            m_animationManager->playAnimation(4); // Play the walking animation
+        if (velocity.length() > 0.1f) {
+            m_animationState = PlayerAnimationState::WALKING;
         }
         else {
-            
-            m_animationManager->playAnimation(2); // Play the idle animation
+            m_animationState = PlayerAnimationState::IDLE;
         }
     }
-
-    // Update the animation frame based on the player's movement
-    m_animationManager->updateAnimation(GetFrameTime());
 }
 
 
 
+
+void Player::startInvincibility() {
+	m_isInvincible = true;
+	m_invincibilityTimer = m_invincibilityDuration;
+}
+
+bool Player::isInvincible() const {
+	return m_isInvincible;
+}
+
+void Player::updateInvincibilityTimer() {
+    if (m_isInvincible) {
+        m_invincibilityTimer -= GetFrameTime();
+        if (m_invincibilityTimer <= 0.0f) {
+            m_isInvincible = false;
+
+            // Reset animation state if it was HIT
+            if (m_animationState == PlayerAnimationState::HIT) {
+                m_animationState = m_isOnGround ? PlayerAnimationState::IDLE : PlayerAnimationState::FALLING;
+            }
+        }
+    }
+}
+
+
 void Player::update() {
     m_isOnGround = checkGroundCollision();  // Update grounded state
-	
+
     if (!m_isOnGround) {
         // Apply gravity
         btVector3 velocity = m_rigidBody->getLinearVelocity();
@@ -205,14 +260,17 @@ void Player::update() {
 
     move();    // Update movement
     rotate();  // Update rotation
-    jump();  // Handle jumping
+    jump();    // Handle jumping
 
     updateCollisionShape();  // Update collision shape
     updateModelTransform();  // Synchronize model with physics body
 
-	btVector3 playerVelocity = m_rigidBody->getLinearVelocity();
-	updateAnimationState();  // Update animation state
+    btVector3 playerVelocity = m_rigidBody->getLinearVelocity();
+    updatePlayerAnimationState(); // Determine the animation state
+    updateAnimationState();       // Update animations
+    updateInvincibilityTimer();   // Update invincibility timer
 }
+
 
 
 
@@ -237,10 +295,21 @@ void Player::handleJumpOnEnemy() {
 }
 
 void Player::handleTouchEnemy() {
+    if (m_isInvincible) return;
+
 	m_health -= 10;
+	
     if (m_health <= 0) {
 		// Player is dead
+        m_animationState = PlayerAnimationState::DIE;
 	}
+	else {
+		// Player is hit
+		startInvincibility();
+        m_animationState = PlayerAnimationState::HIT; // Trigger hit animation
+    }
+    
+	std::cout << "Player health: " << m_health << std::endl;
 }
 
 Player::~Player() {

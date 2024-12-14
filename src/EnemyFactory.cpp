@@ -10,17 +10,18 @@ Enemy* EnemyFactory::createEnemy(EnemyType type, btDiscreteDynamicsWorld* world,
     Model model = LoadModel(modelPath.c_str());
     BoundingBox modelBounds = GetModelBoundingBox(model);
 
-    // Calculate the arm span (distance along the X-axis)
+    // Calculate the arm span (distance along the X-axis) and depth (Z-axis)
     float armSpan = (modelBounds.max.x - modelBounds.min.x) * scale;
+    float depth = (modelBounds.max.z - modelBounds.min.z) * scale;
 
-    // Set the capsule radius to half the arm span
-    float radius = armSpan * 0.5f - 0.2f;
+    // Set the capsule radius to a fraction of the smaller of armSpan and depth
+    float radius = std::min(armSpan, depth) * 0.4f; // Adjust the multiplier for tighter fit
 
     // Calculate height of the capsule based on the model's bounding box
-    float height = (modelBounds.max.y - modelBounds.min.y) * scale; // Height of the model
+    float height = (modelBounds.max.y - modelBounds.min.y) * scale;
 
     // Adjust height to exclude spherical parts of the capsule
-    float capsuleHeight = height - radius;
+    float capsuleHeight = height - 2 * radius;
     if (capsuleHeight < 0) {
         capsuleHeight = 0; // Prevent negative height
     }

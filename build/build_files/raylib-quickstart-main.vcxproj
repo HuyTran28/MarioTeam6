@@ -302,6 +302,7 @@
     <ClInclude Include="..\..\src\PatrollingEnemy.h" />
     <ClInclude Include="..\..\src\PipeBlock.h" />
     <ClInclude Include="..\..\src\Player.h" />
+    <ClInclude Include="..\..\src\PlayerAnimationStates.h" />
     <ClInclude Include="..\..\src\QuestionBlock.h" />
     <ClInclude Include="..\..\src\RouletteBlock.h" />
     <ClInclude Include="..\..\src\Stage.h" />
