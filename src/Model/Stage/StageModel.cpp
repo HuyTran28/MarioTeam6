@@ -3,6 +3,7 @@
 StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
 {
     m_playerData = playerData;
+    initializeCamera();
 }
 
 StageModel::StageModel()
