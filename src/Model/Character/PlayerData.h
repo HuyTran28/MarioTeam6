@@ -7,11 +7,14 @@
 #include <memory>
 #include "../../Event/CollisionEvent.h"
 #include "raymath.h"
+
 class PlayerData
 {
 protected:
-	btDynamicsWorld* m_dynamicsWorld;  // Store the dynamics world
-	btRigidBody* m_rigidBody;
+	std::shared_ptr<btDynamicsWorld> m_dynamicsWorld;  // Store the dynamics world
+	std::shared_ptr<btRigidBody> m_rigidBody;
+	std::shared_ptr<btCollisionShape> m_collisionShape;
+	std::shared_ptr<btDefaultMotionState> m_motionState;
 	Vector3 m_velocity;
 	bool m_isOnGround;
 	std::unique_ptr<AnimationManager> m_animationManager; // Composition
@@ -33,8 +36,8 @@ protected:
 public:
 	PlayerData();
 	PlayerData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
-	PlayerData(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
-		, const Vector3& rotaionAxis, float rotationAngle, const float& speed, btDynamicsWorld* world);
+	PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
+		, const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
 
 	Vector3 getPlayerPos() const;
 	int getPlayerHealth() const;
@@ -45,8 +48,8 @@ public:
 	float getPlayerRotationAngle() const;
 	float getMoveSpeed() const;
 	Vector3 getVelocity() const;
-	btRigidBody* getRigidBody() const;
-	btDynamicsWorld* getWorld() const;
+	std::shared_ptr<btRigidBody> getRigidBody() const;
+	std::shared_ptr<btDynamicsWorld> getWorld() const;
 
 
 	void setPlayerPos(Vector3 playerPos);

@@ -5,7 +5,7 @@
 #include "../Event/EventManager.h"
 #include "StageController.h"
 
-class Stage1Controller : public StageController,public std::enable_shared_from_this<Stage1Controller>
+class Stage1Controller : public StageController, public std::enable_shared_from_this<Stage1Controller>
 {
 public:
 	Stage1Controller();
@@ -15,5 +15,4 @@ public:
 
 private:
 	std::shared_ptr<Stage1Model> model;
-
 };

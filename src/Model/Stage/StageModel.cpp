@@ -4,6 +4,7 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
 {
     m_playerData = playerData;
 }
+
 StageModel::StageModel()
 {
 

@@ -2,8 +2,10 @@
 
 
 
-Mario::Mario(btRigidBody* rigidBody, std::string modelPath, const Vector3& forwardDir, const Vector3& position, const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const float& jumpForce, const int& health, btDynamicsWorld* world)
-	: PlayerData(rigidBody, modelPath, position, health, scale, rotaionAxis, rotationAngle, speed, world)
+Mario::Mario(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
+	std::string modelPath, const Vector3& forwardDir, const Vector3& position, const float& speed, const Vector3& scale, const Vector3& rotaionAxis,
+	const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world)
+	: PlayerData(rigidBody, shape, motionState, modelPath, position, health, scale, rotaionAxis, rotationAngle, speed, world)
 {
 	m_jumpForce = jumpForce;
 	m_isCrouching = false;

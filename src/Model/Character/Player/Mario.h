@@ -20,9 +20,9 @@ public:
     //    float speed, Vector3 scale, Vector3 rotationAxis, float rotationAngle,
     //    float jumpForce, int health, btDynamicsWorld* world);
 
-    Mario(btRigidBody* rigidBody, std::string modelPath, const Vector3& forwardDir, const Vector3& position,
-            const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, 
-        const float& jumpForce, const int& health, btDynamicsWorld* world);
+    Mario(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& forwardDir, const Vector3& position,
+            const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world);
+
     Vector3 getForwarDir() const;
     bool getIsJumping() const;
     bool getIsCrouching() const;

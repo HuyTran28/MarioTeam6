@@ -65,13 +65,13 @@ Vector3 PlayerData::getVelocity() const
 	return m_velocity;
 }
 
-btRigidBody* PlayerData::getRigidBody() const
+std::shared_ptr<btRigidBody> PlayerData::getRigidBody() const
 {
 	if(m_rigidBody)
 		return m_rigidBody;
 }
 
-btDynamicsWorld* PlayerData::getWorld() const
+std::shared_ptr<btDynamicsWorld> PlayerData::getWorld() const
 {
 	return m_dynamicsWorld;
 }
@@ -182,11 +182,12 @@ PlayerData::PlayerData(Vector3 playerPos, int playerHealth, Model& playerModel, 
 	playerRotationAngle = 0.0f;
 	this->moveSpeed = moveSpeed;
 }
-#include <iostream>
 
-PlayerData::PlayerData(btRigidBody* rigidBody, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, const float& speed, btDynamicsWorld* world)
+PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world)
 {
 	m_rigidBody = rigidBody;
+	m_collisionShape = shape;
+	m_motionState = motionState;
 	m_dynamicsWorld = world;
 	playerModelPath = modelPath;
 	playerPos = position;
@@ -212,7 +213,7 @@ PlayerData::PlayerData(btRigidBody* rigidBody, std::string modelPath, const Vect
 	// Set the rigid body's user pointer to this character
 	m_rigidBody->setUserPointer(this);
 	m_rigidBody->setGravity(btVector3(0, -9.81 * m_rigidBody->getMass(), 0));
-	m_dynamicsWorld->addRigidBody(m_rigidBody);
+	m_dynamicsWorld->addRigidBody(m_rigidBody.get());
 }
 
 

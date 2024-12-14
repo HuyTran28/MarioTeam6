@@ -5,11 +5,8 @@
 class StageController : public StateController
 {
 protected:
-	//std::shared_ptr<StageModel> model;
-	//std::shared_ptr<PlayerData> playerData;
-public:
-	//StageController(std::shared_ptr<Mario> mario) : marioModel(mario){}
 
+public:
 	void updateCollisionShape(std::shared_ptr<Mario> marioData);
 	void updateModelTransform(std::shared_ptr<Mario> marioData);
 	bool checkGroundCollision(std::shared_ptr<Mario> marioData);

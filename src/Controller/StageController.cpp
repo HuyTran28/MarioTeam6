@@ -10,7 +10,6 @@ void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
 
     if (marioData->getRigidBody())
     {
-        std::cout << "111111111111111111111111111111111\n";
         marioData->setIsOnGround(checkGroundCollision(marioData));
         if (!(marioData->getIsOnGround())) {
             // Apply gravity
