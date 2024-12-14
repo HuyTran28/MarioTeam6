@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StateModel.h"
-#include "Player/PlayerData.h"
+#include "../Model/Character/PlayerData.h"
 #include <string>
 #include <vector>
 #include <raylib.h>

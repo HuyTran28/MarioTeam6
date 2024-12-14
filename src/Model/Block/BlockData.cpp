@@ -22,7 +22,7 @@ std::shared_ptr<btDiscreteDynamicsWorld> BlockData::getDynamicsWorld() const
 
 std::shared_ptr<btRigidBody> BlockData::getRigidBody() const
 {
-	return m_rigidBodyOfBlock;
+    return m_rigidBodyOfBlock;
 }
 
 std::string BlockData::getName() const
@@ -32,17 +32,17 @@ std::string BlockData::getName() const
 
 Model BlockData::getModel() const
 {
-	return m_model;
+    return m_model;
 }
 
 Vector3 BlockData::getPosition() const
 {
-	return m_position;
+    return m_position;
 }
 
 Vector3 BlockData::getScale() const
 {
-	return m_scale;
+    return m_scale;
 }
 
 Vector3 BlockData::getRotationAxis() const
@@ -57,5 +57,5 @@ float BlockData::getRotationAngle() const
 
 bool BlockData::getIsBouncing() const
 {
-	return m_isBouncing;
+    return m_isBouncing;
 }

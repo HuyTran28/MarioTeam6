@@ -4,9 +4,14 @@
 #include "../Event/Event.h"
 #include "../Observer/IObserver.h"
 #include <raylib.h>
+#include "../Model/Character/Player/Mario.h"
+#include <memory>
+#include <btBulletDynamicsCommon.h>
+
 
 class StateController : public IObserver
 {
+
 public:
 	virtual ~StateController() = default;
 	virtual void registerSelf() = 0;
@@ -22,4 +27,5 @@ public:
 		// Check if the mouse is over the icon and if the left mouse button is pressed
 		return CheckCollisionPointRec(mousePosition, destRec) && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 	}
+
 };

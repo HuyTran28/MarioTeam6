@@ -49,7 +49,6 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
     }
     else
     {
-        blockShape = std::make_shared<btBoxShape> (btVector3(
             halfExtents.x, halfExtents.y, halfExtents.z
         ));
         blockShape->setMargin(0.1f);

@@ -5,7 +5,7 @@
 #include "../../Factory/BlockFactory.h"
 #include <vector>
 #include "../StateModel.h"
-
+#include "../../Model/Character/PlayerData.h"
 constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
 constexpr char PATH_CASTLEBLOCK[] = "../../Assets\\Models\\Platforms\\CastleBlock.glb";
 constexpr char PATH_MANMABLOCK[] = "../../Assets\\Models\\Platforms\\ManmaBlock.glb";
@@ -23,13 +23,15 @@ constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.
 class StageModel : public StateModel
 {
 public:
-
+	StageModel(std::shared_ptr<PlayerData> playerData);
 	virtual ~StageModel() = default;
 	StageModel();
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
-
+	std::shared_ptr<PlayerData> getPlayerData() const;
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
+
+	std::shared_ptr<PlayerData> m_playerData;
 };

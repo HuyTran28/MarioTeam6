@@ -1,9 +1,13 @@
 #include "StageModel.h"
 #include <iostream>
+StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
+{
+    m_playerData = playerData;
+}
 StageModel::StageModel()
 {
 
-    m_cameraInitialPosition = Vector3{ 300.0f, 20.0f, 20.0f };
+    m_cameraInitialPosition = Vector3{ 0.0f, 20.0f, 20.0f };
     m_camera.position = m_cameraInitialPosition;
     m_camera.target = Vector3{ 0.0f, 0.0f, 0.0f };
     m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };
@@ -20,3 +24,9 @@ void StageModel::setCamera(Camera3D camera)
 {
     m_camera = camera;
 }
+
+std::shared_ptr<PlayerData> StageModel::getPlayerData() const
+{
+    return m_playerData;
+}
+

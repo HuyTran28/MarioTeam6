@@ -17,18 +17,12 @@ void Stage1Controller::registerSelf()
 
 void Stage1Controller::update(std::shared_ptr<Event> event)
 {
-}
+	
+	if (event->getType() == "Tick Event")
+	{
+		updateMovementOfMario(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
+	}
 
-void Stage1Controller::updateKeyboard()
-{
-}
-
-void Stage1Controller::updateMouse()
-{
-}
-
-void Stage1Controller::updateGameState()
-{
 }
 
 
