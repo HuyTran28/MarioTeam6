@@ -2,7 +2,9 @@
 
 #include <raylib.h>
 #include "../../Model/Block/BlockData.h"
+#include "../../Model/Character/Enemy/Enemy.h"
 #include "../../Factory/BlockFactory.h"
+#include "../../Factory/EnemyFactory.h"
 #include <vector>
 #include "../StateModel.h"
 #include "../../Model/Character/PlayerData.h"
@@ -21,6 +23,11 @@ constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb"
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
 
 
+
+constexpr char PATH_GOOMBA[] = "../../Assets\\Models\\Characters\\Goomba.glb";
+constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
+
+
 #include <iostream>
 class StageModel : public StateModel
 {
@@ -36,6 +43,8 @@ private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 	std::shared_ptr<PlayerData> m_playerData;
+
+
 	std::shared_ptr<Button> m_pause;
 	void initializeCamera() {
 		m_cameraInitialPosition = m_playerData->getPlayerPos();

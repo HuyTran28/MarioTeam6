@@ -14,6 +14,8 @@ void Stage1View::render()
 {
 
     std::vector<std::shared_ptr<BlockData>> map = m_model->getMap();
+    std::vector<std::shared_ptr<Enemy>> enemies = m_model->getEnemies();
+
     std::shared_ptr<Mario> marioModel = std::dynamic_pointer_cast<Mario>(m_model->getPlayerData());
     //UpdateCamera(&(m_model->getCamera()), CAMERA_FIRST_PERSON);
 
@@ -25,11 +27,11 @@ void Stage1View::render()
 
     float zoomSpeed = 5.0f;
     camera.fovy -= GetMouseWheelMove() * zoomSpeed;
-
     if (camera.fovy < 10.0f) camera.fovy = 10.0f; 
     if (camera.fovy > 90.0f) camera.fovy = 90.0f; 
-
     UpdateCamera(&camera, CAMERA_CUSTOM);
+
+
 
 
     BeginDrawing();
@@ -39,21 +41,18 @@ void Stage1View::render()
 
 
     StateView::renderBlocks(map);
-
+    StateView::renderEnemies(enemies);
     for (int i = 0; i < m_model->getClouds().size(); i++) {
 		DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
     }
 
+
 	DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
-
-	std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << std::endl;
-
-
     DrawModelEx(marioModel->getPlayerModel(), marioModel->getPlayerPos(), marioModel->getPlayerRotationAxis(), marioModel->getPlayerRotationAngle(),
         marioModel->getPlayerScale(), WHITE);
 
     m_model->setCamera(m_model->getCamera());
-    
+  //  std::cout << marioModel->getPlayerPos().x << " " << marioModel->getPlayerPos().y <<" " << marioModel->getPlayerPos().z << '\n';
 
 
     btCollisionShape* shape = m_model->getPlayerData()->getRigidBody()->getCollisionShape();

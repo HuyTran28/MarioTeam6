@@ -3,6 +3,7 @@
 #include <string>
 
 
+
 class Mario : public PlayerData
 {
 private:
@@ -13,7 +14,7 @@ private:
     float m_jumpTimer = 0.0f;  // Timer to control jump force duration
     float m_maxJumpDuration;  // Maximum time to apply jump force (in seconds)
 
-
+   
 public:
 
     //Mario(btRigidBody* rigidBody, std::string modelPath, Vector3 forwardDir, Vector3 position,
@@ -29,11 +30,13 @@ public:
     float getJumpForce() const;
     float getJumpTimer() const;
     float getMaxJumpDuration() const;
+    
+
 
     void setForwarDir(const Vector3& forwardDir);
     void setIsJumping(bool isJumping);
     void setJumpTimer(float jumTimer);
     void setMaxJumpDuaration(float maxJumpDuaration);
-
+ 
     ~Mario();
 };

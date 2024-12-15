@@ -3,6 +3,7 @@
 Stage1Model::Stage1Model() : StageModel(createMarioModel())
 {
     m_map = createMap();
+    m_enemies = createEnemies();
 
 	cloudScales = { 1.0f, 1.0f, 1.0f };
 	cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
@@ -215,13 +216,16 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
     return map;
 }
 
+
+
+
 std::shared_ptr<Mario> Stage1Model::createMarioModel()
 {
     std::shared_ptr<Mario> marioModel;
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
 
     Vector3 forwardDir = { 0.0f, 0.0f, 1.0f };
-    Vector3 positionMario = { 0.0f, 20.0f, 0.0f };
+    Vector3 positionMario = { 180.0f, 10.0f, 0.0 };
     Vector3 scaleMario = { 0.9f, 0.9f, 0.9f };
     Vector3 rotationAxisMario = { 0.0f, 1.0f, 0.0f };
     Model playerModel = LoadModel("../../Assets\\Models\\Characters\\Mario.glb");
@@ -260,10 +264,7 @@ std::shared_ptr<Mario> Stage1Model::createMarioModel()
 
     std::shared_ptr<btRigidBody> playerRigidBody = std::make_shared<btRigidBody> (rbInfo);
 
-    // Add the player to the physics world
-
 	std::string modelPath = "../../Assets\\Models\\Characters\\Mario.glb";
-
     marioModel = std::make_shared<Mario>(
         playerRigidBody,                               // std::shared_ptr<btRigidBody>
         playerShape,                                   // std::shared_ptr<btCollisionShape>
@@ -281,6 +282,62 @@ std::shared_ptr<Mario> Stage1Model::createMarioModel()
     );
 
     return marioModel;
+}
+
+std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
+{
+    std::vector<std::shared_ptr<Enemy>> enemies;
+
+    Vector3 rotaionAxisGoomba = { 0.0f, 1.0f, 0.0f };
+    float rotationAngleGoomba = 0.0f;
+
+    Vector3 rotaionAxisKoopa = { 0.0f, 1.0f, 0.0f };
+    float rotationAngleKoopa = 0.0f;
+
+
+    Vector3 scaleGoomba = { 0.7f, 0.7f, 0.7f };
+    Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
+
+    Vector3 forwardDirGoomba = { 0, 0, 1 };
+    Vector3 forwardDirKoopa = { 0, 0, 1 };
+
+    float speedGooba = 5.0f;
+    float speedKoopa = 5.0f;
+
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
+    auto addEnemy = [&](EnemyType type, const std::string& path, const Vector3& position, const Vector3 forwardDir, const Vector3& scale,
+        const Vector3& pointA, const Vector3& pointB, const float& speed, const Vector3& rotationAxis, const float& rotationAngle)
+        {
+            auto enemy = EnemyFactory::createEnemy(type, dynamicsWorld, path, position, forwardDir, rotationAxis, rotationAngle, scale, speed, pointA, pointB);
+            if (enemy)
+                enemies.push_back(std::shared_ptr<Enemy>(enemy));
+        };
+    const float size = 2.5;
+    const float Oy = (m_height * 1.0) * size;
+    const float Oz = (m_depth * size) / 2;
+
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 35, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 35, Oy, Oz }, { 50, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 90, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 95, Oy, Oz + (2 * size)}, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 110, Oy, Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 110, Oy, Oz - (2 * size) }, { 110, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 120, Oy, Oz + (2 * size) }, forwardDirGoomba, scaleGoomba, { 120, Oy, Oz + (2 * size) }, { 120, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+
+  //  addEnemy(EnemyType::Koopa, PATH_KOOPA, { 10, 5, 3 }, forwardDirKoopa, scaleKoopa, { 10, 5, 3 }, { 20, 5, 3 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 182.508, 21.6751, 10.1829 }, forwardDirGoomba, scaleGoomba, { 182.508, 21.6751, 10.1829 }, { 200, 21.6751, 10.1829 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+
+
+    
+
+
+
+
+    return enemies;
+}
+
+std::vector<std::shared_ptr<Enemy>> Stage1Model::getEnemies()
+{
+    return m_enemies;
 }
 
 const std::vector<std::shared_ptr<BlockData>>& Stage1Model::getMap() const

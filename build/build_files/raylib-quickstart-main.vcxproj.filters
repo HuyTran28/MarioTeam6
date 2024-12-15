@@ -1,263 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{21EB8090-0D4E-1035-B6D3-48EBA215DCB7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{E9C7FDCE-D52A-8D73-7EB0-C5296AF258F6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{11691cdb-50ee-4026-b859-05e86d596c37}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Models">
-      <UniqueIdentifier>{9a27f1d5-5b2f-4769-a7c7-767c77cd823a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Sounds">
-      <UniqueIdentifier>{9850464c-fec4-474b-90de-292d971edb12}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Textures">
-      <UniqueIdentifier>{a5cd9831-ed9f-4f43-ab15-4e706aa2b38b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Scripts">
-      <UniqueIdentifier>{f3186bde-52e6-435a-b191-96d9c9a4457c}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\src\Event\EventManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Observer\IObserver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\Event.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Observer\Subject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\QuitEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\InitializeEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\TickEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\KeyboardEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\MouseClickedEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\GameEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Event\StateChangeEvent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\StateView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\MenuView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\ModelEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\StateModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\MenuModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\MapData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\ControlEngine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Factory\Factory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\StateController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\MenuController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\LogInModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\LogInView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\LogInController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\GameData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\LevelSelectModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\LevelSelectView.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\LevelSelectController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\Stage\Stage1View.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\View\Stage\Stage2View.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Stage\StageModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\Stage1Controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\BlockData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\BrickBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\FlyBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\ModelStage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\PipeBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Factory\BlockFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Controller\StageController.h" />
-    <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
-    <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
-    <ClInclude Include="..\..\src\Model\Character\PlayerData.h" />
-    <ClInclude Include="..\..\src\Model\Character\Player\Mario.h" />
-    <ClInclude Include="..\..\src\Event\BackEvent.h" />
-    <ClInclude Include="..\..\src\Model\Pause.h" />
-    <ClInclude Include="..\..\src\Button\Button.h" />
-    <ClInclude Include="..\..\src\View\PauseView.h" />
-    <ClInclude Include="..\..\src\Controller\PauseController.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\Assets\Models\SkeletonMario.glb">
-      <Filter>Assets\Models</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\Event\EventManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Event\Event.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\GameEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\MenuModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Controller\ControlEngine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\View\MenuView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Factory\Factory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Controller\MenuController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\LogInModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\View\LogInView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Controller\LogInController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\GameData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\View\LevelSelectView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\Block\BlockData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Factory\BlockFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
-    <ClCompile Include="..\..\src\View\StateView.cpp" />
+    <ClCompile Include="..\..\src\Button\Button.cpp" />
+    <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
+    <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp" />
+    <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
+    <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
+    <ClCompile Include="..\..\src\Controller\PauseController.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp" />
     <ClCompile Include="..\..\src\Controller\StageController.cpp" />
     <ClCompile Include="..\..\src\Controller\StateController.cpp" />
+    <ClCompile Include="..\..\src\Event\Event.cpp" />
+    <ClCompile Include="..\..\src\Event\EventManager.cpp" />
+    <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
+    <ClCompile Include="..\..\src\Factory\Factory.cpp" />
+    <ClCompile Include="..\..\src\GameEngine.cpp" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
+    <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp" />
     <ClCompile Include="..\..\src\Model\Character\Player\Mario.cpp" />
     <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
     <ClCompile Include="..\..\src\Model\Character\PlayerData.cpp" />
-    <ClCompile Include="..\..\src\Button\Button.cpp" />
+    <ClCompile Include="..\..\src\Model\GameData.cpp" />
+    <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
+    <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
+    <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
     <ClCompile Include="..\..\src\Model\Pause.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
+    <ClCompile Include="..\..\src\View\LevelSelectView.cpp" />
+    <ClCompile Include="..\..\src\View\LogInView.cpp" />
+    <ClCompile Include="..\..\src\View\MenuView.cpp" />
     <ClCompile Include="..\..\src\View\PauseView.cpp" />
-    <ClCompile Include="..\..\src\Controller\PauseController.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp" />
+    <ClCompile Include="..\..\src\View\StateView.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\Enemy\Enemy.cpp" />
+    <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Button\Button.h" />
+    <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
+    <ClInclude Include="..\..\src\Controller\LevelSelectController.h" />
+    <ClInclude Include="..\..\src\Controller\LogInController.h" />
+    <ClInclude Include="..\..\src\Controller\MenuController.h" />
+    <ClInclude Include="..\..\src\Controller\PauseController.h" />
+    <ClInclude Include="..\..\src\Controller\Stage1Controller.h" />
+    <ClInclude Include="..\..\src\Controller\StageController.h" />
+    <ClInclude Include="..\..\src\Controller\StateController.h" />
+    <ClInclude Include="..\..\src\Event\BackEvent.h" />
+    <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
+    <ClInclude Include="..\..\src\Event\Event.h" />
+    <ClInclude Include="..\..\src\Event\EventManager.h" />
+    <ClInclude Include="..\..\src\Event\InitializeEvent.h" />
+    <ClInclude Include="..\..\src\Event\KeyboardEvent.h" />
+    <ClInclude Include="..\..\src\Event\MouseClickedEvent.h" />
+    <ClInclude Include="..\..\src\Event\QuitEvent.h" />
+    <ClInclude Include="..\..\src\Event\StateChangeEvent.h" />
+    <ClInclude Include="..\..\src\Event\TickEvent.h" />
+    <ClInclude Include="..\..\src\Factory\BlockFactory.h" />
+    <ClInclude Include="..\..\src\Factory\Factory.h" />
+    <ClInclude Include="..\..\src\GameEngine.h" />
+    <ClInclude Include="..\..\src\Model\Block\BlockData.h" />
+    <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\FlyBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\ModelStage.h" />
+    <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\PipeBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h" />
+    <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
+    <ClInclude Include="..\..\src\Model\Character\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\Character\Player\Mario.h" />
+    <ClInclude Include="..\..\src\Model\GameData.h" />
+    <ClInclude Include="..\..\src\Model\LevelSelectModel.h" />
+    <ClInclude Include="..\..\src\Model\LogInModel.h" />
+    <ClInclude Include="..\..\src\Model\MapData.h" />
+    <ClInclude Include="..\..\src\Model\MenuModel.h" />
+    <ClInclude Include="..\..\src\Model\ModelEngine.h" />
+    <ClInclude Include="..\..\src\Model\Pause.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h" />
+    <ClInclude Include="..\..\src\Model\Stage\StageModel.h" />
+    <ClInclude Include="..\..\src\Model\StateModel.h" />
+    <ClInclude Include="..\..\src\Observer\IObserver.h" />
+    <ClInclude Include="..\..\src\Observer\Subject.h" />
+    <ClInclude Include="..\..\src\View\LevelSelectView.h" />
+    <ClInclude Include="..\..\src\View\LogInView.h" />
+    <ClInclude Include="..\..\src\View\MenuView.h" />
+    <ClInclude Include="..\..\src\View\PauseView.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage1View.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage2View.h" />
+    <ClInclude Include="..\..\src\View\StateView.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Enemy.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Goomba.h" />
+    <ClInclude Include="..\..\src\Factory\EnemyFactory.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Assets\Models\SkeletonMario.glb" />
   </ItemGroup>
 </Project>

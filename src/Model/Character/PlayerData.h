@@ -3,10 +3,19 @@
 #include <raylib.h>
 #include "btBulletDynamicsCommon.h"
 #include <string>
-#include "AnimationManager.h"
 #include <memory>
 #include "../../Event/CollisionEvent.h"
 #include "raymath.h"
+
+enum class PlayerAnimationState {
+	IDLE,
+	WALKING,
+	JUMPING,
+	FALLING,
+	HIT,
+	DIE
+};
+
 
 class PlayerData
 {
@@ -17,7 +26,7 @@ protected:
 	std::shared_ptr<btDefaultMotionState> m_motionState;
 	Vector3 m_velocity;
 	bool m_isOnGround;
-	std::shared_ptr<AnimationManager> m_animationManager; // Composition
+	//std::shared_ptr<AnimationManager> m_animationManager; // Composition
 
 
 	Vector3 playerPos;
@@ -31,7 +40,11 @@ protected:
 	float moveSpeed;
 
 
-
+	std::shared_ptr<ModelAnimation> m_animations;
+	int m_animationCount;
+	int m_currentAnimation;
+	float m_animationFrame;
+	PlayerAnimationState m_animationState = PlayerAnimationState::IDLE;
 
 public:
 	PlayerData();
@@ -50,7 +63,19 @@ public:
 	Vector3 getVelocity() const;
 	std::shared_ptr<btRigidBody> getRigidBody() const;
 	std::shared_ptr<btDynamicsWorld> getWorld() const;
-	std::shared_ptr<AnimationManager> getAnimarionManager() const;
+	PlayerAnimationState getPlayerAnimationState() const;
+
+	std::shared_ptr<ModelAnimation> getModelAnimation() const;
+	int getAnimationCount() const;
+	int getCurrentAnimation() const;
+	float getAnimationFrame() const;
+
+
+	void setModelAnimation(std::shared_ptr<ModelAnimation> modelAnimation);
+	void setAnimationCount(int animationCount);
+	void setCurrentAnimation(int currentAnimation);
+	void setAnimationFrame(float animationFrame);
+	void setPlayerAnimationState(PlayerAnimationState animationState);
 
 	void setPlayerPos(Vector3 playerPos);
 	void setPlayerHealth(int playerHealth);
@@ -70,12 +95,8 @@ public:
 	void applyCentralImpulse(btVector3 impulse);
 	void applyCentralForce(btVector3 force);
 	void setDamping(float linearDamping, float angularDamping);
+	void setWorldTransform(const btTransform& transform);
 
-
-	void updateCollisionShape();
-	void updateModelTransform();
-	bool checkGroundCollision();
-	void playAnimation(int animationIndex);
 
 	virtual ~PlayerData();
 };

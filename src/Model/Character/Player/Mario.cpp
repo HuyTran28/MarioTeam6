@@ -50,6 +50,8 @@ float Mario::getMaxJumpDuration() const
 	return m_maxJumpDuration;
 }
 
+
+
 void Mario::setForwarDir(const Vector3& forwardDir)
 {
 	m_forwardDir = forwardDir;
@@ -69,6 +71,8 @@ void Mario::setMaxJumpDuaration(float maxJumpDuaration)
 {
 	m_maxJumpDuration = maxJumpDuaration;
 }
+
+
 
 Mario::~Mario()
 {

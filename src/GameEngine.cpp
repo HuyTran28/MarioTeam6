@@ -16,7 +16,7 @@ void GameEngine::run()
 	isRunning = true;
 
 	InitWindow(1900, 1000, "Game Engine");
-	SetTargetFPS(60);
+	SetTargetFPS(120);
 
 	this->registerSelf();
 

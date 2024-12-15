@@ -288,6 +288,7 @@
     <ClInclude Include="..\..\src\Event\StateChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\TickEvent.h" />
     <ClInclude Include="..\..\src\Factory\BlockFactory.h" />
+    <ClInclude Include="..\..\src\Factory\EnemyFactory.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
     <ClInclude Include="..\..\src\Model\Block\BlockData.h" />
@@ -301,6 +302,9 @@
     <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h" />
     <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Enemy.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Goomba.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />
     <ClInclude Include="..\..\src\Model\Character\PlayerData.h" />
     <ClInclude Include="..\..\src\Model\Character\Player\Mario.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
@@ -345,11 +349,13 @@
     <ClCompile Include="..\..\src\Event\Event.cpp" />
     <ClCompile Include="..\..\src\Event\EventManager.cpp" />
     <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
+    <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
     <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\Enemy\Enemy.cpp" />
     <ClCompile Include="..\..\src\Model\Character\Player\Mario.cpp" />
     <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
     <ClCompile Include="..\..\src\Model\Character\PlayerData.cpp" />

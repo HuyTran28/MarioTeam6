@@ -17,11 +17,18 @@ void Stage1Controller::registerSelf()
 
 void Stage1Controller::update(std::shared_ptr<Event> event)
 {
-	
+	std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
 	if (event->getType() == "Tick Event")
 	{
+		setPlayerAnimationState(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
 		updateMovementOfMario(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
 		updateAnimationState(std::dynamic_pointer_cast<Mario>(model->getPlayerData()));
+
+		std::cout <<" tttttttttttttttttttttttttttttttttttttttttt " << model->getPlayerData()->getAnimationCount() << '\n';
+
+		updateMovemenOfEnemy(enemies);
+
+
 		updateMouse();
 	}
 
