@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StateModel.h"
-#include "../Model/Character/PlayerData.h"
+#include "../Model/Character/CharacterData.h"
 #include <string>
 #include <vector>
 #include <raylib.h>
@@ -11,7 +11,7 @@
 class MenuModel : public StateModel
 {
 private:
-	std::shared_ptr<PlayerData> playerData;
+	std::shared_ptr<CharacterData> playerData;
 
 	Camera3D camera;
 	Vector3 cameraInitialPosition;
@@ -56,8 +56,8 @@ public:
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
 
-	std::shared_ptr<PlayerData> getPlayerData();
-	void setPlayerData(std::shared_ptr<PlayerData> playerData);
+	std::shared_ptr<CharacterData> getPlayerData();
+	void setPlayerData(std::shared_ptr<CharacterData> playerData);
 
 	Model getLobbyModel();
 	Vector3 getLobbyPos();

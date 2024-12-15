@@ -29,7 +29,7 @@ void MenuView::render()
 
 
 
-	std::shared_ptr<PlayerData> playerData = model->getPlayerData();
+	std::shared_ptr<CharacterData> playerData = model->getPlayerData();
 	DrawModelEx(playerData->getPlayerModel(), playerData->getPlayerPos(), playerData->getPlayerRotationAxis(), playerData->getPlayerRotationAngle(), playerData->getPlayerScale(), WHITE);
 
 	drawAccessories();

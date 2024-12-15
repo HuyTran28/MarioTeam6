@@ -219,9 +219,9 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 
 
 
-std::shared_ptr<Mario> Stage1Model::createMarioModel()
+std::shared_ptr<PlayerData> Stage1Model::createMarioModel()
 {
-    std::shared_ptr<Mario> marioModel;
+    std::shared_ptr<PlayerData> marioModel;
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
 
     Vector3 forwardDir = { 0.0f, 0.0f, 1.0f };
@@ -265,7 +265,7 @@ std::shared_ptr<Mario> Stage1Model::createMarioModel()
     std::shared_ptr<btRigidBody> playerRigidBody = std::make_shared<btRigidBody> (rbInfo);
 
 	std::string modelPath = "../../Assets\\Models\\Characters\\Mario.glb";
-    marioModel = std::make_shared<Mario>(
+    marioModel = std::make_shared<PlayerData>(
         playerRigidBody,                               // std::shared_ptr<btRigidBody>
         playerShape,                                   // std::shared_ptr<btCollisionShape>
         motionState,								   // std::shared_ptr<btDefaultMotionState>
@@ -345,7 +345,7 @@ const std::vector<std::shared_ptr<BlockData>>& Stage1Model::getMap() const
     return m_map;
 }
 
-std::shared_ptr<PlayerData> Stage1Model::getPlayerData() const
+std::shared_ptr<CharacterData> Stage1Model::getPlayerData() const
 {
     return StageModel::getPlayerData();
 }

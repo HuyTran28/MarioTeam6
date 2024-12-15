@@ -11,7 +11,7 @@ AnimationManager& AnimationManager::getInstance()
 
 
 
-void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<PlayerData> playerData)
+void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<CharacterData> playerData)
 {
     if (animationIndex >= 0 && animationIndex < playerData->getAnimationCount()) {
         if (playerData->getCurrentAnimation() != animationIndex) {
@@ -25,7 +25,7 @@ void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<PlayerD
 
 
 
-void AnimationManager::updateAnimation(float deltaTime, std::shared_ptr<PlayerData> playerData) {
+void AnimationManager::updateAnimation(float deltaTime, std::shared_ptr<CharacterData> playerData) {
     if (playerData->getAnimationCount() > 0) {
         UpdateModelAnimation(playerData->getPlayerModel(), playerData->getModelAnimation().get()[playerData->getCurrentAnimation()], playerData->getAnimationFrame());
        

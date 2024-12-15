@@ -2,7 +2,7 @@
 
 MenuModel::MenuModel()
 {
-	playerData = std::make_shared<PlayerData>();
+	playerData = std::make_shared<CharacterData>();
 
     lobbyModelPath = "../../Assets\\Models\\Lobby\\lobby.glb";
     lobbyModel = LoadModel(lobbyModelPath.c_str());
@@ -113,12 +113,12 @@ Model MenuModel::getJoyStickModelNoLogIn()
 }
 
 
-std::shared_ptr<PlayerData> MenuModel::getPlayerData()
+std::shared_ptr<CharacterData> MenuModel::getPlayerData()
 {
 	return playerData;
 }
 
-void MenuModel::setPlayerData(std::shared_ptr<PlayerData> playerData)
+void MenuModel::setPlayerData(std::shared_ptr<CharacterData> playerData)
 {
 	this->playerData = playerData;
 }

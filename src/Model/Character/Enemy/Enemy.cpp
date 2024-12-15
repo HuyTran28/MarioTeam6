@@ -4,7 +4,7 @@
 
 Enemy::Enemy(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
 	std::string modelPath, const Vector3& position, const Vector3& forwardDir, const Vector3& pointA, const Vector3& pointB, const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, std::shared_ptr<btDynamicsWorld> world, std::string name)
-	: PlayerData(rigidBody, shape, motionState, modelPath, position, 0, scale, rotaionAxis, rotationAngle, speed, world)
+	: CharacterData(rigidBody, shape, motionState, modelPath, position, 0, scale, rotaionAxis, rotationAngle, speed, world)
 {
 	m_forwardDir = forwardDir;
 	m_pointA = pointA;

@@ -1,6 +1,6 @@
 #pragma once
 #include "raylib.h"
-#include "PlayerData.h"
+#include "CharacterData.h"
 #include <memory>
 
 class AnimationManager {
@@ -21,8 +21,8 @@ public:
 
 
 
-    void playAnimation(int animationIndex, std::shared_ptr<PlayerData> playerData);
-    void updateAnimation(float deltaTime, std::shared_ptr<PlayerData> playerData);
+    void playAnimation(int animationIndex, std::shared_ptr<CharacterData> playerData);
+    void updateAnimation(float deltaTime, std::shared_ptr<CharacterData> playerData);
     //int getCurrentFrame() const;          // Get the current frame of the animation
     //bool isAnimationFinished() const;    // Check if the animation has finished
     //bool hasAnimations() const { return m_animationCount > 0; }

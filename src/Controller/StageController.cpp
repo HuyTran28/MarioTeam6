@@ -100,9 +100,9 @@ void StageController::registerSelf()
 {
 }
 
-void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
+void StageController::updateMovementOfMario(std::shared_ptr<PlayerData> marioData)
 {
-   // std::shared_ptr<Mario> marioData = std::dynamic_pointer_cast<Mario>(marioData);
+   // std::shared_ptr<PlayerData> marioData = std::dynamic_pointer_cast<PlayerData>(marioData);
 
     if (marioData->getRigidBody())
     {
@@ -140,7 +140,7 @@ void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
     }
 }
 
-void StageController::moveMario(std::shared_ptr<Mario> marioData)
+void StageController::moveMario(std::shared_ptr<PlayerData> marioData)
 {
 
 
@@ -171,7 +171,7 @@ void StageController::moveMario(std::shared_ptr<Mario> marioData)
    // marioData->setPlayerPos()
 }
 
-void StageController::rotateMario(std::shared_ptr<Mario> marioData)
+void StageController::rotateMario(std::shared_ptr<PlayerData> marioData)
 {
     
 
@@ -196,7 +196,7 @@ void StageController::rotateMario(std::shared_ptr<Mario> marioData)
     marioData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
 }
 
-void StageController::jumpMario(std::shared_ptr<Mario> marioData)
+void StageController::jumpMario(std::shared_ptr<PlayerData> marioData)
 {
    
     float invGravity = 1.0f / -(marioData->getWorld())->getGravity().getY();
@@ -244,7 +244,7 @@ void StageController::jumpMario(std::shared_ptr<Mario> marioData)
 
 
 
-void StageController::updateCollisionShape(std::shared_ptr<PlayerData> playerData)
+void StageController::updateCollisionShape(std::shared_ptr<CharacterData> playerData)
 {
     
     // Get the rigid body's current transform
@@ -256,7 +256,7 @@ void StageController::updateCollisionShape(std::shared_ptr<PlayerData> playerDat
     playerData->setRigidBodyTransform(transform);
 }
 
-void StageController::updateModelTransform(std::shared_ptr<PlayerData> playerData)
+void StageController::updateModelTransform(std::shared_ptr<CharacterData> playerData)
 {
    
 
@@ -289,7 +289,7 @@ void StageController::updateModelTransform(std::shared_ptr<PlayerData> playerDat
     playerData->setPlayerModelTransform(MatrixMultiply(scaleMatrix, rotationMatrix));
 }
 
-bool StageController::checkGroundCollision(std::shared_ptr<PlayerData> playerData)
+bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> playerData)
 {
     
     if (playerData->getRigidBody()) {
@@ -314,7 +314,7 @@ bool StageController::checkGroundCollision(std::shared_ptr<PlayerData> playerDat
 }
 
 
-void StageController::updateAnimationState(std::shared_ptr<PlayerData> marioData)
+void StageController::updateAnimationState(std::shared_ptr<CharacterData> marioData)
 {
 
     PlayerAnimationState animationState = marioData->getPlayerAnimationState();
@@ -356,7 +356,7 @@ void StageController::updateAnimationState(std::shared_ptr<PlayerData> marioData
 
 }
 
-void StageController::setPlayerAnimationState(std::shared_ptr<PlayerData> marioData)
+void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> marioData)
 {
     if (marioData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
         std::cout << "11111111111111111111111111111111111111\n";

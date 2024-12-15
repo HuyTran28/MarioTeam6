@@ -1,6 +1,6 @@
-#include "PlayerData.h"
+#include "CharacterData.h"
 
-PlayerData::PlayerData()
+CharacterData::CharacterData()
 {
 	playerModelPath = "../../Assets\\Models\\joystick2.glb";
 	playerModel = LoadModel(playerModelPath.c_str());
@@ -14,155 +14,155 @@ PlayerData::PlayerData()
 }
 
 
-PlayerData::~PlayerData()
+CharacterData::~CharacterData()
 {
 
 	UnloadModel(playerModel);
 }
 
-Vector3 PlayerData::getPlayerPos() const
+Vector3 CharacterData::getPlayerPos() const
 {
 	return playerPos;
 }
 
-int PlayerData::getPlayerHealth() const
+int CharacterData::getPlayerHealth() const
 {
 	return playerHealth;
 }
 
-Model PlayerData::getPlayerModel() const
+Model CharacterData::getPlayerModel() const
 {
 	return playerModel;
 }
 
-BoundingBox PlayerData::getPlayerBoundingBox() const
+BoundingBox CharacterData::getPlayerBoundingBox() const
 {
 	return playerBoundingBox;
 }
 
-Vector3 PlayerData::getPlayerScale() const
+Vector3 CharacterData::getPlayerScale() const
 {
 	return playerScale;
 }
 
-Vector3 PlayerData::getPlayerRotationAxis() const
+Vector3 CharacterData::getPlayerRotationAxis() const
 {
 	return playerRotationAxis;
 }
 
-float PlayerData::getPlayerRotationAngle() const
+float CharacterData::getPlayerRotationAngle() const
 {
 	return playerRotationAngle;
 }
 
-float PlayerData::getMoveSpeed() const
+float CharacterData::getMoveSpeed() const
 {
 	return moveSpeed;
 }
 
-Vector3 PlayerData::getVelocity() const
+Vector3 CharacterData::getVelocity() const
 {
 	return m_velocity;
 }
 
-std::shared_ptr<btRigidBody> PlayerData::getRigidBody() const
+std::shared_ptr<btRigidBody> CharacterData::getRigidBody() const
 {
 	if(m_rigidBody)
 		return m_rigidBody;
 }
 
-std::shared_ptr<btDynamicsWorld> PlayerData::getWorld() const
+std::shared_ptr<btDynamicsWorld> CharacterData::getWorld() const
 {
 	return m_dynamicsWorld;
 }
 
 
-std::shared_ptr<ModelAnimation> PlayerData::getModelAnimation() const
+std::shared_ptr<ModelAnimation> CharacterData::getModelAnimation() const
 {
 	return m_animations;
 }
 
-int PlayerData::getAnimationCount() const
+int CharacterData::getAnimationCount() const
 {
 	return m_animationCount;
 }
 
-int PlayerData::getCurrentAnimation() const
+int CharacterData::getCurrentAnimation() const
 {
 	return m_currentAnimation;
 }
 
-float PlayerData::getAnimationFrame() const
+float CharacterData::getAnimationFrame() const
 {
 	return m_animationFrame;
 }
 
-void PlayerData::setModelAnimation(std::shared_ptr<ModelAnimation> modelAnimation)
+void CharacterData::setModelAnimation(std::shared_ptr<ModelAnimation> modelAnimation)
 {
 	m_animations = modelAnimation;
 }
 
-void PlayerData::setAnimationCount(int animationCount)
+void CharacterData::setAnimationCount(int animationCount)
 {
 	m_animationCount = animationCount;
 }
 
-void PlayerData::setCurrentAnimation(int currentAnimation)
+void CharacterData::setCurrentAnimation(int currentAnimation)
 {
 	m_currentAnimation = currentAnimation;
 }
 
-void PlayerData::setAnimationFrame(float animationFrame)
+void CharacterData::setAnimationFrame(float animationFrame)
 {
 	m_animationFrame = animationFrame;
 }
 
-void PlayerData::setPlayerScale(Vector3 playerScale)
+void CharacterData::setPlayerScale(Vector3 playerScale)
 {
 	this->playerScale = playerScale;
 }
 
-void PlayerData::setPlayerRotationAxis(Vector3 playerRotationAxis)
+void CharacterData::setPlayerRotationAxis(Vector3 playerRotationAxis)
 {
 	this->playerRotationAxis = playerRotationAxis;
 }
 
-void PlayerData::setPlayerRotationAngle(float playerRotationAngle)
+void CharacterData::setPlayerRotationAngle(float playerRotationAngle)
 {
 	this->playerRotationAngle = playerRotationAngle;
 }
 
-void PlayerData::setPlayerPos(Vector3 playerPos)
+void CharacterData::setPlayerPos(Vector3 playerPos)
 {
 	this->playerPos = playerPos;
 }
 
-void PlayerData::setPlayerHealth(int playerHealth)
+void CharacterData::setPlayerHealth(int playerHealth)
 {
 	this->playerHealth = playerHealth;
 }
 
-void PlayerData::setPlayerModel(Model playerModel)
+void CharacterData::setPlayerModel(Model playerModel)
 {
 	this->playerModel = playerModel;
 }
 
-void PlayerData::setPlayerBoundingBox(BoundingBox playerBoundingBox)
+void CharacterData::setPlayerBoundingBox(BoundingBox playerBoundingBox)
 {
 	this->playerBoundingBox = playerBoundingBox;
 }
 
-void PlayerData::setMoveSpeed(float moveSpeed)
+void CharacterData::setMoveSpeed(float moveSpeed)
 {
 	this->moveSpeed = moveSpeed;
 }
 
-void PlayerData::setPlayerModelTransform(const Matrix& transform)
+void CharacterData::setPlayerModelTransform(const Matrix& transform)
 {
 	playerModel.transform = transform;
 }
 
-void PlayerData::setRigidBodyTransform(const btTransform& transform)
+void CharacterData::setRigidBodyTransform(const btTransform& transform)
 {	
 	if (m_rigidBody)
 	{
@@ -177,47 +177,47 @@ void PlayerData::setRigidBodyTransform(const btTransform& transform)
 	
 }
 
-void PlayerData::setLinearVelocity(btVector3 newVelocity)
+void CharacterData::setLinearVelocity(btVector3 newVelocity)
 {
 	if (m_rigidBody)
 		m_rigidBody->setLinearVelocity(newVelocity);
 }
 
-bool PlayerData::getIsOnGround() const
+bool CharacterData::getIsOnGround() const
 {
 	return m_isOnGround;
 }
 
-void PlayerData::setIsOnGround(bool isOnGround)
+void CharacterData::setIsOnGround(bool isOnGround)
 {
 	m_isOnGround = isOnGround;
 }
 
-void PlayerData::applyCentralImpulse(btVector3 impulse)
+void CharacterData::applyCentralImpulse(btVector3 impulse)
 {
 	if(m_rigidBody)
 		m_rigidBody->applyCentralImpulse(impulse);
 }
 
-void PlayerData::applyCentralForce(btVector3 force)
+void CharacterData::applyCentralForce(btVector3 force)
 {
 	if (m_rigidBody)
 		m_rigidBody->applyCentralForce(force);
 }
 
-void PlayerData::setDamping(float linearDamping, float angularDamping)
+void CharacterData::setDamping(float linearDamping, float angularDamping)
 {
 	if(m_rigidBody)
 		m_rigidBody->setDamping(linearDamping, angularDamping);
 }
 
-void PlayerData::setWorldTransform(const btTransform& transform)
+void CharacterData::setWorldTransform(const btTransform& transform)
 {
 	if (m_rigidBody)
 		m_rigidBody->setWorldTransform(transform);
 }
 
-//PlayerData::PlayerData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed)
+//CharacterData::CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed)
 //{
 //	this->playerPos = playerPos;
 //	this->playerHealth = playerHealth;
@@ -229,17 +229,17 @@ void PlayerData::setWorldTransform(const btTransform& transform)
 //	playerRotationAngle = 0.0f;
 //	this->moveSpeed = moveSpeed;
 //}
-void PlayerData::setPlayerAnimationState(PlayerAnimationState animationState)
+void CharacterData::setPlayerAnimationState(PlayerAnimationState animationState)
 {
 	m_animationState = animationState;
 }
 
-PlayerAnimationState PlayerData::getPlayerAnimationState() const
+PlayerAnimationState CharacterData::getPlayerAnimationState() const
 {
 	return m_animationState;
 }
 
-PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
+CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
 	std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, 
 	const float& speed, std::shared_ptr<btDynamicsWorld> world)
 {

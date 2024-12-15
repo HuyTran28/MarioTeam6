@@ -16,7 +16,7 @@ void Stage1View::render()
     std::vector<std::shared_ptr<BlockData>> map = m_model->getMap();
     std::vector<std::shared_ptr<Enemy>> enemies = m_model->getEnemies();
 
-    std::shared_ptr<Mario> marioModel = std::dynamic_pointer_cast<Mario>(m_model->getPlayerData());
+    std::shared_ptr<PlayerData> marioModel = std::dynamic_pointer_cast<PlayerData>(m_model->getPlayerData());
     //UpdateCamera(&(m_model->getCamera()), CAMERA_FIRST_PERSON);
 
     Camera3D& camera = m_model->getCamera();

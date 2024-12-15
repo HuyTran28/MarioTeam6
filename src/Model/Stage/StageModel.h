@@ -7,7 +7,7 @@
 #include "../../Factory/EnemyFactory.h"
 #include <vector>
 #include "../StateModel.h"
-#include "../../Model/Character/PlayerData.h"
+#include "../../Model/Character/CharacterData.h"
 #include "../../Button/Button.h"
 
 constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
@@ -32,17 +32,17 @@ constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
 class StageModel : public StateModel
 {
 public:
-	StageModel(std::shared_ptr<PlayerData> playerData);
+	StageModel(std::shared_ptr<CharacterData> playerData);
 	virtual ~StageModel() = default;
 	StageModel();
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
-	std::shared_ptr<PlayerData> getPlayerData() const;
+	std::shared_ptr<CharacterData> getPlayerData() const;
 	std::shared_ptr<Button> getPauseButton() const;
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
-	std::shared_ptr<PlayerData> m_playerData;
+	std::shared_ptr<CharacterData> m_playerData;
 
 
 	std::shared_ptr<Button> m_pause;

@@ -1,6 +1,6 @@
 #include "StageModel.h"
 #include <iostream>
-StageModel::StageModel(std::shared_ptr<PlayerData> playerData) : StageModel()
+StageModel::StageModel(std::shared_ptr<CharacterData> playerData) : StageModel()
 {
     m_playerData = playerData;
     initializeCamera();
@@ -32,7 +32,7 @@ void StageModel::setCamera(Camera3D camera)
     m_camera = camera;
 }
 
-std::shared_ptr<PlayerData> StageModel::getPlayerData() const
+std::shared_ptr<CharacterData> StageModel::getPlayerData() const
 {
     return m_playerData;
 }

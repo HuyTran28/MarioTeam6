@@ -2,7 +2,7 @@
 #include "../../Model/Stage/Stage1Model.h"
 #include "../../Event/EventManager.h"
 #include <memory>
-#include "../../Model/Character/Player/Mario.h"
+#include "../../Model/Character/Player/PlayerData.h"
 
 class Stage1View : public StateView, public std::enable_shared_from_this<Stage1View>
 {

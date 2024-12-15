@@ -1,11 +1,11 @@
 #pragma once
-#include "../PlayerData.h"
+#include "../CharacterData.h"
 //#include "EnemyState.h"
 #include <memory>
 #include <string>
 
 
-class Enemy : public PlayerData {
+class Enemy : public CharacterData {
 protected:
     Vector3 m_forwardDir;
     Vector3 m_pointA;
