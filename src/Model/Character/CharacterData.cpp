@@ -67,7 +67,7 @@ Vector3 CharacterData::getVelocity() const
 
 std::shared_ptr<btRigidBody> CharacterData::getRigidBody() const
 {
-	if(m_rigidBody)
+	if (m_rigidBody)
 		return m_rigidBody;
 }
 
@@ -163,7 +163,7 @@ void CharacterData::setPlayerModelTransform(const Matrix& transform)
 }
 
 void CharacterData::setRigidBodyTransform(const btTransform& transform)
-{	
+{
 	if (m_rigidBody)
 	{
 		m_rigidBody->setWorldTransform(transform);
@@ -174,7 +174,7 @@ void CharacterData::setRigidBodyTransform(const btTransform& transform)
 
 		m_rigidBody->activate(true);
 	}
-	
+
 }
 
 void CharacterData::setLinearVelocity(btVector3 newVelocity)
@@ -195,7 +195,7 @@ void CharacterData::setIsOnGround(bool isOnGround)
 
 void CharacterData::applyCentralImpulse(btVector3 impulse)
 {
-	if(m_rigidBody)
+	if (m_rigidBody)
 		m_rigidBody->applyCentralImpulse(impulse);
 }
 
@@ -207,7 +207,7 @@ void CharacterData::applyCentralForce(btVector3 force)
 
 void CharacterData::setDamping(float linearDamping, float angularDamping)
 {
-	if(m_rigidBody)
+	if (m_rigidBody)
 		m_rigidBody->setDamping(linearDamping, angularDamping);
 }
 
@@ -240,7 +240,7 @@ PlayerAnimationState CharacterData::getPlayerAnimationState() const
 }
 
 CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
-	std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, 
+	std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle,
 	const float& speed, std::shared_ptr<btDynamicsWorld> world)
 {
 	m_rigidBody = rigidBody;
@@ -270,9 +270,9 @@ CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared
 	m_animationFrame = 0.0f;
 	this->m_animations = modelAnimation;
 
-    if (m_animationCount == 0) {
-        m_animations = nullptr;
-    }
+	if (m_animationCount == 0) {
+		m_animations = nullptr;
+	}
 
 	btTransform trans;
 	m_rigidBody->getMotionState()->getWorldTransform(trans);

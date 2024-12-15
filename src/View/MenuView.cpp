@@ -27,8 +27,6 @@ void MenuView::render()
 
 	DrawModelEx(model->getLobbyModel(), model->getLobbyPos(), model->getLobbyRotationAxis(), model->getLobbyRotationAngle(), model->getLobbyScale(), WHITE);
 
-
-
 	std::shared_ptr<CharacterData> playerData = model->getPlayerData();
 	DrawModelEx(playerData->getPlayerModel(), playerData->getPlayerPos(), playerData->getPlayerRotationAxis(), playerData->getPlayerRotationAngle(), playerData->getPlayerScale(), WHITE);
 

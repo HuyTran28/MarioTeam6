@@ -28,7 +28,7 @@ protected:
 	bool m_isOnGround;
 	//std::shared_ptr<AnimationManager> m_animationManager; // Composition
 
-
+	Vector3 m_forwardDir;
 	Vector3 playerPos;
 	int playerHealth;
 	Model playerModel;

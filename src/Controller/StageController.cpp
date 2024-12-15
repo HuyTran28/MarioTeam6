@@ -207,7 +207,7 @@ void StageController::jumpMario(std::shared_ptr<PlayerData> marioData)
         marioData->setIsOnGround(false);   // Player is now airborne
 
         // Increase the jump force for a higher jump
-        float acceleration = (marioData->getJumpForce() * 1.5f) / marioData->getRigidBody()->getMass();
+        float acceleration = (marioData->getJumpForce() * 0.5f) / marioData->getRigidBody()->getMass();
         marioData->setMaxJumpDuaration(sqrt(acceleration / marioData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
     }
 
@@ -246,20 +246,16 @@ void StageController::jumpMario(std::shared_ptr<PlayerData> marioData)
 
 void StageController::updateCollisionShape(std::shared_ptr<CharacterData> playerData)
 {
-    
     // Get the rigid body's current transform
     btTransform transform = playerData->getRigidBody()->getWorldTransform();
 
     // Force the rotation to align with the Y-axis (capsule's up-axis)
-
     transform.setRotation(btQuaternion(0, 0, 0, 1));
     playerData->setRigidBodyTransform(transform);
 }
 
 void StageController::updateModelTransform(std::shared_ptr<CharacterData> playerData)
 {
-   
-
     // Get the rigid body's transform
     btTransform transform = playerData->getRigidBody()->getWorldTransform();
     btVector3 origin = transform.getOrigin();
@@ -309,7 +305,6 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> player
             return true;
         }
     }
-
     return false;
 }
 

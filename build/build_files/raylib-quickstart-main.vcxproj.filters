@@ -38,6 +38,8 @@
     <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Model\Character\CharacterData.cpp" />
     <ClCompile Include="..\..\src\Model\Character\Player\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
+    <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -99,6 +101,8 @@
     <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />
     <ClInclude Include="..\..\src\Model\Character\CharacterData.h" />
     <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
+    <ClInclude Include="..\..\src\Factory\ItemFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

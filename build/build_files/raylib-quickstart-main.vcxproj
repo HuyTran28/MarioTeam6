@@ -290,6 +290,7 @@
     <ClInclude Include="..\..\src\Factory\BlockFactory.h" />
     <ClInclude Include="..\..\src\Factory\EnemyFactory.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
+    <ClInclude Include="..\..\src\Factory\ItemFactory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
     <ClInclude Include="..\..\src\Model\Block\BlockData.h" />
     <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
@@ -308,6 +309,7 @@
     <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />
     <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
+    <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
     <ClInclude Include="..\..\src\Model\LevelSelectModel.h" />
     <ClInclude Include="..\..\src\Model\LogInModel.h" />
     <ClInclude Include="..\..\src\Model\MapData.h" />
@@ -351,6 +353,7 @@
     <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
+    <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
@@ -360,6 +363,7 @@
     <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
     <ClCompile Include="..\..\src\Model\Character\Player\PlayerData.cpp" />
     <ClCompile Include="..\..\src\Model\GameData.cpp" />
+    <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
