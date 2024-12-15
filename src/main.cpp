@@ -50,8 +50,8 @@ int main()
     Stage1 stage1(200, 2, 9, dynamicsWorld);
     //Stage2 stage2(110, 2, 9, dynamicsWorld);
 
-	Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Mario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 0.9f, 80000.0f, 100);
-	
+	//Player* mario = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Mario.glb", {0, 10, 0}, {0, 0, 1}, 10.0f, 0.9f, 80000.0f, 100);
+	Player* luigi = Player::createPlayer(dynamicsWorld, "Assets/Models/Characters/Luigi.glb", { 5, 10, 0 }, { 0, 0, 1 }, 15.0f, 0.9f, 100000.0f, 100);
 	PatrollingEnemyAttributes patrolling1({ 0, 5, 10 }, { 0, 5, 20 });
     Enemy* koopa = EnemyFactory::createEnemy(EnemyType::Koopa, dynamicsWorld, "Assets/Models/Characters/Koopa.glb", { 0, 5, 5 }, { 0, 0, 1 }, 5.0f, 0.7f, &patrolling1);
     
@@ -64,8 +64,8 @@ int main()
         // Update
         dynamicsWorld->stepSimulation(GetFrameTime());
         Vector3 cameraOffset = { 0.0f, 5.0f, 10.0f }; // Offset behind and above the player
-        camera.position = Vector3Add(mario->getPosition(), cameraOffset);
-        camera.target = mario->getPosition(); // Camera always looks at the player
+        camera.position = Vector3Add(luigi->getPosition(), cameraOffset);
+        camera.target = luigi->getPosition(); // Camera always looks at the player
         float zoomSpeed = 5.0f; // How fast the zoom changes
         camera.fovy -= GetMouseWheelMove() * zoomSpeed;
 
@@ -81,14 +81,16 @@ int main()
 		// Update
         CollisionManager collisionManager(dynamicsWorld);
         collisionManager.detectCollisions();
-        mario->update();
+        //mario->update();
+        luigi->update();
 		
 		koopa->update();
 		goomba->update();
 
         //stage2.draw();
         stage1.draw();
-		mario->render();
+		//mario->render();
+		luigi->render();
 		
 		goomba->render();
 		koopa->render();

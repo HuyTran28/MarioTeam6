@@ -155,7 +155,7 @@ void Player::updateAnimationState() {
         break;
 
     case PlayerAnimationState::WALKING:
-        m_animationManager->playAnimation(6); // Walking animation
+        m_animationManager->playAnimation(5); // Walking animation
         break;
 
     case PlayerAnimationState::JUMPING:
@@ -189,7 +189,7 @@ void Player::updatePlayerAnimationState() {
     }
 
     if (!m_isOnGround) {
-        if (velocity.getY() > 0.0f) {
+        if (velocity.getY() > 1.0f) {
             m_animationState = PlayerAnimationState::JUMPING;
         }
         else {
@@ -197,7 +197,7 @@ void Player::updatePlayerAnimationState() {
         }
     }
     else {
-        if (velocity.length() > 0.1f) {
+        if (velocity.length() > 1.0f) {
             m_animationState = PlayerAnimationState::WALKING;
         }
         else {
@@ -205,9 +205,6 @@ void Player::updatePlayerAnimationState() {
         }
     }
 }
-
-
-
 
 void Player::startInvincibility() {
 	m_isInvincible = true;
@@ -236,27 +233,27 @@ void Player::updateInvincibilityTimer() {
 void Player::update() {
     m_isOnGround = checkGroundCollision();  // Update grounded state
 
-    if (!m_isOnGround) {
-        // Apply gravity
-        btVector3 velocity = m_rigidBody->getLinearVelocity();
-        btVector3 gravity = m_dynamicsWorld->getGravity();
-        m_rigidBody->applyCentralForce(gravity);
+    //if (!m_isOnGround) {
+    //    // Apply gravity
+    //    btVector3 velocity = m_rigidBody->getLinearVelocity();
+    //    btVector3 gravity = m_dynamicsWorld->getGravity();
+    //    m_rigidBody->applyCentralForce(gravity);
 
-        // Apply extra gravity for faster falling if needed
-        const float extraGravityFactor = 2.0f;
-        btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
+    //    // Apply extra gravity for faster falling if needed
+    //    const float extraGravityFactor = 2.0f;
+    //    btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
 
-        if (velocity.getY() < 0.0f) {  // Only apply extra gravity when falling
-            m_rigidBody->applyCentralForce(additionalGravity);
-        }
+    //    if (velocity.getY() < 0.0f) {  // Only apply extra gravity when falling
+    //        m_rigidBody->applyCentralForce(additionalGravity);
+    //    }
 
-        // Reduce damping for smooth motion in the air
-        m_rigidBody->setDamping(0.1f, m_rigidBody->getAngularDamping());
-    }
-    else {
-        // Restore damping when on the ground
-        m_rigidBody->setDamping(0.5f, m_rigidBody->getAngularDamping());
-    }
+    //    // Reduce damping for smooth motion in the air
+    //    m_rigidBody->setDamping(0.1f, m_rigidBody->getAngularDamping());
+    //}
+    //else {
+    //    // Restore damping when on the ground
+    //    m_rigidBody->setDamping(0.5f, m_rigidBody->getAngularDamping());
+    //}
 
     move();    // Update movement
     rotate();  // Update rotation
@@ -269,9 +266,10 @@ void Player::update() {
     updatePlayerAnimationState(); // Determine the animation state
     updateAnimationState();       // Update animations
     updateInvincibilityTimer();   // Update invincibility timer
+
+	std::cout << "Player velocity: " << playerVelocity.getX() << ", " << playerVelocity.getY() << ", " << playerVelocity.getZ() << std::endl;
+	std::cout << "Player position: " << m_position.x << ", " << m_position.y << ", " << m_position.z << std::endl;
 }
-
-
 
 
 void Player::determineCollisionType(CollisionEvent& event) {

@@ -30,7 +30,7 @@ void AnimationManager::updateAnimation(float deltaTime) {
     if (m_animationCount > 0) {
         UpdateModelAnimation(m_model, m_animations[m_currentAnimation], m_animationFrame);
 
-        m_animationFrame += deltaTime * 30.0f; // Ensure a reasonable frame rate multiplier (30 FPS)
+        m_animationFrame += deltaTime * 60.0f; // Ensure a reasonable frame rate multiplier (30 FPS)
 
         if (m_animationFrame >= m_animations[m_currentAnimation].frameCount) {
             m_animationFrame = 0.0f; // Loop the animation
