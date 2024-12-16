@@ -105,21 +105,22 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
 
     if (playerData->getRigidBody())
     {
-        marioData->setIsOnGround(checkGroundCollision(marioData));
-        if (!(marioData->getIsOnGround())) {
+        playerData->setIsOnGround(checkGroundCollision(playerData));
+        if (!(playerData->getIsOnGround())) {
             // Apply gravity
-            btVector3 velocity = marioData->getRigidBody()->getLinearVelocity();
-            btVector3 gravity = marioData->getWorld()->getGravity();
-            marioData->applyCentralForce(gravity);
+            btVector3 velocity = playerData->getRigidBody()->getLinearVelocity();
+            btVector3 gravity = playerData->getWorld()->getGravity();
+            playerData->applyCentralForce(gravity);
             // Apply extra gravity for faster falling if needed
             const float extraGravityFactor = 100.0f;
             btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
-            
-            if (velocity.getY() < 0.0f) {  
-				velocity.setY(0.0f);  // Prevent the player from falling through the ground
-				marioData->setLinearVelocity(velocity);
-                marioData->applyCentralForce(additionalGravity * marioData->getRigidBody()->getMass());
+
+            if (velocity.getY() < 0.0f) {
+                velocity.setY(0.0f);  // Prevent the player from falling through the ground
+                playerData->setLinearVelocity(velocity);
+                playerData->applyCentralForce(additionalGravity * playerData->getRigidBody()->getMass());
             }
+        }
 
         movePlayer(playerData);    // Update movement
         rotatePlayer(playerData);  // Update rotation
@@ -160,7 +161,7 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
     if (newVelocity.length() > velocityThreshold)
         playerData->setLinearVelocity(newVelocity);
 
-   // marioData->setPlayerPos()
+    // marioData->setPlayerPos()
 }
 
 void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
@@ -215,12 +216,12 @@ void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
 
         playerData->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
         // End the jump if the max jump duration is reached
-        if (marioData->getJumpTimer() >= marioData->getMaxJumpDuration()) {
-            marioData->setIsJumping(false);
+        if (playerData->getJumpTimer() >= playerData->getMaxJumpDuration()) {
+            playerData->setIsJumping(false);
 
-            btVector3 velocity = marioData->getRigidBody()->getLinearVelocity();
+            btVector3 velocity = playerData->getRigidBody()->getLinearVelocity();
             velocity.setY(0.0f);  // Prevent the player from falling through the ground
-            marioData->setLinearVelocity(velocity);
+            playerData->setLinearVelocity(velocity);
         }
     }
 }
@@ -340,27 +341,29 @@ void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> cha
         return;
     }
 
-    if (!(marioData->getIsOnGround())) {
+
+    btVector3 velocity = characterData->getRigidBody()->getLinearVelocity();
+    if (!(characterData->getIsOnGround())) {
         // Mario is airborne
-        if (currentVelocity.getY() > 0.01f) {
+        if (velocity.getY() > 0.01f) {
             // Ascending (jumping up)
-            marioData->getAnimarionManager()->playAnimation(4); // Jump animation
+            characterData->setPlayerAnimationState(PlayerAnimationState::JUMPING);
         }
-        else if (currentVelocity.getY() <= 0.0f) {
+        else if (velocity.getY() <= 0.0f) {
             // Descending (falling down)
-            marioData->getAnimarionManager()->playAnimation(1); // Fall animation
+            characterData->setPlayerAnimationState(PlayerAnimationState::FALLING);
         }
     }
     else {
 
         // Player is grounded
-        if (currentVelocity.length() > 0.1f) {
+        if (velocity.length() > 0.1f) {
 
-            marioData->getAnimarionManager()->playAnimation(5); // Play the walking animation
+            characterData->setPlayerAnimationState(PlayerAnimationState::WALKING);
         }
         else {
 
-            marioData->getAnimarionManager()->playAnimation(3); // Play the idle animation
+            characterData->setPlayerAnimationState(PlayerAnimationState::IDLE);
         }
     }
 }

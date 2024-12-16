@@ -11,19 +11,17 @@ class StageController : public StateController
 {
 
 public:
-
-
 	void updateCollisionShape(std::shared_ptr<CharacterData> playerData);
 	void updateModelTransform(std::shared_ptr<CharacterData> playerData);
 	bool checkGroundCollision(std::shared_ptr<CharacterData> playerData);
 
 
-	void updateAnimationState(std::shared_ptr<CharacterData> marioData);
-	void setPlayerAnimationState(std::shared_ptr<CharacterData> marioData);
-	void updateMovementOfPlayer(std::shared_ptr<PlayerData> marioData);
-	void movePlayer(std::shared_ptr<PlayerData> marioData);
-	void rotatePlayer(std::shared_ptr<PlayerData> marioData);
-	void jumpPlayer(std::shared_ptr<PlayerData> marioData);
+	void updateAnimationState(std::shared_ptr<CharacterData> playerData);
+	void setPlayerAnimationState(std::shared_ptr<CharacterData> playerData);
+	void updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData);
+	void movePlayer(std::shared_ptr<PlayerData> playerData);
+	void rotatePlayer(std::shared_ptr<PlayerData> playerData);
+	void jumpPlayer(std::shared_ptr<PlayerData> playerData);
 
 
 
