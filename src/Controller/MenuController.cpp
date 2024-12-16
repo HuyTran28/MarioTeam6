@@ -24,7 +24,6 @@ void MenuController::update(std::shared_ptr<Event> event)
 	else if (event->getType() == "Tick Event")
 	{
 		updateCamera();
-		StageController::updateMovementOfPlayer(model->getPlayerData());
 
 		Camera3D camera = model->getCamera();
 
@@ -45,27 +44,66 @@ void MenuController::update(std::shared_ptr<Event> event)
 
 void MenuController::updateCamera()
 {
-	Camera3D& camera = model->getCamera();
-	std::shared_ptr<PlayerData> marioModel = model->getPlayerData();
+	// Calculate direction vector from camera position to target
+	Camera3D camera = model->getCamera();
 
-	std::cout << marioModel->getForwarDir().x << " " << marioModel->getForwarDir().y << " " << marioModel->getForwarDir().z << std::endl;
+	float moveSpeed = model->getPlayerData()->getMoveSpeed();
 
-	Vector3 tmp = Vector3Scale(marioModel->getForwarDir(), 20.0f);
-	camera.position = Vector3Add(marioModel->getPlayerPos(), tmp);
+	// Calculate direction vector from camera position to target
+	Vector3 direction = Vector3Subtract(camera.target, camera.position);
+	float length = Vector3Length(direction);
 
-	Vector3 baseTarget = Vector3Add(camera.position, marioModel->getForwarDir());
-	verticalOffset -= GetMouseDelta().y * 0.001f;
+	// Normalize the direction vector to avoid NaN values
+	if (length != 0.0f) {
+		direction = Vector3Scale(direction, 1.0f / length);
+	}
 
-	camera.target = baseTarget;
-	camera.target.y += verticalOffset;
+	float xChange = moveSpeed * direction.x;
+	float zChange = moveSpeed * direction.z;
 
-	float zoomSpeed = 5.0f;
-	camera.fovy -= GetMouseWheelMove() * zoomSpeed;
+	Vector3 playerPosition = model->getPlayerData()->getPlayerPos();
 
-	if (camera.fovy < 10.0f) camera.fovy = 10.0f;
-	if (camera.fovy > 90.0f) camera.fovy = 90.0f;
+	Vector3 cameraInitialPosition = model->getCameraInitialPosition();
 
-	UpdateCamera(&(model->getCamera()), CAMERA_CUSTOM);
+	if (IsKeyDown(KEY_W)) {
+		playerPosition.x += xChange;
+		playerPosition.z += zChange;
+		model->getPlayerData()->setPlayerPos(playerPosition);
+	}
+
+	if (IsKeyDown(KEY_S)) {
+		playerPosition.x -= xChange;
+		playerPosition.z -= zChange;
+		model->getPlayerData()->setPlayerPos(playerPosition);
+
+	}
+
+	if (IsKeyDown(KEY_A)) {
+		playerPosition.x += zChange;
+		playerPosition.z -= xChange;
+		model->getPlayerData()->setPlayerPos(playerPosition);
+
+	}
+
+	if (IsKeyDown(KEY_D)) {
+		playerPosition.x -= zChange;
+		playerPosition.z += xChange;
+		model->getPlayerData()->setPlayerPos(playerPosition);
+
+	}
+
+
+	// Update camera position based on player position
+	camera.position = Vector3Add(playerPosition, cameraInitialPosition);
+	// Update the camera target to avoid NaN values
+	camera.target = Vector3Add(camera.position, direction);
+	model->setCamera(camera);
+
+	model->getPlayerData()->setForwarDir(direction);
+
+	std::cout << model->getCamera().position.x << " " << model->getCamera().position.y << " " << model->getCamera().position.z << std::endl;
+
+	UpdateCamera(&(model->getCamera()), CAMERA_FIRST_PERSON);
 }
 
 void MenuController::updateGameState()

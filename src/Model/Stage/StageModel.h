@@ -42,6 +42,9 @@ public:
 	std::shared_ptr<PlayerData> getPlayerData() const;
 	std::shared_ptr<Button> getPauseButton() const;
 	std::shared_ptr<PlayerData> createMarioModel(Vector3 position, Vector3 scale);
+	Vector3 getCameraInitialPosition() const {
+		return m_cameraInitialPosition;
+	}
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;

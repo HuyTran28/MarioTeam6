@@ -1,10 +1,10 @@
 #include "StageModel.h"
 #include <iostream>
 StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode )
-    : StageModel(Vector3{ 0.0f, 20.0f, 40.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE)
+    : StageModel(cameraInitPos,cameraTarget, fovy, cameraMode)
 {
     m_playerData = playerData;
-    initializeCamera();
+    //initializeCamera();
 }
 
 StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)

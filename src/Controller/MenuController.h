@@ -21,6 +21,7 @@ public:
 private:
 	std::shared_ptr<MenuModel> model;
 	float verticalOffset = 0.0f;	
+	float OffsetZ = 0.0f;
 	bool CheckCollisionRayBox(Ray ray, BoundingBox box);
 	bool IsMouseOver3DObject(Camera3D camera, BoundingBox box);
 };
