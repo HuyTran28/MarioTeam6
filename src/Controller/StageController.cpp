@@ -1,14 +1,109 @@
 #include "StageController.h"
 #include <iostream>
+
+void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData)
+{
+    Vector3 targetPos = enemyData->getMovingToA() ? enemyData->getPointA() : enemyData->getPointB();
+    enemyData->setTargetPosistion(targetPos);
+
+    moveToEnemy(enemyData);
+    // Check if the enemy has reached the target position with some tolerance
+    float distance = Vector3Distance(enemyData->getPlayerPos(), targetPos);
+
+    if (distance < 2.0f) {
+        enemyData->setMovingToA(!(enemyData->getMovingToA()));
+        Vector3 newtargetPos = enemyData->getMovingToA() ? enemyData->getPointA() : enemyData->getPointB();
+        enemyData->setTargetPosistion(newtargetPos);
+
+        rotateEnemy(enemyData);
+    }
+}
+
+void StageController::moveToEnemy(std::shared_ptr<Enemy> enemyData)
+{
+    Vector3 direction = Vector3Normalize(enemyData->getTargetPosition() - enemyData->getPlayerPos());
+    btVector3 movement(direction.x, 0, direction.z);
+
+    enemyData->setLinearVelocity(movement * enemyData->getMoveSpeed());
+    // Update position
+    btTransform trans;
+    enemyData->getRigidBody()->getMotionState()->getWorldTransform(trans);
+    btVector3 pos = trans.getOrigin();
+
+    Vector3 newPos = { pos.x(), pos.y(), pos.z() };
+    enemyData->setPlayerPos(newPos);
+}
+
+void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
+{
+    // Step 1: Calculate the desired horizontal direction
+    btTransform transform = enemyData->getRigidBody()->getWorldTransform();
+    btQuaternion currentRotation = transform.getRotation();
+
+    Vector3 desiredDirection = Vector3Subtract(enemyData->getTargetPosition(), enemyData->getPlayerPos());
+    desiredDirection.y = 0; // Ignore vertical component
+    if (Vector3Length(desiredDirection) < 0.001f) return; // Avoid division by zero
+    desiredDirection = Vector3Normalize(desiredDirection);
+
+    // Step 2: Get the current forward direction (projected on the horizontal plane)
+    Vector3 normalizedForwardDir = Vector3Normalize(enemyData->getForwardDir());
+    Vector3 currentForwardDir = { normalizedForwardDir.x, 0.0f, normalizedForwardDir.z };
+    currentForwardDir = Vector3Normalize(currentForwardDir);
+
+    // Step 3: Calculate the rotation axis
+    Vector3 rotationAxis = { 0.0f, 1.0f, 0.0f }; // Constrain rotation to the Y-axis
+
+    // Step 4: Calculate the rotation angle
+    float dot = Vector3DotProduct(currentForwardDir, desiredDirection);
+    float angle = acosf(Clamp(dot, -1.0f, 1.0f)); // Clamp for safety
+
+    // Determine the sign of the angle using the cross product
+    Vector3 cross = Vector3CrossProduct(currentForwardDir, desiredDirection);
+    if (cross.y < 0) angle = -angle; // Clockwise rotation
+
+    // Step 5: Apply the rotation
+    if (fabs(angle) > 0.01f) { // Skip tiny rotations
+        // Calculate smooth interpolation factor based on the angle
+        float rotationSpeedFactor = fminf(fabs(angle) / 3.14159f, 1.0f); // Cap at 1.0 for maximum speed
+        float slerpFactor = 0.1f + (rotationSpeedFactor * 0.4f); // Smooth factor (adjust as needed)
+
+        btQuaternion rotation(btVector3(rotationAxis.x, rotationAxis.y, rotationAxis.z), angle);
+        btQuaternion newRotation = rotation * currentRotation;
+
+        // Smoothly interpolate the rotation
+        btQuaternion interpolatedRotation = slerp(currentRotation, newRotation, slerpFactor); // Adjust factor as needed
+        interpolatedRotation.normalize(); // Normalize to avoid numerical errors
+
+        // Update transform (preserve position)
+        btVector3 currentPosition = transform.getOrigin();
+        transform.setRotation(interpolatedRotation);
+        transform.setOrigin(currentPosition);
+
+        // Apply to rigid body
+        enemyData->setWorldTransform(transform);
+    }
+    enemyData->setPlayerRotationAngle(angle);
+}   
+    
+void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies)
+{
+    for (auto &enemy : enemies)
+    {
+        
+        moveEnemy(enemy);
+        updateCollisionShape(enemy);  // Update collision shape
+        updateModelTransform(enemy);  // Synchronize marioData with physics body
+    }
+     
+}
 void StageController::registerSelf()
 {
 }
 
-void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
+void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData)
 {
-   // std::shared_ptr<Mario> marioData = std::dynamic_pointer_cast<Mario>(marioData);
 
-    if (marioData->getRigidBody())
+    if (playerData->getRigidBody())
     {
         marioData->setIsOnGround(checkGroundCollision(marioData));
         if (!(marioData->getIsOnGround())) {
@@ -26,27 +121,18 @@ void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
                 marioData->applyCentralForce(additionalGravity * marioData->getRigidBody()->getMass());
             }
 
-            // Reduce damping for smooth motion in the air
-            marioData->setDamping(0.1f, marioData->getRigidBody()->getAngularDamping());
-        }
-        else {
-            // Restore damping when on the ground
-            marioData->setDamping(0.5f, marioData->getRigidBody()->getAngularDamping());
-        }
+        movePlayer(playerData);    // Update movement
+        rotatePlayer(playerData);  // Update rotation
+        jumpPlayer(playerData);  // Handle jumping
 
-        moveMario(marioData);    // Update movement
-        rotateMario(marioData);  // Update rotation
-        jumpMario(marioData);  // Handle jumping
-
-        updateCollisionShape(marioData);  // Update collision shape
-        updateModelTransform(marioData);  // Synchronize marioData with physics body
-
-        // btVector3 playerVelocity = m_rigidBody->getLinearVelocity();
-        // updateAnimationState();  // Update animation state
+        updateCollisionShape(playerData);  // Update collision shape
+        updateModelTransform(playerData);  // Synchronize playerData with physics body
+        setPlayerAnimationState(playerData);
+        updateAnimationState(playerData);  
     }
 }
 
-void StageController::moveMario(std::shared_ptr<Mario> marioData)
+void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 {
 
 
@@ -54,30 +140,30 @@ void StageController::moveMario(std::shared_ptr<Mario> marioData)
 
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
-        desiredVelocity = btVector3(marioData->getForwarDir().x, 0, marioData->getForwarDir().z).normalized() * marioData->getMoveSpeed();
+        desiredVelocity = btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
     }
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
-    btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
+    btVector3 currentVelocity = playerData->getRigidBody()->getLinearVelocity();
     btVector3 acceleration = (desiredVelocity - currentVelocity) * accelerationFactor * GetFrameTime();
 
     // Update the player's velocity with acceleration
     btVector3 newVelocity = currentVelocity + acceleration;
 
     // Clamp the new velocity to the max speed
-    if (newVelocity.length() > marioData->getMoveSpeed()) {
-        newVelocity = newVelocity.normalized() * marioData->getMoveSpeed();
+    if (newVelocity.length() > playerData->getMoveSpeed()) {
+        newVelocity = newVelocity.normalized() * playerData->getMoveSpeed();
     }
 
     // Apply the new velocity if significant
     const float velocityThreshold = 0.01f;
     if (newVelocity.length() > velocityThreshold)
-        marioData->setLinearVelocity(newVelocity);
+        playerData->setLinearVelocity(newVelocity);
 
    // marioData->setPlayerPos()
 }
 
-void StageController::rotateMario(std::shared_ptr<Mario> marioData)
+void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
 {
     
 
@@ -94,40 +180,40 @@ void StageController::rotateMario(std::shared_ptr<Mario> marioData)
     }
 
     // Update the forward direction based on rotation
-    float rotationAngle = marioData->getPlayerRotationAngle();
+    float rotationAngle = playerData->getPlayerRotationAngle();
     rotationAngle += angularVelocity * GetFrameTime();
-    marioData->setPlayerRotationAngle(rotationAngle);
+    playerData->setPlayerRotationAngle(rotationAngle);
 
     Matrix rotationMatrix = MatrixRotateY(rotationAngle);
-    marioData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
+    playerData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
 }
 
-void StageController::jumpMario(std::shared_ptr<Mario> marioData)
+void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
 {
    
-    float invGravity = 1.0f / -(marioData->getWorld())->getGravity().getY();
+    float invGravity = 1.0f / -(playerData->getWorld())->getGravity().getY();
 
-    if (marioData->getIsOnGround() && IsKeyDown(KEY_SPACE)) {
-        marioData->setIsJumping(true);      // Start the jump
-        marioData->setJumpTimer(0.0f);      // Reset the jump timer
-        marioData->setIsOnGround(false);   // Player is now airborne
+    if (playerData->getIsOnGround() && IsKeyDown(KEY_SPACE)) {
+        playerData->setIsJumping(true);      // Start the jump
+        playerData->setJumpTimer(0.0f);      // Reset the jump timer
+        playerData->setIsOnGround(false);   // Player is now airborne
 
         // Increase the jump force for a higher jump
-        float acceleration = (marioData->getJumpForce() * 1.5f) / marioData->getRigidBody()->getMass();
-        marioData->setMaxJumpDuaration(sqrt(acceleration / marioData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
+        float acceleration = (playerData->getJumpForce() * 0.5f) / playerData->getRigidBody()->getMass();
+        playerData->setMaxJumpDuaration(sqrt(acceleration / playerData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
     }
 
-    if (marioData->getIsJumping())
+    if (playerData->getIsJumping())
     {
         // Increment the jump timer
-        float jumpTimer = marioData->getJumpTimer();
-        marioData->setJumpTimer(jumpTimer += GetFrameTime());
+        float jumpTimer = playerData->getJumpTimer();
+        playerData->setJumpTimer(jumpTimer += GetFrameTime());
         // Calculate the current jump force based on the elapsed time
-        float currentJumpForce = marioData->getJumpForce() * 2.0f * (1.0f - (marioData->getJumpTimer() / marioData->getMaxJumpDuration()));
+        float currentJumpForce = playerData->getJumpForce() * 2.0f * (1.0f - (playerData->getJumpTimer() / playerData->getMaxJumpDuration()));
 
         // Apply the current jump force
 
-        marioData->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
+        playerData->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
         // End the jump if the max jump duration is reached
         if (marioData->getJumpTimer() >= marioData->getMaxJumpDuration()) {
             marioData->setIsJumping(false);
@@ -140,32 +226,30 @@ void StageController::jumpMario(std::shared_ptr<Mario> marioData)
 }
 
 
-void StageController::updateCollisionShape(std::shared_ptr<Mario> marioData)
+
+
+void StageController::updateCollisionShape(std::shared_ptr<CharacterData> characterData)
 {
-    
     // Get the rigid body's current transform
-    btTransform transform = marioData->getRigidBody()->getWorldTransform();
+    btTransform transform = characterData->getRigidBody()->getWorldTransform();
 
     // Force the rotation to align with the Y-axis (capsule's up-axis)
-
     transform.setRotation(btQuaternion(0, 0, 0, 1));
-    marioData->setRigidBodyTransform(transform);
+    characterData->setRigidBodyTransform(transform);
 }
 
-void StageController::updateModelTransform(std::shared_ptr<Mario> marioData)
+void StageController::updateModelTransform(std::shared_ptr<CharacterData> characterData)
 {
-   
-
     // Get the rigid body's transform
-    btTransform transform = marioData->getRigidBody()->getWorldTransform();
+    btTransform transform = characterData->getRigidBody()->getWorldTransform();
     btVector3 origin = transform.getOrigin();
 
     // Get the bounding box of the marioData
-    BoundingBox marioDataBounds = GetModelBoundingBox(marioData->getPlayerModel());
-    float marioDataHeight = (marioDataBounds.max.y - marioDataBounds.min.y) * marioData->getPlayerScale().y;
+    BoundingBox marioDataBounds = GetModelBoundingBox(characterData->getPlayerModel());
+    float marioDataHeight = (marioDataBounds.max.y - marioDataBounds.min.y) * characterData->getPlayerScale().y;
 
     // Retrieve the collision shape and calculate capsule dimensions
-    btCollisionShape* collisionShape = marioData->getRigidBody()->getCollisionShape();
+    btCollisionShape* collisionShape = characterData->getRigidBody()->getCollisionShape();
     btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(collisionShape);
     float capsuleRadius = capsuleShape->getRadius();
     float capsuleHeight = capsuleShape->getHalfHeight() * 2.0f + capsuleRadius * 2.0f;
@@ -174,49 +258,87 @@ void StageController::updateModelTransform(std::shared_ptr<Mario> marioData)
     float yOffset = (capsuleHeight / 2) - capsuleRadius * 1.7f - (marioDataHeight / 2);
 
     // Update the marioData position
-    marioData->setPlayerPos({ origin.getX(), origin.getY() + yOffset, origin.getZ() });
+    characterData->setPlayerPos({ origin.getX(), origin.getY() + yOffset, origin.getZ() });
 
     // Apply rotation and scale to the marioData
-    Matrix rotationMatrix = MatrixRotateY(marioData->getPlayerRotationAngle());
-    Matrix scaleMatrix = MatrixScale(marioData->getPlayerScale().x, marioData->getPlayerScale().y, marioData->getPlayerScale().z);
+    Matrix rotationMatrix = MatrixRotateY(characterData->getPlayerRotationAngle());
+    Matrix scaleMatrix = MatrixScale(characterData->getPlayerScale().x, characterData->getPlayerScale().y, characterData->getPlayerScale().z);
 
     // Combine the transformations and apply to the marioData
 
-    marioData->setPlayerModelTransform(MatrixMultiply(scaleMatrix, rotationMatrix));
+    characterData->setPlayerModelTransform(MatrixMultiply(scaleMatrix, rotationMatrix));
 }
 
-bool StageController::checkGroundCollision(std::shared_ptr<Mario> marioData)
+bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> characterData)
 {
     
-    if (marioData->getRigidBody()) {
+    if (characterData->getRigidBody()) {
         // Get the current motion state of the rigid body
         btTransform transform;
-        marioData->getRigidBody()->getMotionState()->getWorldTransform(transform);
+        characterData->getRigidBody()->getMotionState()->getWorldTransform(transform);
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
         btVector3 end = start - btVector3(0, 2.1f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
-        marioData->getWorld()->rayTest(start, end, rayCallback);
+        characterData->getWorld()->rayTest(start, end, rayCallback);
 
         if (rayCallback.hasHit()) {
             // If the ray hits something, we are on the ground
             return true;
         }
     }
-
     return false;
 }
 
-void StageController::playAnimation(int animationIndex)
+
+void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData)
 {
+
+    PlayerAnimationState animationState = characterData->getPlayerAnimationState();
+
+    switch (animationState) {
+    case PlayerAnimationState::IDLE:
+        AnimationManager::getInstance().playAnimation(3, characterData);
+        break;
+
+    case PlayerAnimationState::WALKING:
+        AnimationManager::getInstance().playAnimation(5, characterData);
+
+        break;
+
+    case PlayerAnimationState::JUMPING:
+        AnimationManager::getInstance().playAnimation(4, characterData);
+
+        break;
+
+    case PlayerAnimationState::FALLING:
+        AnimationManager::getInstance().playAnimation(1, characterData);
+
+        break;
+
+    case PlayerAnimationState::HIT:
+        AnimationManager::getInstance().playAnimation(2, characterData);
+
+        break;
+    case PlayerAnimationState::DIE:
+       
+        AnimationManager::getInstance().playAnimation(0, characterData);
+
+        break;
+    }
+    // Update the animation frame
+   
+    AnimationManager::getInstance().updateAnimation(GetFrameTime(), characterData);
+
 }
 
-
-void StageController::updateAnimationState(std::shared_ptr<Mario> marioData)
+void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> characterData)
 {
-    btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
+    if (characterData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
+        return;
+    }
 
     if (!(marioData->getIsOnGround())) {
         // Mario is airborne
@@ -241,7 +363,4 @@ void StageController::updateAnimationState(std::shared_ptr<Mario> marioData)
             marioData->getAnimarionManager()->playAnimation(3); // Play the idle animation
         }
     }
-
-    // Update the animation frame based on the player's movement
-    marioData->getAnimarionManager()->updateAnimation(GetFrameTime());
 }

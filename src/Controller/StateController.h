@@ -4,7 +4,7 @@
 #include "../Event/Event.h"
 #include "../Observer/IObserver.h"
 #include <raylib.h>
-#include "../Model/Character/Player/Mario.h"
+#include "../Model/Character/Player/PlayerData.h"
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 

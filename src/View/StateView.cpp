@@ -41,3 +41,58 @@ void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
 
     }
 }
+
+void StateView::renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
+{
+    for (auto enemy : enemies)
+    {
+        DrawModelEx(enemy->getPlayerModel(), {enemy->getPlayerPos().x, enemy->getPlayerPos().y, enemy->getPlayerPos().z}, 
+            enemy->getPlayerRotationAxis(), enemy->getPlayerRotationAngle(), enemy->getPlayerScale(), WHITE);
+        btCollisionShape* shape = enemy->getRigidBody()->getCollisionShape();
+
+        // Get the transform of the rigid body
+        btTransform transform;
+        enemy->getRigidBody()->getMotionState()->getWorldTransform(transform);
+
+        // Convert Bullet's transform to your rendering library's format
+        btVector3 origin = transform.getOrigin();
+        btQuaternion rotation = transform.getRotation();
+        Vector3 boxPosition = { origin.getX(), origin.getY(), origin.getZ() };
+        Quaternion boxRotation = { rotation.getX(), rotation.getY(), rotation.getZ(), rotation.getW() };
+
+        if (shape->getShapeType() == BOX_SHAPE_PROXYTYPE) {
+            btBoxShape* boxShape = static_cast<btBoxShape*>(shape);
+            btVector3 halfExtents = boxShape->getHalfExtentsWithMargin();
+            Vector3 boxSize = { halfExtents.getX() * 2, halfExtents.getY() * 2, halfExtents.getZ() * 2 };
+
+            //DrawCube(boxPosition, boxSize.x, boxSize.y, boxSize.z, RED); // Draw the box in red
+            DrawCubeWires(boxPosition, boxSize.x, boxSize.y, boxSize.z, BLACK); // Draw the box wireframe in black
+        }
+        else if (shape->getShapeType() == CAPSULE_SHAPE_PROXYTYPE) {
+            btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(shape);
+
+            // Get the bounding box of the model
+            BoundingBox modelBounds = GetModelBoundingBox(enemy->getPlayerModel());
+            float modelHeight = (modelBounds.max.y - modelBounds.min.y) * enemy->getPlayerScale().y;
+            float modelRadius = std::max((modelBounds.max.x - modelBounds.min.x), (modelBounds.max.z - modelBounds.min.z)) * enemy->getPlayerScale().z / 2.0f;
+
+            // Adjust the capsule size to wrap around the model
+            float radius = modelRadius * 1.1f; // Slightly larger than the model radius
+            float halfHeight = (modelHeight / 2.0f) - radius;
+
+            Vector3 startPos = { boxPosition.x, boxPosition.y - halfHeight, boxPosition.z };
+            Vector3 endPos = { boxPosition.x, boxPosition.y + halfHeight, boxPosition.z };
+            //DrawCapsule(startPos, endPos, radius, RED); // Draw the capsule in red
+            DrawCapsuleWires(startPos, endPos, radius, 16, 16, BLACK); // Draw the capsule wireframe in black
+        }
+        // Add handling for other shape types here
+        else if (shape->getShapeType() == SPHERE_SHAPE_PROXYTYPE) {
+            btSphereShape* sphereShape = static_cast<btSphereShape*>(shape);
+            float radius = sphereShape->getMargin(); // Assuming margin is the radius
+            //DrawSphere(boxPosition, radius, RED); // Draw the sphere in red
+            DrawSphereWires(boxPosition, radius, 16, 16, BLACK); // Draw the sphere wireframe in black
+        }
+    }
+
+    
+}

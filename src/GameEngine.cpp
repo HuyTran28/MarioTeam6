@@ -16,7 +16,7 @@ void GameEngine::run()
 	isRunning = true;
 
 	InitWindow(1900, 1000, "Game Engine");
-	SetTargetFPS(60);
+	SetTargetFPS(120);
 
 	this->registerSelf();
 
@@ -24,14 +24,11 @@ void GameEngine::run()
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
-
-	std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = gameData.getDynamicsWorld();
+	CollisionManager::getInstance();
 
 
 	while (isRunning == true && !WindowShouldClose())
 	{
-		dynamicsWorld->stepSimulation(GetFrameTime());
-
 		std::shared_ptr<Event> newEvent = std::make_shared<TickEvent>();
 		EventManager::getInstance().notify(newEvent);
 		newEvent.reset();

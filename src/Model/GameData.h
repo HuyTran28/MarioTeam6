@@ -17,7 +17,6 @@ public:
 	void setPlayerName(std::string playerName);
 	void setPlayerScore(int playerScore);
 	void setIsLogIn(bool isLogIn);
-	std::shared_ptr<btDiscreteDynamicsWorld> getDynamicsWorld() const;
 	std::string getLastState();
 	void setLastState(std::string lastState);
 
@@ -30,9 +29,4 @@ private:
 	std::string lastState;
 	GameData();
 
-	std::shared_ptr<btDiscreteDynamicsWorld> m_dynamicsWorld;
-	std::shared_ptr<btDefaultCollisionConfiguration> m_collisionConfiguration;
-	std::shared_ptr<btCollisionDispatcher> m_dispatcher;
-	std::shared_ptr<btBroadphaseInterface> m_overlappingPairCache;
-	std::shared_ptr<btSequentialImpulseConstraintSolver> m_solver;
 };

@@ -41,7 +41,7 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
 
     // Create box shape based on model dimensions
     std::shared_ptr<btCollisionShape> blockShape = nullptr;
-    if (type == BlockType::PipeBlock)
+    if (type == BlockType::PipeBlock || type == BlockType::IslandBlock)
     {
         blockShape = std::make_shared<btCylinderShape>(btVector3(
             halfExtents.x, halfExtents.y, halfExtents.z));
@@ -88,6 +88,8 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
 		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "SupportivePipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::FlyBlock:
 		return std::make_shared<FlyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "FlyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+    case BlockType::IslandBlock:
+        return std::make_shared<IslandBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "IslandBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 
     default:
         nullptr;

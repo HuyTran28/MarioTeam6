@@ -1,8 +1,10 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel())
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 430.0f, 10.0f, 10.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE)
 {
+
     m_map = createMap();
+    m_enemies = createEnemies();
 
 	cloudScales = { 1.0f, 1.0f, 1.0f };
 	cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
@@ -59,7 +61,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
     m_width = 200;
     m_height = 2;
     m_depth = 9;
-    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
 
     const float size = 2.5f;
     const int middle = m_depth / 2;
@@ -201,6 +203,15 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         }
         };
 
+    auto createIslandBlock = [&]()
+        {
+            Vector3 scaleIsland = { 13.0f, 13.0f, 13.0f };
+            Vector3 rotationAxisIsland = { 1.0f, 0.0f, 0.0f };
+            float rotaionAngleIsland = -90.0f;
+            Vector3 position = { 430.0f, 1.0f, 6.0f };
+            addBlock(BlockType::IslandBlock, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
+
+        };
     // Main function calls
     createBrickBlockGrid();
     createQuestionBlocks();
@@ -211,86 +222,74 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
     createRightRouletteBlocks();
     createUnderground();
     createSpecificNormalBlocks();
-
+    createIslandBlock();
     return map;
 }
 
-std::shared_ptr<Mario> Stage1Model::createMarioModel()
+
+
+
+
+
+std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
 {
-    std::shared_ptr<Mario> marioModel;
-    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
+    std::vector<std::shared_ptr<Enemy>> enemies;
 
-    Vector3 forwardDir = { 0.0f, 0.0f, 1.0f };
-    Vector3 positionMario = { 0.0f, 20.0f, 0.0f };
-    Vector3 scaleMario = { 0.9f, 0.9f, 0.9f };
-    Vector3 rotationAxisMario = { 0.0f, 1.0f, 0.0f };
-    Model playerModel = LoadModel("../../Assets\\Models\\Characters\\Mario.glb");
-    BoundingBox modelBounds = GetModelBoundingBox(playerModel);
+    Vector3 rotaionAxisGoomba = { 0.0f, 1.0f, 0.0f };
+    float rotationAngleGoomba = 0.0f;
 
-    // Calculate the arm span (distance along the X-axis)
-    float armSpan = (modelBounds.max.x - modelBounds.min.x) * scaleMario.x;
+    Vector3 rotaionAxisKoopa = { 0.0f, 1.0f, 0.0f };
+    float rotationAngleKoopa = 0.0f;
 
-    // Set the capsule radius to half the arm span
-    float radius = armSpan * 0.5f - 0.2f;
 
-    // Calculate height of the capsule based on the model's bounding box
-    float height = (modelBounds.max.y - modelBounds.min.y) * scaleMario.y - 1.0f; // Height of the model
+    Vector3 scaleGoomba = { 0.7f, 0.7f, 0.7f };
+    Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
 
-    // Adjust height to exclude spherical parts of the capsule
-    float capsuleHeight = height - radius;
-    if (capsuleHeight < 0) {
-        capsuleHeight = 0; // Prevent negative height
-    }
+    Vector3 forwardDirGoomba = { 0, 0, 1 };
+    Vector3 forwardDirKoopa = { 0, 0, 1 };
 
-    // Define initial transformation for the player
-    btTransform startTransform;
-    startTransform.setIdentity();
-    startTransform.setOrigin(btVector3(positionMario.x, positionMario.y, positionMario.z));
+    float speedGooba = 5.0f;
+    float speedKoopa = 5.0f;
 
-    // Create capsule shape
-    std::shared_ptr<btCollisionShape> playerShape = std::make_shared<btCapsuleShape>(radius, capsuleHeight);
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
+    auto addEnemy = [&](EnemyType type, const std::string& path, const Vector3& position, const Vector3 forwardDir, const Vector3& scale,
+        const Vector3& pointA, const Vector3& pointB, const float& speed, const Vector3& rotationAxis, const float& rotationAngle)
+        {
+            auto enemy = EnemyFactory::createEnemy(type, dynamicsWorld, path, position, forwardDir, rotationAxis, rotationAngle, scale, speed, pointA, pointB);
+            if (enemy)
+                enemies.push_back(std::shared_ptr<Enemy>(enemy));
+        };
+    const float size = 2.5;
+    const float Oy = (m_height * 1.0) * size;
+    const float Oz = (m_depth * size) / 2;
 
-    // Physics body setup remains the same
-    btScalar mass = 75.0f;
-    btVector3 localInertia(0, 0, 0);
-    playerShape->calculateLocalInertia(mass, localInertia);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 35, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 35, Oy, Oz }, { 50, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 90, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 95, Oy, Oz + (2 * size)}, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    std::shared_ptr<btDefaultMotionState> motionState = std::make_shared<btDefaultMotionState> (btDefaultMotionState(startTransform));
-    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState.get(), playerShape.get(), localInertia);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 110, Oy, Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 110, Oy, Oz - (2 * size) }, { 110, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 120, Oy, Oz + (2 * size) }, forwardDirGoomba, scaleGoomba, { 120, Oy, Oz + (2 * size) }, { 120, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    std::shared_ptr<btRigidBody> playerRigidBody = std::make_shared<btRigidBody> (rbInfo);
+  //  addEnemy(EnemyType::Koopa, PATH_KOOPA, { 10, 5, 3 }, forwardDirKoopa, scaleKoopa, { 10, 5, 3 }, { 20, 5, 3 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 182.508, 21.6751, 10.1829 }, forwardDirGoomba, scaleGoomba, { 182.508, 21.6751, 10.1829 }, { 200, 21.6751, 10.1829 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    // Add the player to the physics world
 
-	std::string modelPath = "../../Assets\\Models\\Characters\\Mario.glb";
+    
 
-    marioModel = std::make_shared<Mario>(
-        playerRigidBody,                               // std::shared_ptr<btRigidBody>
-        playerShape,                                   // std::shared_ptr<btCollisionShape>
-        motionState,								   // std::shared_ptr<btDefaultMotionState>
-        modelPath,                                     // std::string
-        forwardDir,                                    // Vector3
-        positionMario,                                 // Vector3
-        10.0f,                                         // float
-        scaleMario,                                    // Vector3
-        rotationAxisMario,                             // Vector3
-        0.0f,                                          // float
-        80000.0f,                                      // float
-        100,                                           // int
-        dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
-    );
 
-    return marioModel;
+
+
+    return enemies;
+}
+
+std::vector<std::shared_ptr<Enemy>> Stage1Model::getEnemies()
+{
+    return m_enemies;
 }
 
 const std::vector<std::shared_ptr<BlockData>>& Stage1Model::getMap() const
 {
     return m_map;
-}
-
-std::shared_ptr<PlayerData> Stage1Model::getPlayerData() const
-{
-    return StageModel::getPlayerData();
 }
 
 std::shared_ptr<Button> Stage1Model::getPauseButton() const

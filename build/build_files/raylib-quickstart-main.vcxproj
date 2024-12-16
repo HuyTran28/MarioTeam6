@@ -269,6 +269,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
+    <ClInclude Include="..\..\src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
     <ClInclude Include="..\..\src\Controller\LevelSelectController.h" />
     <ClInclude Include="..\..\src\Controller\LogInController.h" />
@@ -288,27 +289,35 @@
     <ClInclude Include="..\..\src\Event\StateChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\TickEvent.h" />
     <ClInclude Include="..\..\src\Factory\BlockFactory.h" />
+    <ClInclude Include="..\..\src\Factory\EnemyFactory.h" />
     <ClInclude Include="..\..\src\Factory\Factory.h" />
+    <ClInclude Include="..\..\src\Factory\ItemFactory.h" />
     <ClInclude Include="..\..\src\GameEngine.h" />
     <ClInclude Include="..\..\src\Model\Block\BlockData.h" />
     <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\FlyBlock.h" />
-    <ClInclude Include="..\..\src\Model\Block\ModelStage.h" />
+    <ClInclude Include="..\..\src\Model\Block\IslandBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\PipeBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h" />
     <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
-    <ClInclude Include="..\..\src\Model\Character\PlayerData.h" />
-    <ClInclude Include="..\..\src\Model\Character\Player\Mario.h" />
+    <ClInclude Include="..\..\src\Model\Character\CharacterData.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Enemy.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Goomba.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />
+    <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
+    <ClInclude Include="..\..\src\Model\CollidableObject.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
+    <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
     <ClInclude Include="..\..\src\Model\LevelSelectModel.h" />
     <ClInclude Include="..\..\src\Model\LogInModel.h" />
     <ClInclude Include="..\..\src\Model\MapData.h" />
     <ClInclude Include="..\..\src\Model\MenuModel.h" />
     <ClInclude Include="..\..\src\Model\ModelEngine.h" />
+    <ClInclude Include="..\..\src\Model\ModelStage.h" />
     <ClInclude Include="..\..\src\Model\Pause.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h" />
@@ -334,6 +343,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Button\Button.cpp" />
+    <ClCompile Include="..\..\src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
     <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp" />
     <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
@@ -345,18 +355,23 @@
     <ClCompile Include="..\..\src\Event\Event.cpp" />
     <ClCompile Include="..\..\src\Event\EventManager.cpp" />
     <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
+    <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
+    <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
-    <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp" />
-    <ClCompile Include="..\..\src\Model\Character\Player\Mario.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\CharacterData.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\Enemy\Enemy.cpp" />
     <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
-    <ClCompile Include="..\..\src\Model\Character\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\Model\Character\Player\PlayerData.cpp" />
+    <ClCompile Include="..\..\src\Model\CollidableObject.cpp" />
     <ClCompile Include="..\..\src\Model\GameData.cpp" />
+    <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
     <ClCompile Include="..\..\src\Model\MenuModel.cpp" />
+    <ClCompile Include="..\..\src\Model\ModelStage.cpp" />
     <ClCompile Include="..\..\src\Model\Pause.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />

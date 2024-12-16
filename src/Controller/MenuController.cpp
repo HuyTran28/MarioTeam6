@@ -23,7 +23,7 @@ void MenuController::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "Tick Event")
 	{
-		updatePlayerMovement();
+		updateCamera();
 
 		Camera3D camera = model->getCamera();
 
@@ -42,7 +42,7 @@ void MenuController::update(std::shared_ptr<Event> event)
 	}
 }
 
-void MenuController::updatePlayerMovement()
+void MenuController::updateCamera()
 {
 	// Calculate direction vector from camera position to target
 	Camera3D camera = model->getCamera();
@@ -92,11 +92,18 @@ void MenuController::updatePlayerMovement()
 
 	}
 
+
 	// Update camera position based on player position
 	camera.position = Vector3Add(playerPosition, cameraInitialPosition);
 	// Update the camera target to avoid NaN values
 	camera.target = Vector3Add(camera.position, direction);
 	model->setCamera(camera);
+
+	model->getPlayerData()->setForwarDir(direction);
+
+	std::cout << model->getCamera().position.x << " " << model->getCamera().position.y << " " << model->getCamera().position.z << std::endl;
+
+	UpdateCamera(&(model->getCamera()), CAMERA_FIRST_PERSON);
 }
 
 void MenuController::updateGameState()

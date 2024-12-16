@@ -17,4 +17,5 @@ public:
 private:
 	std::shared_ptr<Stage1Model> model;
 	void updateMouse();
+	void updateCamera();
 };

@@ -2,11 +2,15 @@
 
 #include <raylib.h>
 #include "../../Model/Block/BlockData.h"
+#include "../../Model/Character/Enemy/Enemy.h"
 #include "../../Factory/BlockFactory.h"
+#include "../../Factory/EnemyFactory.h"
 #include <vector>
 #include "../StateModel.h"
-#include "../../Model/Character/PlayerData.h"
+#include "../../Model/Character/CharacterData.h"
 #include "../../Button/Button.h"
+#include "../../Model/Character/Player/PlayerData.h"
+#include "../../CollisionManager/CollisionManager.h"
 
 constexpr char PATH_BRICKBLOCK[] = "../../Assets\\Models\\Platforms\\BrickBlock.glb";
 constexpr char PATH_CASTLEBLOCK[] = "../../Assets\\Models\\Platforms\\CastleBlock.glb";
@@ -19,23 +23,34 @@ constexpr char PATH_ROULETTEBLOCK[] = "../../Assets\\Models\\Platforms\\Roulette
 constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\SupportivePipeBlock.glb";
 constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
+constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\IslandBlock.glb";
+
+
+constexpr char PATH_GOOMBA[] = "../../Assets\\Models\\Characters\\Goomba.glb";
+constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
 
 
 #include <iostream>
 class StageModel : public StateModel
 {
 public:
-	StageModel(std::shared_ptr<PlayerData> playerData);
+	StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
 	virtual ~StageModel() = default;
-	StageModel();
+	StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
 	std::shared_ptr<PlayerData> getPlayerData() const;
 	std::shared_ptr<Button> getPauseButton() const;
+	std::shared_ptr<PlayerData> createMarioModel(Vector3 position, Vector3 scale);
+	Vector3 getCameraInitialPosition() const {
+		return m_cameraInitialPosition;
+	}
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 	std::shared_ptr<PlayerData> m_playerData;
+
+
 	std::shared_ptr<Button> m_pause;
 	void initializeCamera() {
 		m_cameraInitialPosition = m_playerData->getPlayerPos();

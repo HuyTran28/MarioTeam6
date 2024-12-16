@@ -6,7 +6,6 @@
 class CharacterInterface;
 
 enum class CollisionType {
-    \
     Idle,
     Stomped,
     Kicked,

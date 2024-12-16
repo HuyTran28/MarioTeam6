@@ -1,7 +1,7 @@
 #pragma once
 
 #include "raylib.h"
-#include "../Model/Block/ModelStage.h"
+#include "../Model/ModelStage.h"
 #include "../Model/Block/BlockData.h"
 #include "../Model/Block/BrickBlock.h"
 #include "../Model/Block/NormalBrickBlock.h"
@@ -11,6 +11,7 @@
 #include "../Model/Block/RouletteBlock.h"
 #include "../Model/Block/SupportivePipeBlock.h"
 #include "../Model/Block/FlyBlock.h"
+#include "../Model/Block/IslandBlock.h"
 #include <memory>
 
 
@@ -24,6 +25,7 @@ enum class BlockType
 	RouletteBlock,
 	SupportivePipeBlock,
 	FlyBlock,
+	IslandBlock, 
 };
 
 class BlockFactory : public BlockData

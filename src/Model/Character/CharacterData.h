@@ -3,23 +3,29 @@
 #include <raylib.h>
 #include "btBulletDynamicsCommon.h"
 #include <string>
-#include "AnimationManager.h"
 #include <memory>
 #include "../../Event/CollisionEvent.h"
 #include "raymath.h"
+#include "../CollidableObject.h"
 
-class PlayerData
+enum class PlayerAnimationState {
+	IDLE,
+	WALKING,
+	JUMPING,
+	FALLING,
+	HIT,
+	DIE
+};
+
+
+class CharacterData : public CollidableObject
 {
 protected:
-	std::shared_ptr<btDynamicsWorld> m_dynamicsWorld;  // Store the dynamics world
-	std::shared_ptr<btRigidBody> m_rigidBody;
-	std::shared_ptr<btCollisionShape> m_collisionShape;
-	std::shared_ptr<btDefaultMotionState> m_motionState;
 	Vector3 m_velocity;
 	bool m_isOnGround;
-	std::shared_ptr<AnimationManager> m_animationManager; // Composition
+	//std::shared_ptr<AnimationManager> m_animationManager; // Composition
 
-
+	Vector3 m_forwardDir;
 	Vector3 playerPos;
 	int playerHealth;
 	Model playerModel;
@@ -31,13 +37,18 @@ protected:
 	float moveSpeed;
 
 
-
+	std::shared_ptr<ModelAnimation> m_animations;
+	int m_animationCount;
+	int m_currentAnimation;
+	float m_animationFrame;
+	PlayerAnimationState m_animationState = PlayerAnimationState::IDLE;
 
 public:
-	PlayerData();
-	PlayerData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
-	PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
-		, const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
+	CharacterData();
+	CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
+	CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, 
+		std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
+		,const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
 
 	Vector3 getPlayerPos() const;
 	int getPlayerHealth() const;
@@ -50,7 +61,19 @@ public:
 	Vector3 getVelocity() const;
 	std::shared_ptr<btRigidBody> getRigidBody() const;
 	std::shared_ptr<btDynamicsWorld> getWorld() const;
-	std::shared_ptr<AnimationManager> getAnimarionManager() const;
+	PlayerAnimationState getPlayerAnimationState() const;
+
+	std::shared_ptr<ModelAnimation> getModelAnimation() const;
+	int getAnimationCount() const;
+	int getCurrentAnimation() const;
+	float getAnimationFrame() const;
+
+
+	void setModelAnimation(std::shared_ptr<ModelAnimation> modelAnimation);
+	void setAnimationCount(int animationCount);
+	void setCurrentAnimation(int currentAnimation);
+	void setAnimationFrame(float animationFrame);
+	void setPlayerAnimationState(PlayerAnimationState animationState);
 
 	void setPlayerPos(Vector3 playerPos);
 	void setPlayerHealth(int playerHealth);
@@ -70,12 +93,8 @@ public:
 	void applyCentralImpulse(btVector3 impulse);
 	void applyCentralForce(btVector3 force);
 	void setDamping(float linearDamping, float angularDamping);
+	void setWorldTransform(const btTransform& transform);
 
 
-	void updateCollisionShape();
-	void updateModelTransform();
-	bool checkGroundCollision();
-	void playAnimation(int animationIndex);
-
-	virtual ~PlayerData();
+	virtual ~CharacterData();
 };

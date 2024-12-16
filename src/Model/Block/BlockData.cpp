@@ -15,16 +15,6 @@ BlockData::~BlockData()
 
 
 
-std::shared_ptr<btDiscreteDynamicsWorld> BlockData::getDynamicsWorld() const
-{
-    return m_dynamicsWorld;
-}
-
-std::shared_ptr<btRigidBody> BlockData::getRigidBody() const
-{
-    return m_rigidBodyOfBlock;
-}
-
 std::string BlockData::getName() const
 {
     return m_name;
