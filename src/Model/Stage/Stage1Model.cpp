@@ -202,6 +202,15 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         }
         };
 
+    auto createIslandBlock = [&]()
+        {
+            Vector3 scaleIsland = { 13.0f, 13.0f, 13.0f };
+            Vector3 rotationAxisIsland = { 1.0f, 0.0f, 0.0f };
+            float rotaionAngleIsland = -90.0f;
+            Vector3 position = { 430.0f, 1.0f, 6.0f };
+            addBlock(BlockType::IslandBlock, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
+
+        };
     // Main function calls
     createBrickBlockGrid();
     createQuestionBlocks();
@@ -212,7 +221,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
     createRightRouletteBlocks();
     createUnderground();
     createSpecificNormalBlocks();
-
+    createIslandBlock();
     return map;
 }
 
@@ -225,7 +234,7 @@ std::shared_ptr<PlayerData> Stage1Model::createMarioModel()
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = GameData::getInstance().getDynamicsWorld();
 
     Vector3 forwardDir = { 0.0f, 0.0f, 1.0f };
-    Vector3 positionMario = { 180.0f, 10.0f, 0.0 };
+    Vector3 positionMario = { 430.0f, 10.0f, 0.0 };
     Vector3 scaleMario = { 0.9f, 0.9f, 0.9f };
     Vector3 rotationAxisMario = { 0.0f, 1.0f, 0.0f };
     Model playerModel = LoadModel("../../Assets\\Models\\Characters\\Mario.glb");

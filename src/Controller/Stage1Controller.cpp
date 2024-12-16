@@ -20,11 +20,8 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
 	if (event->getType() == "Tick Event")
 	{
-		setPlayerAnimationState(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
-		updateMovementOfMario(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
-		updateAnimationState(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
-
-
+		
+		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies);
 
 
@@ -47,7 +44,6 @@ void Stage1Controller::updateMouse()
 void Stage1Controller::updateCamera()
 {
 	Camera3D& camera = model->getCamera();
-
 	std::shared_ptr<PlayerData> marioModel = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
 
 	Vector3 cameraOffset = { 0.0f, 10.0f, 40.0f };

@@ -17,14 +17,14 @@ int main()
 //    InitWindow(screenwidth, screenheight, "Bullet and Raylib Example");
 //    
 //    Camera camera = { 0 };
-//    camera.position = { 0.0f, 10.0f, 20.0f };
+//    camera.position = { 0.0f, 5.0f, 5.0f };
 //    camera.target = { 0.0f, 0.0f, 0.0f };
 //
 //    camera.up = { 0.0f, 1.0f, 0.0f };
 //    camera.fovy = 45.0f;
 //    camera.projection = CAMERA_PERSPECTIVE;
 //   
-//    Model model = LoadModel("../../assets\\models\\platforms\\tmp.glb");
+//    Model model = LoadModel("../../assets\\models\\platforms\\Island.glb");
 //
 //    while (!WindowShouldClose())
 //    {
@@ -35,8 +35,8 @@ int main()
 //        ClearBackground(RAYWHITE);
 //
 //        BeginMode3D(camera);
-//        DrawModel(model, { 0.0f, 0.0f, 0.0f }, 5.0f, WHITE);
-//    
+//       //d DrawModel(model, { 0.0f, 0.0f, 0.0f }, 2.0f, WHITE);
+//        DrawModelEx(model, { 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, -90.0f, { 2.0f, 2.0f, 2.0f }, WHITE);
 //        
 //
 //        EndMode3D();

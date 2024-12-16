@@ -11,12 +11,12 @@ AnimationManager& AnimationManager::getInstance()
 
 
 
-void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<CharacterData> playerData)
+void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<CharacterData> characterData)
 {
-    if (animationIndex >= 0 && animationIndex < playerData->getAnimationCount()) {
-        if (playerData->getCurrentAnimation() != animationIndex) {
-            playerData->setCurrentAnimation(animationIndex);
-            playerData->setAnimationFrame(0.0f); // Reset frame only when switching animations
+    if (animationIndex >= 0 && animationIndex < characterData->getAnimationCount()) {
+        if (characterData->getCurrentAnimation() != animationIndex) {
+            characterData->setCurrentAnimation(animationIndex);
+            characterData->setAnimationFrame(0.0f); // Reset frame only when switching animations
         }
     }
 
@@ -25,30 +25,17 @@ void AnimationManager::playAnimation(int animationIndex, std::shared_ptr<Charact
 
 
 
-void AnimationManager::updateAnimation(float deltaTime, std::shared_ptr<CharacterData> playerData) {
-    if (playerData->getAnimationCount() > 0) {
-        UpdateModelAnimation(playerData->getPlayerModel(), playerData->getModelAnimation().get()[playerData->getCurrentAnimation()], playerData->getAnimationFrame());
+void AnimationManager::updateAnimation(float deltaTime, std::shared_ptr<CharacterData> characterData) {
+    if (characterData->getAnimationCount() > 0) {
+        UpdateModelAnimation(characterData->getPlayerModel(), characterData->getModelAnimation().get()[characterData->getCurrentAnimation()], characterData->getAnimationFrame());
        
 
-        playerData->setAnimationFrame(playerData->getAnimationFrame() + (deltaTime * 30));
+        characterData->setAnimationFrame(characterData->getAnimationFrame() + (deltaTime * 30));
      
 
-        if (playerData->getAnimationFrame() >= playerData->getModelAnimation().get()[playerData->getCurrentAnimation()].frameCount) {
-            playerData->setAnimationFrame(0.0f); // Loop the animation
+        if (characterData->getAnimationFrame() >= characterData->getModelAnimation().get()[characterData->getCurrentAnimation()].frameCount) {
+            characterData->setAnimationFrame(0.0f); // Loop the animation
         }
     }
 }
 
-//int AnimationManager::getCurrentFrame() const {
-//    if (m_animationCount > 0) {
-//        return static_cast<int>(m_animationFrame);
-//    }
-//    return 0; // Default to frame 0 if no animations loaded
-//}
-//
-//bool AnimationManager::isAnimationFinished() const {
-//    if (m_animationCount > 0) {
-//        return m_animationFrame >= m_animations[m_currentAnimation].frameCount;
-//    }
-//    return true; // Return true if no animations are loaded
-//}

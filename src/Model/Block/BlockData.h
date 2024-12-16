@@ -3,7 +3,7 @@
 #include "raylib.h"
 #include "btBulletDynamicsCommon.h"
 #include <string>
-#include "ModelStage.h"
+#include "../ModelStage.h"
 #include <memory>
 
 

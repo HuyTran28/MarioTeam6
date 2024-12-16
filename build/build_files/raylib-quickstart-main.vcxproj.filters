@@ -17,7 +17,6 @@
     <ClCompile Include="..\..\src\GameEngine.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\Model\Block\BlockData.cpp" />
-    <ClCompile Include="..\..\src\Model\Block\ModelStage.cpp" />
     <ClCompile Include="..\..\src\Model\Character\AnimationManager.cpp" />
     <ClCompile Include="..\..\src\Model\GameData.cpp" />
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
@@ -40,6 +39,7 @@
     <ClCompile Include="..\..\src\Model\Character\Player\PlayerData.cpp" />
     <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
     <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
+    <ClCompile Include="..\..\src\Model\ModelStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -68,7 +68,6 @@
     <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\FlyBlock.h" />
-    <ClInclude Include="..\..\src\Model\Block\ModelStage.h" />
     <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\PipeBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h" />
@@ -103,6 +102,8 @@
     <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
     <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
     <ClInclude Include="..\..\src\Factory\ItemFactory.h" />
+    <ClInclude Include="..\..\src\Model\ModelStage.h" />
+    <ClInclude Include="..\..\src\Model\Block\IslandBlock.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

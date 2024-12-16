@@ -7,7 +7,6 @@
 class PlayerData : public CharacterData
 {
 private:
-
     bool m_isCrouching;
     bool m_isJumping = false;
     float m_jumpForce;

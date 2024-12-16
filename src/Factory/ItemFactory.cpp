@@ -21,4 +21,5 @@ std::shared_ptr<ItemData> ItemFactory::createItem(ItemType type, const std::stri
 	default:
 		break;
 	}
+	return nullptr;
 }

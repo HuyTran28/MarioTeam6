@@ -49,8 +49,9 @@ protected:
 public:
 	CharacterData();
 	CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
-	CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
-		, const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
+	CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, 
+		std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
+		,const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
 
 	Vector3 getPlayerPos() const;
 	int getPlayerHealth() const;

@@ -7,7 +7,7 @@
 
 class Enemy : public CharacterData {
 protected:
-    Vector3 m_forwardDir;
+
     Vector3 m_pointA;
     Vector3 m_pointB;
     Vector3 m_targetPosition;

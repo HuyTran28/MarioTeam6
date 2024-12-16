@@ -100,47 +100,26 @@ void StageController::registerSelf()
 {
 }
 
-void StageController::updateMovementOfMario(std::shared_ptr<PlayerData> marioData)
+void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData)
 {
-   // std::shared_ptr<PlayerData> marioData = std::dynamic_pointer_cast<PlayerData>(marioData);
 
-    if (marioData->getRigidBody())
+    if (playerData->getRigidBody())
     {
-        marioData->setIsOnGround(checkGroundCollision(marioData));
-        if (!(marioData->getIsOnGround())) {
-            // Apply gravity
-            btVector3 velocity = marioData->getRigidBody()->getLinearVelocity();
-            btVector3 gravity = marioData->getWorld()->getGravity();
-            marioData->applyCentralForce(gravity);
-            // Apply extra gravity for faster falling if needed
-            const float extraGravityFactor = 2.0f;
-            btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
+        playerData->setIsOnGround(checkGroundCollision(playerData));
 
-            if (velocity.getY() < 0.0f) {  
-                marioData->applyCentralForce(additionalGravity);
-            }
 
-            // Reduce damping for smooth motion in the air
-            marioData->setDamping(0.1f, marioData->getRigidBody()->getAngularDamping());
-        }
-        else {
-            // Restore damping when on the ground
-            marioData->setDamping(0.5f, marioData->getRigidBody()->getAngularDamping());
-        }
+        movePlayer(playerData);    // Update movement
+        rotatePlayer(playerData);  // Update rotation
+        jumpPlayer(playerData);  // Handle jumping
 
-        moveMario(marioData);    // Update movement
-        rotateMario(marioData);  // Update rotation
-        jumpMario(marioData);  // Handle jumping
-
-        updateCollisionShape(marioData);  // Update collision shape
-        updateModelTransform(marioData);  // Synchronize marioData with physics body
-
-        // btVector3 playerVelocity = m_rigidBody->getLinearVelocity();
-        // updateAnimationState();  // Update animation state
+        updateCollisionShape(playerData);  // Update collision shape
+        updateModelTransform(playerData);  // Synchronize playerData with physics body
+        setPlayerAnimationState(playerData);
+        updateAnimationState(playerData);  
     }
 }
 
-void StageController::moveMario(std::shared_ptr<PlayerData> marioData)
+void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 {
 
 
@@ -148,30 +127,30 @@ void StageController::moveMario(std::shared_ptr<PlayerData> marioData)
 
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
-        desiredVelocity = btVector3(marioData->getForwarDir().x, 0, marioData->getForwarDir().z).normalized() * marioData->getMoveSpeed();
+        desiredVelocity = btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
     }
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
-    btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
+    btVector3 currentVelocity = playerData->getRigidBody()->getLinearVelocity();
     btVector3 acceleration = (desiredVelocity - currentVelocity) * accelerationFactor * GetFrameTime();
 
     // Update the player's velocity with acceleration
     btVector3 newVelocity = currentVelocity + acceleration;
 
     // Clamp the new velocity to the max speed
-    if (newVelocity.length() > marioData->getMoveSpeed()) {
-        newVelocity = newVelocity.normalized() * marioData->getMoveSpeed();
+    if (newVelocity.length() > playerData->getMoveSpeed()) {
+        newVelocity = newVelocity.normalized() * playerData->getMoveSpeed();
     }
 
     // Apply the new velocity if significant
     const float velocityThreshold = 0.01f;
     if (newVelocity.length() > velocityThreshold)
-        marioData->setLinearVelocity(newVelocity);
+        playerData->setLinearVelocity(newVelocity);
 
    // marioData->setPlayerPos()
 }
 
-void StageController::rotateMario(std::shared_ptr<PlayerData> marioData)
+void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
 {
     
 
@@ -188,55 +167,55 @@ void StageController::rotateMario(std::shared_ptr<PlayerData> marioData)
     }
 
     // Update the forward direction based on rotation
-    float rotationAngle = marioData->getPlayerRotationAngle();
+    float rotationAngle = playerData->getPlayerRotationAngle();
     rotationAngle += angularVelocity * GetFrameTime();
-    marioData->setPlayerRotationAngle(rotationAngle);
+    playerData->setPlayerRotationAngle(rotationAngle);
 
     Matrix rotationMatrix = MatrixRotateY(rotationAngle);
-    marioData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
+    playerData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
 }
 
-void StageController::jumpMario(std::shared_ptr<PlayerData> marioData)
+void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
 {
    
-    float invGravity = 1.0f / -(marioData->getWorld())->getGravity().getY();
+    float invGravity = 1.0f / -(playerData->getWorld())->getGravity().getY();
 
-    if (marioData->getIsOnGround() && IsKeyDown(KEY_SPACE)) {
-        marioData->setIsJumping(true);      // Start the jump
-        marioData->setJumpTimer(0.0f);      // Reset the jump timer
-        marioData->setIsOnGround(false);   // Player is now airborne
+    if (playerData->getIsOnGround() && IsKeyDown(KEY_SPACE)) {
+        playerData->setIsJumping(true);      // Start the jump
+        playerData->setJumpTimer(0.0f);      // Reset the jump timer
+        playerData->setIsOnGround(false);   // Player is now airborne
 
         // Increase the jump force for a higher jump
-        float acceleration = (marioData->getJumpForce() * 0.5f) / marioData->getRigidBody()->getMass();
-        marioData->setMaxJumpDuaration(sqrt(acceleration / marioData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
+        float acceleration = (playerData->getJumpForce() * 0.5f) / playerData->getRigidBody()->getMass();
+        playerData->setMaxJumpDuaration(sqrt(acceleration / playerData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
     }
 
-    if (marioData->getIsJumping())
+    if (playerData->getIsJumping())
     {
         // Increment the jump timer
-        float jumpTimer = marioData->getJumpTimer();
-        marioData->setJumpTimer(jumpTimer += GetFrameTime());
+        float jumpTimer = playerData->getJumpTimer();
+        playerData->setJumpTimer(jumpTimer += GetFrameTime());
         // Calculate the current jump force based on the elapsed time
-        float currentJumpForce = marioData->getJumpForce() * 2.0f * (1.0f - (marioData->getJumpTimer() / marioData->getMaxJumpDuration()));
+        float currentJumpForce = playerData->getJumpForce() * 2.0f * (1.0f - (playerData->getJumpTimer() / playerData->getMaxJumpDuration()));
 
         // Apply the current jump force
 
-        marioData->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
+        playerData->applyCentralImpulse(btVector3(0, currentJumpForce * GetFrameTime(), 0));
         // End the jump if the max jump duration is reached
-        if (marioData->getJumpTimer() >= marioData->getMaxJumpDuration()) {
-            marioData->setIsJumping(false);
+        if (playerData->getJumpTimer() >= playerData->getMaxJumpDuration()) {
+            playerData->setIsJumping(false);
         }
     }
 
     // Apply additional gravity to make the player fall faster
-    if (!(marioData->getIsOnGround()) && !(marioData->getIsJumping())) 
+    if (!(playerData->getIsOnGround()) && !(playerData->getIsJumping())) 
     {
-        btVector3 additionalGravity(0, -9.8f * 2.0f * GetFrameTime(), 0); // Increase gravity effect
-        marioData->applyCentralImpulse(additionalGravity);
+        btVector3 additionalGravity(0, -9.8f * 4.0f * GetFrameTime(), 0); // Increase gravity effect
+        playerData->applyCentralImpulse(additionalGravity);
         // Ensure the velocity is negative to trigger fall animation
-        btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
+        btVector3 currentVelocity = playerData->getRigidBody()->getLinearVelocity();
         if (currentVelocity.getY() > 0.01) {
-            marioData->setLinearVelocity(btVector3(currentVelocity.getX(), -fabs(currentVelocity.getY()), currentVelocity.getZ()));
+            playerData->setLinearVelocity(btVector3(currentVelocity.getX(), -fabs(currentVelocity.getY()), currentVelocity.getZ()));
         }
     }
 }
@@ -244,28 +223,28 @@ void StageController::jumpMario(std::shared_ptr<PlayerData> marioData)
 
 
 
-void StageController::updateCollisionShape(std::shared_ptr<CharacterData> playerData)
+void StageController::updateCollisionShape(std::shared_ptr<CharacterData> characterData)
 {
     // Get the rigid body's current transform
-    btTransform transform = playerData->getRigidBody()->getWorldTransform();
+    btTransform transform = characterData->getRigidBody()->getWorldTransform();
 
     // Force the rotation to align with the Y-axis (capsule's up-axis)
     transform.setRotation(btQuaternion(0, 0, 0, 1));
-    playerData->setRigidBodyTransform(transform);
+    characterData->setRigidBodyTransform(transform);
 }
 
-void StageController::updateModelTransform(std::shared_ptr<CharacterData> playerData)
+void StageController::updateModelTransform(std::shared_ptr<CharacterData> characterData)
 {
     // Get the rigid body's transform
-    btTransform transform = playerData->getRigidBody()->getWorldTransform();
+    btTransform transform = characterData->getRigidBody()->getWorldTransform();
     btVector3 origin = transform.getOrigin();
 
     // Get the bounding box of the marioData
-    BoundingBox marioDataBounds = GetModelBoundingBox(playerData->getPlayerModel());
-    float marioDataHeight = (marioDataBounds.max.y - marioDataBounds.min.y) * playerData->getPlayerScale().y;
+    BoundingBox marioDataBounds = GetModelBoundingBox(characterData->getPlayerModel());
+    float marioDataHeight = (marioDataBounds.max.y - marioDataBounds.min.y) * characterData->getPlayerScale().y;
 
     // Retrieve the collision shape and calculate capsule dimensions
-    btCollisionShape* collisionShape = playerData->getRigidBody()->getCollisionShape();
+    btCollisionShape* collisionShape = characterData->getRigidBody()->getCollisionShape();
     btCapsuleShape* capsuleShape = static_cast<btCapsuleShape*>(collisionShape);
     float capsuleRadius = capsuleShape->getRadius();
     float capsuleHeight = capsuleShape->getHalfHeight() * 2.0f + capsuleRadius * 2.0f;
@@ -274,31 +253,31 @@ void StageController::updateModelTransform(std::shared_ptr<CharacterData> player
     float yOffset = (capsuleHeight / 2) - capsuleRadius * 1.7f - (marioDataHeight / 2);
 
     // Update the marioData position
-    playerData->setPlayerPos({ origin.getX(), origin.getY() + yOffset, origin.getZ() });
+    characterData->setPlayerPos({ origin.getX(), origin.getY() + yOffset, origin.getZ() });
 
     // Apply rotation and scale to the marioData
-    Matrix rotationMatrix = MatrixRotateY(playerData->getPlayerRotationAngle());
-    Matrix scaleMatrix = MatrixScale(playerData->getPlayerScale().x, playerData->getPlayerScale().y, playerData->getPlayerScale().z);
+    Matrix rotationMatrix = MatrixRotateY(characterData->getPlayerRotationAngle());
+    Matrix scaleMatrix = MatrixScale(characterData->getPlayerScale().x, characterData->getPlayerScale().y, characterData->getPlayerScale().z);
 
     // Combine the transformations and apply to the marioData
 
-    playerData->setPlayerModelTransform(MatrixMultiply(scaleMatrix, rotationMatrix));
+    characterData->setPlayerModelTransform(MatrixMultiply(scaleMatrix, rotationMatrix));
 }
 
-bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> playerData)
+bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> characterData)
 {
     
-    if (playerData->getRigidBody()) {
+    if (characterData->getRigidBody()) {
         // Get the current motion state of the rigid body
         btTransform transform;
-        playerData->getRigidBody()->getMotionState()->getWorldTransform(transform);
+        characterData->getRigidBody()->getMotionState()->getWorldTransform(transform);
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
         btVector3 end = start - btVector3(0, 3.0f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
-        playerData->getWorld()->rayTest(start, end, rayCallback);
+        characterData->getWorld()->rayTest(start, end, rayCallback);
 
         if (rayCallback.hasHit()) {
             // If the ray hits something, we are on the ground
@@ -309,75 +288,73 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> player
 }
 
 
-void StageController::updateAnimationState(std::shared_ptr<CharacterData> marioData)
+void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData)
 {
 
-    PlayerAnimationState animationState = marioData->getPlayerAnimationState();
+    PlayerAnimationState animationState = characterData->getPlayerAnimationState();
 
     switch (animationState) {
     case PlayerAnimationState::IDLE:
-        AnimationManager::getInstance().playAnimation(3, marioData);
-        std::cout << "ttttttttttttttttttttttttttttttttttttttttttttttttt\n";
+        AnimationManager::getInstance().playAnimation(3, characterData);
         break;
 
     case PlayerAnimationState::WALKING:
-        AnimationManager::getInstance().playAnimation(5, marioData);
+        AnimationManager::getInstance().playAnimation(5, characterData);
 
         break;
 
     case PlayerAnimationState::JUMPING:
-        AnimationManager::getInstance().playAnimation(4, marioData);
+        AnimationManager::getInstance().playAnimation(4, characterData);
 
         break;
 
     case PlayerAnimationState::FALLING:
-        AnimationManager::getInstance().playAnimation(1, marioData);
+        AnimationManager::getInstance().playAnimation(1, characterData);
 
         break;
 
     case PlayerAnimationState::HIT:
-        AnimationManager::getInstance().playAnimation(2, marioData);
+        AnimationManager::getInstance().playAnimation(2, characterData);
 
         break;
     case PlayerAnimationState::DIE:
        
-        AnimationManager::getInstance().playAnimation(0, marioData);
+        AnimationManager::getInstance().playAnimation(0, characterData);
 
         break;
     }
     // Update the animation frame
    
-    AnimationManager::getInstance().updateAnimation(GetFrameTime(), marioData);
+    AnimationManager::getInstance().updateAnimation(GetFrameTime(), characterData);
 
 }
 
-void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> marioData)
+void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> characterData)
 {
-    if (marioData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
-        std::cout << "11111111111111111111111111111111111111\n";
+    if (characterData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
         return;
     }
 
-    btVector3 velocity = marioData->getRigidBody()->getLinearVelocity();
+    btVector3 velocity = characterData->getRigidBody()->getLinearVelocity();
 
     //if (m_isInvincible && m_animationState == PlayerAnimationState::HIT) {
     //    return; // Stay in HIT animation during invincibility
     //}
 
-    if (!(marioData->getIsOnGround())) {
+    if (!(characterData->getIsOnGround())) {
         if (velocity.getY() > 0.0f) {
-            marioData->setPlayerAnimationState(PlayerAnimationState::JUMPING);
+            characterData->setPlayerAnimationState(PlayerAnimationState::JUMPING);
         }
         else {
-            marioData->setPlayerAnimationState(PlayerAnimationState::FALLING);
+            characterData->setPlayerAnimationState(PlayerAnimationState::FALLING);
         }
     }
     else {
         if (velocity.length() > 0.1f) {
-            marioData->setPlayerAnimationState(PlayerAnimationState::WALKING);
+            characterData->setPlayerAnimationState(PlayerAnimationState::WALKING);
         }
         else {
-            marioData->setPlayerAnimationState(PlayerAnimationState::IDLE);
+            characterData->setPlayerAnimationState(PlayerAnimationState::IDLE);
         }
     }
 }

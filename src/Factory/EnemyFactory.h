@@ -1,6 +1,7 @@
 #pragma once
 #include "../Model/Character/Enemy/Goomba.h"
 #include "../Model/Character/Enemy/Koopa.h"
+#include "../Model/ModelStage.h"
 
 enum class EnemyType {
     Goomba,

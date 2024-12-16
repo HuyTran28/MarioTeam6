@@ -3,7 +3,21 @@
 std::shared_ptr<Enemy> EnemyFactory::createEnemy(EnemyType type, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, const std::string& modelPath, const Vector3& startPosition,
     const Vector3& forwardDir, const Vector3& rotationAxis, const float& rotaionAngle, const Vector3& scale, const float& speed, const Vector3& pointA, const Vector3& pointB)
 {
-    Model model = LoadModel(modelPath.c_str());
+
+    auto it = ModelStage::listModels.find(modelPath);
+    Model model = {};
+    if (it != ModelStage::listModels.end()) {
+        model = it->second;
+    }
+    else
+    {
+        model = LoadModel(modelPath.c_str());
+        if (model.meshCount > 0)
+        {
+            ModelStage::listModels[modelPath] = model;
+        }
+    }
+
     BoundingBox modelBounds = GetModelBoundingBox(model);
 
     // Calculate the arm span (distance along the X-axis) and depth (Z-axis)

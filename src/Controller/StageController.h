@@ -19,10 +19,10 @@ public:
 
 	void updateAnimationState(std::shared_ptr<CharacterData> marioData);
 	void setPlayerAnimationState(std::shared_ptr<CharacterData> marioData);
-	void updateMovementOfMario(std::shared_ptr<PlayerData> marioData);
-	void moveMario(std::shared_ptr<PlayerData> marioData);
-	void rotateMario(std::shared_ptr<PlayerData> marioData);
-	void jumpMario(std::shared_ptr<PlayerData> marioData);
+	void updateMovementOfPlayer(std::shared_ptr<PlayerData> marioData);
+	void movePlayer(std::shared_ptr<PlayerData> marioData);
+	void rotatePlayer(std::shared_ptr<PlayerData> marioData);
+	void jumpPlayer(std::shared_ptr<PlayerData> marioData);
 
 
 
