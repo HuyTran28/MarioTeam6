@@ -4,7 +4,12 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     : StageModel(cameraInitPos,cameraTarget, fovy, cameraMode)
 {
     m_playerData = playerData;
-    //initializeCamera();
+}
+
+StageModel::StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
+    : StageModel(cameraInitPos, cameraTarget, fovy, cameraMode)
+{
+	m_playerData = createMarioModel(pos, scale);
 }
 
 StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
@@ -51,7 +56,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
     Vector3 positionMario = position;
     Vector3 scaleMario = scale;
     Vector3 rotationAxisMario = { 0.0f, 1.0f, 0.0f };
-    Model playerModel = LoadModel("../../Assets\\Models\\Characters\\Mario.glb");
+    Model playerModel = LoadModel(("../../Assets\\Models\\Characters\\" + GameData::getInstance().getPlayerName() + ".glb").c_str());
     BoundingBox modelBounds = GetModelBoundingBox(playerModel);
 
     // Calculate the arm span (distance along the X-axis)
@@ -87,7 +92,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
 
     std::shared_ptr<btRigidBody> playerRigidBody = std::make_shared<btRigidBody>(rbInfo);
 
-    std::string modelPath = "../../Assets\\Models\\Characters\\Mario.glb";
+    std::string modelPath = "../../Assets\\Models\\Characters\\" + GameData::getInstance().getPlayerName() + ".glb";
     marioModel = std::make_shared<PlayerData>(
         playerRigidBody,                               // std::shared_ptr<btRigidBody>
         playerShape,                                   // std::shared_ptr<btCollisionShape>

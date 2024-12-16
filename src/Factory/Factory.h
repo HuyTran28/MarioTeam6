@@ -19,6 +19,9 @@
 #include "../View/PauseView.h"
 #include "../Model/Pause.h"
 #include "../Controller/PauseController.h"
+#include "../View/SelectCharacterView.h"
+#include "../Model/SelectCharacter.h"
+#include "../Controller/SelectCharacterController.h"
 
 
 class StateFactory

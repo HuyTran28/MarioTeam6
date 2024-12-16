@@ -33,11 +33,19 @@ void MenuController::update(std::shared_ptr<Event> event)
 		if (GetRayCollisionBox(ray, model->getJoystickBoundingBox()).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 		{
 			updateGameState();
+			return;
 		}
 		else if (GetRayCollisionBox(ray, model->getPlayModelBoundingBox()).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 		{
 			std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("Level Select");
 			EventManager::getInstance().notify(event);
+			return;
+		}
+		else if (GetRayCollisionBox(ray, model->getMarioStatueBoundingBox()).hit && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+		{
+			std::shared_ptr<Event> event = std::make_shared<StateChangeEvent>("Select Character");
+			EventManager::getInstance().notify(event);
+			return;
 		}
 	}
 }

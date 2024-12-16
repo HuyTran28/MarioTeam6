@@ -42,4 +42,12 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 		stateController->registerSelf();
 		stateView->registerSelf();
 	}
+	else if (state == "Select Character")
+	{
+		stateModel = std::make_shared<SelectCharacter>();
+		stateView = std::make_shared<SelectCharacterView>(std::dynamic_pointer_cast<SelectCharacter> (stateModel));
+		stateController = std::make_shared<SelectCharacterController>(std::dynamic_pointer_cast<SelectCharacter> (stateModel));
+		stateController->registerSelf();
+		stateView->registerSelf();
+	}
 }

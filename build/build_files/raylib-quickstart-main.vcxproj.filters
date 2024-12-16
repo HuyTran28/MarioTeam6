@@ -41,6 +41,10 @@
     <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
     <ClCompile Include="..\..\src\Model\ModelStage.cpp" />
     <ClCompile Include="..\..\src\Model\CollidableObject.cpp" />
+    <ClCompile Include="..\..\src\CollisionManager\CollisionManager.cpp" />
+    <ClCompile Include="..\..\src\Model\SelectCharacter.cpp" />
+    <ClCompile Include="..\..\src\View\SelectCharacterView.cpp" />
+    <ClCompile Include="..\..\src\Controller\SelectCharacterController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -106,6 +110,10 @@
     <ClInclude Include="..\..\src\Model\ModelStage.h" />
     <ClInclude Include="..\..\src\Model\Block\IslandBlock.h" />
     <ClInclude Include="..\..\src\Model\CollidableObject.h" />
+    <ClInclude Include="..\..\src\CollisionManager\CollisionManager.h" />
+    <ClInclude Include="..\..\src\Model\SelectCharacter.h" />
+    <ClInclude Include="..\..\src\View\SelectCharacterView.h" />
+    <ClInclude Include="..\..\src\Controller\SelectCharacterController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

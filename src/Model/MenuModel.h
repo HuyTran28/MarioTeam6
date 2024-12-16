@@ -36,6 +36,7 @@ private:
 	Vector3 marioStatueRotationAxis;
 	float marioStatueRotationAngle;
 	std::string marioStatueModelPath;
+	BoundingBox marioStatueBoundingBox;
 
 	Model playModel;
 	Vector3 playPos;
@@ -75,4 +76,5 @@ public:
 	std::string getPlayModelPath();
 	BoundingBox& getJoystickBoundingBox();
 	BoundingBox& getPlayModelBoundingBox();
+	BoundingBox& getMarioStatueBoundingBox();
 };

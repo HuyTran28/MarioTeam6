@@ -35,8 +35,11 @@ class StageModel : public StateModel
 {
 public:
 	StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
-	virtual ~StageModel() = default;
+	StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
 	StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
+
+	virtual ~StageModel() = default;
+
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
 	std::shared_ptr<PlayerData> getPlayerData() const;
@@ -45,6 +48,7 @@ public:
 	Vector3 getCameraInitialPosition() const {
 		return m_cameraInitialPosition;
 	}
+
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
@@ -52,12 +56,4 @@ private:
 
 
 	std::shared_ptr<Button> m_pause;
-	void initializeCamera() {
-		m_cameraInitialPosition = m_playerData->getPlayerPos();
-		m_camera.position = m_cameraInitialPosition;
-		m_camera.target = m_playerData->getPlayerPos();
-		m_camera.up = Vector3{ 0.0f, 1.0f, 0.0f };
-		m_camera.fovy = 45.0f;
-		m_camera.projection = CAMERA_PERSPECTIVE;
-	}
 };
