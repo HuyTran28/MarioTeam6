@@ -17,11 +17,13 @@ void StageController::updateMovementOfMario(std::shared_ptr<Mario> marioData)
             btVector3 gravity = marioData->getWorld()->getGravity();
             marioData->applyCentralForce(gravity);
             // Apply extra gravity for faster falling if needed
-            const float extraGravityFactor = 2.0f;
+            const float extraGravityFactor = 100.0f;
             btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
-
+            
             if (velocity.getY() < 0.0f) {  
-                marioData->applyCentralForce(additionalGravity);
+				velocity.setY(0.0f);  // Prevent the player from falling through the ground
+				marioData->setLinearVelocity(velocity);
+                marioData->applyCentralForce(additionalGravity * marioData->getRigidBody()->getMass());
             }
 
             // Reduce damping for smooth motion in the air
@@ -129,18 +131,10 @@ void StageController::jumpMario(std::shared_ptr<Mario> marioData)
         // End the jump if the max jump duration is reached
         if (marioData->getJumpTimer() >= marioData->getMaxJumpDuration()) {
             marioData->setIsJumping(false);
-        }
-    }
 
-    // Apply additional gravity to make the player fall faster
-    if (!(marioData->getIsOnGround()) && !(marioData->getIsJumping())) 
-    {
-        btVector3 additionalGravity(0, -9.8f * 2.0f * GetFrameTime(), 0); // Increase gravity effect
-        marioData->applyCentralImpulse(additionalGravity);
-        // Ensure the velocity is negative to trigger fall animation
-        btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
-        if (currentVelocity.getY() > 0.01) {
-            marioData->setLinearVelocity(btVector3(currentVelocity.getX(), -fabs(currentVelocity.getY()), currentVelocity.getZ()));
+            btVector3 velocity = marioData->getRigidBody()->getLinearVelocity();
+            velocity.setY(0.0f);  // Prevent the player from falling through the ground
+            marioData->setLinearVelocity(velocity);
         }
     }
 }
@@ -201,7 +195,7 @@ bool StageController::checkGroundCollision(std::shared_ptr<Mario> marioData)
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 3.0f, 0);
+        btVector3 end = start - btVector3(0, 2.1f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         marioData->getWorld()->rayTest(start, end, rayCallback);
@@ -225,13 +219,14 @@ void StageController::updateAnimationState(std::shared_ptr<Mario> marioData)
     btVector3 currentVelocity = marioData->getRigidBody()->getLinearVelocity();
 
     if (!(marioData->getIsOnGround())) {
-        // Check if the player is moving horizontally while airborne
-        if (currentVelocity.length2() > 0.1f && fabs(currentVelocity.getY()) > 0.01f) {
-            marioData->getAnimarionManager()->playAnimation(3);
+        // Mario is airborne
+        if (currentVelocity.getY() > 0.01f) {
+            // Ascending (jumping up)
+            marioData->getAnimarionManager()->playAnimation(4); // Jump animation
         }
-        else if (currentVelocity.getY() > 0.0f) {
-
-            marioData->getAnimarionManager()->playAnimation(3);
+        else if (currentVelocity.getY() <= 0.0f) {
+            // Descending (falling down)
+            marioData->getAnimarionManager()->playAnimation(1); // Fall animation
         }
     }
     else {
@@ -239,11 +234,11 @@ void StageController::updateAnimationState(std::shared_ptr<Mario> marioData)
         // Player is grounded
         if (currentVelocity.length() > 0.1f) {
 
-            marioData->getAnimarionManager()->playAnimation(4); // Play the walking animation
+            marioData->getAnimarionManager()->playAnimation(5); // Play the walking animation
         }
         else {
 
-            marioData->getAnimarionManager()->playAnimation(2); // Play the idle animation
+            marioData->getAnimarionManager()->playAnimation(3); // Play the idle animation
         }
     }
 
