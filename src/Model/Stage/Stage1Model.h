@@ -3,6 +3,7 @@
 #include <vector>
 #include "btBulletDynamicsCommon.h"
 #include "../../Model/Character/Player/PlayerData.h"
+#include "../../CollisionManager/CollisionManager.h"
 
 class Stage1Model : public StageModel
 {
@@ -35,11 +36,10 @@ public:
 	~Stage1Model();
 
 	std::vector<std::shared_ptr<BlockData>> createMap();
-	std::shared_ptr<PlayerData> createMarioModel();
+	//std::shared_ptr<PlayerData> createMarioModel();
 	std::vector<std::shared_ptr<Enemy>> createEnemies();
 	std::vector<std::shared_ptr<Enemy>> getEnemies();
 	const std::vector<std::shared_ptr<BlockData>>& getMap() const;
-	std::shared_ptr<CharacterData> getPlayerData() const;
 	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;
 	std::vector<Vector3> getCloudPositions() const;

@@ -40,6 +40,7 @@
     <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
     <ClCompile Include="..\..\src\Factory\ItemFactory.cpp" />
     <ClCompile Include="..\..\src\Model\ModelStage.cpp" />
+    <ClCompile Include="..\..\src\Model\CollidableObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -104,6 +105,7 @@
     <ClInclude Include="..\..\src\Factory\ItemFactory.h" />
     <ClInclude Include="..\..\src\Model\ModelStage.h" />
     <ClInclude Include="..\..\src\Model\Block\IslandBlock.h" />
+    <ClInclude Include="..\..\src\Model\CollidableObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

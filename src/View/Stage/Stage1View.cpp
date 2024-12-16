@@ -44,7 +44,6 @@ void Stage1View::render()
         marioModel->getPlayerScale(), WHITE);
 
     m_model->setCamera(m_model->getCamera());
-    std::cout << marioModel->getPlayerPos().x << " " << marioModel->getPlayerPos().y <<" " << marioModel->getPlayerPos().z << '\n';
 
 
     btCollisionShape* shape = m_model->getPlayerData()->getRigidBody()->getCollisionShape();

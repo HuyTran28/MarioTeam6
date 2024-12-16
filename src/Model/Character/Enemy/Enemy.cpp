@@ -70,4 +70,5 @@ float Enemy::getSpeed() const
 
 Enemy::~Enemy()
 {
+
 }

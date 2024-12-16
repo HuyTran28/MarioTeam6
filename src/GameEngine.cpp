@@ -24,14 +24,11 @@ void GameEngine::run()
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
-
-	std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = gameData.getDynamicsWorld();
+	CollisionManager::getInstance();
 
 
 	while (isRunning == true && !WindowShouldClose())
 	{
-		dynamicsWorld->stepSimulation(GetFrameTime());
-
 		std::shared_ptr<Event> newEvent = std::make_shared<TickEvent>();
 		EventManager::getInstance().notify(newEvent);
 		newEvent.reset();

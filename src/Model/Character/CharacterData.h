@@ -6,6 +6,7 @@
 #include <memory>
 #include "../../Event/CollisionEvent.h"
 #include "raymath.h"
+#include "../CollidableObject.h"
 
 enum class PlayerAnimationState {
 	IDLE,
@@ -17,13 +18,9 @@ enum class PlayerAnimationState {
 };
 
 
-class CharacterData
+class CharacterData : public CollidableObject
 {
 protected:
-	std::shared_ptr<btDynamicsWorld> m_dynamicsWorld;  // Store the dynamics world
-	std::shared_ptr<btRigidBody> m_rigidBody;
-	std::shared_ptr<btCollisionShape> m_collisionShape;
-	std::shared_ptr<btDefaultMotionState> m_motionState;
 	Vector3 m_velocity;
 	bool m_isOnGround;
 	//std::shared_ptr<AnimationManager> m_animationManager; // Composition

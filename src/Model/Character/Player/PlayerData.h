@@ -12,8 +12,6 @@ private:
     float m_jumpForce;
     float m_jumpTimer = 0.0f;  // Timer to control jump force duration
     float m_maxJumpDuration;  // Maximum time to apply jump force (in seconds)
-
-
 public:
 
     //PlayerData(btRigidBody* rigidBody, std::string modelPath, Vector3 forwardDir, Vector3 position,
@@ -37,5 +35,5 @@ public:
     void setJumpTimer(float jumTimer);
     void setMaxJumpDuaration(float maxJumpDuaration);
 
-    ~PlayerData();
+    virtual ~PlayerData();
 };

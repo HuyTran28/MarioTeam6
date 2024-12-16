@@ -46,7 +46,7 @@ void Stage1Controller::updateCamera()
 	Camera3D& camera = model->getCamera();
 	std::shared_ptr<PlayerData> marioModel = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
 
-	Vector3 cameraOffset = { 0.0f, 10.0f, 40.0f };
+	Vector3 cameraOffset = { -40.0f, 20.0f, 0.0f };
 	camera.position = Vector3Add(marioModel->getPlayerPos(), cameraOffset);
 	camera.target = marioModel->getPlayerPos();
 

@@ -10,6 +10,7 @@ PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<b
 	m_jumpForce = jumpForce;
 	m_isCrouching = false;
 	m_forwardDir = forwardDir;
+	objectType = "Player-Mormal";
 }
 
 //PlayerData::PlayerData(btRigidBody* rigidBody, std::string modelPath, Vector3 forwardDir, Vector3 position, float speed, Vector3 scale, Vector3 rotationAxis, float rotationAngle, float jumpForce, int health, btDynamicsWorld* world)

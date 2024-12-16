@@ -4,15 +4,11 @@
 #include <string>
 #include <memory>
 #include "btBulletDynamicsCommon.h"
+#include "../CollidableObject.h"
 
-class ItemData
+class ItemData : public CollidableObject
 {
 private:
-	std::shared_ptr<btDynamicsWorld> m_dynamicsWorld;
-	std::shared_ptr<btRigidBody> m_rigidBody;
-	std::shared_ptr<btCollisionShape> m_collisionShape;
-	std::shared_ptr<btDefaultMotionState> m_motionState;
-
 	Model m_model;
 	Vector3 m_position;
 	Vector3 m_scale;

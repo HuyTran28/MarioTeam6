@@ -241,12 +241,8 @@ PlayerAnimationState CharacterData::getPlayerAnimationState() const
 
 CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
 	std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle,
-	const float& speed, std::shared_ptr<btDynamicsWorld> world)
+	const float& speed, std::shared_ptr<btDynamicsWorld> world) : CollidableObject(rigidBody, shape, motionState, world)
 {
-	m_rigidBody = rigidBody;
-	m_collisionShape = shape;
-	m_motionState = motionState;
-	m_dynamicsWorld = world;
 	playerModelPath = modelPath;
 	playerPos = position;
 	playerHealth = health;
