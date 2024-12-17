@@ -170,7 +170,7 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
             btVector3 gravity = playerData->getWorld()->getGravity();
             playerData->applyCentralForce(gravity);
             // Apply extra gravity for faster falling if needed
-            const float extraGravityFactor = 100.0f;
+            const float extraGravityFactor = 500.0f;
             btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
 
             if (velocity.getY() < 0.0f) {
@@ -179,6 +179,7 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
                 playerData->applyCentralForce(additionalGravity * playerData->getRigidBody()->getMass());
             }
         }
+
 
         movePlayer(playerData);    // Update movement
         rotatePlayer(playerData);  // Update rotation
@@ -193,34 +194,35 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
 
 void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 {
-
-
     btVector3 desiredVelocity(0, 0, 0);
 
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
         desiredVelocity = btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
     }
+
     // Smooth acceleration towards the desired velocity
-    const float accelerationFactor = 100.0f; // Higher values mean faster acceleration
+    const float accelerationFactor = 1000.0f; // Higher values mean faster acceleration
     btVector3 currentVelocity = playerData->getRigidBody()->getLinearVelocity();
-    btVector3 acceleration = (desiredVelocity - currentVelocity) * accelerationFactor * GetFrameTime();
+    btVector3 velocityDifference = desiredVelocity - currentVelocity;
 
-    // Update the player's velocity with acceleration
-    btVector3 newVelocity = currentVelocity + acceleration;
+    // Calculate the acceleration (delta velocity over time)
+    btVector3 acceleration = velocityDifference * accelerationFactor * GetFrameTime();
 
-    // Clamp the new velocity to the max speed
-    if (newVelocity.length() > playerData->getMoveSpeed()) {
-        newVelocity = newVelocity.normalized() * playerData->getMoveSpeed();
+    // Apply force to the player based on their mass and the acceleration
+    btRigidBody* rigidBody = playerData->getRigidBody().get();
+    btScalar mass = rigidBody->getMass();
+    btVector3 force = acceleration * mass;
+
+    // Apply the force to the rigid body
+    rigidBody->applyCentralForce(force);
+
+    // If no input is given, stop horizontal movement (no force applied)
+    if (desiredVelocity.length() == 0) {
+        rigidBody->setLinearVelocity(btVector3(0, currentVelocity.y(), 0));
     }
-
-    // Apply the new velocity if significant
-    const float velocityThreshold = 0.01f;
-    if (newVelocity.length() > velocityThreshold)
-        playerData->setLinearVelocity(newVelocity);
-
-    // marioData->setPlayerPos()
 }
+
 
 void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
 {
