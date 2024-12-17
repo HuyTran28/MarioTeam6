@@ -45,6 +45,8 @@
     <ClCompile Include="..\..\src\Model\SelectCharacter.cpp" />
     <ClCompile Include="..\..\src\View\SelectCharacterView.cpp" />
     <ClCompile Include="..\..\src\Controller\SelectCharacterController.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage2Controller.cpp" />
+
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -114,6 +116,15 @@
     <ClInclude Include="..\..\src\Model\SelectCharacter.h" />
     <ClInclude Include="..\..\src\View\SelectCharacterView.h" />
     <ClInclude Include="..\..\src\Controller\SelectCharacterController.h" />
+    <ClInclude Include="..\..\src\Model\Item\Coin.h" />
+    <ClInclude Include="..\..\src\Model\Item\RedMushroom.h" />
+    <ClInclude Include="..\..\src\Model\Item\BoomerangFlower.h" />
+    <ClInclude Include="..\..\src\Model\Item\GreenMushroom.h" />
+    <ClInclude Include="..\..\src\Model\Item\PurpleMushroom.h" />
+    <ClInclude Include="..\..\src\Model\Item\SuperStar.h" />
+    <ClInclude Include="..\..\src\Controller\Stage2Controller.h" />
+    <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
+
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

@@ -96,6 +96,63 @@ void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> e
     }
      
 }
+void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
+{
+    float deltaTime = GetFrameTime();
+    if (blockData->getIsBouncing())
+    {
+        btTransform blockTransform;
+        blockData->getRigidBody()->getMotionState()->getWorldTransform(blockTransform);
+        btVector3 originPosition = blockTransform.getOrigin();
+
+        float height = VELOCITY * (blockData->getBounceTime() * blockData->getBounceTime() - TILE_DURATION * blockData->getBounceTime());
+
+
+        blockTransform.setOrigin(btVector3(
+            originPosition.x(),
+            originPosition.y() - height, //update position of block 
+            originPosition.z()
+        ));
+        blockData->setWorldTransform(blockTransform);
+
+        //decrease time bounce
+        float tmp = blockData->getBounceTime() - deltaTime;
+        blockData->setBouncetime(tmp);
+        std::cout << blockData->getPosition().x << " " << blockData->getPosition().y << " " << blockData->getPosition().z << '\n';
+
+
+        btVector3 position = blockTransform.getOrigin();
+        //DrawModelEx(blockData->getModel(), { position.getX(), position.getY(), position.getZ() }, blockData->getRotationAxis(), blockData->getRotationAngle(), blockData->getScale(), WHITE);
+        if (blockData->getBounceTime() <= 0)
+        {
+            blockData->setIsBounce(false);
+            blockData->setBouncetime(0.0f);
+            blockTransform.setOrigin(btVector3(blockData->getPosition().x, blockData->getPosition().y, blockData->getPosition().z));
+            blockData->setWorldTransform(blockTransform);
+
+        }
+    }
+}
+
+void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map)
+{
+
+    auto it = std::find_if(map.begin(), map.end(), [preBlock](const std::shared_ptr<BlockData>& block) {
+        return block.get() == preBlock;
+        });
+
+   
+    if (it != map.end()) {
+        map.erase(it);
+        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(GetFrameTime());
+
+    }
+    map.push_back(newBlock);
+    CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(GetFrameTime());
+
+}
+
+
 void StageController::registerSelf()
 {
 }

@@ -229,3 +229,12 @@
 //}
 //
 //
+
+
+
+	
+
+	const std::vector<std::shared_ptr<BlockData>>& Stage2Model::getMap() const
+	{
+		return m_map;
+	}

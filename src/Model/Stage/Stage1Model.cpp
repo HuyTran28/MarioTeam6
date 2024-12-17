@@ -1,10 +1,12 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 430.0f, 10.0f, 10.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE)
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 0.0f, 10.0f, 10.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
+                            createMap())
 {
 
-    m_map = createMap();
     m_enemies = createEnemies();
+    m_items = createItems();
+
 
 	cloudScales = { 1.0f, 1.0f, 1.0f };
 	cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
@@ -96,6 +98,9 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         return block;
         };
 
+    addBlock(BlockType::QuestionBlock, PATH_QUESTIONBLOCK, { 2.0, 12.0, 9.0 }, scale, rotationAxis, rotaionAngle);
+
+
     auto createBrickBlockGrid = [&]() {
         for (int i = 0; i < m_width; ++i) {
             if (i == 62 || i == 63 || i == 64 || i == 78 || i == 79 || i == 80 || i == 138 || i == 139)
@@ -137,7 +142,14 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         for (int i : pipeBlockIndices) {
             Vector3 scale1 = { 2.0f * scale.x, 3.0f * scale.y, 2.0f * scale.z };
             Vector3 position = { size * i * scale.x, size * j * scale.y, size * middle * scale.z };
-            addBlock(BlockType::PipeBlock, PATH_PIPEBLOCK, position, scale1, rotationAxis, rotaionAngle);
+
+            Vector3 newPos = position;
+            newPos.y -= 100;
+
+            std::shared_ptr<PipeBlock> pipeBlock = std::dynamic_pointer_cast<PipeBlock>(BlockFactory::createBlock(BlockType::PipeBlock, dynamicsWorld, PATH_PIPEBLOCK, position, scale, rotationAxis, rotaionAngle));
+            pipeBlock->setNewPosition({0, -50, 0});
+            map.push_back(pipeBlock);
+
             j++;
         }
         for (int i = -8; i <= 4; i += 3) {
@@ -145,6 +157,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
             Vector3 position = { size * 145 * scale.x, size * i * scale.y, size * middle * scale.z };
             addBlock(BlockType::PipeBlock, PATH_PIPEBLOCK, position, scale1, rotationAxis, rotaionAngle);
         }
+
         };
 
     auto createSupportivePipeBlocks = [&]()
@@ -212,6 +225,8 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
             addBlock(BlockType::IslandBlock, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
 
         };
+
+
     // Main function calls
     createBrickBlockGrid();
     createQuestionBlocks();
@@ -265,15 +280,22 @@ std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 35, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 35, Oy, Oz }, { 50, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 90, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 95, Oy, Oz + (2 * size)}, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 95, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 110, Oy, Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 110, Oy, Oz - (2 * size) }, { 110, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 120, Oy, Oz + (2 * size) }, forwardDirGoomba, scaleGoomba, { 120, Oy, Oz + (2 * size) }, { 120, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-  //  addEnemy(EnemyType::Koopa, PATH_KOOPA, { 10, 5, 3 }, forwardDirKoopa, scaleKoopa, { 10, 5, 3 }, { 20, 5, 3 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 182.508, 21.6751, 10.1829 }, forwardDirGoomba, scaleGoomba, { 182.508, 21.6751, 10.1829 }, { 200, 21.6751, 10.1829 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 250, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 250, Oy, Oz }, { 230, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 255, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 255, Oy, Oz }, { 235, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 260, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 260, Oy, Oz }, { 240, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 265, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 265, Oy, Oz }, { 245, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 230, Oy, Oz }, forwardDirKoopa, scaleKoopa, { 230, Oy, Oz }, { 220, Oy, Oz }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 314.657, 6.76388,  16.8684 }, forwardDirGoomba, scaleGoomba, { 314.657, 6.76388,  16.8684 }, { 314.626, 6.63073, 2.69545 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 317.16, 9.32509,  3.02433 }, forwardDirGoomba, scaleGoomba, { 317.16, 9.32509,  3.02433 }, { 317.071,9.65208, 17.7685 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 319.693, 11.6266,  17.4452 }, forwardDirGoomba, scaleGoomba, { 319.693, 11.6266,  17.4452 }, { 319.663 ,11.6625, 3.54813 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     
 
 
@@ -282,14 +304,33 @@ std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
     return enemies;
 }
 
+std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
+{
+    std::vector < std::shared_ptr<ItemData>> items;
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
+
+    auto addItem = [&](ItemType type, const std::string& modelPath, const Vector3& position, const Vector3& scale,
+        const Vector3& rotationAxis, float rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> world)
+        {
+            auto item = ItemFactory::createItem(type, position, modelPath, scale, rotationAxis, rotationAngle, world);
+            if (item)
+                items.push_back(std::shared_ptr<ItemData>(item));
+        };
+
+    
+    addItem(ItemType::COIN, PATH_COIN, { 0.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+
+    return items;
+}
+
 std::vector<std::shared_ptr<Enemy>> Stage1Model::getEnemies()
 {
     return m_enemies;
 }
 
-const std::vector<std::shared_ptr<BlockData>>& Stage1Model::getMap() const
+std::vector<std::shared_ptr<ItemData>> Stage1Model::getItems()
 {
-    return m_map;
+    return m_items;
 }
 
 std::shared_ptr<Button> Stage1Model::getPauseButton() const
@@ -346,6 +387,8 @@ float Stage1Model::getHillsRotationAngle() const
 {
 	return hillsRotationAngle;
 }
+
+
 
 
 

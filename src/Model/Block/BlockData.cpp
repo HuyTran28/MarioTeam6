@@ -15,10 +15,6 @@ BlockData::~BlockData()
 
 
 
-std::string BlockData::getName() const
-{
-    return m_name;
-}
 
 Model BlockData::getModel() const
 {
@@ -48,4 +44,33 @@ float BlockData::getRotationAngle() const
 bool BlockData::getIsBouncing() const
 {
     return m_isBouncing;
+}
+
+float BlockData::getBounceTime() const
+{
+    return m_bounceTime;
+}
+
+void BlockData::setIsBounce(bool isBounce)
+{
+    m_isBouncing = isBounce;
+}
+
+void BlockData::setBouncetime(float bounceTime)
+{
+    m_bounceTime = bounceTime;
+}
+
+void BlockData::setWorldTransform(const btTransform& transform)
+{
+    if (m_rigidBody)
+    {
+        m_rigidBody->setWorldTransform(transform);
+
+        if (m_rigidBody->getMotionState() != nullptr) {
+            m_rigidBody->getMotionState()->setWorldTransform(transform);
+        }
+
+       // m_rigidBody->activate(true);
+    }
 }

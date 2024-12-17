@@ -14,6 +14,8 @@ public:
 	void registerSelf() override;
 	void update(std::shared_ptr<Event> event) override;
 
+
+
 private:
 	std::shared_ptr<Stage1Model> model;
 	void updateMouse();

@@ -10,9 +10,12 @@ ItemData::ItemData()
 	m_rotationAngle = 0.0f;
 }
 
-ItemData::ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, Model& model, const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, const std::string& modelPath, std::shared_ptr<btDynamicsWorld> world)
+ItemData::ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, const Model& model,
+	const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const std::string& modelPath,
+	std::shared_ptr<btDiscreteDynamicsWorld> world)
 	: CollidableObject(rigidBody, shape, motionState, world), m_model(model), m_position(position), m_scale(scale), m_rotationAxis(rotaionAxis), m_rotationAngle(rotationAngle), m_modelPath(modelPath)
 {
+	m_isVisible = true;
 }
 
 Model ItemData::getModel() const
@@ -45,6 +48,11 @@ std::string ItemData::getModelPath() const
 	return m_modelPath;
 }
 
+bool ItemData::getIsVisible() const
+{
+	return m_isVisible;
+}
+
 void ItemData::setModel(Model& model)
 {
 	m_model = model;
@@ -73,6 +81,11 @@ void ItemData::setRotationAngle(float rotationAngle)
 void ItemData::setModelPath(const std::string& modelPath)
 {
 	m_modelPath = modelPath;
+}
+
+void ItemData::setIsVisble(bool isVisible)
+{
+	m_isVisible = isVisible;
 }
 
 ItemData::~ItemData()

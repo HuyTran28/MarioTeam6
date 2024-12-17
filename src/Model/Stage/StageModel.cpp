@@ -1,15 +1,22 @@
 #include "StageModel.h"
 #include <iostream>
-StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode )
+
+
+
+StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode , std::vector<std::shared_ptr<BlockData>> mapData)
     : StageModel(cameraInitPos,cameraTarget, fovy, cameraMode)
 {
     m_playerData = playerData;
+    m_map = mapData;
 }
 
 StageModel::StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
     : StageModel(cameraInitPos, cameraTarget, fovy, cameraMode)
 {
 	m_playerData = createMarioModel(pos, scale);
+    
+    //initializeCamera();
+
 }
 
 StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
@@ -111,4 +118,15 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
 
     return marioModel;
 }
+
+
+ std::vector<std::shared_ptr<BlockData>> StageModel::getMap() const
+{
+    return m_map;
+}
+
+ void StageModel::setMap(std::vector<std::shared_ptr<BlockData>> map)
+ {
+     m_map = map;
+ }
 

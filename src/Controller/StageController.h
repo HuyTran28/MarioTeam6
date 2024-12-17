@@ -30,7 +30,10 @@ public:
 	void rotateEnemy(std::shared_ptr<Enemy> enemyData);
 	void updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies);
 
+	void updateBounceOfBlock(std::shared_ptr<BlockData> blockData);
 
+
+	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map);
 
 	void registerSelf() override;
 	//void onCollision(const CollisionEvent& event);

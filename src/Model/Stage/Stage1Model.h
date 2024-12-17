@@ -11,9 +11,8 @@ private:
 	int m_width;
 	int m_depth;
 	int m_height;
-	std::vector<std::shared_ptr<BlockData>> m_map;
 	std::vector < std::shared_ptr<Enemy>> m_enemies;
-
+	std::vector<std::shared_ptr<ItemData>> m_items;
 
 
 
@@ -36,10 +35,13 @@ public:
 	~Stage1Model();
 
 	std::vector<std::shared_ptr<BlockData>> createMap();
-	//std::shared_ptr<PlayerData> createMarioModel();
-	std::vector<std::shared_ptr<Enemy>> createEnemies();
+	std::vector<std::shared_ptr<Enemy>>createEnemies();
+	std::vector<std::shared_ptr<ItemData>> createItems();
+
 	std::vector<std::shared_ptr<Enemy>> getEnemies();
-	const std::vector<std::shared_ptr<BlockData>>& getMap() const;
+
+	std::vector<std::shared_ptr<ItemData>> getItems();
+
 	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;
 	std::vector<Vector3> getCloudPositions() const;

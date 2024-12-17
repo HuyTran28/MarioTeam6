@@ -10,16 +10,9 @@ PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<b
 	m_jumpForce = jumpForce;
 	m_isCrouching = false;
 	m_forwardDir = forwardDir;
-	objectType = "Player-Mormal";
+	objectType = "Player-Normal";
 }
 
-//PlayerData::PlayerData(btRigidBody* rigidBody, std::string modelPath, Vector3 forwardDir, Vector3 position, float speed, Vector3 scale, Vector3 rotationAxis, float rotationAngle, float jumpForce, int health, btDynamicsWorld* world)
-//	: CharacterData(rigidBody, modelPath, position, health, scale, rotationAxis, rotationAngle, speed, world)
-//{
-//	m_jumpForce = jumpForce;
-//	m_isCrouching = false;
-//	m_forwardDir = forwardDir;
-//}
 
 Vector3 PlayerData::getForwarDir() const
 {

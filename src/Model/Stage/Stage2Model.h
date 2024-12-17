@@ -14,7 +14,7 @@ private:
 
 public:
 	Stage2Model();
-	~Stage2Model();
+	~Stage2Model() {};
 	const std::vector<std::shared_ptr<BlockData>>& getMap() const;
 };
 

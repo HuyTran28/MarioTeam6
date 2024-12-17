@@ -4,10 +4,18 @@
 #include <raylib.h>
 #include <string>
 #include "../Model/Item/ItemData.h"
+#include "../Model/ModelStage.h"
+#include "../Model/Item/BoomerangFlower.h"
+#include "../Model/Item/Coin.h"
+#include "../Model/Item/GreenMushroom.h"
+#include "../Model/Item/RedMushroom.h"
+#include "../Model/Item/PurpleMushroom.h"
+#include "../Model/Item/SuperStar.h"
+
 
 enum ItemType
 {
-    BOOMERANG,
+    BOOMERANG_FLOWER,
     RED_MUSHROOM,
     GREEN_MUSHROOM,
     PURPLE_MUSHROOM,
@@ -19,5 +27,6 @@ enum ItemType
 class ItemFactory
 {
 public:
-	static std::shared_ptr<ItemData> createItem(ItemType type, const std::string& modelPath, const Vector3& position, const Vector3& scale, const Vector3& rotationAxis, float rotationAngle, std::shared_ptr<btDynamicsWorld> world);
+	static std::shared_ptr<ItemData> createItem(ItemType type, const Vector3& startPosition, const std::string& modelPath, const Vector3& scale, 
+        const Vector3& rotationAxis, float rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> world);
 };

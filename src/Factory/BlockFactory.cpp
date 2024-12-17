@@ -1,6 +1,7 @@
 #include "BlockFactory.h"
 
-std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, const std::string& modelPath, const Vector3& startPosition, const Vector3& scale, const Vector3& rotationAxis, const float& rotationAngle)
+std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, const std::string& modelPath, const Vector3& startPosition,
+    const Vector3& scale, const Vector3& rotationAxis, const float& rotationAngle)
 {
     auto it = ModelStage::listModels.find(modelPath);
     Model model = {};
@@ -73,23 +74,23 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
     switch (type)
     {
 	case BlockType::BrickBlock:
-		return std::make_shared<BrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "BrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<BrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::NormalBrickBlock:
-		return std::make_shared<NormalBrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "NormalBrickBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<NormalBrickBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::PipeBlock:
-		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "PipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::QuestionBlock:
-		return std::make_shared<QuestionBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "QuestionBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<QuestionBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::EmptyBlock:
-		return std::make_shared<EmptyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "EmptyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<EmptyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::RouletteBlock:
-		return std::make_shared<RouletteBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "RouletteBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<RouletteBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::SupportivePipeBlock:
-		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "SupportivePipeBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::FlyBlock:
-		return std::make_shared<FlyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "FlyBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<FlyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
     case BlockType::IslandBlock:
-        return std::make_shared<IslandBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, "IslandBlock", model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+        return std::make_shared<IslandBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 
     default:
         nullptr;

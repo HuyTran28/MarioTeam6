@@ -1,0 +1,60 @@
+//#include "Stage2Controller.h"
+//
+//Stage2Controller::Stage2Controller()
+//{
+//	model = std::make_shared<Stage2Model>();
+//}
+//
+//Stage2Controller::Stage2Controller(std::shared_ptr<Stage2Model> model)
+//{
+//	this->model = model;
+//}
+//
+//void Stage2Controller::registerSelf()
+//{
+//	EventManager::getInstance().addObserver(shared_from_this());
+//}
+//
+//void Stage2Controller::update(std::shared_ptr<Event> event)
+//{
+//	//std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
+//	if (event->getType() == "Tick Event")
+//	{
+//
+//		/*updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
+//		updateMovemenOfEnemy(enemies);
+//
+//
+//		updateMouse();
+//
+//		updateCamera()*/;
+//	}
+//
+//}
+//
+//void Stage2Controller::updateMouse()
+//{
+//	if (model->getPauseButton()->isClicked(GetMousePosition()))
+//	{
+//		EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Pause"));
+//		return;
+//	}
+//}
+//
+//void Stage2Controller::updateCamera()
+//{
+//	Camera3D& camera = model->getCamera();
+//	std::shared_ptr<PlayerData> marioModel = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
+//
+//	Vector3 cameraOffset = { -40.0f, 20.0f, 0.0f };
+//	camera.position = Vector3Add(marioModel->getPlayerPos(), cameraOffset);
+//	camera.target = marioModel->getPlayerPos();
+//
+//	float zoomSpeed = 5.0f;
+//	camera.fovy -= GetMouseWheelMove() * zoomSpeed;
+//
+//	if (camera.fovy < 10.0f) camera.fovy = 10.0f;
+//	if (camera.fovy > 90.0f) camera.fovy = 90.0f;
+//}
+//
+//

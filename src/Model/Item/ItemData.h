@@ -15,9 +15,13 @@ private:
 	Vector3 m_rotationAxis;
 	float m_rotationAngle;
 	std::string m_modelPath;
+	bool m_isVisible;
+
 public:
 	ItemData();
-	ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, Model& model, const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle, const std::string& modelPath, std::shared_ptr<btDynamicsWorld> world);
+	ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, const Model& model,
+		const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const std::string& modelPath, 
+		std::shared_ptr<btDiscreteDynamicsWorld> world);
 
 	Model getModel() const;
 	Vector3 getPosition() const;
@@ -25,6 +29,7 @@ public:
 	Vector3 getRotationAxis() const;
 	float getRotationAngle() const;
 	std::string getModelPath() const;
+	bool getIsVisible() const;
 
 	void setModel(Model& model);
 	void setPosition(const Vector3& position);
@@ -32,6 +37,7 @@ public:
 	void setRotationAxis(const Vector3& rotationAxis);
 	void setRotationAngle(float rotationAngle);
 	void setModelPath(const std::string& modelPath);
+	void setIsVisble(bool isVisible);
 
 	~ItemData();
 };

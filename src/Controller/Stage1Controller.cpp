@@ -18,19 +18,51 @@ void Stage1Controller::registerSelf()
 void Stage1Controller::update(std::shared_ptr<Event> event)
 {
 	std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
+	std::vector<std::shared_ptr<BlockData>> blockData = model->getMap();
 	if (event->getType() == "Tick Event")
 	{
 		
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies);
 
+		for (auto block : blockData)
+		{
+			if (block->getIsBouncing())
+			{
+				updateBounceOfBlock(block);
+			}
+		}
 
 		updateMouse();
 		
 		updateCamera();
 	}
+	else if (event->getType() == "Block Change Event")
+    {
+		std::shared_ptr<BlockChangeEvent> blockChange = std::dynamic_pointer_cast<BlockChangeEvent>(event);
+		BlockData* preBlock = blockChange->getPre();
+		std::shared_ptr<BlockData> newBlock = blockChange->getNew();
+		std::vector<std::shared_ptr<BlockData>> map = model->getMap();
+		updateBlock(preBlock, newBlock, map);
+		model->setMap(map);
+
+    }
 
 }
+
+//void StageController::update(std::shared_ptr<Event> events)
+//{
+//    if (events->getType() == "Block Change Event")
+//    {
+//        std::shared_ptr<BlockChangeEvent> blockChange = std::dynamic_pointer_cast<BlockChangeEvent>(events);
+//        BlockData* preBlock = blockChange->getPre();
+//        std::shared_ptr<BlockData> newBlock = blockChange->getNew();
+//
+//
+//        std::vector<std::shared_ptr<BlockData>> map = mode
+//
+//    }
+//}
 
 void Stage1Controller::updateMouse()
 {

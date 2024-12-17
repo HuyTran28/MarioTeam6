@@ -23,8 +23,6 @@ class CharacterData : public CollidableObject
 protected:
 	Vector3 m_velocity;
 	bool m_isOnGround;
-	//std::shared_ptr<AnimationManager> m_animationManager; // Composition
-
 	Vector3 m_forwardDir;
 	Vector3 playerPos;
 	int playerHealth;
@@ -35,7 +33,6 @@ protected:
 	BoundingBox playerBoundingBox;
 	std::string playerModelPath;
 	float moveSpeed;
-
 
 	std::shared_ptr<ModelAnimation> m_animations;
 	int m_animationCount;

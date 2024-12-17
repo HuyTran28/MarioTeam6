@@ -58,5 +58,8 @@ void CollidableObject::setMotionState(std::shared_ptr<btDefaultMotionState> moti
 CollidableObject::~CollidableObject()
 {
 	m_dynamicsWorld->removeRigidBody(m_rigidBody.get());
+	m_dynamicsWorld->stepSimulation(GetFrameTime());
+
+
 }
 

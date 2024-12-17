@@ -7,6 +7,19 @@
 #include "Event/EventManager.h"
 #include <memory>
 #include <mutex>
+#include "../Model/Block/BlockData.h"
+#include "../Model/Character/Player/PlayerData.h"
+#include "../Factory/BlockFactory.h"
+#include "../Event/BlockChangeEvent.h"
+//#include "../Model/Stage/Stage1Model.h"
+
+
+
+
+
+const float TILE_DURATION = 0.5f;
+const float VELOCITY = 1.0f;
+
 
 class CollisionManager : public IObserver, public std::enable_shared_from_this<CollisionManager>
 {
@@ -31,4 +44,10 @@ public:
     void detectCollisions();
     void handle(CollidableObject* obj1, CollidableObject* obj2, std::vector<btManifoldPoint> contactPoints);
     std::shared_ptr<btDiscreteDynamicsWorld> getDynamicsWorld() const;
+
+
+
+    bool  detectCollisionFromBelow(CollidableObject* obj1, CollidableObject* obj2);
+    bool  detectCollisionFromAbove(CollidableObject* obj1, CollidableObject* obj2);
+
 };

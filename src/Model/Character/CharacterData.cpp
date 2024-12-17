@@ -258,7 +258,6 @@ CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared
 
 	playerModel.transform = MatrixScale(scale.x, scale.y, scale.z);
 
-	//m_animationManager = std::make_unique<AnimationManager>(playerModel, modelPath.c_str());
 
 	ModelAnimation* tmp = LoadModelAnimations(playerModelPath.c_str(), &m_animationCount);
 	std::shared_ptr<ModelAnimation> modelAnimation(tmp);

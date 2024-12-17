@@ -277,9 +277,11 @@
     <ClInclude Include="..\..\src\Controller\PauseController.h" />
     <ClInclude Include="..\..\src\Controller\SelectCharacterController.h" />
     <ClInclude Include="..\..\src\Controller\Stage1Controller.h" />
+    <ClInclude Include="..\..\src\Controller\Stage2Controller.h" />
     <ClInclude Include="..\..\src\Controller\StageController.h" />
     <ClInclude Include="..\..\src\Controller\StateController.h" />
     <ClInclude Include="..\..\src\Event\BackEvent.h" />
+    <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
@@ -312,7 +314,13 @@
     <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
     <ClInclude Include="..\..\src\Model\CollidableObject.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
+    <ClInclude Include="..\..\src\Model\Item\BoomerangFlower.h" />
+    <ClInclude Include="..\..\src\Model\Item\Coin.h" />
+    <ClInclude Include="..\..\src\Model\Item\GreenMushroom.h" />
     <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
+    <ClInclude Include="..\..\src\Model\Item\PurpleMushroom.h" />
+    <ClInclude Include="..\..\src\Model\Item\RedMushroom.h" />
+    <ClInclude Include="..\..\src\Model\Item\SuperStar.h" />
     <ClInclude Include="..\..\src\Model\LevelSelectModel.h" />
     <ClInclude Include="..\..\src\Model\LogInModel.h" />
     <ClInclude Include="..\..\src\Model\MapData.h" />
@@ -354,6 +362,7 @@
     <ClCompile Include="..\..\src\Controller\PauseController.cpp" />
     <ClCompile Include="..\..\src\Controller\SelectCharacterController.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage2Controller.cpp" />
     <ClCompile Include="..\..\src\Controller\StageController.cpp" />
     <ClCompile Include="..\..\src\Controller\StateController.cpp" />
     <ClCompile Include="..\..\src\Event\Event.cpp" />
