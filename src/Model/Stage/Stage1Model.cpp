@@ -1,13 +1,8 @@
 #include "Stage1Model.h"
 #include <iostream>
 Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 0.0f, 10.0f, 10.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
-                            createMap())
+                            createMap(), createEnemies(), createItems())
 {
-
-    m_enemies = createEnemies();
-    m_items = createItems();
-
-
 	cloudScales = { 1.0f, 1.0f, 1.0f };
 	cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
     Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
@@ -319,18 +314,9 @@ std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
 
     
     addItem(ItemType::COIN, PATH_COIN, { 0.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+	addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { 10.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
 
     return items;
-}
-
-std::vector<std::shared_ptr<Enemy>> Stage1Model::getEnemies()
-{
-    return m_enemies;
-}
-
-std::vector<std::shared_ptr<ItemData>> Stage1Model::getItems()
-{
-    return m_items;
 }
 
 std::shared_ptr<Button> Stage1Model::getPauseButton() const

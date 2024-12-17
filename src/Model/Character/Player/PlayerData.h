@@ -12,6 +12,9 @@ private:
     float m_jumpForce;
     float m_jumpTimer = 0.0f;  // Timer to control jump force duration
     float m_maxJumpDuration;  // Maximum time to apply jump force (in seconds)
+
+    float bigDuration = 0.0f;
+	bool isBig = false;
 public:
 
 
@@ -24,6 +27,9 @@ public:
     float getJumpForce() const;
     float getJumpTimer() const;
     float getMaxJumpDuration() const;
+	float getBigDuration() const;
+	bool getIsBig() const;
+
 
 
 
@@ -31,6 +37,9 @@ public:
     void setIsJumping(bool isJumping);
     void setJumpTimer(float jumTimer);
     void setMaxJumpDuaration(float maxJumpDuaration);
+	void setIsCrouching(bool isCrouching);
+	void setBigDuration(float bigDuration);
+	void setIsBig(bool isBig);
 
     virtual ~PlayerData();
 };

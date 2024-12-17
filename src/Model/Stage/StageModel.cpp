@@ -3,11 +3,14 @@
 
 
 
-StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode , std::vector<std::shared_ptr<BlockData>> mapData)
+StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode , std::vector<std::shared_ptr<BlockData>> mapData, std::vector<std::shared_ptr<Enemy>> enemies, std::vector<std::shared_ptr<ItemData>> items)
     : StageModel(cameraInitPos,cameraTarget, fovy, cameraMode)
 {
     m_playerData = playerData;
     m_map = mapData;
+	m_enemies = enemies;
+	m_items = items;
+	//initializeCamera();
 }
 
 StageModel::StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
@@ -37,6 +40,26 @@ StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, 
 Camera3D& StageModel::getCamera()
 {
     return m_camera;
+}
+
+std::vector<std::shared_ptr<Enemy>> StageModel::getEnemies()
+{
+	return m_enemies;
+}
+
+void StageModel::setEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
+{
+	m_enemies = enemies;
+}
+
+std::vector<std::shared_ptr<ItemData>> StageModel::getItems()
+{
+	return m_items;
+}
+
+void StageModel::setItems(std::vector<std::shared_ptr<ItemData>> items)
+{
+	m_items = items;
 }
 
 void StageModel::setCamera(Camera3D camera)

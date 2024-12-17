@@ -13,5 +13,4 @@ public:
 		:ItemData(rigidBody, shape, motionState, model, position, scale, rotationAxis, rotationAngle, modelPath, dynamicsWorld) {
 		objectType = "Item-SuperStar";
 	}
-
 };

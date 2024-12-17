@@ -72,7 +72,8 @@ std::shared_ptr<CollisionManager> CollisionManager::getInstance()
 void CollisionManager::update(std::shared_ptr<Event> event)
 {
     if (event->getType() == "Tick Event") {
-        m_dynamicsWorld->stepSimulation(GetFrameTime());
+        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+        m_dynamicsWorld->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
         detectCollisions();
     }
 }
@@ -206,5 +207,27 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
 
     }
+	std::cout << objectType1 << " " << objectType2 << std::endl;
 
+    if (objectType1 == "Item-Coin" && objectType2 == "Player-Normal")
+    {
+		Coin* coin = dynamic_cast<Coin*>(obj1);
+		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(coin));
+		GameData::getInstance().setPlayerScore(GameData::getInstance().getPlayerScore() + 1);
+    }
+
+	if (objectType1 == "Item-RedMushroom" && objectType2 == "Player-Normal")
+	{
+		RedMushroom* redMushroom = dynamic_cast<RedMushroom*>(obj1);
+		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(redMushroom));
+		player->setBigDuration(3.0f);
+		player->setIsBig(true);
+        player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.25f, 1.25f, 1.25f }));
+	}
+	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
+	{
+
+	}
 }

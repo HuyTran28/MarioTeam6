@@ -1,7 +1,7 @@
 #include "MenuModel.h"
 
 
-MenuModel::MenuModel() : StageModel(createMarioModel(Vector3{0.0f, 0.0f, 0.0f}, Vector3{3.0f, 3.0f, 3.0f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{-20.0f, 30.0f, 0.0f}, 60.0f, CAMERA_PERSPECTIVE, {})
+MenuModel::MenuModel() : StageModel(createMarioModel(Vector3{0.0f, 0.0f, 0.0f}, Vector3{3.0f, 3.0f, 3.0f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{-20.0f, 30.0f, 0.0f}, 60.0f, CAMERA_PERSPECTIVE, {}, {}, {})
 {
     lobbyModelPath = "../../Assets\\Models\\Lobby\\lobby.glb";
     lobbyModel = LoadModel(lobbyModelPath.c_str());

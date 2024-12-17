@@ -46,7 +46,7 @@
     <ClCompile Include="..\..\src\View\SelectCharacterView.cpp" />
     <ClCompile Include="..\..\src\Controller\SelectCharacterController.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage2Controller.cpp" />
-
+    <ClCompile Include="..\..\src\Event\ItemTouchedEvent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -124,7 +124,7 @@
     <ClInclude Include="..\..\src\Model\Item\SuperStar.h" />
     <ClInclude Include="..\..\src\Controller\Stage2Controller.h" />
     <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
-
+    <ClInclude Include="..\..\src\Event\ItemTouchedEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

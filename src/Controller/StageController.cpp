@@ -141,14 +141,15 @@ void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData
         return block.get() == preBlock;
         });
 
-   
+    btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
     if (it != map.end()) {
         map.erase(it);
-        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(GetFrameTime());
+        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 
     }
     map.push_back(newBlock);
-    CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(GetFrameTime());
+
+    CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 
 }
 
@@ -281,6 +282,36 @@ void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
             playerData->setLinearVelocity(velocity);
         }
     }
+}
+
+void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
+{
+	if (playerData->getIsBig())
+	{
+		float bigDuration = playerData->getBigDuration();
+		bigDuration -= GetFrameTime();
+		playerData->setBigDuration(bigDuration);
+		if (bigDuration <= 0)
+		{
+			playerData->setIsBig(false);
+			playerData->setBigDuration(0.0f);
+            playerData->setPlayerScale(Vector3Multiply(playerData->getPlayerScale(), Vector3{ 1.0f / 1.25f, 1.0f / 1.25f, 1.0f / 1.25f }));
+		}
+	}
+}
+
+void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item)
+{
+    auto it = std::find_if(items.begin(), items.end(), [item](const std::shared_ptr<ItemData>& block) {
+        return block.get() == item;
+        });
+
+    if (it != items.end()) {
+        items.erase(it);
+        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+    }
+
 }
 
 

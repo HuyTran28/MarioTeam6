@@ -10,7 +10,7 @@ ItemData::ItemData()
 	m_rotationAngle = 0.0f;
 }
 
-ItemData::ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, const Model& model,
+ItemData::ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, const Model model,
 	const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const std::string& modelPath,
 	std::shared_ptr<btDiscreteDynamicsWorld> world)
 	: CollidableObject(rigidBody, shape, motionState, world), m_model(model), m_position(position), m_scale(scale), m_rotationAxis(rotaionAxis), m_rotationAngle(rotationAngle), m_modelPath(modelPath)

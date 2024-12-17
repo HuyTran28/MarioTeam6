@@ -3,19 +3,7 @@
 std::shared_ptr<ItemData> ItemFactory::createItem(ItemType type, const Vector3& startPosition, const std::string& modelPath, 
     const Vector3& scale, const Vector3& rotationAxis, float rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> world)
 {
-    auto it = ModelStage::listModels.find(modelPath);
-    Model model = {};
-    if (it != ModelStage::listModels.end()) {
-        model = it->second;
-    }
-    else
-    {
-        model = LoadModel(modelPath.c_str());
-        if (model.meshCount > 0)
-        {
-            ModelStage::listModels[modelPath] = model;
-        }
-    }
+	Model model = LoadModel(modelPath.c_str());
 
     BoundingBox modelBounds = GetModelBoundingBox(model);
     //calculate the point center of box

@@ -19,6 +19,31 @@ Vector3 PlayerData::getForwarDir() const
 	return m_forwardDir;
 }
 
+bool PlayerData::getIsBig() const
+{
+	return isBig;
+}
+
+float PlayerData::getBigDuration() const
+{
+	return bigDuration;
+}
+
+void PlayerData::setIsBig(bool isBig)
+{
+	this->isBig = isBig;
+}
+
+void PlayerData::setBigDuration(float bigDuration)
+{
+	this->bigDuration = bigDuration;
+}
+
+void PlayerData::setIsCrouching(bool isCrouching)
+{
+	m_isCrouching = isCrouching;
+}
+
 bool PlayerData::getIsJumping() const
 {
 	return m_isJumping;

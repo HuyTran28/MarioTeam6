@@ -11,6 +11,9 @@
 #include "../Model/Character/Player/PlayerData.h"
 #include "../Factory/BlockFactory.h"
 #include "../Event/BlockChangeEvent.h"
+#include "../Factory/ItemFactory.h"
+#include "../Event/ItemTouchedEvent.h"
+#include "../Model/GameData.h"
 //#include "../Model/Stage/Stage1Model.h"
 
 

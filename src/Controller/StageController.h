@@ -23,7 +23,9 @@ public:
 	void rotatePlayer(std::shared_ptr<PlayerData> playerData);
 	void jumpPlayer(std::shared_ptr<PlayerData> playerData);
 
+	void updateBigDuration(std::shared_ptr<PlayerData> playerData);
 
+	void removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item);
 
 	void moveEnemy(std::shared_ptr<Enemy> enemyData);
 	void moveToEnemy(std::shared_ptr<Enemy> enemyData);

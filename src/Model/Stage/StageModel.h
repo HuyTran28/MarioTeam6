@@ -31,6 +31,7 @@ constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\Su
 constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
 constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\IslandBlock.glb";
+constexpr char PATH_REDMUSHROOM[] = "../../Assets\\Models\\Items\\RedMushroom.glb";
 
 
 constexpr char PATH_GOOMBA[] = "../../Assets\\Models\\Characters\\Goomba.glb";
@@ -48,7 +49,8 @@ public:
 	StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
 
 	virtual ~StageModel() = default;
-	StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode, std::vector<std::shared_ptr<BlockData>> mapData);
+	StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode,
+		std::vector<std::shared_ptr<BlockData>> mapData, std::vector<std::shared_ptr<Enemy>> enemies, std::vector<std::shared_ptr<ItemData>> items);
 
 	StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
 
@@ -68,6 +70,14 @@ public:
 		return m_cameraInitialPosition;
 	}
 
+	void setCameraInitialPosition(Vector3 cameraInitialPosition) {
+		m_cameraInitialPosition = cameraInitialPosition;
+	}
+
+	std::vector<std::shared_ptr<Enemy>> getEnemies();
+	void setEnemies(std::vector<std::shared_ptr<Enemy>> enemies);
+	std::vector<std::shared_ptr<ItemData>> getItems();
+	void setItems(std::vector<std::shared_ptr<ItemData>> items);
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
@@ -75,7 +85,8 @@ private:
 
 	std::shared_ptr<PlayerData> m_playerData;
 	std::vector<std::shared_ptr<BlockData>> m_map;
-
+	std::vector <std::shared_ptr<Enemy>> m_enemies;
+	std::vector<std::shared_ptr<ItemData>> m_items;
 
 	std::shared_ptr<Button> m_pause;
 };

@@ -11,11 +11,6 @@ private:
 	int m_width;
 	int m_depth;
 	int m_height;
-	std::vector < std::shared_ptr<Enemy>> m_enemies;
-	std::vector<std::shared_ptr<ItemData>> m_items;
-
-
-
 
 	std::vector<Model> clouds;
 	std::vector<Vector3> cloudPositions;
@@ -37,10 +32,7 @@ public:
 	std::vector<std::shared_ptr<BlockData>> createMap();
 	std::vector<std::shared_ptr<Enemy>>createEnemies();
 	std::vector<std::shared_ptr<ItemData>> createItems();
-
-	std::vector<std::shared_ptr<Enemy>> getEnemies();
-
-	std::vector<std::shared_ptr<ItemData>> getItems();
+\
 
 	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;

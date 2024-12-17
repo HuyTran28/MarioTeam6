@@ -23,6 +23,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	{
 		
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
+		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies);
 
 		for (auto block : blockData)
@@ -32,6 +33,8 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 				updateBounceOfBlock(block);
 			}
 		}
+
+
 
 		updateMouse();
 		
@@ -45,8 +48,15 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		std::vector<std::shared_ptr<BlockData>> map = model->getMap();
 		updateBlock(preBlock, newBlock, map);
 		model->setMap(map);
-
     }
+	else if (event->getType() == "Item Touched Event")
+	{
+		std::shared_ptr<ItemTouchedEvent> itemTouched = std::dynamic_pointer_cast<ItemTouchedEvent>(event);
+		ItemData* item = itemTouched->getItem();
+		std::vector<std::shared_ptr<ItemData>> items = model->getItems();
+		removeItem(items, item);
+		model->setItems(items);
+	}
 
 }
 

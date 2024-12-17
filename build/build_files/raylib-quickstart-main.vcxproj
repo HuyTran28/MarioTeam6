@@ -286,6 +286,7 @@
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
     <ClInclude Include="..\..\src\Event\InitializeEvent.h" />
+    <ClInclude Include="..\..\src\Event\ItemTouchedEvent.h" />
     <ClInclude Include="..\..\src\Event\KeyboardEvent.h" />
     <ClInclude Include="..\..\src\Event\MouseClickedEvent.h" />
     <ClInclude Include="..\..\src\Event\QuitEvent.h" />
@@ -367,6 +368,7 @@
     <ClCompile Include="..\..\src\Controller\StateController.cpp" />
     <ClCompile Include="..\..\src\Event\Event.cpp" />
     <ClCompile Include="..\..\src\Event\EventManager.cpp" />
+    <ClCompile Include="..\..\src\Event\ItemTouchedEvent.cpp" />
     <ClCompile Include="..\..\src\Factory\BlockFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\EnemyFactory.cpp" />
     <ClCompile Include="..\..\src\Factory\Factory.cpp" />
