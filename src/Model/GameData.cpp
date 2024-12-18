@@ -3,7 +3,7 @@
 #include <iostream>
 GameData::GameData()
 {
-	playerName = "Princess";
+	playerName = "Mario";
 	playerScore = 0;
 	isLogIn = false;
 }

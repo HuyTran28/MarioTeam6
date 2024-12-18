@@ -14,6 +14,7 @@
 #include "Model/GameData.h"
 #include "btBulletDynamicsCommon.h"
 #include "CollisionManager/CollisionManager.h"
+#include "SoundManager/SoundManager.h"
 
 class GameEngine : public IObserver, public std::enable_shared_from_this<GameEngine>
 {

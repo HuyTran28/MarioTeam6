@@ -175,8 +175,8 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         return;
     }
 
-    if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Normal")
-     {
+    if (objectType1 == "Block-NormalBrickBlock" && objectType2.substr(0, 6) == "Player")
+    {
             
             BlockData* blockData = dynamic_cast<BlockData*>(obj1);
 
@@ -185,9 +185,9 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
                 blockData->setIsBounce(true);
                 blockData->setBouncetime(TILE_DURATION);
             }  
-     }
+    }
 
-    if ((objectType1 == "Block-Question" && objectType2 == "Player-Normal") || (objectType1 == "Block-Question" && objectType2 == "Player-Big"))
+    if (objectType1 == "Block-Question" && objectType2.substr(0, 6) == "Player")
     {
        
         if (detectCollisionFromBelow(contactPoints))
@@ -203,19 +203,20 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
     }
 
-    if (objectType1 == "Block-Pipe" && objectType2 == "Player-Normal")
+    if (objectType1 == "Block-Pipe" && objectType2.substr(0, 6) == "Player")
     {
         PipeBlock* block = dynamic_cast<PipeBlock*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 
         if (IsKeyPressed(KEY_S) && detectCollisionFromAbove(contactPoints))
         {
+			EventManager::getInstance().notify(std::make_shared<WarpEvent>());
             player->getRigidBody().get()->translate(block->getNewPosition());
         }
 
     }
 
-    if (objectType1 == "Block-UpPipe" && objectType2 == "Player-Normal")
+    if (objectType1 == "Block-UpPipe" && objectType2.substr(0, 6) == "Player")
     {
         SupportivePipeBLock* block = dynamic_cast<SupportivePipeBLock*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
@@ -225,7 +226,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
     }
 
-    if (objectType1 == "Item-Coin" && objectType2 == "Player-Normal")
+    if (objectType1 == "Item-Coin" && objectType2.substr(0, 6) == "Player")
     {
 		Coin* coin = dynamic_cast<Coin*>(obj1);
 		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
@@ -273,6 +274,16 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.0 /1.25f, 1.0 / 1.25f, 1.0 /1.25f }));
     }
 
+	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
+	{
+		GreenMushroom* greenMushroom = dynamic_cast<GreenMushroom*>(obj1);
+		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(greenMushroom));
+
+		EventManager::getInstance().notify(std::make_shared<RegenerateEvent>());
+		player->setPlayerHealth(player->getPlayerHealth() + 10);
+
+	}
 
 	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
 	{

@@ -47,6 +47,10 @@
     <ClCompile Include="..\..\src\Controller\SelectCharacterController.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage2Controller.cpp" />
     <ClCompile Include="..\..\src\Event\ItemTouchedEvent.cpp" />
+    <ClCompile Include="..\..\src\Model\SettingModel.cpp" />
+    <ClCompile Include="..\..\src\View\SettingView.cpp" />
+    <ClCompile Include="..\..\src\Controller\SettingController.cpp" />
+    <ClCompile Include="..\..\src\SoundManager\SoundManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -125,6 +129,14 @@
     <ClInclude Include="..\..\src\Controller\Stage2Controller.h" />
     <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\ItemTouchedEvent.h" />
+    <ClInclude Include="..\..\src\Model\SettingModel.h" />
+    <ClInclude Include="..\..\src\View\SettingView.h" />
+    <ClInclude Include="..\..\src\Controller\SettingController.h" />
+    <ClInclude Include="..\..\src\SoundManager\SoundManager.h" />
+    <ClInclude Include="..\..\src\Event\JumpEvent.h" />
+    <ClInclude Include="..\..\src\Event\DieEvent.h" />
+    <ClInclude Include="..\..\src\Event\WarpEvent.h" />
+    <ClInclude Include="..\..\src\Event\RegenerateEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

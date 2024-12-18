@@ -25,6 +25,9 @@
 #include "../View/SelectCharacterView.h"
 #include "../Model/SelectCharacter.h"
 #include "../Controller/SelectCharacterController.h"
+#include "../View/SettingView.h"
+#include "../Model/SettingModel.h"
+#include "../Controller/SettingController.h"
 
 
 class StateFactory

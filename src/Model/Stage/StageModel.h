@@ -42,6 +42,7 @@ constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
 constexpr char PATH_COIN[] = "../../Assets\\Models\\Items\\Coin.glb";
 constexpr char PATH_REDMUSHROOM[] = "../../Assets\\Models\\Items\\RedMushroom.glb";
 constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushroom.glb";
+constexpr char PATH_GREENMUSHROOM[] = "../../Assets\\Models\\Items\\GreenMushroom.glb";
 
 
 //constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
@@ -83,6 +84,7 @@ public:
 	void setItems(std::vector<std::shared_ptr<ItemData>> items);
 	std::vector<std::shared_ptr<BlockData>> getMap() const;
 	void setMap(std::vector<std::shared_ptr<BlockData>> map);
+	std::shared_ptr<Button> getSettingButton() const;
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
@@ -94,4 +96,5 @@ private:
 	std::vector<std::shared_ptr<ItemData>> m_items;
 
 	std::shared_ptr<Button> m_pause;
+	std::shared_ptr<Button> m_setting;
 };

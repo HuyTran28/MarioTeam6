@@ -53,6 +53,7 @@ void Stage1View::render()
     EndMode3D();
 
     m_model->getPauseButton()->draw();
+	m_model->getSettingButton()->draw();
 
     EndDrawing();
 }

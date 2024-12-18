@@ -31,9 +31,18 @@ StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, 
 	m_camera.projection = cameraMode;
 
 	Texture2D texture = LoadTexture("../../Assets/Icons/pause.png");
+	Texture2D texture2 = LoadTexture("../../Assets/Icons/setting.png");
 	Rectangle sourceRec = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
 	Rectangle destRec = { 50.0f, 50.0f, 100.0f, 100.0f };
+	Rectangle sourceRec2 = { 0.0f, 0.0f, (float)texture2.width, (float)texture2.height };
+	Rectangle destRec2 = { GetScreenWidth() - 150.0f, 50.0f, 100.0f, 100.0f };
 	m_pause = std::make_shared<Button>("", texture, sourceRec, destRec, Vector2{0.0f, 0.0f}, 0.0f, WHITE);
+	m_setting = std::make_shared<Button>("", texture2, sourceRec2, destRec2, Vector2{ 0.0f, 0.0f }, 0.0f, WHITE);
+}
+
+std::shared_ptr<Button> StageModel::getSettingButton() const
+{
+	return m_setting;
 }
 
 Camera3D& StageModel::getCamera()
@@ -81,7 +90,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
     std::shared_ptr<PlayerData> marioModel;
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
 
-    Vector3 forwardDir = { 0.0f, 0.0f, 1.0f };
+    Vector3 forwardDir = { 1.0f, 0.0f, 0.0f };
     Vector3 positionMario = position;
     Vector3 scaleMario = scale;
     Vector3 rotationAxisMario = { 0.0f, 1.0f, 0.0f };

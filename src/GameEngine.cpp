@@ -20,11 +20,12 @@ void GameEngine::run()
 
 	this->registerSelf();
 
-	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
+	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Stage1");
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
 	CollisionManager::getInstance();
+	SoundManager::getInstance();
 
 
 	while (isRunning == true && !WindowShouldClose())
@@ -68,6 +69,8 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "Back Event")
 	{
+		GameData::getInstance().setLastState(curState);
+
 		EventManager::getInstance().removeObserver(stateView);
 		EventManager::getInstance().removeObserver(stateController);
 		stateModel = stateModelStack.top();
@@ -88,6 +91,20 @@ void GameEngine::update(std::shared_ptr<Event> event)
 		EventManager::getInstance().addObserver(stateView);
 		EventManager::getInstance().addObserver(stateController);
 	}
+	else if (event->getType() == "Tick Event")
+	{
+		if (curState.substr(0, 5) == "Stage")
+		{
+			while (stateModelStack.size() > 1)
+			{
+				stateModelStack.pop();
+				stateViewStack.pop();
+				stateControllerStack.pop();
+				stateStack.pop();
+			}
+		}
+	}
+
 }
 
 void GameEngine::registerSelf()

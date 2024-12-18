@@ -5,6 +5,10 @@
 #include "../Model/Character/AnimationManager.h"
 #include <cstdlib> 
 #include <ctime>
+#include "../Event/StateChangeEvent.h"
+#include "../Button/Button.h"
+#include "../Event/JumpEvent.h"
+#include "../Event/DieEvent.h"
 
 
 
@@ -25,8 +29,10 @@ public:
 	void jumpPlayer(std::shared_ptr<PlayerData> playerData);
 
 	void updateBigDuration(std::shared_ptr<PlayerData> playerData);
-
+	void updatePauseAndSetting(std::shared_ptr<Button> setting, std::shared_ptr<Button> pause);
 	void removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item);
+
+	void updatePlayerDie(std::shared_ptr<PlayerData> playerData);
 
 	void moveEnemy(std::shared_ptr<Enemy> enemyData);
 	void moveToEnemy(std::shared_ptr<Enemy> enemyData);

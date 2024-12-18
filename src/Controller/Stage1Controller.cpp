@@ -25,6 +25,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies);
+		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		for (const auto& block : blockData)
 		{
 			if (block->getIsBouncing())
@@ -62,11 +63,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 
 void Stage1Controller::updateMouse()
 {
-	if (model->getPauseButton()->isClicked(GetMousePosition()))
-	{
-		EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Pause"));
-		return;
-	}
+	updatePauseAndSetting(model->getSettingButton(), model->getPauseButton());
 }
 
 void Stage1Controller::updateCamera()

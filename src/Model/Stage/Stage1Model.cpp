@@ -1,6 +1,6 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 0.0f, 10.0f, 10.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 10.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
                             createMap(), createEnemies(), createItems())
 {
 	cloudScales = { 1.0f, 1.0f, 1.0f };
@@ -331,6 +331,7 @@ std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
     addItem(ItemType::COIN, PATH_COIN, { 335, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 339, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
 
+	addItem(ItemType::GREEN_MUSHROOM, PATH_GREENMUSHROOM, { 20.0f, 10.0f, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
  
     return items;
 }

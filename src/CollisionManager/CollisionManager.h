@@ -15,6 +15,9 @@
 #include "../Event/ItemTouchedEvent.h"
 #include "../Model/GameData.h"
 #include "../Model/Character/AnimationManager.h"
+#include "../Event/DieEvent.h"
+#include "../Event/WarpEvent.h"
+#include "../Event/RegenerateEvent.h"
 
 
 

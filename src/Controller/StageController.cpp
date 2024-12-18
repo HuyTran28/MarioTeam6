@@ -1,5 +1,6 @@
 #include "StageController.h"
 #include <iostream>
+#include <raymath.h> 
 
 void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData)
 {
@@ -256,10 +257,37 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 {
     btVector3 desiredVelocity(0, 0, 0);
 
+    bool isW = false;
+	bool isS = false;
+	bool isA = false;
+	bool isD = false;
+
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
         desiredVelocity = btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
+		isW = true;
     }
+	if (IsKeyDown(KEY_S)) {
+		desiredVelocity = -btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
+		isS = true;
+    }
+	if(IsKeyDown(KEY_A)) {
+		desiredVelocity += btVector3(playerData->getForwarDir().z, 0, -playerData->getForwarDir().x).normalized() * playerData->getMoveSpeed();
+		isA = true;
+    }
+	if (IsKeyDown(KEY_D)) {
+		desiredVelocity -= btVector3(playerData->getForwarDir().z, 0, -playerData->getForwarDir().x).normalized() * playerData->getMoveSpeed();
+		isD = true;
+    }
+
+    Vector2 newDir = { 0.0f, 0.0f };
+	if (isW) newDir.y += 1.0f;
+	if (isS) newDir.y -= 1.0f;
+	if (isA) newDir.x -= 1.0f;
+	if (isD) newDir.x += 1.0f;
+
+    playerData->setPlayerRotationAngle(atan2f(newDir.y, newDir.x));
+    
 
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 1000.0f; // Higher values mean faster acceleration
@@ -288,25 +316,25 @@ void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
 {
     
 
-    float angularVelocity = 0.0f;
-    if (IsKeyDown(KEY_A)) {
-        angularVelocity = 5.0f;  // Positive for counterclockwise rotation
-    }
-    if (IsKeyDown(KEY_D)) {
-        angularVelocity = -5.0f;  // Negative for clockwise rotation
-    }
+    //float angularVelocity = 0.0f;
+    ////if (IsKeyDown(KEY_A)) {
+    ////    angularVelocity = 5.0f;  // Positive for counterclockwise rotation
+    ////}
+    ////if (IsKeyDown(KEY_D)) {
+    ////    angularVelocity = -5.0f;  // Negative for clockwise rotation
+    ////}
 
-    if (angularVelocity == 0) {
-        return;
-    }
+    //if (angularVelocity == 0) {
+    //    return;
+    //}
 
-    // Update the forward direction based on rotation
-    float rotationAngle = playerData->getPlayerRotationAngle();
-    rotationAngle += angularVelocity * GetFrameTime();
-    playerData->setPlayerRotationAngle(rotationAngle);
+    //// Update the forward direction based on rotation
+    //float rotationAngle = playerData->getPlayerRotationAngle();
+    //rotationAngle += angularVelocity * GetFrameTime();
+    //playerData->setPlayerRotationAngle(rotationAngle);
 
-    Matrix rotationMatrix = MatrixRotateY(rotationAngle);
-    playerData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
+    //Matrix rotationMatrix = MatrixRotateY(rotationAngle);
+    //playerData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
 }
 
 void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
@@ -322,6 +350,8 @@ void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
         // Increase the jump force for a higher jump
         float acceleration = (playerData->getJumpForce() * 0.5f) / playerData->getRigidBody()->getMass();
         playerData->setMaxJumpDuaration(sqrt(acceleration / playerData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
+
+        EventManager::getInstance().notify(std::make_shared<JumpEvent>());
     }
 
     if (playerData->getIsJumping())
@@ -344,6 +374,7 @@ void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
             playerData->setLinearVelocity(velocity);
         }
     }
+
 }
 
 void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
@@ -363,6 +394,20 @@ void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
 	}
 }
 
+void StageController::updatePauseAndSetting(std::shared_ptr<Button> setting, std::shared_ptr<Button> pause)
+{
+    if (pause->isClicked(GetMousePosition()))
+    {
+        EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Pause"));
+        return;
+    }
+    if (setting->isClicked(GetMousePosition()))
+    {
+        EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Setting"));
+        return;
+    }
+}
+
 void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item)
 {
     auto it = std::find_if(items.begin(), items.end(), [item](const std::shared_ptr<ItemData>& block) {
@@ -375,6 +420,14 @@ void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, 
         CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
     }
 
+}
+
+void StageController::updatePlayerDie(std::shared_ptr<PlayerData> playerData)
+{
+    //if (playerData->getPlayerHealth() <= 0)
+    //{
+    //    EventManager::getInstance().notify(std::shared_ptr<DieEvent>());
+    //}
 }
 
 
