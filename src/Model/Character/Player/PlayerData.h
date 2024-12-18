@@ -15,6 +15,12 @@ private:
 
     float bigDuration = 0.0f;
 	bool isBig = false;
+
+    float m_invincibilityTimer = 0.0f;   // Timer to track invincibility duration
+    bool m_isInvincible = false;         // Flag to indicate if the player is invincible
+    float m_invincibilityDuration = 1.2f; // Duration of invincibility in seconds
+
+
 public:
 
 
@@ -29,9 +35,14 @@ public:
     float getMaxJumpDuration() const;
 	float getBigDuration() const;
 	bool getIsBig() const;
+    float getInvincibilityTimer() const;
+    bool getIsvincible() const;
+    float getInvincibilityDuration() const;
 
 
-
+    void setInvincibilityTimer(float timer);
+    void setIsvincible(bool isVincible);
+    
 
     void setForwarDir(const Vector3& forwardDir);
     void setIsJumping(bool isJumping);

@@ -34,7 +34,7 @@ public:
 	void updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies);
 
 	void updateBounceOfBlock(std::shared_ptr<BlockData> blockData);
-
+	void updateInvincibilityTimer(std::shared_ptr<PlayerData> playerData);
 
 	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>&itetms);
 

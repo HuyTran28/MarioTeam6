@@ -161,10 +161,6 @@ bool CollisionManager::detectCollisionFromLeft(std::vector<btManifoldPoint> cont
 }
 
 
-
-
-
-
 void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, std::vector<btManifoldPoint> contactPoints)
 {
     // Handle collision
@@ -174,7 +170,10 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     std::string objectType2 = obj2->getObjectType();
 
     if (objectType1 > objectType2)
-		handle(obj2, obj1, contactPoints);
+    {
+        handle(obj2, obj1, contactPoints);
+        return;
+    }
 
     if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Normal")
      {
@@ -234,7 +233,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		GameData::getInstance().setPlayerScore(GameData::getInstance().getPlayerScore() + 1);
     }
 
-
     if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Big")
     {
         if (detectCollisionFromBelow(contactPoints))
@@ -278,6 +276,25 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
 	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
 	{
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        if (!player->getIsvincible())
+        {
+            player->setPlayerHealth(player->getPlayerHealth() - 10);
 
+
+            if (player->getPlayerHealth() <= 0) {
+                // Player is dead
+                player->setPlayerAnimationState(PlayerAnimationState::DIE);
+            }
+            else {
+                player->setIsvincible(true);
+          
+                player->setInvincibilityTimer(player->getInvincibilityDuration());
+                player->setPlayerAnimationState(PlayerAnimationState::HIT); // Trigger hit animation
+            }
+        }
+
+
+       
 	}
 }

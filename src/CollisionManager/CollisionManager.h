@@ -14,7 +14,7 @@
 #include "../Factory/ItemFactory.h"
 #include "../Event/ItemTouchedEvent.h"
 #include "../Model/GameData.h"
-//#include "../Model/Stage/Stage1Model.h"
+#include "../Model/Character/AnimationManager.h"
 
 
 

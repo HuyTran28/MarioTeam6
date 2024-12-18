@@ -136,6 +136,28 @@ void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
     }
 }
 
+void StageController::updateInvincibilityTimer(std::shared_ptr<PlayerData> playerData)
+{
+    if (playerData->getIsvincible()) {
+        float tmp = playerData->getInvincibilityTimer() - GetFrameTime();
+        playerData->setInvincibilityTimer(tmp);
+        if (playerData->getInvincibilityTimer() <= 0.0f) {
+            playerData->setIsvincible(false);
+       
+            if (playerData->getPlayerAnimationState() == PlayerAnimationState::HIT) {
+                if (playerData->getIsOnGround())
+                {
+                    playerData->setPlayerAnimationState(PlayerAnimationState::IDLE);
+                }
+                else
+                    playerData->setPlayerAnimationState(PlayerAnimationState::FALLING);
+            }
+        }
+    }
+}
+
+
+
 void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>& items)
 {
 
@@ -226,6 +248,7 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
         updateModelTransform(playerData);  // Synchronize playerData with physics body
         setPlayerAnimationState(playerData);
         updateAnimationState(playerData);  
+        updateInvincibilityTimer(playerData);
     }
 }
 
@@ -465,11 +488,14 @@ void StageController::updateAnimationState(std::shared_ptr<CharacterData> charac
 
 void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> characterData)
 {
+    std::shared_ptr<PlayerData> playerData = std::dynamic_pointer_cast<PlayerData>(characterData);
     if (characterData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
         return;
     }
 
-
+    if (playerData->getIsvincible() && playerData->getPlayerAnimationState() == PlayerAnimationState::HIT) {
+        return; // Stay in HIT animation during invincibility
+    }
     btVector3 velocity = characterData->getRigidBody()->getLinearVelocity();
     if (!(characterData->getIsOnGround())) {
         // Mario is airborne

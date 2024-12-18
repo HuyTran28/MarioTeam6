@@ -24,6 +24,31 @@ bool PlayerData::getIsBig() const
 	return isBig;
 }
 
+float PlayerData::getInvincibilityTimer() const
+{
+	return m_invincibilityTimer;
+}
+
+bool PlayerData::getIsvincible() const
+{
+	return m_isInvincible;
+}
+
+float PlayerData::getInvincibilityDuration() const
+{
+	return m_invincibilityDuration;
+}
+
+void PlayerData::setInvincibilityTimer(float timer)
+{
+	m_invincibilityTimer = timer;
+}
+
+void PlayerData::setIsvincible(bool isVincible)
+{
+	m_isInvincible = isVincible;
+}
+
 float PlayerData::getBigDuration() const
 {
 	return bigDuration;
