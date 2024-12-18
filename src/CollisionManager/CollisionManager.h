@@ -50,7 +50,9 @@ public:
 
 
 
-    bool  detectCollisionFromBelow(CollidableObject* obj1, CollidableObject* obj2);
-    bool  detectCollisionFromAbove(CollidableObject* obj1, CollidableObject* obj2);
+    bool  detectCollisionFromBelow(std::vector<btManifoldPoint> contactPoints);
+    bool  detectCollisionFromAbove(std::vector<btManifoldPoint> contactPoints);
+    bool  detectCollisionFromLeft(std::vector<btManifoldPoint> contactPoints);
+
 
 };

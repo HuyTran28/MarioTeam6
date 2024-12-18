@@ -8,16 +8,16 @@
 class ItemTouchedEvent : public Event
 {
 private:
-	ItemData* item;
+	ItemData* m_item;
 public:
-	ItemTouchedEvent(ItemData* preBlock) : Event("Item Touched Event")
+	ItemTouchedEvent(ItemData* item) : Event("Item Touched Event")
 	{
-		item = preBlock;
+		m_item = item;
 	}
 
 	ItemData* getItem() const
 	{
-		return item;
+		return m_item;
 	}
 
 

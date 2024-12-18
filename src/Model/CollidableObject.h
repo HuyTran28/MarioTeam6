@@ -13,6 +13,7 @@ protected:
 	std::shared_ptr<btCollisionShape> m_collisionShape;
 	std::shared_ptr<btDefaultMotionState> m_motionState;
 	std::string objectType;
+
 public:
 	CollidableObject();
 	CollidableObject(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::shared_ptr<btDynamicsWorld> world);
@@ -22,7 +23,7 @@ public:
 	std::shared_ptr<btDefaultMotionState> getMotionState() const;
 	std::shared_ptr<btDynamicsWorld> getDynamicsWorld() const;
 	std::string getObjectType();
-
+	void setObjectType(std::string type);
 	void setRigidBody(std::shared_ptr<btRigidBody> rigidBody);
 	void setCollisionShape(std::shared_ptr<btCollisionShape> shape);
 	void setMotionState(std::shared_ptr<btDefaultMotionState> motionState);

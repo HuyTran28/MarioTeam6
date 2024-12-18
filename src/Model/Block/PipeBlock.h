@@ -13,11 +13,12 @@ public:
 		const Vector3& rotationAxis, const float& rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld)
 		: BlockData(rigidBody, shape, motionState, mass, inertia, model, position, scale, rotationAxis, rotationAngle, dynamicsWorld) {
 		objectType = "Block-Pipe";
+		newPosition =  { 0.0f, 0.0f, 0.0f };
 		
 	}
-	void setNewPosition(btVector3 position)
+	void setNewPosition(btVector3 Position)
 	{
-		newPosition = position;
+		newPosition = Position;
 	}
 
 	btVector3 getNewPosition() const

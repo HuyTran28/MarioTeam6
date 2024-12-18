@@ -31,13 +31,19 @@ constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\Su
 constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
 constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\IslandBlock.glb";
-constexpr char PATH_REDMUSHROOM[] = "../../Assets\\Models\\Items\\RedMushroom.glb";
+
 
 
 constexpr char PATH_GOOMBA[] = "../../Assets\\Models\\Characters\\Goomba.glb";
 constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
 
+
+
 constexpr char PATH_COIN[] = "../../Assets\\Models\\Items\\Coin.glb";
+constexpr char PATH_REDMUSHROOM[] = "../../Assets\\Models\\Items\\RedMushroom.glb";
+constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushroom.glb";
+
+
 //constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
 
 
@@ -63,9 +69,6 @@ public:
 	std::shared_ptr<Button> getPauseButton() const;
 
 	std::shared_ptr<PlayerData> createMarioModel(Vector3 position, Vector3 scale);
-	std::vector<std::shared_ptr<BlockData>> getMap() const;
-	void setMap(std::vector<std::shared_ptr<BlockData>> map);
-
 	Vector3 getCameraInitialPosition() const {
 		return m_cameraInitialPosition;
 	}
@@ -78,6 +81,8 @@ public:
 	void setEnemies(std::vector<std::shared_ptr<Enemy>> enemies);
 	std::vector<std::shared_ptr<ItemData>> getItems();
 	void setItems(std::vector<std::shared_ptr<ItemData>> items);
+	std::vector<std::shared_ptr<BlockData>> getMap() const;
+	void setMap(std::vector<std::shared_ptr<BlockData>> map);
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;

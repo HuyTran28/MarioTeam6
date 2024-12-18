@@ -100,56 +100,64 @@ void CollisionManager::detectCollisions()
     }
 }
 
-bool CollisionManager::detectCollisionFromBelow(CollidableObject* obj1, CollidableObject* obj2)
+bool CollisionManager::detectCollisionFromBelow(std::vector<btManifoldPoint> contactPoints)
 {
-    if (obj1->getRigidBody() && obj2->getRigidBody())
-    {
 
-        btTransform playerTransform;
-        obj2->getMotionState()->getWorldTransform(playerTransform);
-        btVector3 playerMin, playerMax;
-        obj2->getCollisionShape()->getAabb(playerTransform, playerMin, playerMax);
+    bool collisionFromBelow = false;
 
+    // Loop through all contact points
+    for (const btManifoldPoint& cp : contactPoints) {
+        // Get the contact normal in world coordinates
+        btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
-        btTransform blockTransform;
-        obj1->getRigidBody()->getMotionState()->getWorldTransform(blockTransform);
-        btVector3 blockMin, blockMax;
-        obj1->getRigidBody()->getCollisionShape()->getAabb(blockTransform, blockMin, blockMax);
-
-
-
-        bool isOverlappingX = (playerMax.x() >= blockMin.x()) && (playerMin.x() <= blockMax.x());
-        bool isOverlappingY = (blockMin.y() - playerMax.y() < 0.1) && (blockMin.y() - playerMax.y() >= 0.0f);
-        bool isOverlappingZ = (playerMax.z() >= blockMin.z()) && (playerMin.z() <= blockMax.z());
-
-
-        return isOverlappingX && isOverlappingY && isOverlappingZ;
+        // Check if the normal is pointing upwards (i.e., collision from below)
+        if (normalOnTarget.y() == 1) { // Adjust threshold if necessary
+            collisionFromBelow = true;
+            break;  // Exit loop early if collision from below is detected
+        }
     }
+
+    return collisionFromBelow;
 }
 
-bool CollisionManager::detectCollisionFromAbove(CollidableObject* obj1, CollidableObject* obj2)
+bool CollisionManager::detectCollisionFromAbove(std::vector<btManifoldPoint> contactPoints)
 {
-    if (!obj2->getRigidBody() || !obj1->getRigidBody()) return false;
 
-    btTransform playerTransform, blockTransform;
-    obj2->getRigidBody()->getMotionState()->getWorldTransform(playerTransform);
-    obj1->getRigidBody()->getMotionState()->getWorldTransform(blockTransform);
+    bool collisionFromAbove = false;
 
-    btVector3 playerMin, playerMax;
-    obj2->getRigidBody()->getCollisionShape()->getAabb(playerTransform, playerMin, playerMax);
+    // Loop through all contact points
+    for (const btManifoldPoint& cp : contactPoints) {
+        // Get the contact normal in world coordinates
+        btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
-    // Raycasting from playerMin slightly below the player
-    btVector3 rayStart = playerMin + btVector3(0, -0.1f, 0);
-    btVector3 rayEnd = rayStart - btVector3(0.0f, 1.0f, 0.0f);
-
-
-    btCollisionWorld::ClosestRayResultCallback rayCallback(rayStart, rayEnd);
-    m_dynamicsWorld->rayTest(rayStart, rayEnd, rayCallback);
-
-    if (rayCallback.hasHit()) {
-        const btCollisionObject* hitObject = rayCallback.m_collisionObject;
-        return hitObject == obj2->getRigidBody().get(); // True if the ray hits this block
+        // Check if the normal is pointing upwards (i.e., collision from below)
+        if (normalOnTarget.y() == -1) { // Adjust threshold if necessary
+            collisionFromAbove = true;
+            break;  // Exit loop early if collision from below is detected
+        }
     }
+
+    return collisionFromAbove;
+}
+
+bool CollisionManager::detectCollisionFromLeft(std::vector<btManifoldPoint> contactPoints)
+{
+
+    bool collisionFromLeft = false;
+
+    // Loop through all contact points
+    for (const btManifoldPoint& cp : contactPoints) {
+        // Get the contact normal in world coordinates
+        btVector3 normalOnTarget = cp.m_normalWorldOnB;
+
+        // Check if the normal is pointing upwards (i.e., collision from below)
+        if (normalOnTarget.x() == 1) { // Adjust threshold if necessary
+            collisionFromLeft = true;
+            break;  // Exit loop early if collision from below is detected
+        }
+    }
+
+    return collisionFromLeft;
 }
 
 
@@ -168,21 +176,22 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     if (objectType1 > objectType2)
 		handle(obj2, obj1, contactPoints);
 
-    //if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Normal")  
-    //{
-    //    
-    //    BlockData* blockData = dynamic_cast<BlockData*>(obj1);
-    //     if (detectCollisionFromBelow(contactPoints))
-    //     {
-    //        blockData->setIsBounce(true);
-    //        blockData->setBouncetime(TILE_DURATION);
-    //    }
-    //}
+    if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Normal")
+     {
+            
+            BlockData* blockData = dynamic_cast<BlockData*>(obj1);
 
-    if (objectType1 == "Block-Question" && objectType2 == "Player-Normal")
+            if (detectCollisionFromBelow(contactPoints))
+            {
+                blockData->setIsBounce(true);
+                blockData->setBouncetime(TILE_DURATION);
+            }  
+     }
+
+    if ((objectType1 == "Block-Question" && objectType2 == "Player-Normal") || (objectType1 == "Block-Question" && objectType2 == "Player-Big"))
     {
        
-        if (detectCollisionFromBelow(obj1,  obj2))
+        if (detectCollisionFromBelow(contactPoints))
         {
             BlockData* block = dynamic_cast<BlockData*>(obj1);
             std::shared_ptr<BlockData> newBlock = BlockFactory::createBlock(BlockType::EmptyBlock, CollisionManager::getInstance()->getDynamicsWorld(),
@@ -200,14 +209,22 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         PipeBlock* block = dynamic_cast<PipeBlock*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 
-        if (IsKeyPressed(KEY_S) && detectCollisionFromAbove(obj1, obj2))
+        if (IsKeyPressed(KEY_S) && detectCollisionFromAbove(contactPoints))
         {
-     
             player->getRigidBody().get()->translate(block->getNewPosition());
         }
 
     }
-	std::cout << objectType1 << " " << objectType2 << std::endl;
+
+    if (objectType1 == "Block-UpPipe" && objectType2 == "Player-Normal")
+    {
+        SupportivePipeBLock* block = dynamic_cast<SupportivePipeBLock*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        if (detectCollisionFromLeft(contactPoints))
+        {
+            player->getRigidBody().get()->translate(block->getNewPosition());
+        }
+    }
 
     if (objectType1 == "Item-Coin" && objectType2 == "Player-Normal")
     {
@@ -217,15 +234,48 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		GameData::getInstance().setPlayerScore(GameData::getInstance().getPlayerScore() + 1);
     }
 
-	if (objectType1 == "Item-RedMushroom" && objectType2 == "Player-Normal")
-	{
-		RedMushroom* redMushroom = dynamic_cast<RedMushroom*>(obj1);
-		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
-		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(redMushroom));
-		player->setBigDuration(3.0f);
-		player->setIsBig(true);
+
+    if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Big")
+    {
+        if (detectCollisionFromBelow(contactPoints))
+        {
+            BlockData* block = dynamic_cast<BlockData*>(obj1);
+            std::shared_ptr<BlockData> newBlock = nullptr;
+
+            EventManager::getInstance().notify(std::make_shared<BlockChangeEvent>(block, newBlock));
+        }
+    }
+   
+    if (objectType1 == "Item-RedMushroom" && objectType2 == "Player-Normal")
+    {
+        RedMushroom* redMushroom = dynamic_cast<RedMushroom*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(redMushroom));
+        player->setBigDuration(30.0f);
+        player->setIsBig(true);
         player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.25f, 1.25f, 1.25f }));
-	}
+        player->setObjectType("Player-Big");
+    }
+
+    if ((objectType1 == "Item-PurpleMushroom" && objectType2 == "Player-Normal"))
+    {
+        PurpleMushroom* purpleMushroom = dynamic_cast<PurpleMushroom*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(purpleMushroom));
+
+        player->setPlayerHealth(0);
+    }
+
+    if ((objectType1 == "Item-PurpleMushroom" && objectType2 == "Player-Big"))
+    {
+        PurpleMushroom* purpleMushroom = dynamic_cast<PurpleMushroom*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(purpleMushroom));
+   
+        player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.0 /1.25f, 1.0 / 1.25f, 1.0 /1.25f }));
+    }
+
+
 	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
 	{
 

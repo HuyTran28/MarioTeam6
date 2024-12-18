@@ -10,7 +10,6 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     m_map = mapData;
 	m_enemies = enemies;
 	m_items = items;
-	//initializeCamera();
 }
 
 StageModel::StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
@@ -130,11 +129,11 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
         modelPath,                                     // std::string
         forwardDir,                                    // Vector3
         positionMario,                                 // Vector3
-        10.0f,                                         // float
+        20.0f,                                         // float
         scaleMario,                                    // Vector3
         rotationAxisMario,                             // Vector3
         0.0f,                                          // float
-        80000.0f,                                      // float
+        48000.0f,                                      // float
         100,                                           // int
         dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
     );

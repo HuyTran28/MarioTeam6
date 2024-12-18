@@ -96,6 +96,8 @@ void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> e
     }
      
 }
+
+
 void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
 {
     float deltaTime = GetFrameTime();
@@ -134,7 +136,7 @@ void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
     }
 }
 
-void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map)
+void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>& items)
 {
 
     auto it = std::find_if(map.begin(), map.end(), [preBlock](const std::shared_ptr<BlockData>& block) {
@@ -145,9 +147,44 @@ void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData
     if (it != map.end()) {
         map.erase(it);
         CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
-
     }
-    map.push_back(newBlock);
+    if (newBlock)
+    {
+        Vector3 newPosition = newBlock->getPosition();
+        newPosition.y += 3.0f;
+        int randomChoice = std::rand() % 5;
+
+        std::shared_ptr<ItemData> item;
+
+        if (randomChoice == 5) {
+       
+            item = ItemFactory::createItem(
+                ItemType::COIN,
+                newPosition,
+                "../../Assets\\Models\\Items\\RedMushroom.glb",
+                { 1.0f, 1.0f, 1.0f },
+                { 0.0, 1.0f, 0.0f },
+                0.0f,
+                CollisionManager::getInstance()->getDynamicsWorld()
+            );
+        }
+        else {
+         
+            item = ItemFactory::createItem(
+                ItemType::COIN,
+                newPosition,
+                "../../Assets\\Models\\Items\\Coin.glb",
+                { 1.0f, 1.0f, 1.0f },
+                { 0.0, 1.0f, 0.0f },
+                0.0f,
+                CollisionManager::getInstance()->getDynamicsWorld()
+            );
+        }
+
+        map.push_back(newBlock);
+        items.push_back(item);
+        
+    }
 
     CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 
@@ -170,7 +207,7 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
             btVector3 gravity = playerData->getWorld()->getGravity();
             playerData->applyCentralForce(gravity);
             // Apply extra gravity for faster falling if needed
-            const float extraGravityFactor = 500.0f;
+            const float extraGravityFactor = 100.0f;
             btVector3 additionalGravity(0, extraGravityFactor * gravity.getY(), 0);
 
             if (velocity.getY() < 0.0f) {
@@ -298,6 +335,7 @@ void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
 			playerData->setIsBig(false);
 			playerData->setBigDuration(0.0f);
             playerData->setPlayerScale(Vector3Multiply(playerData->getPlayerScale(), Vector3{ 1.0f / 1.25f, 1.0f / 1.25f, 1.0f / 1.25f }));
+            playerData->setObjectType("Player-Normal");
 		}
 	}
 }

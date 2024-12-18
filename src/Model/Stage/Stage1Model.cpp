@@ -62,7 +62,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 
     const float size = 2.5f;
     const int middle = m_depth / 2;
-    const int heightLevel = 4;
+    const int heightLevel = 5;
 
 
     Vector3 scale = { 1.0f, 1.0f, 1.0f };
@@ -74,27 +74,12 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         auto block = BlockFactory::createBlock(type, dynamicsWorld, path, position, scale, rotationAxis, rotationAngle);
         if (block)
             map.push_back(std::shared_ptr<BlockData>(block));
-        //if (type == BlockType::QuestionBlock)
-        //{
-        //    m_questionBlock.push_back(block);
-        //}
-        //else if (type == BlockType::NormalBrickBlock)
-        //{
-        //    m_normalBrickBlock.push_back(block);
-        //}
-        //else if (type == BlockType::PipeBlock)
-        //{
-        //    m_pipeBlock.push_back(block);
-        //}
-        //else if (type == BlockType::SupportivePipeBlock)
-        //{
-        //    m_supportivePipeBlock.push_back(block);
-        //}
+
         return block;
         };
 
-    addBlock(BlockType::QuestionBlock, PATH_QUESTIONBLOCK, { 2.0, 12.0, 9.0 }, scale, rotationAxis, rotaionAngle);
-
+    addBlock(BlockType::QuestionBlock, PATH_QUESTIONBLOCK, { 10.0, 12.0, 10.0 }, scale, rotationAxis, rotaionAngle);
+    
 
     auto createBrickBlockGrid = [&]() {
         for (int i = 0; i < m_width; ++i) {
@@ -138,28 +123,44 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
             Vector3 scale1 = { 2.0f * scale.x, 3.0f * scale.y, 2.0f * scale.z };
             Vector3 position = { size * i * scale.x, size * j * scale.y, size * middle * scale.z };
 
-            Vector3 newPos = position;
-            newPos.y -= 100;
+            
+            btVector3 tmp = { position.x, position.y - 20, position.z};
 
-            std::shared_ptr<PipeBlock> pipeBlock = std::dynamic_pointer_cast<PipeBlock>(BlockFactory::createBlock(BlockType::PipeBlock, dynamicsWorld, PATH_PIPEBLOCK, position, scale, rotationAxis, rotaionAngle));
-            pipeBlock->setNewPosition({0, -50, 0});
+            std::shared_ptr<PipeBlock> pipeBlock = std::dynamic_pointer_cast<PipeBlock>(BlockFactory::createBlock(BlockType::PipeBlock, dynamicsWorld, PATH_PIPEBLOCK, position, scale1, rotationAxis, rotaionAngle));
+            pipeBlock->setNewPosition(tmp);
             map.push_back(pipeBlock);
 
             j++;
         }
-        for (int i = -8; i <= 4; i += 3) {
+        for (int i = -20; i <= 4; i += 3)
+        {
             Vector3 scale1 = { 2.0f * scale.x, 3.0f * scale.y, 2.0f * scale.z };
-            Vector3 position = { size * 145 * scale.x, size * i * scale.y, size * middle * scale.z };
-            addBlock(BlockType::PipeBlock, PATH_PIPEBLOCK, position, scale1, rotationAxis, rotaionAngle);
+            Vector3 position1 = { size * 145 * scale.x, size * i * scale.y, size * middle * scale.z };
+            std::shared_ptr<PipeBlock> pipeBlock1 = std::dynamic_pointer_cast<PipeBlock>(BlockFactory::createBlock(BlockType::PipeBlock, dynamicsWorld, PATH_PIPEBLOCK, position1, scale1, rotationAxis, rotaionAngle));
+            map.push_back(pipeBlock1);
+
+            if (i == 4) {
+                btVector3 tmp(-35, position1.y - 55 , position1.z -10);
+
+                pipeBlock1->setNewPosition(tmp);
+            }
         }
+        
 
         };
 
     auto createSupportivePipeBlocks = [&]()
         {
             Vector3 scale1 = { 2.0f * scale.x , 2.0f * scale.y, 2.0f * scale.z };
-            Vector3 position = { size * 144 * scale.x, size * (-7) * scale.y, size * middle * scale.z };
-            addBlock(BlockType::SupportivePipeBlock, PATH_SUPPORTIVEPIPEBLOCK, position, scale1, rotationAxis, rotaionAngle);
+            Vector3 position = { size * 144 * scale.x, size * (-17) * scale.y, size * middle * scale.z };
+            std::shared_ptr<SupportivePipeBLock> pipeBlock1 = std::dynamic_pointer_cast<SupportivePipeBLock>(BlockFactory::createBlock(BlockType::SupportivePipeBlock,
+                dynamicsWorld, PATH_SUPPORTIVEPIPEBLOCK, position, scale1, rotationAxis, rotaionAngle));
+            map.push_back(pipeBlock1);
+
+
+            
+            btVector3 tmp({10.0f, 70.0f, 0.0f});
+            pipeBlock1->setNewPosition(tmp);
         };
 
     auto createLeftRouletteBlocks = [&]() {
@@ -167,7 +168,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         {
             for (int j = 2; j <= i - 124; ++j)
             {
-                for (int k = middle - 1; k <= middle + 1; ++k)
+                for (int k = 1; k < m_depth - 1; ++k)
                 {
                     Vector3 position = { size * i * scale.x, size * j * scale.y, size * k * scale.z };
                     addBlock(BlockType::RouletteBlock, PATH_ROULETTEBLOCK, position, scale, rotationAxis, rotaionAngle);
@@ -183,7 +184,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         {
             for (int j = 2; j <= 136 - i; ++j)
             {
-                for (int k = middle - 1; k <= middle + 1; ++k)
+                for (int k = 1; k < m_depth - 1; ++k)
                 {
                     Vector3 position = { size * i * scale.x, size * j * scale.y, size * k * scale.z };
                     addBlock(BlockType::RouletteBlock, PATH_ROULETTEBLOCK, position, scale, rotationAxis, rotaionAngle2);
@@ -194,7 +195,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         };
     auto createUnderground = [&]() {
         for (int i = 130; i < 149; ++i) {
-            for (int j = -10; j < -8; ++j) {
+            for (int j = -20; j < -18; ++j) {
                 for (int k = 0; k < m_depth; ++k) {
                     Vector3 position = { size * i * scale.x, size * j * scale.y, size * k * scale.z };
                     addBlock(BlockType::BrickBlock, PATH_BRICKBLOCK, position, scale, rotationAxis, rotaionAngle);
@@ -205,7 +206,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 
     auto createSpecificNormalBlocks = [&]() {
         for (int i = 134; i < 138; ++i) {
-            Vector3 position = { size * i * scale.x, size * (-7) * scale.y, size * middle * scale.z };
+            Vector3 position = { size * i * scale.x, size * (-15) * scale.y, size * middle * scale.z };
             addBlock(BlockType::NormalBrickBlock, PATH_NORMALBRICKBLOCK, position, scale, rotationAxis, rotaionAngle);
 
         }
@@ -237,10 +238,6 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 }
 
 
-
-
-
-
 std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
 {
     std::vector<std::shared_ptr<Enemy>> enemies;
@@ -270,23 +267,29 @@ std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
                 enemies.push_back(std::shared_ptr<Enemy>(enemy));
         };
     const float size = 2.5;
-    const float Oy = (m_height * 1.0) * size;
+    const float Oy = 10;
     const float Oz = (m_depth * size) / 2;
+    
 
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 35, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 35, Oy, Oz }, { 50, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 90, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 70, Oy ,Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 70, Oy ,Oz - (2 * size) }, { 95, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+   
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 55, 4, 10 }, forwardDirGoomba, scaleGoomba,  { 55, 4, 10 } , { 35, 4, 10 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 71.3546, 4, 15 }, forwardDirGoomba, scaleGoomba, { 71.3546, 4, 15 }, { 93.3127, 4, 15 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 71.3546, 4, 4.5 }, forwardDirGoomba, scaleGoomba, { 71.3546, 4, 4.5 }, { 93.3127, 4, 4.5 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    
 
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 110, Oy, Oz - (2 * size) }, forwardDirGoomba, scaleGoomba, { 110, Oy, Oz - (2 * size) }, { 110, Oy, Oz + (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 120, Oy, Oz + (2 * size) }, forwardDirGoomba, scaleGoomba, { 120, Oy, Oz + (2 * size) }, { 120, Oy, Oz - (2 * size) }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 104, 4, 17 }, forwardDirGoomba, scaleGoomba, { 104, 4, 17 }, { 114.837, 4, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 126.087, 4, 17 }, forwardDirGoomba, scaleGoomba, { 126.087, 4, 17 }, { 114.837, 4, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 104.733, 4, 5 }, forwardDirGoomba, scaleGoomba, { 104.733, 4, 5 }, { 114.837, 4, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 125.048, 4, 5 }, forwardDirGoomba, scaleGoomba, { 125.048, 4, 5 }, { 114.837, 4, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 182.508, 21.6751, 10.1829 }, forwardDirGoomba, scaleGoomba, { 182.508, 21.6751, 10.1829 }, { 200, 21.6751, 10.1829 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 250, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 250, Oy, Oz }, { 230, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 255, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 255, Oy, Oz }, { 235, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 260, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 260, Oy, Oz }, { 240, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 265, Oy, Oz }, forwardDirGoomba, scaleGoomba, { 265, Oy, Oz }, { 245, Oy, Oz }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 230, Oy, Oz }, forwardDirKoopa, scaleKoopa, { 230, Oy, Oz }, { 220, Oy, Oz }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+  
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 250, 4, 10 }, forwardDirGoomba, scaleGoomba, { 250, 4, 10 }, { 230, 4, 10 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 255, 4, 10 }, forwardDirGoomba, scaleGoomba, { 255, 4, 10 }, { 235, 4, 10 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 260, 4, 10 }, forwardDirGoomba, scaleGoomba, { 260, 4, 10 }, { 240, 4, 10 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 265, 4, 10 }, forwardDirGoomba, scaleGoomba, { 265, 4, 10 }, { 245, 4, 10 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 230, 4, 10 }, forwardDirKoopa, scaleKoopa, { 230, 4, 10 }, { 220, 4, 10 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 314.657, 6.76388,  16.8684 }, forwardDirGoomba, scaleGoomba, { 314.657, 6.76388,  16.8684 }, { 314.626, 6.63073, 2.69545 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 317.16, 9.32509,  3.02433 }, forwardDirGoomba, scaleGoomba, { 317.16, 9.32509,  3.02433 }, { 317.071,9.65208, 17.7685 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
@@ -313,9 +316,22 @@ std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
         };
 
     
-    addItem(ItemType::COIN, PATH_COIN, { 0.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
-	addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { 10.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { 67.2905f, 9.0f, 10.0}, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { 100.0f, 11.0f, 9.91975 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::PURPLE_MUSHROOM, PATH_PURPLEMUSHROOM, { 131.83f, 11.1415f, 10.1595f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    
+    addItem(ItemType::COIN, PATH_COIN, { 186, 28, 10.0993 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { 190, 28, 10.0993 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { 194, 28, 10.0993 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
 
+
+    addItem(ItemType::COIN, PATH_COIN, { 100.0f, 11.0f, 9.91975 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { 272.533, 13.6688, 9.93939 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+
+    addItem(ItemType::COIN, PATH_COIN, { 335, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { 339, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+
+ 
     return items;
 }
 

@@ -20,6 +20,11 @@ std::string CollidableObject::getObjectType()
 	return objectType;
 }
 
+void CollidableObject::setObjectType(std::string type)
+{
+	objectType = type;
+}
+
 std::shared_ptr<btRigidBody> CollidableObject::getRigidBody() const
 {
 	return m_rigidBody;

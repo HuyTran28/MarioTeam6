@@ -86,7 +86,7 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
 	case BlockType::RouletteBlock:
 		return std::make_shared<RouletteBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::SupportivePipeBlock:
-		return std::make_shared<PipeBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
+		return std::make_shared<SupportivePipeBLock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
 	case BlockType::FlyBlock:
 		return std::make_shared<FlyBlock>(blockRigidBody, blockShape, motionState, mass, localInertia, model, startPosition, scale, rotationAxis, rotationAngle, dynamicsWorld);
     case BlockType::IslandBlock:

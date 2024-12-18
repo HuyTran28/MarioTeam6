@@ -3,7 +3,8 @@
 #include "StateController.h"
 #include "../Model/Stage/StageModel.h"
 #include "../Model/Character/AnimationManager.h"
-
+#include <cstdlib> 
+#include <ctime>
 
 
 
@@ -35,7 +36,7 @@ public:
 	void updateBounceOfBlock(std::shared_ptr<BlockData> blockData);
 
 
-	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map);
+	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>&itetms);
 
 	void registerSelf() override;
 	//void onCollision(const CollisionEvent& event);

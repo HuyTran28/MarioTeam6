@@ -33,11 +33,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 				updateBounceOfBlock(block);
 			}
 		}
-
-
-
 		updateMouse();
-		
 		updateCamera();
 	}
 	else if (event->getType() == "Block Change Event")
@@ -46,8 +42,11 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		BlockData* preBlock = blockChange->getPre();
 		std::shared_ptr<BlockData> newBlock = blockChange->getNew();
 		std::vector<std::shared_ptr<BlockData>> map = model->getMap();
-		updateBlock(preBlock, newBlock, map);
+		std::vector<std::shared_ptr<ItemData>> items = model->getItems();
+
+		updateBlock(preBlock, newBlock, map, items);
 		model->setMap(map);
+		model->setItems(items);
     }
 	else if (event->getType() == "Item Touched Event")
 	{
