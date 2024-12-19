@@ -484,7 +484,7 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> charac
 
         // Perform a raycast below the character to check for ground
         btVector3 start = transform.getOrigin();
-        btVector3 end = start - btVector3(0, 2.1f, 0);
+        btVector3 end = start - btVector3(0, 2.2f, 0);
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(start, end);
         characterData->getWorld()->rayTest(start, end, rayCallback);
