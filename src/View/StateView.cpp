@@ -149,3 +149,63 @@ void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items)
 
     }
 }
+
+void StateView::renderHealth(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Button> healthButton)
+{
+	healthButton->draw();
+	
+	int health = playerData->getPlayerHealth();
+    Texture2D heart = GameData::getInstance().getHp();
+	Rectangle sourceRec = { 0.0f, 0.0f, (float)heart.width, (float)heart.height };
+	Rectangle destRec = { 300.0f, 50.0f, 50.0f, 50.0f };
+	Vector2 origin = { 0.0f, 0.0f };
+
+
+	for (int i = 0; i < health; i++)
+	{
+		Rectangle destRecNew = { destRec.x + (i * 50), destRec.y, destRec.width, destRec.height };
+		DrawTexturePro(heart, sourceRec, destRecNew, origin, 0.0f, WHITE);
+    }
+}
+
+void StateView::renderCoin(int coins)
+{
+	Texture2D coin1 = GameData::getInstance().getOneCoin();
+	Texture2D coin5 = GameData::getInstance().getFiveCoin();
+	Texture2D coin10 = GameData::getInstance().getTenCoin();
+
+	Rectangle sourceRec1 = { 0.0f, 0.0f, (float)coin1.width, (float)coin1.height };
+	Rectangle sourceRec5 = { 0.0f, 0.0f, (float)coin5.width, (float)coin5.height };
+	Rectangle sourceRec10 = { 0.0f, 0.0f, (float)coin10.width, (float)coin10.height };
+
+	Rectangle destRec = { 300.0f, 100.0f, 50.0f, 50.0f };
+	Vector2 origin = { 0.0f, 0.0f };
+
+    if (coins == 0)
+    {
+		DrawTexturePro(GameData::getInstance().getZeroCoin(), sourceRec1, destRec, origin, 0.0f, WHITE);
+        return;
+    }
+
+	int coin10Count = coins / 10;
+	int coin5Count = (coins % 10) / 5;
+	int coin1Count = (coins % 10) % 5;
+
+	for (int i = 0; i < coin10Count; i++)
+	{
+		DrawTexturePro(coin10, sourceRec10, destRec, origin, 0.0f, WHITE);
+        destRec.x += 50.0f;
+	}
+
+	for (int i = 0; i < coin5Count; i++)
+	{
+		DrawTexturePro(coin5, sourceRec5, destRec, origin, 0.0f, WHITE);
+        destRec.x += 50.0f;
+	}
+
+	for (int i = 0; i < coin1Count; i++)
+	{
+		DrawTexturePro(coin1, sourceRec1, destRec, origin, 0.0f, WHITE);
+        destRec.x += 50.0f;
+	}
+}

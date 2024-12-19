@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include "btBulletDynamicsCommon.h"
+#include "raylib.h"
 
 class GameData
 {
@@ -20,6 +21,16 @@ public:
 	std::string getLastState();
 	void setLastState(std::string lastState);
 
+
+
+	Font getFont();
+	Texture2D getHp();
+	Texture2D getOneCoin();
+	Texture2D getFiveCoin();
+	Texture2D getTenCoin();
+	Texture2D getZeroCoin();
+
+
 	~GameData();
 
 private:
@@ -29,4 +40,10 @@ private:
 	std::string lastState;
 	GameData();
 
+	Font font;
+	Texture2D hp;
+	Texture2D ZeroCoin;
+	Texture2D OneCoin;
+	Texture2D FiveCoin;
+	Texture2D TenCoin;
 };

@@ -6,6 +6,13 @@ GameData::GameData()
 	playerName = "Mario";
 	playerScore = 0;
 	isLogIn = false;
+
+	hp = LoadTexture("../../Assets\\Icons\\health.png");
+	font = LoadFont("../../Assets\\Fonts\\SuperMario256.ttf");
+	ZeroCoin = LoadTexture("../../Assets\\Icons\\0Coin.png");
+	OneCoin = LoadTexture("../../Assets\\Icons\\1Coin.png");
+	FiveCoin = LoadTexture("../../Assets\\Icons\\5Coin.png");
+	TenCoin = LoadTexture("../../Assets\\Icons\\10Coin.png");
 }
 
 GameData& GameData::getInstance()
@@ -14,9 +21,39 @@ GameData& GameData::getInstance()
 	return instance;
 }
 
+Texture2D GameData::getZeroCoin()
+{
+	return ZeroCoin;
+}
+
+Texture2D GameData::getHp()
+{
+	return hp;
+}
+
+Texture2D GameData::getOneCoin()
+{
+	return OneCoin;
+}
+
+Texture2D GameData::getFiveCoin()
+{
+	return FiveCoin;
+}
+
+Texture2D GameData::getTenCoin()
+{
+	return TenCoin;
+}
+
 std::string GameData::getPlayerName()
 {
 	return playerName;
+}
+
+Font GameData::getFont()
+{
+	return font;
 }
 
 int GameData::getPlayerScore()

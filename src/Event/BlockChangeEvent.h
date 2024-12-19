@@ -17,7 +17,10 @@ public:
 		preblockData = preBlock;
 		preblockType = preBlock->getObjectType();
 		newblockData = newblock;
-		newblockType = newblock->getObjectType();
+		if (newblock != nullptr)
+			newblockType = newblock->getObjectType();
+		else
+			newblockType = "";
 	}
 
 	BlockData* getPre() const

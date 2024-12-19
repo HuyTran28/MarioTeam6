@@ -10,6 +10,13 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     m_map = mapData;
 	m_enemies = enemies;
 	m_items = items;
+    
+	std::string characterName = GameData::getInstance().getPlayerName();
+	std::string characterPath = "../../Assets\\Images\\Characters\\" + characterName + ".png";
+	Texture2D texture = LoadTexture(characterPath.c_str());
+	Rectangle sourceRec = { 0.0f, 0.0f, (float)texture.width, (float)texture.height };
+	Rectangle destRec = { 180.0f, 50.0f, 100.0f, 100.0f };
+	m_health = std::make_shared<Button>("", texture, sourceRec, destRec, Vector2{0.0f, 0.0f}, 0.0f, WHITE);
 }
 
 StageModel::StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode)
@@ -55,6 +62,16 @@ std::vector<std::shared_ptr<Enemy>> StageModel::getEnemies()
 	return m_enemies;
 }
 
+int StageModel::getCoins() const
+{
+	return coins;
+}
+
+void StageModel::setCoins(int coins)
+{
+	this->coins = coins;
+}
+
 void StageModel::setEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
 {
 	m_enemies = enemies;
@@ -68,6 +85,11 @@ std::vector<std::shared_ptr<ItemData>> StageModel::getItems()
 void StageModel::setItems(std::vector<std::shared_ptr<ItemData>> items)
 {
 	m_items = items;
+}
+
+std::shared_ptr<Button> StageModel::getHealthButton() const
+{
+	return m_health;
 }
 
 void StageModel::setCamera(Camera3D camera)
@@ -143,7 +165,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
         rotationAxisMario,                             // Vector3
         0.0f,                                          // float
         48000.0f,                                      // float
-        100,                                           // int
+        5,                                           // int
         dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
     );
 

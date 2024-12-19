@@ -1,6 +1,6 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 10.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 250.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
                             createMap(), createEnemies(), createItems())
 {
 	cloudScales = { 1.0f, 1.0f, 1.0f };
@@ -325,8 +325,9 @@ std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
     addItem(ItemType::COIN, PATH_COIN, { 194, 28, 10.0993 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
 
 
-    addItem(ItemType::COIN, PATH_COIN, { 100.0f, 11.0f, 9.91975 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
     addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { 272.533, 13.6688, 9.93939 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+    addItem(ItemType::PURPLE_MUSHROOM, PATH_PURPLEMUSHROOM, { 272.533, 23.6688, 9.93939 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
+
 
     addItem(ItemType::COIN, PATH_COIN, { 335, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 339, -35, 9.69735 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);

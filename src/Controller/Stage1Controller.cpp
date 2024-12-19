@@ -50,11 +50,26 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
     }
 	else if (event->getType() == "Item Touched Event")
 	{
+
 		std::shared_ptr<ItemTouchedEvent> itemTouched = std::dynamic_pointer_cast<ItemTouchedEvent>(event);
+
+
 		ItemData* item = itemTouched->getItem();
 		std::vector<std::shared_ptr<ItemData>> items = model->getItems();
 		removeItem(items, item);
 		model->setItems(items);
+
+		if (itemTouched->getObjectType() == "Item-Coin")
+		{
+			std::shared_ptr<PlayerData> playerData = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
+			model->setCoins(model->getCoins() + 1);
+		}
+		else if (itemTouched->getObjectType() == "Item-RedMushroom")
+		{
+			//std::shared_ptr<PlayerData> playerData = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
+			//playerData->setBig(true);
+			//playerData->setBigDuration(1000);
+		}
 	}
 
 }

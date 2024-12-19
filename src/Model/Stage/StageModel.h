@@ -85,10 +85,14 @@ public:
 	std::vector<std::shared_ptr<BlockData>> getMap() const;
 	void setMap(std::vector<std::shared_ptr<BlockData>> map);
 	std::shared_ptr<Button> getSettingButton() const;
+	std::shared_ptr<Button> getHealthButton() const;
+	int getCoins() const;
+	void setCoins(int coins);
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 
+	int coins = 10;
 
 	std::shared_ptr<PlayerData> m_playerData;
 	std::vector<std::shared_ptr<BlockData>> m_map;
@@ -97,4 +101,5 @@ private:
 
 	std::shared_ptr<Button> m_pause;
 	std::shared_ptr<Button> m_setting;
+	std::shared_ptr<Button> m_health;
 };

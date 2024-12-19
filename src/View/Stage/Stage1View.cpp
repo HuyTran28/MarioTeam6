@@ -49,8 +49,10 @@ void Stage1View::render()
 
    
 
-
     EndMode3D();
+
+    renderHealth(marioModel, m_model->getHealthButton());
+    renderCoin(m_model->getCoins());
 
     m_model->getPauseButton()->draw();
 	m_model->getSettingButton()->draw();

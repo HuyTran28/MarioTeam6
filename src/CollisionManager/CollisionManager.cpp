@@ -231,7 +231,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		Coin* coin = dynamic_cast<Coin*>(obj1);
 		PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(coin));
-		GameData::getInstance().setPlayerScore(GameData::getInstance().getPlayerScore() + 1);
     }
 
     if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Big")
@@ -281,7 +280,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(greenMushroom));
 
 		EventManager::getInstance().notify(std::make_shared<RegenerateEvent>());
-		player->setPlayerHealth(player->getPlayerHealth() + 10);
+		player->setPlayerHealth(player->getPlayerHealth() + 1);
 
 	}
 
@@ -290,12 +289,13 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
         if (!player->getIsvincible())
         {
-            player->setPlayerHealth(player->getPlayerHealth() - 10);
+            player->setPlayerHealth(player->getPlayerHealth() - 1);
 
 
             if (player->getPlayerHealth() <= 0) {
                 // Player is dead
                 player->setPlayerAnimationState(PlayerAnimationState::DIE);
+				EventManager::getInstance().notify(std::make_shared<DieEvent>());
             }
             else {
                 player->setIsvincible(true);
