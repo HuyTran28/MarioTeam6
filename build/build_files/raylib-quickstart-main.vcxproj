@@ -271,6 +271,7 @@
     <ClInclude Include="..\..\src\Button\Button.h" />
     <ClInclude Include="..\..\src\CollisionManager\CollisionManager.h" />
     <ClInclude Include="..\..\src\Controller\ControlEngine.h" />
+    <ClInclude Include="..\..\src\Controller\GameOverController.h" />
     <ClInclude Include="..\..\src\Controller\LevelSelectController.h" />
     <ClInclude Include="..\..\src\Controller\LogInController.h" />
     <ClInclude Include="..\..\src\Controller\MenuController.h" />
@@ -285,6 +286,7 @@
     <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
     <ClInclude Include="..\..\src\Event\DieEvent.h" />
+    <ClInclude Include="..\..\src\Event\EnemyDie.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
     <ClInclude Include="..\..\src\Event\InitializeEvent.h" />
@@ -320,6 +322,7 @@
     <ClInclude Include="..\..\src\Model\Character\Player\PlayerData.h" />
     <ClInclude Include="..\..\src\Model\CollidableObject.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
+    <ClInclude Include="..\..\src\Model\GameOverModel.h" />
     <ClInclude Include="..\..\src\Model\Item\BoomerangFlower.h" />
     <ClInclude Include="..\..\src\Model\Item\Coin.h" />
     <ClInclude Include="..\..\src\Model\Item\GreenMushroom.h" />
@@ -343,6 +346,7 @@
     <ClInclude Include="..\..\src\Observer\IObserver.h" />
     <ClInclude Include="..\..\src\Observer\Subject.h" />
     <ClInclude Include="..\..\src\SoundManager\SoundManager.h" />
+    <ClInclude Include="..\..\src\View\GameOverView.h" />
     <ClInclude Include="..\..\src\View\LevelSelectView.h" />
     <ClInclude Include="..\..\src\View\LogInView.h" />
     <ClInclude Include="..\..\src\View\MenuView.h" />
@@ -365,6 +369,7 @@
     <ClCompile Include="..\..\src\Button\Button.cpp" />
     <ClCompile Include="..\..\src\CollisionManager\CollisionManager.cpp" />
     <ClCompile Include="..\..\src\Controller\ControlEngine.cpp" />
+    <ClCompile Include="..\..\src\Controller\GameOverController.cpp" />
     <ClCompile Include="..\..\src\Controller\LevelSelectController.cpp" />
     <ClCompile Include="..\..\src\Controller\LogInController.cpp" />
     <ClCompile Include="..\..\src\Controller\MenuController.cpp" />
@@ -391,6 +396,7 @@
     <ClCompile Include="..\..\src\Model\Character\Player\PlayerData.cpp" />
     <ClCompile Include="..\..\src\Model\CollidableObject.cpp" />
     <ClCompile Include="..\..\src\Model\GameData.cpp" />
+    <ClCompile Include="..\..\src\Model\GameOverModel.cpp" />
     <ClCompile Include="..\..\src\Model\Item\ItemData.cpp" />
     <ClCompile Include="..\..\src\Model\LevelSelectModel.cpp" />
     <ClCompile Include="..\..\src\Model\LogInModel.cpp" />
@@ -403,6 +409,7 @@
     <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
     <ClCompile Include="..\..\src\SoundManager\SoundManager.cpp" />
+    <ClCompile Include="..\..\src\View\GameOverView.cpp" />
     <ClCompile Include="..\..\src\View\LevelSelectView.cpp" />
     <ClCompile Include="..\..\src\View\LogInView.cpp" />
     <ClCompile Include="..\..\src\View\MenuView.cpp" />

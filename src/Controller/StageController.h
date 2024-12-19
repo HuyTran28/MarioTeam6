@@ -9,12 +9,12 @@
 #include "../Button/Button.h"
 #include "../Event/JumpEvent.h"
 #include "../Event/DieEvent.h"
+#include "../Event/EnemyDie.h"
 
 
 
 class StageController : public StateController
 {
-
 public:
 	void updateCollisionShape(std::shared_ptr<CharacterData> playerData);
 	void updateModelTransform(std::shared_ptr<CharacterData> playerData);
@@ -25,12 +25,12 @@ public:
 	void setPlayerAnimationState(std::shared_ptr<CharacterData> playerData);
 	void updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData);
 	void movePlayer(std::shared_ptr<PlayerData> playerData);
-	void rotatePlayer(std::shared_ptr<PlayerData> playerData);
 	void jumpPlayer(std::shared_ptr<PlayerData> playerData);
 
 	void updateBigDuration(std::shared_ptr<PlayerData> playerData);
 	void updatePauseAndSetting(std::shared_ptr<Button> setting, std::shared_ptr<Button> pause);
 	void removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item);
+	void removeEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Enemy* enemy);
 
 	void updatePlayerDie(std::shared_ptr<PlayerData> playerData);
 
@@ -47,4 +47,8 @@ public:
 	void registerSelf() override;
 	//void onCollision(const CollisionEvent& event);
 	//void determineCollisionType(CollisionEvent& event);
+private:
+	float timer = 0.0f;
+	bool isNotifyDie = false;
+	bool isInputEnable = true;
 };

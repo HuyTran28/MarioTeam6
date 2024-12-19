@@ -1,6 +1,6 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 250.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 10.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
                             createMap(), createEnemies(), createItems())
 {
 	cloudScales = { 1.0f, 1.0f, 1.0f };
@@ -249,7 +249,7 @@ std::vector<std::shared_ptr<Enemy>> Stage1Model::createEnemies()
     float rotationAngleKoopa = 0.0f;
 
 
-    Vector3 scaleGoomba = { 0.7f, 0.7f, 0.7f };
+    Vector3 scaleGoomba = { 1.0f, 1.0f, 1.0f };
     Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
 
     Vector3 forwardDirGoomba = { 0, 0, 1 };

@@ -71,6 +71,15 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 			//playerData->setBigDuration(1000);
 		}
 	}
+	else if (event->getType() == "Enemy Die Event")
+	{
+		auto enemyDie = std::dynamic_pointer_cast<EnemyDie>(event);
+
+		Enemy* enemy = enemyDie->getEnemy();
+		std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
+		removeEnemy(enemies, enemy);
+		model->setEnemies(enemies);
+	}
 
 }
 

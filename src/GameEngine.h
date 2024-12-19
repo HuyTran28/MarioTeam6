@@ -20,7 +20,9 @@ class GameEngine : public IObserver, public std::enable_shared_from_this<GameEng
 {
 private:
 	bool isRunning;
+	bool isGameOver = false;
 	bool isInit = false;
+	float timer = 0.0f;
 	std::string curState;
 	std::shared_ptr<StateModel> stateModel;
 	std::shared_ptr<StateView> stateView;

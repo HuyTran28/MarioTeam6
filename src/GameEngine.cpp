@@ -39,6 +39,7 @@ void GameEngine::run()
 
 void GameEngine::update(std::shared_ptr<Event> event)
 {
+
 	if (event->getType() == "Quit Event")
 	{
 		isRunning = false;
@@ -93,6 +94,19 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "Tick Event")
 	{
+		if (isGameOver == true)
+		{
+			timer += GetFrameTime();
+
+			if (timer > 3.0f)
+			{
+				isGameOver = false;
+				timer = 0.0f;
+				EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Game Over"));
+			}
+
+		}
+
 		if (curState.substr(0, 5) == "Stage")
 		{
 			while (stateModelStack.size() > 1)
@@ -103,6 +117,10 @@ void GameEngine::update(std::shared_ptr<Event> event)
 				stateStack.pop();
 			}
 		}
+	}
+	else if (event->getType() == "Die Event")
+	{
+		isGameOver = true;
 	}
 
 }

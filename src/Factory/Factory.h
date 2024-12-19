@@ -28,7 +28,9 @@
 #include "../View/SettingView.h"
 #include "../Model/SettingModel.h"
 #include "../Controller/SettingController.h"
-
+#include "../View/GameOverView.h"
+#include "../Model/GameOverModel.h"
+#include "../Controller/GameOverController.h"
 
 class StateFactory
 {

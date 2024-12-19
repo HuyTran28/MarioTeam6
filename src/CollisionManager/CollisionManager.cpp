@@ -131,7 +131,27 @@ bool CollisionManager::detectCollisionFromAbove(std::vector<btManifoldPoint> con
         btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
         // Check if the normal is pointing upwards (i.e., collision from below)
-        if (normalOnTarget.y() == -1) { // Adjust threshold if necessary
+        if (normalOnTarget.y() == - 1) { // Adjust threshold if necessary
+            collisionFromAbove = true;
+            break;  // Exit loop early if collision from below is detected
+        }
+    }
+
+    return collisionFromAbove;
+}
+
+bool CollisionManager::detectCollisionFromAboveEnemy(std::vector<btManifoldPoint> contactPoints)
+{
+
+    bool collisionFromAbove = false;
+
+    // Loop through all contact points
+    for (const btManifoldPoint& cp : contactPoints) {
+        // Get the contact normal in world coordinates
+        btVector3 normalOnTarget = cp.m_normalWorldOnB;
+
+        // Check if the normal is pointing upwards (i.e., collision from below)
+        if (normalOnTarget.y() < -0.5) { // Adjust threshold if necessary
             collisionFromAbove = true;
             break;  // Exit loop early if collision from below is detected
         }
@@ -287,17 +307,20 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
 	{
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+		Goomba* goomba = dynamic_cast<Goomba*>(obj1);
+
+        if (detectCollisionFromAboveEnemy(contactPoints))
+        {
+			EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
+            return;
+        }
+
         if (!player->getIsvincible())
         {
             player->setPlayerHealth(player->getPlayerHealth() - 1);
 
 
-            if (player->getPlayerHealth() <= 0) {
-                // Player is dead
-                player->setPlayerAnimationState(PlayerAnimationState::DIE);
-				EventManager::getInstance().notify(std::make_shared<DieEvent>());
-            }
-            else {
+            if (player->getPlayerHealth() > 0) {
                 player->setIsvincible(true);
           
                 player->setInvincibilityTimer(player->getInvincibilityDuration());

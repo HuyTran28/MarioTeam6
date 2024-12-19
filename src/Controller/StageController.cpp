@@ -240,10 +240,11 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
             }
         }
 
-
-        movePlayer(playerData);    // Update movement
-        rotatePlayer(playerData);  // Update rotation
-        jumpPlayer(playerData);  // Handle jumping
+        if (isInputEnable)
+        {
+            movePlayer(playerData);    // Update movement
+            jumpPlayer(playerData);  // Handle jumping
+        }
 
         updateCollisionShape(playerData);  // Update collision shape
         updateModelTransform(playerData);  // Synchronize playerData with physics body
@@ -311,31 +312,6 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
     }
 }
 
-
-void StageController::rotatePlayer(std::shared_ptr<PlayerData> playerData)
-{
-    
-
-    //float angularVelocity = 0.0f;
-    ////if (IsKeyDown(KEY_A)) {
-    ////    angularVelocity = 5.0f;  // Positive for counterclockwise rotation
-    ////}
-    ////if (IsKeyDown(KEY_D)) {
-    ////    angularVelocity = -5.0f;  // Negative for clockwise rotation
-    ////}
-
-    //if (angularVelocity == 0) {
-    //    return;
-    //}
-
-    //// Update the forward direction based on rotation
-    //float rotationAngle = playerData->getPlayerRotationAngle();
-    //rotationAngle += angularVelocity * GetFrameTime();
-    //playerData->setPlayerRotationAngle(rotationAngle);
-
-    //Matrix rotationMatrix = MatrixRotateY(rotationAngle);
-    //playerData->setForwarDir(Vector3Normalize(Vector3Transform(Vector3{ 0.0f, 0.0f, 1.0f }, rotationMatrix)));
-}
 
 void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
 {
@@ -422,12 +398,34 @@ void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, 
 
 }
 
+void StageController::removeEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Enemy* enemy)
+{
+	auto it = std::find_if(enemies.begin(), enemies.end(), [enemy](const std::shared_ptr<Enemy>& block) {
+		return block.get() == enemy;
+		});
+
+	if (it != enemies.end()) {
+		enemies.erase(it);
+		btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+		CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+	}
+}
+
 void StageController::updatePlayerDie(std::shared_ptr<PlayerData> playerData)
 {
-    //if (playerData->getPlayerHealth() <= 0)
-    //{
-    //    EventManager::getInstance().notify(std::shared_ptr<DieEvent>());
-    //}
+    if (playerData->getPlayerHealth() <= 0)
+    {
+        if (isNotifyDie == true)
+        {
+			return;
+        }
+
+		isNotifyDie = true;
+        isInputEnable = false;
+        
+        playerData->setPlayerAnimationState(PlayerAnimationState::DIE);
+        EventManager::getInstance().notify(std::make_shared<DieEvent>());
+    }
 }
 
 

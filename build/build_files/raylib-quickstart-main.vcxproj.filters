@@ -51,6 +51,9 @@
     <ClCompile Include="..\..\src\View\SettingView.cpp" />
     <ClCompile Include="..\..\src\Controller\SettingController.cpp" />
     <ClCompile Include="..\..\src\SoundManager\SoundManager.cpp" />
+    <ClCompile Include="..\..\src\Model\GameOverModel.cpp" />
+    <ClCompile Include="..\..\src\View\GameOverView.cpp" />
+    <ClCompile Include="..\..\src\Controller\GameOverController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -137,6 +140,10 @@
     <ClInclude Include="..\..\src\Event\DieEvent.h" />
     <ClInclude Include="..\..\src\Event\WarpEvent.h" />
     <ClInclude Include="..\..\src\Event\RegenerateEvent.h" />
+    <ClInclude Include="..\..\src\Event\EnemyDie.h" />
+    <ClInclude Include="..\..\src\Model\GameOverModel.h" />
+    <ClInclude Include="..\..\src\View\GameOverView.h" />
+    <ClInclude Include="..\..\src\Controller\GameOverController.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

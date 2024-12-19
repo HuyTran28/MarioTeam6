@@ -6,6 +6,7 @@
 #include "StageController.h"
 #include "../Event/StateChangeEvent.h"
 
+
 class Stage1Controller : public StageController, public std::enable_shared_from_this<Stage1Controller>
 {
 public:

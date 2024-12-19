@@ -12,12 +12,14 @@
 #include "../Factory/BlockFactory.h"
 #include "../Event/BlockChangeEvent.h"
 #include "../Factory/ItemFactory.h"
+#include "../Factory/EnemyFactory.h"
 #include "../Event/ItemTouchedEvent.h"
 #include "../Model/GameData.h"
 #include "../Model/Character/AnimationManager.h"
 #include "../Event/DieEvent.h"
 #include "../Event/WarpEvent.h"
 #include "../Event/RegenerateEvent.h"
+#include "../Event/EnemyDie.h"
 
 
 
@@ -55,7 +57,7 @@ public:
 
     bool  detectCollisionFromBelow(std::vector<btManifoldPoint> contactPoints);
     bool  detectCollisionFromAbove(std::vector<btManifoldPoint> contactPoints);
+    bool detectCollisionFromAboveEnemy(std::vector<btManifoldPoint> contactPoints);
     bool  detectCollisionFromLeft(std::vector<btManifoldPoint> contactPoints);
-
 
 };

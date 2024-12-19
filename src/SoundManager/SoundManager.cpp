@@ -22,6 +22,11 @@ void SoundManager::update(std::shared_ptr<Event> event)
             PlaySoundEffect("Pause");
 			PauseMusicStream(backgroundMusic); 
         }
+		else if (stateChangeEvent->getNewState() == "Game Over")
+		{
+			StopBackgroundMusic();
+			PlaySoundEffect("Game Over");
+		}
     }
     else if (event->getType() == "Back Event")
     {
@@ -101,6 +106,7 @@ SoundManager::SoundManager()
 	LoadSoundFile("Warp", "../../Assets/Sounds/Warp.wav");
 	LoadSoundFile("ItemAppear", "../../Assets/Sounds/Item.wav");
 	LoadSoundFile("Regerate", "../../Assets/Sounds/1up.wav");
+	LoadSoundFile("Game Over", "../../Assets/Sounds/GameOver.wav");
 }
 
 std::shared_ptr<SoundManager> SoundManager::getInstance()
