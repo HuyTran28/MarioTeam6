@@ -289,7 +289,8 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
         EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(purpleMushroom));
    
-        player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.0 /1.25f, 1.0 / 1.25f, 1.0 /1.25f }));
+		player->setBigDuration(0.1f);
+		player->setIsBig(true);
     }
 
 	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
