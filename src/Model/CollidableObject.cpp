@@ -62,9 +62,9 @@ void CollidableObject::setMotionState(std::shared_ptr<btDefaultMotionState> moti
 
 CollidableObject::~CollidableObject()
 {
-	m_dynamicsWorld->removeRigidBody(m_rigidBody.get());
+ 	m_dynamicsWorld->removeRigidBody(m_rigidBody.get());
 	btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
-	m_dynamicsWorld->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+	//m_dynamicsWorld->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 
 }
 

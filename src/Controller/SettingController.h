@@ -6,6 +6,7 @@
 #include "../Event/StateChangeEvent.h"
 #include "../Event/BackEvent.h"
 #include "../SoundManager/SoundManager.h"
+#include "../CollisionManager/CollisionManager.h"
 
 class SettingController : public StateController, public std::enable_shared_from_this<StateController>
 {

@@ -80,7 +80,10 @@ void SoundManager::update(std::shared_ptr<Event> event)
 	{
 		PlaySoundEffect("Regerate");
 	}
-
+	else if (event->getType() == "Enemy Die Event")
+	{
+		PlaySoundEffect("Enemy Die");
+	}
 }
 
 void SoundManager::LoadSoundFile(const std::string& id, const std::string& filepath) {
@@ -107,6 +110,7 @@ SoundManager::SoundManager()
 	LoadSoundFile("ItemAppear", "../../Assets/Sounds/Item.wav");
 	LoadSoundFile("Regerate", "../../Assets/Sounds/1up.wav");
 	LoadSoundFile("Game Over", "../../Assets/Sounds/GameOver.wav");
+	LoadSoundFile("Enemy Die", "../../Assets/Sounds/EnemyDie.wav");
 }
 
 std::shared_ptr<SoundManager> SoundManager::getInstance()

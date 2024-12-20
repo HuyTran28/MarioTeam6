@@ -72,8 +72,7 @@ std::shared_ptr<CollisionManager> CollisionManager::getInstance()
 void CollisionManager::update(std::shared_ptr<Event> event)
 {
     if (event->getType() == "Tick Event") {
-        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
-        m_dynamicsWorld->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+        m_dynamicsWorld->stepSimulation(GetFrameTime());
         detectCollisions();
     }
 }
@@ -151,7 +150,7 @@ bool CollisionManager::detectCollisionFromAboveEnemy(std::vector<btManifoldPoint
         btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
         // Check if the normal is pointing upwards (i.e., collision from below)
-        if (normalOnTarget.y() < -0.8) { // Adjust threshold if necessary
+        if (normalOnTarget.y() < -0.6) { // Adjust threshold if necessary
             collisionFromAbove = true;
             break;  // Exit loop early if collision from below is detected
         }

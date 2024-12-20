@@ -374,6 +374,7 @@ void StageController::updatePauseAndSetting(std::shared_ptr<Button> setting, std
 {
     if (pause->isClicked(GetMousePosition()))
     {
+
         EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Pause"));
         return;
     }
@@ -392,8 +393,8 @@ void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, 
 
     if (it != items.end()) {
         items.erase(it);
-        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
-        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+        //btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+        //CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
     }
 
 }
@@ -404,11 +405,11 @@ void StageController::removeEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, 
         return en.get() == enemy;
         });
 
-    if (it != enemies.end()) {
-        enemies.erase(it);
-        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
-        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
-    }
+	if (it != enemies.end()) {
+		enemies.erase(it);
+		//btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+		//CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+	}
 }
 
 void StageController::updatePlayerDie(std::shared_ptr<PlayerData> playerData)

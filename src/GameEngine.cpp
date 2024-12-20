@@ -109,7 +109,7 @@ void GameEngine::update(std::shared_ptr<Event> event)
 
 		if (curState.substr(0, 5) == "Stage")
 		{
-			while (stateModelStack.size() > 1)
+			while (stateModelStack.size() > 0)
 			{
 				stateModelStack.pop();
 				stateViewStack.pop();
