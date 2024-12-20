@@ -151,7 +151,7 @@ bool CollisionManager::detectCollisionFromAboveEnemy(std::vector<btManifoldPoint
         btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
         // Check if the normal is pointing upwards (i.e., collision from below)
-        if (normalOnTarget.y() < -0.5) { // Adjust threshold if necessary
+        if (normalOnTarget.y() < -0.8) { // Adjust threshold if necessary
             collisionFromAbove = true;
             break;  // Exit loop early if collision from below is detected
         }
@@ -304,7 +304,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
 	}
 
-	if (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal")
+	if ((objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal") || (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Big"))
 	{
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 		Goomba* goomba = dynamic_cast<Goomba*>(obj1);
@@ -315,7 +315,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             return;
         }
 
-        if (!player->getIsvincible())
+        if (!player->getIsvincible() && player->getIsOnGround())
         {
             player->setPlayerHealth(player->getPlayerHealth() - 1);
 

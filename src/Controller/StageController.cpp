@@ -400,15 +400,15 @@ void StageController::removeItem(std::vector<std::shared_ptr<ItemData>>& items, 
 
 void StageController::removeEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Enemy* enemy)
 {
-	auto it = std::find_if(enemies.begin(), enemies.end(), [enemy](const std::shared_ptr<Enemy>& block) {
-		return block.get() == enemy;
-		});
+    auto it = std::find_if(enemies.begin(), enemies.end(), [enemy](const std::shared_ptr<Enemy>& en) {
+        return en.get() == enemy;
+        });
 
-	if (it != enemies.end()) {
-		enemies.erase(it);
-		btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
-		CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
-	}
+    if (it != enemies.end()) {
+        enemies.erase(it);
+        btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+        CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+    }
 }
 
 void StageController::updatePlayerDie(std::shared_ptr<PlayerData> playerData)

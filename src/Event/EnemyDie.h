@@ -7,11 +7,12 @@
 class EnemyDie : public Event
 {
 private:
-	Enemy* enemy;
+	Enemy* m_enemy;
 	std::string enemyType;
 public:
 	EnemyDie(Enemy* enemy) : Event("Enemy Die Event")
 	{
+		m_enemy = enemy;
 		enemyType = enemy->getObjectType();
 	}
 
@@ -22,6 +23,6 @@ public:
 
 	Enemy* getEnemy() const
 	{
-		return enemy;
+		return m_enemy;
 	}
 };
