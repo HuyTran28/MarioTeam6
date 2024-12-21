@@ -94,6 +94,7 @@ void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> e
         moveEnemy(enemy);
         updateCollisionShape(enemy);  // Update collision shape
         updateModelTransform(enemy);  // Synchronize marioData with physics body
+        updateAnimationState(enemy);
     }
      
 }
