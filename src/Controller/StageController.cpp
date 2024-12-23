@@ -23,9 +23,24 @@ void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData)
 void StageController::moveToEnemy(std::shared_ptr<Enemy> enemyData)
 {
     Vector3 direction = Vector3Normalize(enemyData->getTargetPosition() - enemyData->getPlayerPos());
-    btVector3 movement(direction.x, 0, direction.z);
+    btVector3 desiredVelocity(direction.x, 0, direction.z);
 
-    enemyData->setLinearVelocity(movement * enemyData->getMoveSpeed());
+    // Smooth acceleration towards the desired velocity
+    const float accelerationFactor = 1000.0f; // Higher values mean faster acceleration
+    btVector3 currentVelocity = enemyData->getRigidBody()->getLinearVelocity();
+    btVector3 velocityDifference = desiredVelocity * enemyData->getMoveSpeed() - currentVelocity;
+
+    // Calculate the acceleration (delta velocity over time)
+    btVector3 acceleration = velocityDifference * accelerationFactor * GetFrameTime();
+
+    // Apply force to the enemy based on their mass and the acceleration
+    btRigidBody* rigidBody = enemyData->getRigidBody().get();
+    btScalar mass = rigidBody->getMass();
+    btVector3 force = acceleration * mass;
+
+    // Apply the force to the rigid body
+    rigidBody->applyCentralForce(force);
+
     // Update position
     btTransform trans;
     enemyData->getRigidBody()->getMotionState()->getWorldTransform(trans);
