@@ -45,7 +45,7 @@ constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushr
 constexpr char PATH_GREENMUSHROOM[] = "../../Assets\\Models\\Items\\GreenMushroom.glb";
 
 
-//constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
+
 
 
 #include <iostream>

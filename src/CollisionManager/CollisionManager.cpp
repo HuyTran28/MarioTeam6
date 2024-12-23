@@ -179,6 +179,25 @@ bool CollisionManager::detectCollisionFromLeft(std::vector<btManifoldPoint> cont
     return collisionFromLeft;
 }
 
+bool CollisionManager::detectCollisionFromRight(std::vector<btManifoldPoint> contactPoints)
+{
+    bool collisionFromRight = false;
+
+    // Loop through all contact points
+    for (const btManifoldPoint& cp : contactPoints) {
+        // Get the contact normal in world coordinates
+        btVector3 normalOnTarget = cp.m_normalWorldOnB;
+
+        // Check if the normal is pointing upwards (i.e., collision from below)
+        if (normalOnTarget.x() == -1) { // Adjust threshold if necessary
+            collisionFromRight = true;
+            break;  // Exit loop early if collision from below is detected
+        }
+    }
+
+    return collisionFromRight;
+}
+
 
 void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, std::vector<btManifoldPoint> contactPoints)
 {
@@ -239,7 +258,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     {
         SupportivePipeBLock* block = dynamic_cast<SupportivePipeBLock*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
-        if (detectCollisionFromLeft(contactPoints))
+        if (detectCollisionFromLeft(contactPoints) || detectCollisionFromRight(contactPoints))
         {
             player->getRigidBody().get()->translate(block->getNewPosition());
         }

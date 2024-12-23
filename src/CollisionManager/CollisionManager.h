@@ -55,9 +55,11 @@ public:
 
 
 
-    bool  detectCollisionFromBelow(std::vector<btManifoldPoint> contactPoints);
-    bool  detectCollisionFromAbove(std::vector<btManifoldPoint> contactPoints);
+    bool detectCollisionFromBelow(std::vector<btManifoldPoint> contactPoints);
+    bool detectCollisionFromAbove(std::vector<btManifoldPoint> contactPoints);
     bool detectCollisionFromAboveEnemy(std::vector<btManifoldPoint> contactPoints);
-    bool  detectCollisionFromLeft(std::vector<btManifoldPoint> contactPoints);
+    bool detectCollisionFromLeft(std::vector<btManifoldPoint> contactPoints);
+    bool detectCollisionFromRight(std::vector<btManifoldPoint> contactPoints);
+
 
 };

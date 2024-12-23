@@ -32,7 +32,7 @@ public:
 	std::vector<std::shared_ptr<BlockData>> createMap();
 	std::vector<std::shared_ptr<Enemy>>createEnemies();
 	std::vector<std::shared_ptr<ItemData>> createItems();
-\
+
 
 	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;

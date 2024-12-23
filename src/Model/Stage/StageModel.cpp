@@ -194,7 +194,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
         scaleMario,                                    // Vector3
         rotationAxisMario,                             // Vector3
         0.0f,                                          // float
-        48000.0f,                                      // float
+        35000.0f,                                      // float
         5,                                           // int
         dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
     );
