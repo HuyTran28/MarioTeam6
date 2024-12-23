@@ -306,6 +306,10 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 	if (isS) newDir.y -= 1.0f;
 	if (isA) newDir.x -= 1.0f;
 	if (isD) newDir.x += 1.0f;
+    
+	if (newDir == Vector2{ 0.0f, 0.0f }) {
+        newDir = Vector2{ 0.0f, 1.0f };
+    }
 
     playerData->setPlayerRotationAngle(atan2f(newDir.y, newDir.x));
     
@@ -550,7 +554,8 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> charac
 
 void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData, Camera3D cam)
 {
-	if (Vector3Distance(cam.position, characterData->getPlayerPos()) > 140.0f) {
+	if ((Vector3Distance(cam.position, characterData->getPlayerPos()) > 140.0f && cam.position.x < characterData->getPlayerPos().x)
+        || (Vector3Distance(cam.position, characterData->getPlayerPos()) > 10.0f && cam.position.x > characterData->getPlayerPos().x)) {
 		return; // Skip animation updates for distant objects
 	}
 

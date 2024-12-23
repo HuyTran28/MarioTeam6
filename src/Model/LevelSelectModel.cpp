@@ -12,6 +12,19 @@ LevelSelectModel::LevelSelectModel()
 	destRecColorLevel1 = WHITE;
 	originLevel1 = { 0.0f, 0.0f };
 
+	level2Texture = LoadTexture("../../Assets\\Images\\volcanoMountain.png");
+	srcRecLevel2 = { 0.0f, 0.0f, (float)level2Texture.width, (float)level2Texture.height };
+	destRecLevel2 = { 825.0f, 141.0f, 1075.0f - 825.0f, 321.0f - 141.0f };
+	destRecColorLevel2 = WHITE;
+	originLevel2 = { 0.0f, 0.0f };
+
+	level3Texture = LoadTexture("../../Assets\\Images\\BowserCastle.png");
+	srcRecLevel3 = { 0.0f, 0.0f, (float)level3Texture.width, (float)level3Texture.height };
+	destRecLevel3 = { 1147.0f, 141.0f, 1397.0f - 1147.0f, 321.0f - 141.0f };
+	destRecColorLevel3 = WHITE;
+	originLevel3 = { 0.0f, 0.0f };
+
+
 	//level2Pos = { 100, 300 };
 	//level2Texture = LoadTexture("res/level2.png");
 	//level2Frame = LoadTexture("res/levelFrame.png");
@@ -132,4 +145,26 @@ Vector2 LevelSelectModel::getOriginLevel3()
 {
 	return originLevel3;
 }
+
+Color LevelSelectModel::getDestRecColorLevel2()
+{
+	return destRecColorLevel2;
+}
+
+void LevelSelectModel::setDestRecColorLevel2(Color color)
+{
+	destRecColorLevel2 = color;
+}
+
+Color LevelSelectModel::getDestRecColorLevel3()
+{
+	return destRecColorLevel3;
+}
+
+void LevelSelectModel::setDestRecColorLevel3(Color color)
+{
+	destRecColorLevel3 = color;
+}
+
+
 

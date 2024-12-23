@@ -30,7 +30,8 @@ void LevelSelectView::render()
 	Rectangle level1 = model->getDestRecLevel1();
 	DrawRectangleRec(level1, model->getDestRecColorLevel1());
 	DrawTexturePro(model->getLevel1Texture(), model->getSrcRecLevel1(), model->getDestRecLevel1(), model->getOriginLevel1(), 0.0f, WHITE);
-
+	DrawTexturePro(model->getLevel2Texture(), model->getSrcRecLevel2(), model->getDestRecLevel2(), model->getOriginLevel2(), 0.0f, WHITE);
+	DrawTexturePro(model->getLevel3Texture(), model->getSrcRecLevel3(), model->getDestRecLevel3(), model->getOriginLevel3(), 0.0f, WHITE);
 	DrawTextureEx(model->getBackArrow(), model->getBackArrowPosition(), 0.0f, model->getBackArrowScale(), WHITE);
 
 	EndDrawing();

@@ -1,7 +1,7 @@
 #include "MenuModel.h"
 
 
-MenuModel::MenuModel() : StageModel(createMarioModel(Vector3{0.0f, 0.0f, 0.0f}, Vector3{3.0f, 3.0f, 3.0f}), Vector3{0.0f, 40.0f, 0.0f}, Vector3{-20.0f, 30.0f, 0.0f}, 60.0f, CAMERA_PERSPECTIVE, {}, {}, {})
+MenuModel::MenuModel() : StageModel(createMarioModel(Vector3{0.0f, -10.0f, 0.0f}, Vector3{3.0f, 3.0f, 3.0f}), Vector3{0.0f, 60.0f, 0.0f}, Vector3{-20.0f, 30.0f, 0.0f}, 60.0f, CAMERA_PERSPECTIVE, {}, {}, {})
 {
     lobbyModelPath = "../../Assets\\Models\\Lobby\\lobby.glb";
     lobbyModel = LoadModel(lobbyModelPath.c_str());
@@ -27,7 +27,12 @@ MenuModel::MenuModel() : StageModel(createMarioModel(Vector3{0.0f, 0.0f, 0.0f}, 
 	marioStatueScale = Vector3{ 10.0f, 10.0f, 10.0f };
 	marioStatueRotationAngle = 225.0f;
 	marioStatueModel = LoadModel(marioStatueModelPath.c_str());
-	marioStatuePos = Vector3{ 80.0f, 0.0f, 40.0f };
+	if (GameData::getInstance().getPlayerName() == "Luigi") {
+		marioStatuePos = Vector3{ 80.0f, 0.0f, 40.0f };
+	}
+	else {
+		marioStatuePos = Vector3{ 80.0f, -15.0f, 40.0f };
+	}
 	marioStatueRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
 	marioStatueBoundingBox.min = Vector3{ marioStatuePos.x - 7.0f, marioStatuePos.y, marioStatuePos.z - 15.0f };
 	marioStatueBoundingBox.max = Vector3{ marioStatuePos.x + 12.0f, marioStatuePos.y + 35.0f, marioStatuePos.z + 7.0f };

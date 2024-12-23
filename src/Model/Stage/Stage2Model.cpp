@@ -10,6 +10,17 @@ Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 0.0f, 10.0f, 0
     cloudScales = { 1.0f, 1.0f, 1.0f };
     cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
     Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
+	volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
+	volcanoPosition = { 360.0f, -120.0f, 60.0f };
+	volcanoScale = { 3.0f, 3.0f, 3.0f };
+	volcanoRotationAxis = { 0.0f, 1.0f, 0.0f };
+	volcanoRotationAngle = 0.0f;
+
+	BowserCastle = LoadModel("../../Assets\\Models\\BowserCastle\\castle.glb");
+	BowserCastlePosition = { 400.0f, -20.0f, 210.0f };
+	BowserCastleScale = { 1.0f, 1.0f, 1.0f };
+	BowserCastleRotationAxis = { 0.0f, 1.0f, 0.0f };
+	BowserCastleRotationAngle = 270.0f;
 
 
     for (int i = 0; i < 10; i++)
@@ -380,4 +391,58 @@ float Stage2Model::getHillsRotationAngle() const
 {
     return hillsRotationAngle;
 }
+
+Model Stage2Model::getVolcano() const
+{
+	return volcano;
+}
+
+Vector3 Stage2Model::getVolcanoPosition() const
+{
+	return volcanoPosition;
+}
+
+Vector3 Stage2Model::getVolcanoScale() const
+{
+	return volcanoScale;
+}
+
+Vector3 Stage2Model::getVolcanoRotationAxis() const
+{
+	return volcanoRotationAxis;
+}
+
+float Stage2Model::getVolcanoRotationAngle() const
+{
+	return volcanoRotationAngle;
+}
+
+Model Stage2Model::getBowserCastle() const
+{
+	return BowserCastle;
+}
+
+Vector3 Stage2Model::getBowserCastlePosition() const
+{
+	return BowserCastlePosition;
+}
+
+Vector3 Stage2Model::getBowserCastleScale() const
+{
+	return BowserCastleScale;
+}
+
+Vector3 Stage2Model::getBowserCastleRotationAxis() const
+{
+	return BowserCastleRotationAxis;
+}
+
+float Stage2Model::getBowserCastleRotationAngle() const
+{
+	return BowserCastleRotationAngle;
+}
+
+
+
+
 

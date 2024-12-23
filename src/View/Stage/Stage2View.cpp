@@ -29,7 +29,8 @@ void Stage2View::render()
 
     BeginMode3D(m_model->getCamera());
 
-
+	DrawModelEx(m_model->getVolcano(), m_model->getVolcanoPosition(), m_model->getVolcanoRotationAxis(), m_model->getHillsRotationAngle(), m_model->getVolcanoScale(), WHITE);
+	DrawModelEx(m_model->getBowserCastle(), m_model->getBowserCastlePosition(), m_model->getBowserCastleRotationAxis(), m_model->getBowserCastleRotationAngle(), m_model->getBowserCastleScale(), WHITE);
     //renderClouds();
 
     renderCharacter();

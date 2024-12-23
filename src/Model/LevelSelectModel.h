@@ -22,11 +22,13 @@ private:
 	Rectangle srcRecLevel2;
 	Rectangle destRecLevel2;
 	Vector2 originLevel2;
+	Color destRecColorLevel2;
 	
 	Texture2D level3Texture;
 	Rectangle srcRecLevel3;
 	Rectangle destRecLevel3;
 	Vector2 originLevel3;
+	Color destRecColorLevel3;
 
 	Texture2D backArrow;
 	Vector2 backArrowPosition;
@@ -51,12 +53,16 @@ public:
 	Rectangle getSrcRecLevel2();
 	Rectangle getDestRecLevel2();
 	Vector2 getOriginLevel2();
+	Color getDestRecColorLevel2();
+	void setDestRecColorLevel2(Color color);
 
 
 	Texture2D& getLevel3Texture();
 	Rectangle getSrcRecLevel3();
 	Rectangle getDestRecLevel3();
 	Vector2 getOriginLevel3();
+	Color getDestRecColorLevel3();
+	void setDestRecColorLevel3(Color color);
 
 	Texture2D& getBackArrow();
 	Vector2 getBackArrowPosition();

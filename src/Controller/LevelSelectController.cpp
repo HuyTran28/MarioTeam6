@@ -48,6 +48,16 @@ void LevelSelectController::updateMouse()
 			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage1"));
 			return;
 		}
+		if (CheckCollisionPointRec(mousePoint, model->getDestRecLevel2()))
+		{
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage2"));
+			return;
+		}
+		if (CheckCollisionPointRec(mousePoint, model->getDestRecLevel3()))
+		{
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage3"));
+			return;
+		}
 		if (StateController::isIconClicked(model->getBackArrow(), model->getBackArrowPosition(), model->getBackArrowScale()))
 		{
 			EventManager::getInstance().notify(std::make_shared<BackEvent>());

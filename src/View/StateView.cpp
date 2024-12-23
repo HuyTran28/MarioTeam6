@@ -5,8 +5,9 @@ void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map, Camera
 {
     for (const auto& block : map)
     {
-		if (Vector3Distance(block->getPosition(), cam.position) > 140.0f)
-			continue;
+        if ((Vector3Distance(block->getPosition(), cam.position) > 140.0f && cam.position.x < block->getPosition().x)
+            || (Vector3Distance(block->getPosition(), cam.position) > 10.0f && cam.position.x > block->getPosition().x))
+            continue;
         std::shared_ptr<btRigidBody> rigidBodyOfBlock = block->getRigidBody();
         btTransform blockTransform;
 
@@ -48,8 +49,10 @@ void StateView::renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies, Camer
 {
     for (auto enemy : enemies)
     {
-		if (Vector3Distance(enemy->getPlayerPos(), cam.position) > 140.0f)
+        if ((Vector3Distance(enemy->getPlayerPos(), cam.position) > 140.0f && cam.position.x < enemy->getPlayerPos().x)
+            || (Vector3Distance(enemy->getPlayerPos(), cam.position) > 10.0f && cam.position.x > enemy->getPlayerPos().x))
 			continue;
+
         DrawModelEx(enemy->getPlayerModel(), {enemy->getPlayerPos().x, enemy->getPlayerPos().y, enemy->getPlayerPos().z}, 
             enemy->getPlayerRotationAxis(), enemy->getPlayerRotationAngle(), enemy->getPlayerScale(), WHITE);
         btCollisionShape* shape = enemy->getRigidBody()->getCollisionShape();
@@ -105,7 +108,8 @@ void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items, Camera
 {
     for (const auto& item : items)
     {
-		if (Vector3Distance(item->getPosition(), cam.position) > 140.0f)
+		if ( ( Vector3Distance(item->getPosition(), cam.position) > 140.0f && cam.position.x < item->getPosition().x ) 
+            || (Vector3Distance(item->getPosition(), cam.position) > 10.0f && cam.position.x > item->getPosition().x))
 			continue;
         DrawModelEx(item->getModel(), {item->getPosition().x, item->getPosition().y, item->getPosition().z},
             item->getRotationAxis(), item->getRotationAngle(), item->getScale(), WHITE);

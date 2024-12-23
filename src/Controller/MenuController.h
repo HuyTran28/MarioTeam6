@@ -5,6 +5,7 @@
 #include "../Event/MouseClickedEvent.h"
 #include <raymath.h>
 #include "../Event/StateChangeEvent.h"
+#include "../Model/Character/AnimationManager.h"
 
 
 

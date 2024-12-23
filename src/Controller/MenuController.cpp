@@ -23,6 +23,8 @@ void MenuController::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "Tick Event")
 	{
+		AnimationManager::getInstance().playAnimation(5, model->getPlayerData());
+
 		updateCamera();
 
 		Camera3D camera = model->getCamera();
@@ -109,7 +111,12 @@ void MenuController::updateCamera()
 
 	model->getPlayerData()->setForwarDir(direction);
 
-	std::cout << model->getCamera().position.x << " " << model->getCamera().position.y << " " << model->getCamera().position.z << std::endl;
+	Vector2 newDir;
+	newDir.x = direction.x;
+	newDir.y = direction.z;
+	newDir = Vector2Normalize(newDir);
+	std::cout << atan2f(newDir.x, newDir.y) << std::endl;
+	model->getPlayerData()->setPlayerRotationAngle(- atan2f(newDir.y, newDir.x) * RAD2DEG + 90); 
 
 	UpdateCamera(&(model->getCamera()), CAMERA_FIRST_PERSON);
 }

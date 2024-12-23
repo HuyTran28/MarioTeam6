@@ -24,6 +24,19 @@ private:
 	Vector3 hillsRotationAxis;
 	float hillsRotationAngle;
 
+	Model volcano;
+	Vector3 volcanoPosition;
+	Vector3 volcanoScale;
+	Vector3 volcanoRotationAxis;
+	float volcanoRotationAngle;
+
+	Model BowserCastle;
+	Vector3 BowserCastlePosition;
+	Vector3 BowserCastleScale;
+	Vector3 BowserCastleRotationAxis;
+	float BowserCastleRotationAngle;
+
+
 
 public:
 	Stage2Model();
@@ -45,5 +58,17 @@ public:
 	Vector3 getHillsScale() const;
 	Vector3 getHillsRotationAxis() const;
 	float getHillsRotationAngle() const;
+	Model getVolcano() const;
+	Vector3 getVolcanoPosition() const;
+	Vector3 getVolcanoScale() const;
+	Vector3 getVolcanoRotationAxis() const;
+	float getVolcanoRotationAngle() const;
+	Model getBowserCastle() const;
+	Vector3 getBowserCastlePosition() const;
+	Vector3 getBowserCastleScale() const;
+	Vector3 getBowserCastleRotationAxis() const;
+	float getBowserCastleRotationAngle() const;
+
+
 };
 
