@@ -45,6 +45,16 @@ StageModel::StageModel(Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, 
 	Rectangle destRec2 = { GetScreenWidth() - 150.0f, 50.0f, 100.0f, 100.0f };
 	m_pause = std::make_shared<Button>("", texture, sourceRec, destRec, Vector2{0.0f, 0.0f}, 0.0f, WHITE);
 	m_setting = std::make_shared<Button>("", texture2, sourceRec2, destRec2, Vector2{ 0.0f, 0.0f }, 0.0f, WHITE);
+
+	Texture2D texture3 = LoadTexture("../../Assets/Icons/clock.png");
+	Rectangle sourceRec3 = { 0.0f, 0.0f, (float)texture3.width, (float)texture3.height };
+	Rectangle destRec3 = { 1525.0f, 50.0f, 70.0f, 70.0f };
+	m_timer = std::make_shared<Button>("", texture3, sourceRec3, destRec3, Vector2{ 0.0f, 0.0f }, 0.0f, WHITE);
+}
+
+std::shared_ptr<Button> StageModel::getTimerButton() const
+{
+	return m_timer;
 }
 
 std::shared_ptr<Button> StageModel::getSettingButton() const
@@ -80,6 +90,26 @@ void StageModel::setEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
 std::vector<std::shared_ptr<ItemData>> StageModel::getItems()
 {
 	return m_items;
+}
+
+float StageModel::getTimer()
+{
+	return timer;
+}
+
+void StageModel::setTimer(float timer)
+{
+	this->timer = timer;
+}
+
+int StageModel::getScore() const
+{
+	return score;
+}
+
+void StageModel::setScore(int score)
+{
+	this->score = score;
 }
 
 void StageModel::setItems(std::vector<std::shared_ptr<ItemData>> items)

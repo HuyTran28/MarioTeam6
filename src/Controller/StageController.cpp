@@ -101,15 +101,14 @@ void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
     enemyData->setPlayerRotationAngle(angle);
 }   
     
-void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies)
+void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam)
 {
     for (auto &enemy : enemies)
     {
-        
         moveEnemy(enemy);
         updateCollisionShape(enemy);  // Update collision shape
         updateModelTransform(enemy);  // Synchronize marioData with physics body
-        updateAnimationState(enemy);
+        updateAnimationState(enemy, cam);
     }
      
 }
@@ -234,7 +233,12 @@ void StageController::registerSelf()
 {
 }
 
-void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData)
+void StageController::updateTimer(float& timer)
+{
+	timer -= GetFrameTime();
+}
+
+void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData, Camera3D cam)
 {
 
     if (playerData->getRigidBody())
@@ -265,7 +269,7 @@ void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerD
         updateCollisionShape(playerData);  // Update collision shape
         updateModelTransform(playerData);  // Synchronize playerData with physics body
         setPlayerAnimationState(playerData);
-        updateAnimationState(playerData);  
+        updateAnimationState(playerData, cam);  
         updateInvincibilityTimer(playerData);
     }
 }
@@ -382,6 +386,37 @@ void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
 			playerData->setBigDuration(0.0f);
             playerData->setPlayerScale(Vector3Multiply(playerData->getPlayerScale(), Vector3{ 1.0f / 1.25f, 1.0f / 1.25f, 1.0f / 1.25f }));
             playerData->setObjectType("Player-Normal");
+		}
+	}
+}
+
+void StageController::updateScore(std::shared_ptr<Event> event, std::shared_ptr<StageModel> model)
+{
+	if (event->getType() == "Item Touched Event")
+	{
+		auto itemTouched = std::dynamic_pointer_cast<ItemTouchedEvent>(event);
+        if (itemTouched->getObjectType() == "Item-Coin")
+		{
+            model->setScore(model->getScore() + 100);
+        }
+        else if (itemTouched->getObjectType() != "Item-PurpleMushroom") {
+            model->setScore(model->getScore() + 1000);
+        }
+	}
+	else if (event->getType() == "Enemy Die Event")
+	{
+		model->setScore(model->getScore() + 500);
+	}
+	else if (event->getType() == "Block Change Event")
+	{
+		auto blockChange = std::dynamic_pointer_cast<BlockChangeEvent>(event);
+        if (blockChange->getPreType() == "Block-Question")
+        {
+			model->setScore(model->getScore() + 200);
+        }
+		else if (blockChange->getNewType() == "")
+		{
+			model->setScore(model->getScore() + 20);
 		}
 	}
 }
@@ -513,8 +548,11 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> charac
 }
 
 
-void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData)
+void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData, Camera3D cam)
 {
+	if (Vector3Distance(cam.position, characterData->getPlayerPos()) > 140.0f) {
+		return; // Skip animation updates for distant objects
+	}
 
     PlayerAnimationState animationState = characterData->getPlayerAnimationState();
 

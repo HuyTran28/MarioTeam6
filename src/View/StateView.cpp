@@ -1,10 +1,12 @@
 #include "StateView.h"
 
 
-void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
+void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map, Camera3D cam)
 {
     for (const auto& block : map)
     {
+		if (Vector3Distance(block->getPosition(), cam.position) > 140.0f)
+			continue;
         std::shared_ptr<btRigidBody> rigidBodyOfBlock = block->getRigidBody();
         btTransform blockTransform;
 
@@ -42,10 +44,12 @@ void StateView::renderBlocks(std::vector<std::shared_ptr<BlockData>> map)
     }
 }
 
-void StateView::renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
+void StateView::renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam)
 {
     for (auto enemy : enemies)
     {
+		if (Vector3Distance(enemy->getPlayerPos(), cam.position) > 140.0f)
+			continue;
         DrawModelEx(enemy->getPlayerModel(), {enemy->getPlayerPos().x, enemy->getPlayerPos().y, enemy->getPlayerPos().z}, 
             enemy->getPlayerRotationAxis(), enemy->getPlayerRotationAngle(), enemy->getPlayerScale(), WHITE);
         btCollisionShape* shape = enemy->getRigidBody()->getCollisionShape();
@@ -97,10 +101,12 @@ void StateView::renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies)
     
 }
 
-void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items)
+void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items, Camera3D cam)
 {
     for (const auto& item : items)
     {
+		if (Vector3Distance(item->getPosition(), cam.position) > 140.0f)
+			continue;
         DrawModelEx(item->getModel(), {item->getPosition().x, item->getPosition().y, item->getPosition().z},
             item->getRotationAxis(), item->getRotationAngle(), item->getScale(), WHITE);
 
@@ -150,6 +156,19 @@ void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items)
     }
 }
 
+void StateView::renderTimer(float timer, std::shared_ptr<Button> timerButton)
+{
+	timerButton->draw();
+	std::string timerString = std::to_string((int)timer);
+	if (timer < 0)
+		timerString = "0";
+    else if (timer < 10)
+		timerString = "00" + timerString;
+	else if (timer < 100)
+		timerString = "0" + timerString;
+	DrawTextEx(GameData::getInstance().getFont(), timerString.c_str(), {1615.0f, 30.0f}, 100.0f, 0.0f, RED);
+}
+
 void StateView::renderHealth(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Button> healthButton)
 {
 	healthButton->draw();
@@ -166,6 +185,22 @@ void StateView::renderHealth(std::shared_ptr<PlayerData> playerData, std::shared
 		Rectangle destRecNew = { destRec.x + (i * 50), destRec.y, destRec.width, destRec.height };
 		DrawTexturePro(heart, sourceRec, destRecNew, origin, 0.0f, WHITE);
     }
+}
+
+void StateView::renderScore(int score)
+{
+	std::string scoreString = std::to_string(score);
+
+	int scoreLength = scoreString.length();
+	if (scoreLength < 6)
+	{
+		for (int i = 0; i < 6 - scoreLength; i++)
+		{
+			scoreString = "0" + scoreString;
+		}
+	}
+
+	DrawTextEx(GameData::getInstance().getFont(), scoreString.c_str(), { 1550.0f, 100.0f }, 80.0f, 0.0f, RAYWHITE);
 }
 
 void StateView::renderCoin(int coins)

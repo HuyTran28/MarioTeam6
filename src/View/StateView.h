@@ -18,10 +18,11 @@ public:
 	virtual ~StateView() = default;
 	virtual void registerSelf() = 0;
 
-	void renderBlocks(std::vector<std::shared_ptr<BlockData>> map);
-	void renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies);
-	void renderItems(std::vector<std::shared_ptr<ItemData>> items);
-
+	void renderBlocks(std::vector<std::shared_ptr<BlockData>> map, Camera3D cam);
+	void renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam);
+	void renderItems(std::vector<std::shared_ptr<ItemData>> items, Camera3D cam);
+	void renderTimer(float timer, std::shared_ptr<Button> timerButton);
 	void renderHealth(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Button> healthButton);
 	void renderCoin(int coins);
+	void renderScore(int score);
 };

@@ -88,11 +88,18 @@ public:
 	std::shared_ptr<Button> getHealthButton() const;
 	int getCoins() const;
 	void setCoins(int coins);
+	float getTimer();
+	void setTimer(float timer);
+	std::shared_ptr<Button> getTimerButton() const;
+	int getScore() const;
+	void setScore(int score);
 private:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 
 	int coins = 10;
+	float timer = 300.0f;
+	int score = 0;
 
 	std::shared_ptr<PlayerData> m_playerData;
 	std::vector<std::shared_ptr<BlockData>> m_map;
@@ -102,4 +109,5 @@ private:
 	std::shared_ptr<Button> m_pause;
 	std::shared_ptr<Button> m_setting;
 	std::shared_ptr<Button> m_health;
+	std::shared_ptr<Button> m_timer;
 };

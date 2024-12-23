@@ -23,8 +23,9 @@ void Stage1View::render()
     Camera3D& camera = m_model->getCamera();
     UpdateCamera(&camera, CAMERA_CUSTOM);
 
+
     BeginDrawing();
-    ClearBackground(BLUE);
+    ClearBackground(SKYBLUE);
 
     BeginMode3D(m_model->getCamera());
 
@@ -32,10 +33,12 @@ void Stage1View::render()
 	renderClouds();
 
 	renderCharacter();
-    StateView::renderBlocks(map);
-    StateView::renderEnemies(enemies);
-    StateView::renderItems(items);
+    StateView::renderBlocks(map, m_model->getCamera());
+    StateView::renderEnemies(enemies, m_model->getCamera());
+    StateView::renderItems(items, m_model->getCamera());
     for (int i = 0; i < m_model->getClouds().size(); i++) {
+        if (Vector3Distance(m_model->getCloudPositions()[i], m_model->getPlayerData()->getPlayerPos()) < 300.0f)
+            continue;
 		DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
     }
 
@@ -53,6 +56,8 @@ void Stage1View::render()
 
     renderHealth(marioModel, m_model->getHealthButton());
     renderCoin(m_model->getCoins());
+	renderTimer(m_model->getTimer(), m_model->getTimerButton());
+	renderScore(m_model->getScore());
 
     m_model->getPauseButton()->draw();
 	m_model->getSettingButton()->draw();

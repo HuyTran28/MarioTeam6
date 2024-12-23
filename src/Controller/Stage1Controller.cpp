@@ -22,9 +22,9 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	if (event->getType() == "Tick Event")
 	{
 		
-		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
+		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()), model->getCamera());
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
-		updateMovemenOfEnemy(enemies);
+		updateMovemenOfEnemy(enemies, model->getCamera());
 		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		for (const auto& block : blockData)
 		{
@@ -34,6 +34,10 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 			}
 		}
 		updateMouse();
+		float timer = model->getTimer();
+		updateTimer(timer);
+		model->setTimer(timer);
+
 		updateCamera();
 	}
 	else if (event->getType() == "Block Change Event")
@@ -80,7 +84,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		removeEnemy(enemies, enemy);
 		model->setEnemies(enemies);
 	}
-
+	updateScore(event, model);
 }
 
 

@@ -8,7 +8,7 @@ GameData::GameData()
 	isLogIn = false;
 
 	hp = LoadTexture("../../Assets\\Icons\\health.png");
-	font = LoadFont("../../Assets\\Fonts\\SuperMario256.ttf");
+	font = LoadFontEx("../../Assets\\Font\\font.otf", 256, 0, 0);
 	ZeroCoin = LoadTexture("../../Assets\\Icons\\0Coin.png");
 	OneCoin = LoadTexture("../../Assets\\Icons\\1Coin.png");
 	FiveCoin = LoadTexture("../../Assets\\Icons\\5Coin.png");
