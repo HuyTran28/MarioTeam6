@@ -1,4 +1,4 @@
-#include "StageController.h"
+﻿#include "StageController.h"
 #include <iostream>
 #include <raymath.h> 
 
@@ -114,6 +114,107 @@ void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> e
 }
 
 
+void StageController::updateMovementOfBoomerang(std::shared_ptr<Boomerang> boomerang)
+{
+    Vector3 movement = Vector3Scale(boomerang->getForwarDir(), boomerang->getSpeed() * GetFrameTime());
+    boomerang->setTravelDis(boomerang->getTravelDistance() + Vector3Length(movement));
+
+  
+    if (boomerang->getTravelDistance() >= boomerang->getDistance())
+    {
+        boomerang->setIsreturning(true);
+        boomerang->setForwarDir(Vector3Scale(boomerang->getForwarDir(), -1.0f));
+        boomerang->setTravelDis(0.0f);
+    }
+
+    
+    btTransform transform;
+    boomerang->getRigidBody()->getMotionState()->getWorldTransform(transform);
+    btVector3 origin = transform.getOrigin();
+    origin += btVector3(movement.x, movement.y, movement.z);
+    transform.setOrigin(origin);
+    boomerang->setRigidBodyTransform(transform); 
+
+ 
+    boomerang->setRotationAngle(fmod(boomerang->getRotationAngle() + (360.f * GetFrameTime()), 360.0f));
+    btQuaternion rotation(btVector3(0, 1, 0), btRadians(boomerang->getRotationAngle()));
+    transform.setRotation(rotation);
+    boomerang->setRigidBodyTransform(transform); 
+
+
+    btVector3 pos = transform.getOrigin();
+    boomerang->setPosition({ (float)pos.getX(), (float)pos.getY(), (float)pos.getZ() });
+}
+
+void StageController::updateTimeBoomerang(std::shared_ptr<CharacterData> playerData, std::shared_ptr<Boomerang> boomerang)
+{
+    float deltaTime = GetFrameTime();
+
+    if (playerData->getIsUsed())
+    {
+        float Duration = std::max(0.0f, playerData->getTimeOfBoomerang() - deltaTime);
+        playerData->setTimeOfBoomerang(Duration);
+
+     
+        if (IsKeyPressed(KEY_J))
+        {
+            if (!boomerang->getIsvisble())
+            {
+                boomerang->setStartPos(Vector3Add(playerData->getPlayerPos(), { 0.0f, 1.5f, 0.0f }));
+                boomerang->setPosition(Vector3Add(playerData->getPlayerPos(), { 0.0f, 1.5f, 0.0f }));
+                boomerang->setForwarDir(playerData->getForwardDir());
+                boomerang->setIsVisble(true);
+
+                btTransform transform;
+                transform.setIdentity();
+                transform.setOrigin(btVector3(boomerang->getStartPos().x, boomerang->getStartPos().y, boomerang->getStartPos().z));
+                boomerang->setRigidBodyTransform(transform);
+            }
+        }
+
+       
+        if (boomerang->getIsvisble())
+        {
+            if (boomerang->getIsreturning())
+            {
+                if (Vector3Distance(boomerang->getPosition(), boomerang->getStartPos()) < 0.5)
+                {
+                    boomerang->setIsVisble(false);
+                    boomerang->setIsreturning(false); 
+
+                  
+                    btTransform transform;
+                    transform.setIdentity();
+                    transform.setOrigin(btVector3(0.0f, -15.0f, 0.0f));
+                    boomerang->setRigidBodyTransform(transform);
+                    boomerang->setTravelDis(0.0f);
+                }
+                else
+                {
+                    updateMovementOfBoomerang(boomerang);
+                }
+            }
+            else
+            {
+                updateMovementOfBoomerang(boomerang);
+            }
+        }
+
+
+        if (Duration <= 0)
+        {
+            playerData->setIsUsed(false);
+            playerData->setTimeOfBoomerang(0.0f);
+            boomerang->setIsVisble(false);
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(0.0f, -15.0f, 0.0f));
+            boomerang->setRigidBodyTransform(transform);
+        }
+    }
+}
+
+
 void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
 {
     float deltaTime = GetFrameTime();
@@ -173,7 +274,6 @@ void StageController::updateInvincibilityTimer(std::shared_ptr<PlayerData> playe
 }
 
 
-
 void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>& items)
 {
 
@@ -227,7 +327,6 @@ void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData
     CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 
 }
-
 
 void StageController::registerSelf()
 {

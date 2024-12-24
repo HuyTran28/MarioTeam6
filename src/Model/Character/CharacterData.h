@@ -21,6 +21,12 @@ enum class PlayerAnimationState {
 class CharacterData : public CollidableObject
 {
 protected:
+
+	bool m_isUsed = false;
+	const float m_duarationOfBoomerang = 30.0f;
+	float m_timeBoomerang = 0.0f;
+
+
 	Vector3 m_velocity;
 	bool m_isOnGround;
 	Vector3 m_forwardDir;
@@ -40,6 +46,9 @@ protected:
 	float m_animationFrame;
 	PlayerAnimationState m_animationState = PlayerAnimationState::IDLE;
 
+
+
+
 public:
 	CharacterData();
 	CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
@@ -53,6 +62,7 @@ public:
 	BoundingBox getPlayerBoundingBox() const;
 	Vector3 getPlayerScale() const;
 	Vector3 getPlayerRotationAxis() const;
+	Vector3 getForwardDir() const;
 	float getPlayerRotationAngle() const;
 	float getMoveSpeed() const;
 	Vector3 getVelocity() const;
@@ -92,6 +102,13 @@ public:
 	void setDamping(float linearDamping, float angularDamping);
 	void setWorldTransform(const btTransform& transform);
 
+
+
+	bool getIsUsed() const;
+	void setIsUsed(bool isUsed);
+	float getDurationBoomerang() const;
+	float getTimeOfBoomerang() const;
+	void setTimeOfBoomerang(float time);
 
 	virtual ~CharacterData();
 };

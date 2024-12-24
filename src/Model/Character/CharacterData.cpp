@@ -50,6 +50,11 @@ Vector3 CharacterData::getPlayerRotationAxis() const
 	return playerRotationAxis;
 }
 
+Vector3 CharacterData::getForwardDir() const
+{
+	return m_forwardDir;
+}
+
 float CharacterData::getPlayerRotationAngle() const
 {
 	return playerRotationAngle;
@@ -217,18 +222,31 @@ void CharacterData::setWorldTransform(const btTransform& transform)
 		m_rigidBody->setWorldTransform(transform);
 }
 
-//CharacterData::CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed)
-//{
-//	this->playerPos = playerPos;
-//	this->playerHealth = playerHealth;
-//	this->playerModel = playerModel;
-//	this->playerBoundingBox = playerBoundingBox;
-//	this->playerModelPath = playerModelPath;
-//	playerScale = Vector3{ 10.0f, 10.0f, 10.0f };
-//	playerRotationAxis = Vector3{ 0.0f, 1.0f, 0.0f };
-//	playerRotationAngle = 0.0f;
-//	this->moveSpeed = moveSpeed;
-//}
+bool CharacterData::getIsUsed() const
+{
+	return m_isUsed;
+}
+
+void CharacterData::setIsUsed(bool isUsed)
+{
+	m_isUsed = isUsed;
+}
+
+float CharacterData::getDurationBoomerang() const
+{
+	return m_duarationOfBoomerang;
+}
+
+float CharacterData::getTimeOfBoomerang() const
+{
+	return m_timeBoomerang;
+}
+
+void CharacterData::setTimeOfBoomerang(float time)
+{
+	m_timeBoomerang = time;
+}
+
 void CharacterData::setPlayerAnimationState(PlayerAnimationState animationState)
 {
 	m_animationState = animationState;

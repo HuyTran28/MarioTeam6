@@ -312,6 +312,25 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		player->setIsBig(true);
     }
 
+    if (objectType1 == "Item-BoomerangFlower" && objectType2 == "Player-Normal")
+    {
+        BoomerangFlower* flower = dynamic_cast<BoomerangFlower*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(flower));
+
+        player->setIsUsed(true);
+        player->setTimeOfBoomerang(player->getDurationBoomerang());
+
+    }
+
+    if (objectType1 == "Enemy-Goomba" && objectType2 == "Item-Boomerang")
+    {
+        Goomba* goomba = dynamic_cast<Goomba*>(obj1);
+        Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
+
+    }
+
 	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
 	{
 		GreenMushroom* greenMushroom = dynamic_cast<GreenMushroom*>(obj1);

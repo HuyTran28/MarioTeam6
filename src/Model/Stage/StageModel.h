@@ -43,6 +43,10 @@ constexpr char PATH_COIN[] = "../../Assets\\Models\\Items\\Coin.glb";
 constexpr char PATH_REDMUSHROOM[] = "../../Assets\\Models\\Items\\RedMushroom.glb";
 constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushroom.glb";
 constexpr char PATH_GREENMUSHROOM[] = "../../Assets\\Models\\Items\\GreenMushroom.glb";
+constexpr char PATH_BOOMERANGFLOWER[] = "../../Assets\\Models\\Items\\BoomerangFlower.glb";
+constexpr char PATH_BOOMERANG[] = "../../Assets\\Models\\Items\\Boomerang.glb";
+
+
 
 
 
@@ -84,8 +88,11 @@ public:
 	void setItems(std::vector<std::shared_ptr<ItemData>> items);
 	std::vector<std::shared_ptr<BlockData>> getMap() const;
 	void setMap(std::vector<std::shared_ptr<BlockData>> map);
+	
+
 	std::shared_ptr<Button> getSettingButton() const;
 	std::shared_ptr<Button> getHealthButton() const;
+	std::shared_ptr<Boomerang> getBoomerang() const;
 	int getCoins() const;
 	void setCoins(int coins);
 	float getTimer();
@@ -105,6 +112,8 @@ private:
 	std::vector<std::shared_ptr<BlockData>> m_map;
 	std::vector <std::shared_ptr<Enemy>> m_enemies;
 	std::vector<std::shared_ptr<ItemData>> m_items;
+	std::shared_ptr<Boomerang> m_boomerang;
+
 
 	std::shared_ptr<Button> m_pause;
 	std::shared_ptr<Button> m_setting;

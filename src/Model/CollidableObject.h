@@ -28,5 +28,7 @@ public:
 	void setCollisionShape(std::shared_ptr<btCollisionShape> shape);
 	void setMotionState(std::shared_ptr<btDefaultMotionState> motionState);
 
+
+
 	virtual ~CollidableObject();
 };

@@ -6,6 +6,7 @@
 
 class BoomerangFlower : public ItemData
 {
+
 public:
 	BoomerangFlower(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState
 		, const std::string& modelPath, const Model& model, const Vector3& position, const Vector3& scale,

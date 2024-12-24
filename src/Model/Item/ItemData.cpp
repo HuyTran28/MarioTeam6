@@ -88,6 +88,21 @@ void ItemData::setIsVisble(bool isVisible)
 	m_isVisible = isVisible;
 }
 
+void ItemData::setRigidBodyTransform(const btTransform& transform)
+{
+	if (m_rigidBody)
+	{
+		m_rigidBody->setWorldTransform(transform);
+
+		if (m_rigidBody->getMotionState() != nullptr) {
+			m_rigidBody->getMotionState()->setWorldTransform(transform);
+		}
+
+		m_rigidBody->activate(true);
+	}
+}
+
+
 ItemData::~ItemData()
 {
 	UnloadModel(m_model);

@@ -36,20 +36,29 @@ void Stage1View::render()
     StateView::renderBlocks(map, m_model->getCamera());
     StateView::renderEnemies(enemies, m_model->getCamera());
     StateView::renderItems(items, m_model->getCamera());
-    for (int i = 0; i < m_model->getClouds().size(); i++) {
-        if (Vector3Distance(m_model->getCloudPositions()[i], m_model->getPlayerData()->getPlayerPos()) < 300.0f)
-            continue;
-		DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
-    }
 
+   /* std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << '\n';
+     m_model->setCamera(m_model->getCamera());*/
 
 	DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
     DrawModelEx(marioModel->getPlayerModel(), marioModel->getPlayerPos(), marioModel->getPlayerRotationAxis(), marioModel->getPlayerRotationAngle(),
         marioModel->getPlayerScale(), WHITE);
      m_model->setCamera(m_model->getCamera());
 
+     if (m_model->getBoomerang()->getIsvisble())
+     {
+         btTransform transform;
+         m_model->getBoomerang()->getRigidBody()->getMotionState()->getWorldTransform(transform);
+         btQuaternion rotation = transform.getRotation();
+         Vector3 rotationAxis = { (float)rotation.getAxis().getX(),
+                                  (float)rotation.getAxis().getY(),
+                                  (float)rotation.getAxis().getZ() };
+         float rotationAngleDeg = btDegrees(rotation.getAngle());
 
-   
+
+         DrawModelEx(m_model->getBoomerang()->getModel(), m_model->getBoomerang()->getPosition(), rotationAxis, rotationAngleDeg,
+                { m_model->getBoomerang()->getScale().x, m_model->getBoomerang()->getScale().y, m_model->getBoomerang()->getScale().z }, WHITE);
+     }
 
     EndMode3D();
 

@@ -38,6 +38,7 @@ public:
 	void setRotationAngle(float rotationAngle);
 	void setModelPath(const std::string& modelPath);
 	void setIsVisble(bool isVisible);
+	void setRigidBodyTransform(const btTransform& transform);
 
 	~ItemData();
 };

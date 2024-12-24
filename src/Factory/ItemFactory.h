@@ -11,7 +11,7 @@
 #include "../Model/Item/RedMushroom.h"
 #include "../Model/Item/PurpleMushroom.h"
 #include "../Model/Item/SuperStar.h"
-
+#include "../Model/Item/Boomerang.h"
 
 enum ItemType
 {

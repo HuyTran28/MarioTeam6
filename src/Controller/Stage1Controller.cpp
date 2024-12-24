@@ -26,6 +26,9 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies, model->getCamera());
 		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
+		updateTimeBoomerang(model->getPlayerData(), model->getBoomerang());
+
+
 		for (const auto& block : blockData)
 		{
 			if (block->getIsBouncing())

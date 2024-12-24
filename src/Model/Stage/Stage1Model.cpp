@@ -78,7 +78,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
         return block;
         };
 
-    addBlock(BlockType::QuestionBlock, PATH_QUESTIONBLOCK, { 10.0, 12.0, 10.0 }, scale, rotationAxis, rotaionAngle);
+    
     
 
     auto createBrickBlockGrid = [&]() {
@@ -315,6 +315,8 @@ std::vector<std::shared_ptr<ItemData>> Stage1Model::createItems()
                 items.push_back(std::shared_ptr<ItemData>(item));
         };
 
+
+    addItem(ItemType::BOOMERANG_FLOWER, PATH_BOOMERANGFLOWER, { 0.0f, 5.0f, 0.0f }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
     
     addItem(ItemType::COIN, PATH_COIN, { 67.2905f, 9.0f, 10.0}, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 100.0f, 11.0f, 9.91975 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, 0.0f, dynamicsWorld);

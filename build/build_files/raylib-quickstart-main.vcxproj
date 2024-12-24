@@ -323,6 +323,7 @@
     <ClInclude Include="..\..\src\Model\CollidableObject.h" />
     <ClInclude Include="..\..\src\Model\GameData.h" />
     <ClInclude Include="..\..\src\Model\GameOverModel.h" />
+    <ClInclude Include="..\..\src\Model\Item\Boomerang.h" />
     <ClInclude Include="..\..\src\Model\Item\BoomerangFlower.h" />
     <ClInclude Include="..\..\src\Model\Item\Coin.h" />
     <ClInclude Include="..\..\src\Model\Item\GreenMushroom.h" />

@@ -10,7 +10,69 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     m_map = mapData;
 	m_enemies = enemies;
 	m_items = items;
-    
+
+
+    std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
+    Vector3 startPosition = {0.0f, -5.0f, 0.0f};
+    Vector3 scale = { 1.0f, 1.0f, 1.0f };
+    Vector3 rotateAxis = { 0.0f, 1.0f, 0.0f };
+    float rotateAngle = 0.0f;
+
+
+    Model model = LoadModel(PATH_BOOMERANG);
+    BoundingBox modelBounds = GetModelBoundingBox(model);
+    //calculate the point center of box
+    Vector3 modelCenter = {
+        (modelBounds.max.x + modelBounds.min.x) * 0.5f,
+        (modelBounds.max.y + modelBounds.min.y) * 0.5f,
+        (modelBounds.max.z + modelBounds.min.z) * 0.5f
+    };
+
+
+    Vector3 halfExtents = {
+        (modelBounds.max.x - modelBounds.min.x) * scale.x * 0.5f,
+        (modelBounds.max.y - modelBounds.min.y) * scale.y * 0.5f,
+        (modelBounds.max.z - modelBounds.min.z) * scale.z * 0.5f
+    };
+
+    btTransform startTransform;
+    startTransform.setIdentity();
+    startTransform.setOrigin(btVector3(
+        startPosition.x + (modelCenter.x * scale.x),
+        startPosition.y + (modelCenter.y * scale.y),
+        startPosition.z + (modelCenter.z * scale.z)
+    ));
+
+    // Create box shape based on model dimensions
+    std::shared_ptr<btCollisionShape>  itemShape = nullptr;
+    itemShape = std::make_shared<btBoxShape>(btVector3(
+        halfExtents.x, halfExtents.y, halfExtents.z));
+    itemShape->setMargin(0.05f);
+
+
+
+    btScalar mass = 0.0f;
+    btVector3 localInertia(0, 0, 0);
+    itemShape->calculateLocalInertia(mass, localInertia);
+
+
+    std::shared_ptr<btDefaultMotionState> motionState = std::make_shared<btDefaultMotionState>(startTransform);
+    btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState.get(), itemShape.get(), localInertia);
+
+    std::shared_ptr<btRigidBody> itemRigidBody = std::make_shared<btRigidBody>(rbInfo);
+
+    //// Add block to the world
+    dynamicsWorld->addRigidBody(itemRigidBody.get());
+    m_boomerang = std::make_shared<Boomerang>(itemRigidBody, itemShape, motionState, PATH_BOOMERANG, model, 
+        startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 10.0f);
+
+
+
+
+
+
+
+
 	std::string characterName = GameData::getInstance().getPlayerName();
 	std::string characterPath = "../../Assets\\Images\\Characters\\" + characterName + ".png";
 	Texture2D texture = LoadTexture(characterPath.c_str());
@@ -120,6 +182,11 @@ void StageModel::setItems(std::vector<std::shared_ptr<ItemData>> items)
 std::shared_ptr<Button> StageModel::getHealthButton() const
 {
 	return m_health;
+}
+
+std::shared_ptr<Boomerang> StageModel::getBoomerang() const
+{
+    return m_boomerang;
 }
 
 void StageModel::setCamera(Camera3D camera)

@@ -39,6 +39,11 @@ public:
 	void rotateEnemy(std::shared_ptr<Enemy> enemyData);
 	void updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam);
 
+
+	void updateMovementOfBoomerang(std::shared_ptr<Boomerang> boomerang);
+	void updateTimeBoomerang(std::shared_ptr<CharacterData> playerData, std::shared_ptr<Boomerang> boomerang);
+
+
 	void updateBounceOfBlock(std::shared_ptr<BlockData> blockData);
 	void updateInvincibilityTimer(std::shared_ptr<PlayerData> playerData);
 	void updateTimer(float& timer);
