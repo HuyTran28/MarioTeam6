@@ -30,7 +30,7 @@ constexpr char PATH_ROULETTEBLOCK[] = "../../Assets\\Models\\Platforms\\Roulette
 constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\SupportivePipeBlock.glb";
 constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
-constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\IslandBlock.glb";
+constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\Flagpole.glb";
 
 
 

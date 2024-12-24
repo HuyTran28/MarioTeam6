@@ -214,10 +214,10 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 
     auto createIslandBlock = [&]()
         {
-            Vector3 scaleIsland = { 13.0f, 13.0f, 13.0f };
-            Vector3 rotationAxisIsland = { 1.0f, 0.0f, 0.0f };
+            Vector3 scaleIsland = { 1.0f, 1.0f, 1.0f };
+            Vector3 rotationAxisIsland = { 0.0f, 1.0f, 0.0f };
             float rotaionAngleIsland = -90.0f;
-            Vector3 position = { 430.0f, 1.0f, 6.0f };
+            Vector3 position = { 430.0f, 1.0f, 10.0f };
             addBlock(BlockType::IslandBlock, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
 
         };
