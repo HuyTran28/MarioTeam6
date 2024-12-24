@@ -13,13 +13,14 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
 
 
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
-    Vector3 startPosition = {0.0f, -5.0f, 0.0f};
-    Vector3 scale = { 1.0f, 1.0f, 1.0f };
+    Vector3 startPosition = {0.0f, 5.0f, 0.0f};
+    Vector3 scale = { 0.3f, 0.3f, 0.3f };
     Vector3 rotateAxis = { 0.0f, 1.0f, 0.0f };
     float rotateAngle = 0.0f;
 
 
     Model model = LoadModel(PATH_BOOMERANG);
+
     BoundingBox modelBounds = GetModelBoundingBox(model);
     //calculate the point center of box
     Vector3 modelCenter = {

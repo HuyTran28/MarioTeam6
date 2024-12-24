@@ -145,6 +145,7 @@
     <ClInclude Include="..\..\src\View\GameOverView.h" />
     <ClInclude Include="..\..\src\Controller\GameOverController.h" />
     <ClInclude Include="..\..\src\Model\Item\Boomerang.h" />
+    <ClInclude Include="..\..\src\Event\BoomerangEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

@@ -284,6 +284,7 @@
     <ClInclude Include="..\..\src\Controller\StateController.h" />
     <ClInclude Include="..\..\src\Event\BackEvent.h" />
     <ClInclude Include="..\..\src\Event\BlockChangeEvent.h" />
+    <ClInclude Include="..\..\src\Event\BoomerangEvent.h" />
     <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
     <ClInclude Include="..\..\src\Event\DieEvent.h" />
     <ClInclude Include="..\..\src\Event\EnemyDie.h" />

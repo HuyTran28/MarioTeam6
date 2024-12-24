@@ -14,10 +14,10 @@ PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<b
 }
 
 
-Vector3 PlayerData::getForwarDir() const
-{
-	return m_forwardDir;
-}
+//Vector3 PlayerData::getForwarDir() const
+//{
+//	return m_forwardDir;
+//}
 
 bool PlayerData::getIsBig() const
 {

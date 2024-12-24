@@ -119,7 +119,7 @@ void StageController::updateMovementOfBoomerang(std::shared_ptr<Boomerang> boome
     Vector3 movement = Vector3Scale(boomerang->getForwarDir(), boomerang->getSpeed() * GetFrameTime());
     boomerang->setTravelDis(boomerang->getTravelDistance() + Vector3Length(movement));
 
-  
+
     if (boomerang->getTravelDistance() >= boomerang->getDistance())
     {
         boomerang->setIsreturning(true);
@@ -127,31 +127,39 @@ void StageController::updateMovementOfBoomerang(std::shared_ptr<Boomerang> boome
         boomerang->setTravelDis(0.0f);
     }
 
-    
+
     btTransform transform;
     boomerang->getRigidBody()->getMotionState()->getWorldTransform(transform);
     btVector3 origin = transform.getOrigin();
     origin += btVector3(movement.x, movement.y, movement.z);
     transform.setOrigin(origin);
-    boomerang->setRigidBodyTransform(transform); 
+    boomerang->setRigidBodyTransform(transform);
 
- 
+
     boomerang->setRotationAngle(fmod(boomerang->getRotationAngle() + (360.f * GetFrameTime()), 360.0f));
     btQuaternion rotation(btVector3(0, 1, 0), btRadians(boomerang->getRotationAngle()));
     transform.setRotation(rotation);
-    boomerang->setRigidBodyTransform(transform); 
+    boomerang->setRigidBodyTransform(transform);
 
 
     btVector3 pos = transform.getOrigin();
     boomerang->setPosition({ (float)pos.getX(), (float)pos.getY(), (float)pos.getZ() });
 }
 
-void StageController::updateTimeBoomerang(std::shared_ptr<CharacterData> playerData, std::shared_ptr<Boomerang> boomerang)
+
+void StageController::updateTimeBoomerang(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Boomerang> boomerang)
 {
     float deltaTime = GetFrameTime();
 
     if (playerData->getIsUsed())
     {
+		Vector3 forwardDir = playerData->getForwardDir();
+
+        if (forwardDir == Vector3{ 0.0f, 0.0f, 0.0f })
+        {
+            forwardDir = { 1.0f, 0.0f, 0.0f };
+        }
+
         float Duration = std::max(0.0f, playerData->getTimeOfBoomerang() - deltaTime);
         playerData->setTimeOfBoomerang(Duration);
 
@@ -160,9 +168,11 @@ void StageController::updateTimeBoomerang(std::shared_ptr<CharacterData> playerD
         {
             if (!boomerang->getIsvisble())
             {
-                boomerang->setStartPos(Vector3Add(playerData->getPlayerPos(), { 0.0f, 1.5f, 0.0f }));
-                boomerang->setPosition(Vector3Add(playerData->getPlayerPos(), { 0.0f, 1.5f, 0.0f }));
-                boomerang->setForwarDir(playerData->getForwardDir());
+				EventManager::getInstance().notify(std::make_shared<BoomerangEvent>());
+                Vector3 pos = Vector3Add(playerData->getPlayerPos(), Vector3Multiply({ 1.5f, 1.5f, 1.5f }, forwardDir));
+                boomerang->setStartPos(pos);
+                boomerang->setPosition(pos);
+                boomerang->setForwarDir(forwardDir);
                 boomerang->setIsVisble(true);
 
                 btTransform transform;
@@ -384,19 +394,15 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 
     // Calculate the desired movement direction based on input
     if (IsKeyDown(KEY_W)) {
-        desiredVelocity = btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
 		isW = true;
     }
 	if (IsKeyDown(KEY_S)) {
-		desiredVelocity = -btVector3(playerData->getForwarDir().x, 0, playerData->getForwarDir().z).normalized() * playerData->getMoveSpeed();
 		isS = true;
     }
 	if(IsKeyDown(KEY_A)) {
-		desiredVelocity += btVector3(playerData->getForwarDir().z, 0, -playerData->getForwarDir().x).normalized() * playerData->getMoveSpeed();
 		isA = true;
     }
 	if (IsKeyDown(KEY_D)) {
-		desiredVelocity -= btVector3(playerData->getForwarDir().z, 0, -playerData->getForwarDir().x).normalized() * playerData->getMoveSpeed();
 		isD = true;
     }
 
@@ -407,11 +413,16 @@ void StageController::movePlayer(std::shared_ptr<PlayerData> playerData)
 	if (isD) newDir.x += 1.0f;
     
 	if (newDir == Vector2{ 0.0f, 0.0f }) {
-        newDir = Vector2{ 0.0f, 1.0f };
+        playerData->setPlayerRotationAngle(atan2f( 1.0f, 0.0f ));
+		playerData->setForwarDir(Vector3{ 0.0f, 0.0f, 0.0f });
+        desiredVelocity = btVector3(0.0f, 0.0f, 0.0f);
     }
-
-    playerData->setPlayerRotationAngle(atan2f(newDir.y, newDir.x));
-    
+    else {
+        Vector3 newForwardDir = { newDir.y, 0.0f, newDir.x };
+        playerData->setForwarDir(Vector3Normalize(newForwardDir));
+        playerData->setPlayerRotationAngle(atan2f(newDir.y, newDir.x));
+        desiredVelocity = btVector3(playerData->getForwardDir().x, 0, playerData->getForwardDir().z).normalized() * playerData->getMoveSpeed();
+    }
 
     // Smooth acceleration towards the desired velocity
     const float accelerationFactor = 1000.0f; // Higher values mean faster acceleration
@@ -579,6 +590,9 @@ void StageController::updatePlayerDie(std::shared_ptr<PlayerData> playerData)
         isInputEnable = false;
         
         playerData->setPlayerAnimationState(PlayerAnimationState::DIE);
+		playerData->setPlayerHealth(0);
+		playerData->setForwarDir(Vector3{ 0.0f, 0.0f, 0.0f });
+
         EventManager::getInstance().notify(std::make_shared<DieEvent>());
     }
 }
