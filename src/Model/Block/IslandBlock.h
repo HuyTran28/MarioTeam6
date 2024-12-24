@@ -9,7 +9,7 @@ public:
 		btVector3 inertia, const Model& model, const Vector3& position, const Vector3& scale,
 		const Vector3& rotationAxis, const float& rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld)
 		: BlockData(rigidBody, shape, motionState, mass, inertia, model, position, scale, rotationAxis, rotationAngle, dynamicsWorld) {
-		objectType = "Block-Normal";
+		objectType = "Block-Flagpole";
 	}
 	//~IslandBlock(){}
 };

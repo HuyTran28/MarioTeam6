@@ -703,6 +703,11 @@ void StageController::updateAnimationState(std::shared_ptr<CharacterData> charac
         AnimationManager::getInstance().playAnimation(0, characterData);
 
         break;
+    case PlayerAnimationState::WIN:
+
+        AnimationManager::getInstance().playAnimation(6, characterData);
+
+        break;
     }
     // Update the animation frame
    
@@ -713,12 +718,12 @@ void StageController::updateAnimationState(std::shared_ptr<CharacterData> charac
 void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> characterData)
 {
     std::shared_ptr<PlayerData> playerData = std::dynamic_pointer_cast<PlayerData>(characterData);
-    if (characterData->getPlayerAnimationState() == PlayerAnimationState::DIE) {
+    if (characterData->getPlayerAnimationState() == PlayerAnimationState::DIE || characterData->getPlayerAnimationState() == PlayerAnimationState::WIN) {
         return;
     }
 
     if (playerData->getIsvincible() && playerData->getPlayerAnimationState() == PlayerAnimationState::HIT) {
-        return; // Stay in HIT animation during invincibility
+        return; 
     }
     btVector3 velocity = characterData->getRigidBody()->getLinearVelocity();
     if (!(characterData->getIsOnGround())) {
