@@ -331,6 +331,27 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
     }
 
+    if (objectType1 == "Enemy-Koopa" && objectType2 == "Item-Boomerang")
+    {
+        Koopa* koopa = dynamic_cast<Koopa*>(obj1);
+        Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<EnemyDie>(koopa));
+
+    }
+
+    if (objectType1 == "Item-Boomerang" && objectType2.substr(0, 6) == "Player")
+    {
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        Boomerang* boomerang = dynamic_cast<Boomerang*>(obj1);
+        boomerang->setIsVisble(false);
+        boomerang->setIsreturning(false);
+        btTransform transform;
+        transform.setIdentity();
+        transform.setOrigin(btVector3(0.0f, -20.0f, 0.0f));
+        boomerang->setRigidBodyTransform(transform);
+        boomerang->setTravelDis(0.0f);
+    }
+
 	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
 	{
 		GreenMushroom* greenMushroom = dynamic_cast<GreenMushroom*>(obj1);
@@ -342,7 +363,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
 	}
 
-	if ((objectType1 == "Enemy-Goomba" && objectType2 == "Player-Normal") || (objectType1 == "Enemy-Goomba" && objectType2 == "Player-Big"))
+	if ((objectType1 == "Enemy-Goomba" && objectType2.substr(0, 6) == "Player"))
 	{
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 		Goomba* goomba = dynamic_cast<Goomba*>(obj1);

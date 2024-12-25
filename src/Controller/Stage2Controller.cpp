@@ -6,7 +6,7 @@ Stage2Controller::Stage2Controller()
 	model = std::make_shared<Stage2Model>();
 }
 
-Stage2Controller::Stage2Controller(std::shared_ptr<Stage2Model> model) 
+Stage2Controller::Stage2Controller(std::shared_ptr<Stage2Model> model)
 {
 	this->model = model;
 }
@@ -27,6 +27,8 @@ void Stage2Controller::update(std::shared_ptr<Event> event)
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies, model->getCamera());
 		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
+		updateTimeBoomerang(model->getPlayerData(), model->getBoomerang());
+
 		for (const auto& block : blockData)
 		{
 			if (block->getIsBouncing())

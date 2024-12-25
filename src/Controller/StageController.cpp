@@ -169,7 +169,7 @@ void StageController::updateTimeBoomerang(std::shared_ptr<PlayerData> playerData
             if (!boomerang->getIsvisble())
             {
 				EventManager::getInstance().notify(std::make_shared<BoomerangEvent>());
-                Vector3 pos = Vector3Add(Vector3Add(playerData->getPlayerPos(), {0.0f, 2.0f, 0.0f}), Vector3Multiply({1.5f, 1.5f, 1.5f}, forwardDir));
+                Vector3 pos = Vector3Add(Vector3Add(playerData->getPlayerPos(), {2.0f, 2.0f, 0.0f}), Vector3Multiply({1.5f, 1.5f, 1.5f}, forwardDir));
                 boomerang->setStartPos(pos);
                 boomerang->setPosition(pos);
                 boomerang->setForwarDir(forwardDir);

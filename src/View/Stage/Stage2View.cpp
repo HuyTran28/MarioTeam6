@@ -29,8 +29,8 @@ void Stage2View::render()
 
     BeginMode3D(m_model->getCamera());
 
-	DrawModelEx(m_model->getVolcano(), m_model->getVolcanoPosition(), m_model->getVolcanoRotationAxis(), m_model->getHillsRotationAngle(), m_model->getVolcanoScale(), WHITE);
-	DrawModelEx(m_model->getBowserCastle(), m_model->getBowserCastlePosition(), m_model->getBowserCastleRotationAxis(), m_model->getBowserCastleRotationAngle(), m_model->getBowserCastleScale(), WHITE);
+	//DrawModelEx(m_model->getVolcano(), m_model->getVolcanoPosition(), m_model->getVolcanoRotationAxis(), m_model->getHillsRotationAngle(), m_model->getVolcanoScale(), WHITE);
+	//DrawModelEx(m_model->getBowserCastle(), m_model->getBowserCastlePosition(), m_model->getBowserCastleRotationAxis(), m_model->getBowserCastleRotationAngle(), m_model->getBowserCastleScale(), WHITE);
     //renderClouds();
 
     renderCharacter();
@@ -42,7 +42,20 @@ void Stage2View::render()
     std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << '\n';
     m_model->setCamera(m_model->getCamera());
 
+    if (m_model->getBoomerang()->getIsvisble())
+    {
+        btTransform transform;
+        m_model->getBoomerang()->getRigidBody()->getMotionState()->getWorldTransform(transform);
+        btQuaternion rotation = transform.getRotation();
+        Vector3 rotationAxis = { (float)rotation.getAxis().getX(),
+                                 (float)rotation.getAxis().getY(),
+                                 (float)rotation.getAxis().getZ() };
+        float rotationAngleDeg = btDegrees(rotation.getAngle());
 
+
+        DrawModelEx(m_model->getBoomerang()->getModel(), m_model->getBoomerang()->getPosition(), rotationAxis, rotationAngleDeg,
+            { m_model->getBoomerang()->getScale().x, m_model->getBoomerang()->getScale().y, m_model->getBoomerang()->getScale().z }, WHITE);
+    }
 
 
     EndMode3D();
