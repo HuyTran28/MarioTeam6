@@ -2,7 +2,7 @@
 
 
 
-Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 0.0f, 10.0f, 10.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
+Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 60.0f, 10.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
 

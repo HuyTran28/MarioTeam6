@@ -312,7 +312,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		player->setIsBig(true);
     }
 
-    if (objectType1 == "Item-BoomerangFlower" && objectType2 == "Player-Normal")
+    if (objectType1 == "Item-BoomerangFlower" && objectType2.substr(0.6) == "Player-Normal")
     {
         BoomerangFlower* flower = dynamic_cast<BoomerangFlower*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
@@ -343,13 +343,16 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     {
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
         Boomerang* boomerang = dynamic_cast<Boomerang*>(obj1);
-        boomerang->setIsVisble(false);
-        boomerang->setIsreturning(false);
-        btTransform transform;
-        transform.setIdentity();
-        transform.setOrigin(btVector3(0.0f, -20.0f, 0.0f));
-        boomerang->setRigidBodyTransform(transform);
-        boomerang->setTravelDis(0.0f);
+        if (boomerang->getIsreturning())
+        {
+            boomerang->setIsVisble(false);
+            boomerang->setIsreturning(false);
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(0.0f, -20.0f, 0.0f));
+            boomerang->setRigidBodyTransform(transform);
+            boomerang->setTravelDis(0.0f);
+        }
     }
 
 	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
