@@ -300,16 +300,52 @@ void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData
     {
         Vector3 newPosition = newBlock->getPosition();
         newPosition.y += 3.0f;
-        int randomChoice = std::rand() % 5;
+        int randomChoice = std::rand() % 8;
 
-        std::shared_ptr<ItemData> item;
+        std::shared_ptr<ItemData> item = nullptr;
 
-        if (randomChoice == 5) {
+        if (randomChoice == 7) {
        
             item = ItemFactory::createItem(
-                ItemType::COIN,
+                ItemType::RED_MUSHROOM,
                 newPosition,
                 "../../Assets\\Models\\Items\\RedMushroom.glb",
+                { 1.0f, 1.0f, 1.0f },
+                { 0.0, 1.0f, 0.0f },
+                0.0f,
+                CollisionManager::getInstance()->getDynamicsWorld()
+            );
+        }
+        else if (randomChoice == 6)
+        {
+            item = ItemFactory::createItem(
+                ItemType::PURPLE_MUSHROOM,
+                newPosition,
+                "../../Assets\\Models\\Items\\PurpleMushroom.glb",
+                { 1.0f, 1.0f, 1.0f },
+                { 0.0, 1.0f, 0.0f },
+                0.0f,
+                CollisionManager::getInstance()->getDynamicsWorld()
+            );
+        }
+        else if (randomChoice == 5)
+        {
+            item = ItemFactory::createItem(
+                ItemType::GREEN_MUSHROOM,
+                newPosition,
+                "../../Assets\\Models\\Items\\GreenMushroom.glb",
+                { 1.0f, 1.0f, 1.0f },
+                { 0.0, 1.0f, 0.0f },
+                0.0f,
+                CollisionManager::getInstance()->getDynamicsWorld()
+            );
+        }
+        else if (randomChoice == 4)
+        {
+            item = ItemFactory::createItem(
+                ItemType::BOOMERANG_FLOWER,
+                newPosition,
+                "../../Assets\\Models\\Items\\BoomerangFlower.glb",
                 { 1.0f, 1.0f, 1.0f },
                 { 0.0, 1.0f, 0.0f },
                 0.0f,
