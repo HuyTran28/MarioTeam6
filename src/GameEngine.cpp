@@ -16,11 +16,12 @@ void GameEngine::run()
 	isRunning = true;
 
 	InitWindow(1900, 1000, "Game Engine");
-	SetTargetFPS(120);
+	SetTargetFPS(60);
 
 	this->registerSelf();
 
-	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Stage1");
+	curState = "Menu";
+	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
@@ -94,6 +95,9 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	}
 	else if (event->getType() == "Tick Event")
 	{
+		GameData::getInstance().setCurState(curState);
+
+
 		if (isGameOver == true)
 		{
 			timer += GetFrameTime();
@@ -104,7 +108,17 @@ void GameEngine::update(std::shared_ptr<Event> event)
 				timer = 0.0f;
 				EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Game Over"));
 			}
+		}
+		else if (isWin == true)
+		{
+			timer += GetFrameTime();
 
+			if (timer > 6.0f)
+			{
+				isWin = false;
+				timer = 0.0f;
+				EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Win"));
+			}
 		}
 
 		if (curState.substr(0, 5) == "Stage")
@@ -121,6 +135,10 @@ void GameEngine::update(std::shared_ptr<Event> event)
 	else if (event->getType() == "Die Event")
 	{
 		isGameOver = true;
+	}
+	else if (event->getType() == "Win Event")
+	{
+		isWin = true;
 	}
 
 }

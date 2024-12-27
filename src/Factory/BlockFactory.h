@@ -25,7 +25,7 @@ enum class BlockType
 	RouletteBlock,
 	SupportivePipeBlock,
 	FlyBlock,
-	IslandBlock, 
+	Flagpole, 
 };
 
 class BlockFactory : public BlockData

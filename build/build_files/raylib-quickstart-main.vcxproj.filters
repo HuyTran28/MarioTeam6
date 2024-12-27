@@ -54,6 +54,9 @@
     <ClCompile Include="..\..\src\Model\GameOverModel.cpp" />
     <ClCompile Include="..\..\src\View\GameOverView.cpp" />
     <ClCompile Include="..\..\src\Controller\GameOverController.cpp" />
+    <ClCompile Include="..\..\src\Model\WinModel.cpp" />
+    <ClCompile Include="..\..\src\View\WinView.cpp" />
+    <ClCompile Include="..\..\src\Controller\WinController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -146,6 +149,10 @@
     <ClInclude Include="..\..\src\Controller\GameOverController.h" />
     <ClInclude Include="..\..\src\Model\Item\Boomerang.h" />
     <ClInclude Include="..\..\src\Event\BoomerangEvent.h" />
+    <ClInclude Include="..\..\src\Model\WinModel.h" />
+    <ClInclude Include="..\..\src\View\WinView.h" />
+    <ClInclude Include="..\..\src\Controller\WinController.h" />
+    <ClInclude Include="..\..\src\Event\WinEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

@@ -5,11 +5,6 @@
 Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 60.0f, 10.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
-
-
-    cloudScales = { 1.0f, 1.0f, 1.0f };
-    cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
-    Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
     volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
     volcanoPosition = { 360.0f, -120.0f, 60.0f };
     volcanoScale = { 3.0f, 3.0f, 3.0f };
@@ -21,41 +16,6 @@ Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 60.0f,
     BowserCastleScale = { 1.0f, 1.0f, 1.0f };
     BowserCastleRotationAxis = { 0.0f, 1.0f, 0.0f };
     BowserCastleRotationAngle = 270.0f;
-
-
-    for (int i = 0; i < 10; i++)
-    {
-        Vector3 cloud1Position = { 0.0f + 30.0f * i, 25.0f, -60.0f };
-        float cloud1RotationAngle = 90.0f;
-        cloudPositions.push_back(cloud1Position);
-        cloudRotationsAngle.push_back(cloud1RotationAngle);
-        clouds.push_back(cloud1);
-    }
-
-    for (int i = 0; i < 10; i++)
-    {
-        Vector3 cloud1Position = { 0.0f + 30.0f * i, -120.0f, 0.0f };
-        float cloud1RotationAngle = 90.0f;
-        cloudPositions.push_back(cloud1Position);
-        cloudRotationsAngle.push_back(cloud1RotationAngle);
-        clouds.push_back(cloud1);
-    }
-
-    for (int i = 0; i < 12; i++)
-    {
-        Vector3 cloud1Position = { -60.0f + 30.0f * i, 40.0f, 0.0f };
-        float cloud1RotationAngle = 90.0f;
-        cloudPositions.push_back(cloud1Position);
-        cloudRotationsAngle.push_back(cloud1RotationAngle);
-        clouds.push_back(cloud1);
-    }
-
-
-    hills = LoadModel("../../Assets\\Models\\mountain.glb");
-    hillsPosition = { 80.0f, -80.0f, -100.0f };
-    hillsScale = { 2.0f, 2.0f, 2.0f };
-    hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
-    hillsRotationAngle = 0.0f;
 }
 
 
@@ -438,56 +398,6 @@ std::vector<std::shared_ptr<ItemData>> Stage2Model::createItems()
 std::shared_ptr<Button> Stage2Model::getPauseButton() const
 {
     return StageModel::getPauseButton();
-}
-
-std::vector<Model> Stage2Model::getClouds() const
-{
-    return clouds;
-}
-
-std::vector<Vector3> Stage2Model::getCloudPositions() const
-{
-    return cloudPositions;
-}
-
-Vector3 Stage2Model::getCloudScales() const
-{
-    return cloudScales;
-}
-
-Vector3 Stage2Model::getCloudRotationsAxis() const
-{
-    return cloudRotationsAxis;
-}
-
-std::vector<float> Stage2Model::getCloudRotationsAngle() const
-{
-    return cloudRotationsAngle;
-}
-
-Model Stage2Model::getHills() const
-{
-    return hills;
-}
-
-Vector3 Stage2Model::getHillsPosition() const
-{
-    return hillsPosition;
-}
-
-Vector3 Stage2Model::getHillsScale() const
-{
-    return hillsScale;
-}
-
-Vector3 Stage2Model::getHillsRotationAxis() const
-{
-    return hillsRotationAxis;
-}
-
-float Stage2Model::getHillsRotationAngle() const
-{
-    return hillsRotationAngle;
 }
 
 Model Stage2Model::getVolcano() const

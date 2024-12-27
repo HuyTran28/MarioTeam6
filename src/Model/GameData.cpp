@@ -21,6 +21,16 @@ GameData& GameData::getInstance()
 	return instance;
 }
 
+std::string GameData::getCurState()
+{
+	return curState;
+}
+
+void GameData::setCurState(std::string curState)
+{
+	this->curState = curState;
+}
+
 Texture2D GameData::getZeroCoin()
 {
 	return ZeroCoin;

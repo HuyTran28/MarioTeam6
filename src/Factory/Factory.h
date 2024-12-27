@@ -31,6 +31,9 @@
 #include "../View/GameOverView.h"
 #include "../Model/GameOverModel.h"
 #include "../Controller/GameOverController.h"
+#include "../View/WinView.h"
+#include "../Model/WinModel.h"
+#include "../Controller/WinController.h"
 
 class StateFactory
 {

@@ -29,8 +29,8 @@ void Stage2View::render()
 
     BeginMode3D(m_model->getCamera());
 
-	//DrawModelEx(m_model->getVolcano(), m_model->getVolcanoPosition(), m_model->getVolcanoRotationAxis(), m_model->getHillsRotationAngle(), m_model->getVolcanoScale(), WHITE);
-	//DrawModelEx(m_model->getBowserCastle(), m_model->getBowserCastlePosition(), m_model->getBowserCastleRotationAxis(), m_model->getBowserCastleRotationAngle(), m_model->getBowserCastleScale(), WHITE);
+	DrawModelEx(m_model->getVolcano(), m_model->getVolcanoPosition(), m_model->getVolcanoRotationAxis(), m_model->getVolcanoRotationAngle(), m_model->getVolcanoScale(), WHITE);
+	DrawModelEx(m_model->getBowserCastle(), m_model->getBowserCastlePosition(), m_model->getBowserCastleRotationAxis(), m_model->getBowserCastleRotationAngle(), m_model->getBowserCastleScale(), WHITE);
     //renderClouds();
 
     renderCharacter();
@@ -73,11 +73,7 @@ void Stage2View::render()
 
 void Stage2View::renderClouds()
 {
-    for (int i = 0; i < m_model->getClouds().size(); i++) {
-        DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
-    }
-
-    DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
+  
 }
 
 void Stage2View::renderCharacter()

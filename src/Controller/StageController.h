@@ -53,7 +53,7 @@ public:
 	void registerSelf() override;
 	//void onCollision(const CollisionEvent& event);
 	//void determineCollisionType(CollisionEvent& event);
-private:
+protected:
 	bool isNotifyDie = false;
 	bool isInputEnable = true;
 };

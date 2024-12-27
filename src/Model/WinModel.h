@@ -1,0 +1,25 @@
+#pragma once
+
+#include "StateModel.h"
+#include "Button/Button.h"
+
+class WinModel : public StateModel
+{
+private:
+	std::string title;
+
+	const int buttonSize = 200;
+
+	std::shared_ptr<Button> backButton;
+	std::shared_ptr<Button> retryButton;
+	std::shared_ptr<Button> resumeButton;
+	std::shared_ptr<Button> quitButton;
+public:
+	WinModel();
+
+	std::string getTitle();
+	std::shared_ptr<Button> getBackButton();
+	std::shared_ptr<Button> getRetryButton();
+	std::shared_ptr<Button> getResumeButton();
+	std::shared_ptr<Button> getQuitButton();
+};

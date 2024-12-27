@@ -65,7 +65,7 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     //// Add block to the world
     dynamicsWorld->addRigidBody(itemRigidBody.get());
     m_boomerang = std::make_shared<Boomerang>(itemRigidBody, itemShape, motionState, PATH_BOOMERANG, model, 
-        startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 10.0f);
+        startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 40.0f);
 
 
 

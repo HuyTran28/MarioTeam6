@@ -282,7 +282,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
     }
    
-    if (objectType1 == "Item-RedMushroom" && objectType2 == "Player-Normal")
+    if (objectType1 == "Item-RedMushroom" && objectType2.substr(0, 6) == "Player")
     {
         RedMushroom* redMushroom = dynamic_cast<RedMushroom*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
@@ -290,6 +290,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         player->setBigDuration(30.0f);
         player->setIsBig(true);
         player->setPlayerScale(Vector3Multiply(player->getPlayerScale(), Vector3{ 1.25f, 1.25f, 1.25f }));
+
         player->setObjectType("Player-Big");
     }
 
@@ -312,7 +313,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		player->setIsBig(true);
     }
 
-    if (objectType1 == "Item-BoomerangFlower" && objectType2.substr(0.6) == "Player-Normal")
+    if (objectType1 == "Item-BoomerangFlower" && objectType2.substr(0,6) == "Player")
     {
         BoomerangFlower* flower = dynamic_cast<BoomerangFlower*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
@@ -363,7 +364,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
 		EventManager::getInstance().notify(std::make_shared<RegenerateEvent>());
 		player->setPlayerHealth(player->getPlayerHealth() + 1);
-
 	}
 
 	if ((objectType1 == "Enemy-Goomba" && objectType2.substr(0, 6) == "Player"))
@@ -391,9 +391,14 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
 	}
 
-    if ((objectType2 == "Player-Normal" || objectType2 == "Player-Big") && objectType1 == "Block-Flagpole")
+    if (objectType2.substr(0, 6) == "Player" && objectType1 == "Block-Flagpole")
     {
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+		Flagpole* block = dynamic_cast<Flagpole*>(obj1);
+
+
 		player->setPlayerAnimationState(PlayerAnimationState::WIN);
+		m_dynamicsWorld->removeRigidBody(player->getRigidBody().get());
+		EventManager::getInstance().notify(std::make_shared<WinEvent>());
     }
 }

@@ -20,6 +20,8 @@ public:
 	void setIsLogIn(bool isLogIn);
 	std::string getLastState();
 	void setLastState(std::string lastState);
+	std::string getCurState();
+	void setCurState(std::string curState);
 
 
 
@@ -37,6 +39,7 @@ private:
 	std::string playerName;
 	int playerScore;
 	bool isLogIn;
+	std::string curState = "Menu";
 	std::string lastState;
 	GameData();
 

@@ -380,7 +380,8 @@ void StageController::registerSelf()
 
 void StageController::updateTimer(float& timer)
 {
-	timer -= GetFrameTime();
+    if (isInputEnable == true)
+	    timer -= GetFrameTime();
 }
 
 void StageController::updateMovementOfPlayer(std::shared_ptr<PlayerData> playerData, Camera3D cam)
@@ -494,7 +495,7 @@ void StageController::jumpPlayer(std::shared_ptr<PlayerData> playerData)
         playerData->setIsOnGround(false);   // Player is now airborne
 
         // Increase the jump force for a higher jump
-        float acceleration = (playerData->getJumpForce() * 0.5f) / playerData->getRigidBody()->getMass();
+        float acceleration = (playerData->getJumpForce() * 1.0f) / playerData->getRigidBody()->getMass();
         playerData->setMaxJumpDuaration(sqrt(acceleration / playerData->getRigidBody()->getMass() * invGravity)); // Simplified physics calculation
 
         EventManager::getInstance().notify(std::make_shared<JumpEvent>());
@@ -564,11 +565,12 @@ void StageController::updateScore(std::shared_ptr<Event> event, std::shared_ptr<
         {
 			model->setScore(model->getScore() + 200);
         }
-		else if (blockChange->getNewType() == "")
+		else if (blockChange->getNewType() == "" && blockChange->getPreType() != "Block-Flagpole")
 		{
 			model->setScore(model->getScore() + 20);
 		}
 	}
+    GameData::getInstance().setPlayerScore(model->getScore());
 }
 
 void StageController::updatePauseAndSetting(std::shared_ptr<Button> setting, std::shared_ptr<Button> pause)
@@ -703,7 +705,7 @@ bool StageController::checkGroundCollision(std::shared_ptr<CharacterData> charac
 
 void StageController::updateAnimationState(std::shared_ptr<CharacterData> characterData, Camera3D cam)
 {
-	if ((Vector3Distance(cam.position, characterData->getPlayerPos()) > 140.0f && cam.position.x < characterData->getPlayerPos().x)
+	if ((Vector3Distance(cam.position, characterData->getPlayerPos()) > 80.0f && cam.position.x < characterData->getPlayerPos().x)
         || (Vector3Distance(cam.position, characterData->getPlayerPos()) > 10.0f && cam.position.x > characterData->getPlayerPos().x)) {
 		return; // Skip animation updates for distant objects
 	}

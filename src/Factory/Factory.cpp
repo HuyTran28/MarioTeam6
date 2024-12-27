@@ -28,19 +28,19 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 	}
 	else if (state == "Stage1")
 	{
-		stateModel = std::make_shared<Stage2Model>();
-		stateView = std::make_shared<Stage2View>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
-		stateController = std::make_shared<Stage2Controller>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
+		stateModel = std::make_shared<Stage1Model>();
+		stateView = std::make_shared<Stage1View>(std::dynamic_pointer_cast<Stage1Model> (stateModel));
+		stateController = std::make_shared<Stage1Controller>(std::dynamic_pointer_cast<Stage1Model> (stateModel));
 		stateController->registerSelf();
 		stateView->registerSelf();
 	}
 	else if (state == "Stage2")
 	{
-		//stateModel = std::make_shared<Stage2Model>();
-		//stateView = std::make_shared<Stage2View>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
-		//stateController = std::make_shared<Stage2Controller>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
-		//stateController->registerSelf();
-		//stateView->registerSelf();
+		stateModel = std::make_shared<Stage2Model>();
+		stateView = std::make_shared<Stage2View>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
+		stateController = std::make_shared<Stage2Controller>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
+		stateController->registerSelf();
+		stateView->registerSelf();
 	}
 	else if (state == "Pause")
 	{
@@ -71,6 +71,14 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 		stateModel = std::make_shared<GameOverModel>();
 		stateView = std::make_shared<GameOverView>(std::dynamic_pointer_cast<GameOverModel> (stateModel));
 		stateController = std::make_shared<GameOverController>(std::dynamic_pointer_cast<GameOverModel> (stateModel));
+		stateController->registerSelf();
+		stateView->registerSelf();
+	}
+	else if (state == "Win")
+	{
+		stateModel = std::make_shared<WinModel>();
+		stateView = std::make_shared<WinView>(std::dynamic_pointer_cast<WinModel> (stateModel));
+		stateController = std::make_shared<WinController>(std::dynamic_pointer_cast<WinModel> (stateModel));
 		stateController->registerSelf();
 		stateView->registerSelf();
 	}

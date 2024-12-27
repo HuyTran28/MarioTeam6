@@ -21,7 +21,6 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	std::vector<std::shared_ptr<BlockData>> blockData = model->getMap();
 	if (event->getType() == "Tick Event")
 	{
-		
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()), model->getCamera());
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovemenOfEnemy(enemies, model->getCamera());
@@ -86,6 +85,11 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 		std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
 		removeEnemy(enemies, enemy);
 		model->setEnemies(enemies);
+	}
+	else if (event->getType() == "Win Event")
+	{
+		isInputEnable = false;
+		model->getPlayerData()->setPlayerRotationAngle(270 * DEG2RAD);
 	}
 	updateScore(event, model);
 }

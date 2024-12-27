@@ -17,6 +17,8 @@
 #include "../Model/GameData.h"
 #include "../Model/Character/AnimationManager.h"
 #include "../Event/DieEvent.h"
+#include "../Event/StateChangeEvent.h"
+#include "../Event/WinEvent.h"
 #include "../Event/WarpEvent.h"
 #include "../Event/RegenerateEvent.h"
 #include "../Event/EnemyDie.h"

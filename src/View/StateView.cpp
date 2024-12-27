@@ -108,7 +108,7 @@ void StateView::renderItems(std::vector<std::shared_ptr<ItemData>> items, Camera
 {
     for (const auto& item : items)
     {
-		if ( ( Vector3Distance(item->getPosition(), cam.position) > 140.0f && cam.position.x < item->getPosition().x ) 
+		if ( ( Vector3Distance(item->getPosition(), cam.position) > 100.0f && cam.position.x < item->getPosition().x ) 
             || (Vector3Distance(item->getPosition(), cam.position) > 10.0f && cam.position.x > item->getPosition().x))
 			continue;
         DrawModelEx(item->getModel(), {item->getPosition().x, item->getPosition().y, item->getPosition().z},

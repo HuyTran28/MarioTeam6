@@ -7,15 +7,15 @@ void SoundManager::update(std::shared_ptr<Event> event)
 {
 	if (event->getType() == "Tick Event")
 	{
-		UpdateMusicStream(backgroundMusic);
+		if (GameData::getInstance().getCurState().substr(0, 5) == "Stage")
+		{
+			if (IsMusicStreamPlaying(backgroundMusic) == false)
+				PlayBackgroundMusic();
+			UpdateMusicStream(backgroundMusic);
+		}
 	}
     else if (event->getType() == "State Change Event")
     {
-        if (GameData::getInstance().getLastState() == "Pause")
-        {
-            PlayMusicStream(backgroundMusic);
-			SeekMusicStream(backgroundMusic, GetMusicTimePlayed(backgroundMusic));
-        }
         auto stateChangeEvent = std::dynamic_pointer_cast<StateChangeEvent>(event);
         if (stateChangeEvent->getNewState() == "Pause")
         {
@@ -27,14 +27,6 @@ void SoundManager::update(std::shared_ptr<Event> event)
 			StopBackgroundMusic();
 			PlaySoundEffect("Game Over");
 		}
-    }
-    else if (event->getType() == "Back Event")
-    {
-        if (GameData::getInstance().getLastState() == "Pause")
-        {
-			PlayMusicStream(backgroundMusic);
-            SeekMusicStream(backgroundMusic, GetMusicTimePlayed(backgroundMusic));
-        }
     }
     else if (event->getType() == "Jump Event")
     {
@@ -88,6 +80,10 @@ void SoundManager::update(std::shared_ptr<Event> event)
 	{
 		PlaySoundEffect("Boomerang");
 	}
+	else if (event->getType() == "Win Event")
+	{
+		PlaySoundEffect("StageClear");
+	}
 }
 
 void SoundManager::LoadSoundFile(const std::string& id, const std::string& filepath) {
@@ -116,6 +112,7 @@ SoundManager::SoundManager()
 	LoadSoundFile("Game Over", "../../Assets/Sounds/GameOver.wav");
 	LoadSoundFile("Enemy Die", "../../Assets/Sounds/EnemyDie.wav");
 	LoadSoundFile("Boomerang", "../../Assets/Sounds/Throw.wav");
+	LoadSoundFile("StageClear", "../../Assets/Sounds/StageClear.mp3");
 }
 
 std::shared_ptr<SoundManager> SoundManager::getInstance()

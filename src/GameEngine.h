@@ -21,6 +21,7 @@ class GameEngine : public IObserver, public std::enable_shared_from_this<GameEng
 private:
 	bool isRunning;
 	bool isGameOver = false;
+	bool isWin = false;
 	bool isInit = false;
 	float timer = 0.0f;
 	std::string curState;

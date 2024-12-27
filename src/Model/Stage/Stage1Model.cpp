@@ -1,6 +1,6 @@
 #include "Stage1Model.h"
 #include <iostream>
-Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 10.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
+Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 350.0f, 10.0f, 0.0f }, Vector3{0.9f, 0.9f, 0.9f}), Vector3{0.0f, 20.0f, 0.0f}, Vector3{0.0f, 0.0f, 0.0f}, 30.0f, CAMERA_PERSPECTIVE,
                             createMap(), createEnemies(), createItems())
 {
 	cloudScales = { 1.0f, 1.0f, 1.0f };
@@ -218,7 +218,7 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
             Vector3 rotationAxisIsland = { 0.0f, 1.0f, 0.0f };
             float rotaionAngleIsland = -90.0f;
             Vector3 position = { 430.0f, 1.0f, 10.0f };
-            addBlock(BlockType::IslandBlock, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
+            addBlock(BlockType::Flagpole, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
 
         };
 
