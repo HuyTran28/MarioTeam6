@@ -394,7 +394,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     if ((objectType2 == "Player-Normal" || objectType2 == "Player-Big") && objectType1 == "Block-Flagpole")
     {
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
-		std::cout << "WIN" << std::endl;
 		player->setPlayerAnimationState(PlayerAnimationState::WIN);
     }
 }
