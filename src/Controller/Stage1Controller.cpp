@@ -23,7 +23,7 @@ void Stage1Controller::update(std::shared_ptr<Event> event)
 	{
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()), model->getCamera());
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
-		updateMovemenOfEnemy(enemies, model->getCamera());
+		updateMovementOfEnemy(enemies, model->getCamera(), std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateTimeBoomerang(model->getPlayerData(), model->getBoomerang());
 

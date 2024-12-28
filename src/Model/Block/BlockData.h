@@ -6,7 +6,6 @@
 #include <memory>
 #include "../CollidableObject.h"
 
-
 class BlockData : public CollidableObject
 
 {
@@ -32,6 +31,7 @@ public:
 		: CollidableObject(rigidBody, shape, motionState, dynamicsWorld), m_mass(mass), m_inertia(inertia), m_model(model),
           m_position(position), m_scale(scale), m_rotationAxis(rotationAxis), m_rotationAngle(rotationAngle)
     {
+        
         m_isBouncing = false;
         m_bounceTime = 0.0f;
     }

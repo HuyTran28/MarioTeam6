@@ -2,16 +2,25 @@
 #include <iostream>
 #include <raymath.h> 
 
-void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData)
+void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_ptr<PlayerData> playerData)
 {
-    Vector3 targetPos = enemyData->getMovingToA() ? enemyData->getPointA() : enemyData->getPointB();
+    Vector3 targetPos;
+    if (enemyData->getState() == EnemyState::PATROL) {
+        targetPos = enemyData->getMovingToA() ? enemyData->getPointA() : enemyData->getPointB();
+    }
+    else if (enemyData->getState() == EnemyState::CHASE) {
+        targetPos = playerData->getPlayerPos(); // Use the player's position as the target
+        
+    }
     enemyData->setTargetPosistion(targetPos);
 
+    rotateEnemy(enemyData);
     moveToEnemy(enemyData);
+
     // Check if the enemy has reached the target position with some tolerance
     float distance = Vector3Distance(enemyData->getPlayerPos(), targetPos);
 
-    if (distance < 2.0f) {
+    if (enemyData->getState() == EnemyState::PATROL && distance < 2.0f) {
         enemyData->setMovingToA(!(enemyData->getMovingToA()));
         Vector3 newtargetPos = enemyData->getMovingToA() ? enemyData->getPointA() : enemyData->getPointB();
         enemyData->setTargetPosistion(newtargetPos);
@@ -101,11 +110,20 @@ void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
     enemyData->setPlayerRotationAngle(angle);
 }   
     
-void StageController::updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam)
+void StageController::updateMovementOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam, std::shared_ptr<PlayerData> playerData)
 {
     for (auto &enemy : enemies)
     {
-        moveEnemy(enemy);
+		float distanceToPlayer = Vector3Distance(enemy->getPlayerPos(), playerData->getPlayerPos());
+		
+        if (distanceToPlayer < 10.0f) {
+			enemy->setState(EnemyState::CHASE);
+		}
+		else {
+			enemy->setState(EnemyState::PATROL);
+		}
+        
+        moveEnemy(enemy, playerData);
         updateCollisionShape(enemy);  // Update collision shape
         updateModelTransform(enemy);  // Synchronize marioData with physics body
         updateAnimationState(enemy, cam);

@@ -12,8 +12,6 @@
 #include "../Event/BoomerangEvent.h"
 #include "../Event/EnemyDie.h"
 
-
-
 class StageController : public StateController
 {
 public:
@@ -35,10 +33,10 @@ public:
 
 	void updatePlayerDie(std::shared_ptr<PlayerData> playerData);
 
-	void moveEnemy(std::shared_ptr<Enemy> enemyData);
+	void moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_ptr<PlayerData> playerData);
 	void moveToEnemy(std::shared_ptr<Enemy> enemyData);
 	void rotateEnemy(std::shared_ptr<Enemy> enemyData);
-	void updateMovemenOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam);
+	void updateMovementOfEnemy(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam, std::shared_ptr<PlayerData> playerData);
 
 
 	void updateMovementOfBoomerang(std::shared_ptr<Boomerang> boomerang);
