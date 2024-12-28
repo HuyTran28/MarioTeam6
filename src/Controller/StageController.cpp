@@ -151,6 +151,15 @@ void StageController::updateTimeBoomerang(std::shared_ptr<PlayerData> playerData
 {
     float deltaTime = GetFrameTime();
 
+    // Update the throw timer
+    if (playerData->getThrowTimer() > 0.0f) {
+        playerData->setThrowTimer(playerData->getThrowTimer() - deltaTime);
+    }
+    else
+    {
+		playerData->setIsThrowing(false);
+    }
+
     if (playerData->getIsUsed())
     {
 		Vector3 forwardDir = playerData->getForwardDir();
@@ -179,6 +188,10 @@ void StageController::updateTimeBoomerang(std::shared_ptr<PlayerData> playerData
                 transform.setIdentity();
                 transform.setOrigin(btVector3(boomerang->getStartPos().x, boomerang->getStartPos().y, boomerang->getStartPos().z));
                 boomerang->setRigidBodyTransform(transform);
+
+                // Reset the throw timer
+                playerData->setThrowTimer(1.0f); // Set the cooldown duration as needed
+				playerData->setIsThrowing(true);
             }
         }
 
@@ -746,6 +759,9 @@ void StageController::updateAnimationState(std::shared_ptr<CharacterData> charac
         AnimationManager::getInstance().playAnimation(6, characterData);
 
         break;
+	case PlayerAnimationState::THROW:
+		AnimationManager::getInstance().playAnimation(7, characterData);
+		break;
     }
     // Update the animation frame
    
@@ -763,6 +779,13 @@ void StageController::setPlayerAnimationState(std::shared_ptr<CharacterData> cha
     if (playerData->getIsvincible() && playerData->getPlayerAnimationState() == PlayerAnimationState::HIT) {
         return; 
     }
+
+	if (playerData->getIsThrowing())
+	{
+		characterData->setPlayerAnimationState(PlayerAnimationState::THROW);
+		return;
+	}
+
     btVector3 velocity = characterData->getRigidBody()->getLinearVelocity();
     if (!(characterData->getIsOnGround())) {
         // Mario is airborne

@@ -29,6 +29,16 @@ float PlayerData::getInvincibilityTimer() const
 	return m_invincibilityTimer;
 }
 
+float PlayerData::getThrowTimer() const
+{
+	return m_throwTimer;
+}
+
+bool PlayerData::getIsThrowing() const
+{
+	return m_isThrowing;
+}
+
 bool PlayerData::getIsvincible() const
 {
 	return m_isInvincible;
@@ -42,6 +52,16 @@ float PlayerData::getInvincibilityDuration() const
 void PlayerData::setInvincibilityTimer(float timer)
 {
 	m_invincibilityTimer = timer;
+}
+
+void PlayerData::setThrowTimer(float timer)
+{
+	m_throwTimer = timer;
+}
+
+void PlayerData::setIsThrowing(bool isThrowing)
+{
+	m_isThrowing = isThrowing;
 }
 
 void PlayerData::setIsvincible(bool isVincible)

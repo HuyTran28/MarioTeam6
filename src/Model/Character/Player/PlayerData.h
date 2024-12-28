@@ -21,6 +21,10 @@ private:
     float m_invincibilityDuration = 1.2f; // Duration of invincibility in seconds
 
 
+	float m_throwTimer = 0.0f;
+	float m_throwDuration = 0.7f;
+	bool m_isThrowing = false;
+
 public:
 
 
@@ -38,10 +42,14 @@ public:
     float getInvincibilityTimer() const;
     bool getIsvincible() const;
     float getInvincibilityDuration() const;
-
+	bool getIsThrowing() const;
+	float getThrowTimer() const;
+	
 
     void setInvincibilityTimer(float timer);
     void setIsvincible(bool isVincible);
+	void setThrowTimer(float timer);
+	void setIsThrowing(bool isThrowing);
     
 
     void setForwarDir(const Vector3& forwardDir);
