@@ -12,6 +12,17 @@
 #include "../Model/Block/SupportivePipeBlock.h"
 #include "../Model/Block/FlyBlock.h"
 #include "../Model/Block/IslandBlock.h"
+#include "../Model/Block/GroundBlock.h"
+#include "../Model/Block/WallBlock1.h"
+#include "../Model/Block/WallBlock2.h"
+#include "../Model/Block/WallBlock3.h"
+#include "../Model/Block/WallBlock4.h"
+#include "../Model/Block/WallBlock5.h"
+
+
+
+
+
 #include <memory>
 
 
@@ -25,7 +36,15 @@ enum class BlockType
 	RouletteBlock,
 	SupportivePipeBlock,
 	FlyBlock,
-	Flagpole, 
+	IslandBlock,
+	GroundBlock,
+	WallBlock1,
+	WallBlock2,
+	WallBlock3,
+	WallBlock4,
+	WallBlock5,
+	Flagpole,
+
 };
 
 class BlockFactory : public BlockData

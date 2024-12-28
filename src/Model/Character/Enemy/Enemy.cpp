@@ -68,6 +68,16 @@ float Enemy::getSpeed() const
 	return moveSpeed;
 }
 
+void Enemy::setIsDie(bool isDie)
+{
+	m_isDie = isDie;
+}
+
+bool Enemy::getIsDie() const
+{
+	return m_isDie;
+}
+
 Enemy::~Enemy()
 {
 

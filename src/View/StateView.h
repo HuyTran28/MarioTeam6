@@ -21,6 +21,7 @@ public:
 	void renderBlocks(std::vector<std::shared_ptr<BlockData>> map, Camera3D cam);
 	void renderEnemies(std::vector<std::shared_ptr<Enemy>> enemies, Camera3D cam);
 	void renderItems(std::vector<std::shared_ptr<ItemData>> items, Camera3D cam);
+
 	void renderTimer(float timer, std::shared_ptr<Button> timerButton);
 	void renderHealth(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Button> healthButton);
 	void renderCoin(int coins);

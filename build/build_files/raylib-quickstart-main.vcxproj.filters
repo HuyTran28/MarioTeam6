@@ -57,6 +57,9 @@
     <ClCompile Include="..\..\src\Model\WinModel.cpp" />
     <ClCompile Include="..\..\src\View\WinView.cpp" />
     <ClCompile Include="..\..\src\Controller\WinController.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage3Model.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage3View.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage3Controller.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Button\Button.h" />
@@ -153,6 +156,15 @@
     <ClInclude Include="..\..\src\View\WinView.h" />
     <ClInclude Include="..\..\src\Controller\WinController.h" />
     <ClInclude Include="..\..\src\Event\WinEvent.h" />
+    <ClInclude Include="..\..\src\Model\Block\GroundBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock1.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock2.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock3.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock4.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock5.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage3Model.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage3View.h" />
+    <ClInclude Include="..\..\src\Controller\Stage3Controller.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

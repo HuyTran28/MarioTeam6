@@ -42,6 +42,14 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 		stateController->registerSelf();
 		stateView->registerSelf();
 	}
+	else if (state == "Stage3")
+	{
+		stateModel = std::make_shared<Stage3Model>();
+		stateView = std::make_shared<Stage3View>(std::dynamic_pointer_cast<Stage3Model> (stateModel));
+		stateController = std::make_shared<Stage3Controller>(std::dynamic_pointer_cast<Stage3Model> (stateModel));
+		stateController->registerSelf();
+		stateView->registerSelf();
+	}
 	else if (state == "Pause")
 	{
 		stateModel = std::make_shared<Pause>();

@@ -12,7 +12,7 @@ protected:
     Vector3 m_targetPosition;
     bool m_movingToA;
     std::string m_name;
-
+    bool m_isDie = false;
    // std::unique_ptr<EnemyState> m_currentState;
 
 public:
@@ -34,8 +34,8 @@ public:
 
     void setPosition(const Vector3& pos);
     float getSpeed() const;
-    
-
+    void setIsDie(bool isDie);
+    bool getIsDie() const;
 
 
     ~Enemy() override;

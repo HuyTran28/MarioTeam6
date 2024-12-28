@@ -327,6 +327,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
     if (objectType1 == "Enemy-Goomba" && objectType2 == "Item-Boomerang")
     {
         Goomba* goomba = dynamic_cast<Goomba*>(obj1);
+        goomba->setIsDie(true);
         Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
         EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
 
@@ -371,9 +372,11 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 		Goomba* goomba = dynamic_cast<Goomba*>(obj1);
 
+
         if (detectCollisionFromAboveEnemy(contactPoints))
         {
 			EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
+            goomba->setIsDie(true);
             return;
         }
 

@@ -280,6 +280,7 @@
     <ClInclude Include="..\..\src\Controller\SettingController.h" />
     <ClInclude Include="..\..\src\Controller\Stage1Controller.h" />
     <ClInclude Include="..\..\src\Controller\Stage2Controller.h" />
+    <ClInclude Include="..\..\src\Controller\Stage3Controller.h" />
     <ClInclude Include="..\..\src\Controller\StageController.h" />
     <ClInclude Include="..\..\src\Controller\StateController.h" />
     <ClInclude Include="..\..\src\Controller\WinController.h" />
@@ -311,12 +312,18 @@
     <ClInclude Include="..\..\src\Model\Block\BrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\EmptyBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\FlyBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\GroundBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\IslandBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\NormalBrickBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\PipeBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\QuestionBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\RouletteBlock.h" />
     <ClInclude Include="..\..\src\Model\Block\SupportivePipeBlock.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock1.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock2.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock3.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock4.h" />
+    <ClInclude Include="..\..\src\Model\Block\WallBlock5.h" />
     <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
     <ClInclude Include="..\..\src\Model\Character\CharacterData.h" />
     <ClInclude Include="..\..\src\Model\Character\Enemy\Enemy.h" />
@@ -345,6 +352,7 @@
     <ClInclude Include="..\..\src\Model\SettingModel.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage1Model.h" />
     <ClInclude Include="..\..\src\Model\Stage\Stage2Model.h" />
+    <ClInclude Include="..\..\src\Model\Stage\Stage3Model.h" />
     <ClInclude Include="..\..\src\Model\Stage\StageModel.h" />
     <ClInclude Include="..\..\src\Model\StateModel.h" />
     <ClInclude Include="..\..\src\Model\WinModel.h" />
@@ -360,6 +368,7 @@
     <ClInclude Include="..\..\src\View\SettingView.h" />
     <ClInclude Include="..\..\src\View\Stage\Stage1View.h" />
     <ClInclude Include="..\..\src\View\Stage\Stage2View.h" />
+    <ClInclude Include="..\..\src\View\Stage\Stage3View.h" />
     <ClInclude Include="..\..\src\View\StateView.h" />
     <ClInclude Include="..\..\src\View\WinView.h" />
   </ItemGroup>
@@ -384,6 +393,7 @@
     <ClCompile Include="..\..\src\Controller\SettingController.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage1Controller.cpp" />
     <ClCompile Include="..\..\src\Controller\Stage2Controller.cpp" />
+    <ClCompile Include="..\..\src\Controller\Stage3Controller.cpp" />
     <ClCompile Include="..\..\src\Controller\StageController.cpp" />
     <ClCompile Include="..\..\src\Controller\StateController.cpp" />
     <ClCompile Include="..\..\src\Controller\WinController.cpp" />
@@ -414,6 +424,7 @@
     <ClCompile Include="..\..\src\Model\SettingModel.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage1Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\Stage2Model.cpp" />
+    <ClCompile Include="..\..\src\Model\Stage\Stage3Model.cpp" />
     <ClCompile Include="..\..\src\Model\Stage\StageModel.cpp" />
     <ClCompile Include="..\..\src\Model\WinModel.cpp" />
     <ClCompile Include="..\..\src\SoundManager\SoundManager.cpp" />
@@ -426,6 +437,7 @@
     <ClCompile Include="..\..\src\View\SettingView.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage1View.cpp" />
     <ClCompile Include="..\..\src\View\Stage\Stage2View.cpp" />
+    <ClCompile Include="..\..\src\View\Stage\Stage3View.cpp" />
     <ClCompile Include="..\..\src\View\StateView.cpp" />
     <ClCompile Include="..\..\src\View\WinView.cpp" />
   </ItemGroup>

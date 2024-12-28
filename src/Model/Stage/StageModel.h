@@ -31,6 +31,13 @@ constexpr char PATH_SUPPORTIVEPIPEBLOCK[] = "../../Assets\\Models\\Platforms\\Su
 constexpr char PATH_FLYBLOCK[] = "../../Assets\\Models\\Platforms\\FlyBlock.glb";
 constexpr char PATH_WATERBLOCK[] = "../../Assets\\Models\\Platforms\\WaterBlock.glb";
 constexpr char PATH_ISLANDBLOCK[] = "../../Assets\\Models\\Platforms\\Flagpole.glb";
+constexpr char PATH_WALLBLOCK1[] = "../../Assets\\Models\\Platforms\\WallBlock1.glb";
+constexpr char PATH_WALLBLOCK2[] = "../../Assets\\Models\\Platforms\\WallBlock2.glb";
+constexpr char PATH_WALLBLOCK3[] = "../../Assets\\Models\\Platforms\\WallBlock3.glb";
+constexpr char PATH_WALLBLOCK4[] = "../../Assets\\Models\\Platforms\\WallBlock4.glb";
+constexpr char PATH_WALLBLOCK5[] = "../../Assets\\Models\\Platforms\\WallBlock5.glb";
+constexpr char PATH_GROUNDBLOCK[] = "../../Assets\\Models\\Platforms\\GroundBlock.glb";
+
 
 
 
@@ -45,6 +52,8 @@ constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushr
 constexpr char PATH_GREENMUSHROOM[] = "../../Assets\\Models\\Items\\GreenMushroom.glb";
 constexpr char PATH_BOOMERANGFLOWER[] = "../../Assets\\Models\\Items\\BoomerangFlower.glb";
 constexpr char PATH_BOOMERANG[] = "../../Assets\\Models\\Items\\Boomerang.glb";
+
+
 
 
 
@@ -88,7 +97,7 @@ public:
 	void setItems(std::vector<std::shared_ptr<ItemData>> items);
 	std::vector<std::shared_ptr<BlockData>> getMap() const;
 	void setMap(std::vector<std::shared_ptr<BlockData>> map);
-	
+
 
 	std::shared_ptr<Button> getSettingButton() const;
 	std::shared_ptr<Button> getHealthButton() const;

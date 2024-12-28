@@ -20,8 +20,8 @@ void GameEngine::run()
 
 	this->registerSelf();
 
-	curState = "Menu";
-	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
+	//curState = "Menu";
+	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Stage3");
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
