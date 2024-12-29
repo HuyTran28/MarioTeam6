@@ -364,6 +364,13 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		player->setPlayerHealth(player->getPlayerHealth() + 1);
 	}
 
+    if (objectType1 == "Item-SuperStar" && objectType2.substr(0, 6) == "Player")
+    {
+        SuperStar* superStar = dynamic_cast<SuperStar*>(obj1);
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(superStar));
+    }
+
 	if ((objectType1 == "Enemy-Goomba" && objectType2.substr(0, 6) == "Player"))
 	{
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
