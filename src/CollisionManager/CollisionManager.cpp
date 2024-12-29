@@ -427,21 +427,14 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             {
 				std::shared_ptr<Koopa> newKoopa = std::dynamic_pointer_cast<Koopa>(EnemyFactory::createEnemy(EnemyType::Koopa, CollisionManager::getInstance()->getDynamicsWorld(),
 					"../../Assets\\Models\\Characters\\KoopaShell.glb",
-					koopa->getPlayerPos(), koopa->getForwardDir(), koopa->getPlayerRotationAxis(), koopa->getPlayerRotationAngle(), koopa->getPlayerScale(), 10.0f, koopa->getPlayerPos(), koopa->getPlayerPos()) );
+					koopa->getPlayerPos(), koopa->getForwardDir(), koopa->getPlayerRotationAxis(), koopa->getPlayerRotationAngle(), koopa->getPlayerScale(), 0.0f, koopa->getPlayerPos(), koopa->getPlayerPos()) );
                 EventManager::getInstance().notify(std::make_shared<EnemyChangeEvent>(koopa, newKoopa));
 				newKoopa->setState("Shell");
 				newKoopa->setPlayerAnimationState(PlayerAnimationState::SHELL);
             }
             else if (koopa->getState() == "Shell")
             {
-                if (IsKeyPressed(KEY_J))
-                {
-                    //const float FORCE_MULTIPLIER = 10.0f; // Adjust for desired kick strength
-                    //btVector3 enhancedForce = btVector3{ player->getForwardDir().x, player->getForwardDir().y, player->getForwardDir().z } * koopa->getSpeed() * FORCE_MULTIPLIER;
-                    //enhancedForce.setY(0);
-                    //koopa->getRigidBody()->applyCentralForce(enhancedForce);
-                }
-
+                
             }
             return;
         }
@@ -450,6 +443,8 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         {
             if (koopa->getState() == "Shell")
 			{
+                btRigidBody* koopaBody = koopa->getRigidBody().get();
+                koopaBody->applyCentralForce(btVector3(player->getForwardDir().x, 0, player->getForwardDir().z)* koopaBody->getMass() * 80000);
                 return;
 			}
             player->setPlayerHealth(player->getPlayerHealth() - 1);

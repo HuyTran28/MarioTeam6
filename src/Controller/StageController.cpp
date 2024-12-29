@@ -10,7 +10,6 @@ void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_pt
     }
     else if (enemyData->getState() == EnemyState::CHASE) {
         targetPos = playerData->getPlayerPos(); // Use the player's position as the target
-        
     }
     enemyData->setTargetPosistion(targetPos);
 
