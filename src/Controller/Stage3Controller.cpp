@@ -56,6 +56,16 @@ void Stage3Controller::update(std::shared_ptr<Event> event)
 		model->setMap(map);
 		model->setItems(items);
 	}
+	else if (event->getType() == "Enemy Change Event")
+	{
+		std::shared_ptr<EnemyChangeEvent> enemyChange = std::dynamic_pointer_cast<EnemyChangeEvent>(event);
+		Enemy* enemy = enemyChange->getPre();
+		std::shared_ptr<Enemy> newEnemy = enemyChange->getNew();
+		std::vector<std::shared_ptr<Enemy>> enemies = model->getEnemies();
+
+		updateEnemy(enemy, newEnemy, enemies);
+		model->setEnemies(enemies);
+	}
 	else if (event->getType() == "Item Touched Event")
 	{
 
