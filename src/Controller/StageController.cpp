@@ -402,6 +402,25 @@ void StageController::updateBlock(BlockData* preBlock, std::shared_ptr<BlockData
 
 }
 
+void StageController::updateEnemy(Enemy* preEnemy, std::shared_ptr<Enemy> newEnemy, std::vector<std::shared_ptr<Enemy>>& enemies)
+{
+	auto it = std::find_if(enemies.begin(), enemies.end(), [preEnemy](const std::shared_ptr<Enemy>& enemy) {
+		return enemy.get() == preEnemy;
+		});
+
+	btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
+	if (it != enemies.end()) {
+		enemies.erase(it);
+		CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+	}
+	if (newEnemy)
+	{
+		enemies.push_back(newEnemy);
+	}
+
+	CollisionManager::getInstance()->getDynamicsWorld()->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
+}
+
 void StageController::registerSelf()
 {
 }
@@ -631,6 +650,10 @@ void StageController::updateScore(std::shared_ptr<Event> event, std::shared_ptr<
 			model->setScore(model->getScore() + 20);
 		}
 	}
+    else if (event->getType() == "Enemy Change Event")
+    {
+		model->setScore(model->getScore() + 500);
+    }
     GameData::getInstance().setPlayerScore(model->getScore());
 }
 

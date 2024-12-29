@@ -6,7 +6,8 @@
 enum class EnemyState
 {
     PATROL,
-	CHASE
+	CHASE,
+    SHELL
 };
 
 class Enemy : public CharacterData {

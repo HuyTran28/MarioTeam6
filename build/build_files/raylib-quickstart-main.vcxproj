@@ -289,6 +289,7 @@
     <ClInclude Include="..\..\src\Event\BoomerangEvent.h" />
     <ClInclude Include="..\..\src\Event\CollisionEvent.h" />
     <ClInclude Include="..\..\src\Event\DieEvent.h" />
+    <ClInclude Include="..\..\src\Event\EnemyChangeEvent.h" />
     <ClInclude Include="..\..\src\Event\EnemyDie.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />

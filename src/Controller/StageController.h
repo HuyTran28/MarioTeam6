@@ -48,6 +48,7 @@ public:
 	void updateInvincibilityTimer(std::shared_ptr<PlayerData> playerData);
 	void updateTimer(float& timer);
 	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>&itetms);
+	void updateEnemy(Enemy* preEnemy, std::shared_ptr<Enemy> newEnemy, std::vector<std::shared_ptr<Enemy>>& enemies);
 	void updateScore(std::shared_ptr<Event> event, std::shared_ptr<StageModel> model);
 	void registerSelf() override;
 

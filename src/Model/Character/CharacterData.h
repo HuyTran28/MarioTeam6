@@ -16,7 +16,8 @@ enum class PlayerAnimationState {
 	HIT,
 	DIE,
 	WIN,
-	THROW
+	THROW,
+	SHELL
 };
 
 
