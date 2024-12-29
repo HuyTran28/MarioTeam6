@@ -278,11 +278,8 @@ void StageController::updateBounceOfBlock(std::shared_ptr<BlockData> blockData)
         //decrease time bounce
         float tmp = blockData->getBounceTime() - deltaTime;
         blockData->setBouncetime(tmp);
-        std::cout << blockData->getPosition().x << " " << blockData->getPosition().y << " " << blockData->getPosition().z << '\n';
-
 
         btVector3 position = blockTransform.getOrigin();
-        //DrawModelEx(blockData->getModel(), { position.getX(), position.getY(), position.getZ() }, blockData->getRotationAxis(), blockData->getRotationAngle(), blockData->getScale(), WHITE);
         if (blockData->getBounceTime() <= 0)
         {
             blockData->setIsBounce(false);
@@ -586,6 +583,23 @@ void StageController::updateBigDuration(std::shared_ptr<PlayerData> playerData)
             playerData->setObjectType("Player-Normal");
 		}
 	}
+}
+
+void StageController::updateSpecial(std::shared_ptr<PlayerData> playerData)
+{
+    if (playerData->getIsSpecial())
+    {
+        float specialDuration = playerData->getSpecialTimer();
+        specialDuration -= GetFrameTime();
+        playerData->setSpecialTimer(specialDuration);
+        if (specialDuration <= 0)
+        {
+            playerData->setIsSpecial(false);
+            playerData->setSpecialTimer(0.0f);
+            playerData->setMoveSpeed(playerData->getMoveSpeed() / 2.0f);
+            playerData->setObjectType("Player-Normal");
+        }
+    }
 }
 
 void StageController::updateScore(std::shared_ptr<Event> event, std::shared_ptr<StageModel> model)

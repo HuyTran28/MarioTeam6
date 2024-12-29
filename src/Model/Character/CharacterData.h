@@ -24,7 +24,7 @@ class CharacterData : public CollidableObject
 {
 protected:
 
-	bool m_isUsed = false;
+	bool m_isUsed = false;	
 	const float m_duarationOfBoomerang = 30.0f;
 	float m_timeBoomerang = 0.0f;
 

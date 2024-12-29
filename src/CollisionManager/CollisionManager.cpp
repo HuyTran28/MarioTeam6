@@ -369,13 +369,30 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         SuperStar* superStar = dynamic_cast<SuperStar*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
         EventManager::getInstance().notify(std::make_shared<ItemTouchedEvent>(superStar));
+        player->setMoveSpeed(player->getMoveSpeed() * 2.0f);
+        player->setIsSpecial(true);
+        player->setSpecialTimer(player->getSpecialDuration());
+        player->setObjectType("Player-Special");
     }
 
+    //if ((objectType1 == "Enemy-Goomba" && objectType2 == "Player-Special"))
+    //{
+    //    PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+    //    Goomba* goomba = dynamic_cast<Goomba*>(obj1);
+    //    EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
+    //}
+   
 	if ((objectType1 == "Enemy-Goomba" && objectType2.substr(0, 6) == "Player"))
 	{
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 		Goomba* goomba = dynamic_cast<Goomba*>(obj1);
 
+        if (objectType2 == "Player-Special")
+        {
+            EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
+            goomba->setIsDie(true);
+            return;
+        }
 
         if (detectCollisionFromAboveEnemy(contactPoints))
         {

@@ -34,6 +34,21 @@ float PlayerData::getThrowTimer() const
 	return m_throwTimer;
 }
 
+bool PlayerData::getIsSpecial() const
+{
+	return m_isSpecial;
+}
+
+float PlayerData::getSpecialDuration() const
+{
+	return m_specialDuartion;
+}
+
+float PlayerData::getSpecialTimer() const
+{
+	return m_specialTimer;
+}
+
 bool PlayerData::getIsThrowing() const
 {
 	return m_isThrowing;
@@ -62,6 +77,16 @@ void PlayerData::setThrowTimer(float timer)
 void PlayerData::setIsThrowing(bool isThrowing)
 {
 	m_isThrowing = isThrowing;
+}
+
+void PlayerData::setIsSpecial(bool isSpecial)
+{
+	m_isSpecial = isSpecial;
+}
+
+void PlayerData::setSpecialTimer(float timer)
+{
+	m_specialTimer = timer;
 }
 
 void PlayerData::setIsvincible(bool isVincible)

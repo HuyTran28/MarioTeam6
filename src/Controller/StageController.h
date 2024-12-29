@@ -27,6 +27,7 @@ public:
 	void jumpPlayer(std::shared_ptr<PlayerData> playerData);
 
 	void updateBigDuration(std::shared_ptr<PlayerData> playerData);
+	void updateSpecial(std::shared_ptr<PlayerData> playerData);
 	void updatePauseAndSetting(std::shared_ptr<Button> setting, std::shared_ptr<Button> pause);
 	void removeItem(std::vector<std::shared_ptr<ItemData>>& items, ItemData* item);
 	void removeEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Enemy* enemy);
