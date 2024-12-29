@@ -444,7 +444,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             if (koopa->getState() == "Shell")
 			{
                 btRigidBody* koopaBody = koopa->getRigidBody().get();
-                koopaBody->applyCentralForce(btVector3(player->getForwardDir().x, 0, player->getForwardDir().z)* koopaBody->getMass() * 80000);
+                koopaBody->applyCentralForce(btVector3(player->getForwardDir().x, 0, player->getForwardDir().z)* koopaBody->getMass() * 5000);
                 return;
 			}
             player->setPlayerHealth(player->getPlayerHealth() - 1);
