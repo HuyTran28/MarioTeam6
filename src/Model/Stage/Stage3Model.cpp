@@ -51,8 +51,8 @@ Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.
     }
 
 
-    hills = LoadModel("../../Assets\\Models\\mountain.glb");
-    hillsPosition = { 80.0f, -80.0f, -100.0f };
+    hills = LoadModel("../../Assets\\Models\\bossRoom.glb");
+    hillsPosition = { 0.0f, 0.0f, 0.0f };
     hillsScale = { 2.0f, 2.0f, 2.0f };
     hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
     hillsRotationAngle = 0.0f;

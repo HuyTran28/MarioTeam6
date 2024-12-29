@@ -8,11 +8,6 @@
 class Stage1Model : public StageModel
 {
 private:
-	int m_width;
-	int m_depth;
-	int m_height;
-
-
 
 	std::vector<Model> clouds;
 	std::vector<Vector3> cloudPositions;
@@ -36,7 +31,6 @@ public:
 	std::vector<std::shared_ptr<ItemData>> createItems();
 	
 
-	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;
 	std::vector<Vector3> getCloudPositions() const;
 	Vector3 getCloudScales() const;

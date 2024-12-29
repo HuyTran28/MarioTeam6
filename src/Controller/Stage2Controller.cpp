@@ -36,12 +36,12 @@ void Stage2Controller::update(std::shared_ptr<Event> event)
 				updateBounceOfBlock(block);
 			}
 		}
-		updateMouse();
+		updatePauseAndSetting(model->getSettingButton(), model->getPauseButton());
 		float timer = model->getTimer();
 		updateTimer(timer);
 		model->setTimer(timer);
 
-		updateCamera();
+		updateCamera(model);
 	}
 	else if (event->getType() == "Block Change Event")
 	{
@@ -90,23 +90,4 @@ void Stage2Controller::update(std::shared_ptr<Event> event)
 	updateScore(event, model);
 }
 
-void Stage2Controller::updateMouse()
-{
-	updatePauseAndSetting(model->getSettingButton(), model->getPauseButton());
-}
 
-void Stage2Controller::updateCamera()
-{
-	Camera3D& camera = model->getCamera();
-	std::shared_ptr<PlayerData> marioModel = std::dynamic_pointer_cast<PlayerData>(model->getPlayerData());
-
-	Vector3 cameraOffset = { -40.0f, 20.0f, 0.0f };
-	camera.position = Vector3Add(marioModel->getPlayerPos(), cameraOffset);
-	camera.target = marioModel->getPlayerPos();
-
-	float zoomSpeed = 5.0f;
-	camera.fovy -= GetMouseWheelMove() * zoomSpeed;
-
-	if (camera.fovy < 10.0f) camera.fovy = 10.0f;
-	if (camera.fovy > 90.0f) camera.fovy = 90.0f;
-}

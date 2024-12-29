@@ -49,6 +49,8 @@ public:
 	void updateBlock(BlockData* preBlock, std::shared_ptr<BlockData> newBlock, std::vector<std::shared_ptr<BlockData>>& map, std::vector<std::shared_ptr<ItemData>>&itetms);
 	void updateScore(std::shared_ptr<Event> event, std::shared_ptr<StageModel> model);
 	void registerSelf() override;
+
+	void updateCamera(std::shared_ptr<StageModel> model);
 	//void onCollision(const CollisionEvent& event);
 	//void determineCollisionType(CollisionEvent& event);
 protected:

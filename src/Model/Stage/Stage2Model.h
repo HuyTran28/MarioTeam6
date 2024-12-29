@@ -8,10 +8,6 @@
 class Stage2Model : public StageModel
 {
 private:
-	int m_width;
-	int m_depth;
-	int m_height;
-
 	Model volcano;
 	Vector3 volcanoPosition;
 	Vector3 volcanoScale;

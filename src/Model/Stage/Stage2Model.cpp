@@ -186,7 +186,6 @@ std::vector<std::shared_ptr<BlockData>> Stage2Model::createMap()
                     pipeBlock1->setNewPosition(tmp);
                 }
             }
-
         };
 
     auto createUpperBrickBlock = [&]()
@@ -336,8 +335,6 @@ std::vector<std::shared_ptr<Enemy>> Stage2Model::createEnemies()
 
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 84, 26, 12 }, forwardDirGoomba, scaleGoomba, { 84, 26, 12 }, { 93, 26, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-
-
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 138, 61, 20.0947 }, forwardDirGoomba, scaleGoomba, { 137.293, 61, 20 }, { 137.313, 61, 2 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 145, 61, 12.5778 }, forwardDirGoomba, scaleGoomba, { 145, 61, 12.5778 }, { 165, 61, 12.5778 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);

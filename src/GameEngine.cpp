@@ -16,7 +16,7 @@ void GameEngine::run()
 	isRunning = true;
 
 	InitWindow(1900, 1000, "Game Engine");
-	SetTargetFPS(60);
+	SetTargetFPS(30);
 
 	this->registerSelf();
 
@@ -31,6 +31,7 @@ void GameEngine::run()
 
 	while (isRunning == true && !WindowShouldClose())
 	{
+		DrawFPS(10, 10);
 		std::shared_ptr<Event> newEvent = std::make_shared<TickEvent>();
 		EventManager::getInstance().notify(newEvent);
 		newEvent.reset();

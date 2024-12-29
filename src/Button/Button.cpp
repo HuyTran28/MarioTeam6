@@ -7,6 +7,17 @@ Button::Button() : text(""), texture(Texture2D()), srcRec(Rectangle()), dstRec(R
 	textPosition = { 0.0f, 0.0f };
 }
 
+Button::Button(std::string text, Rectangle dstRec, Color color)
+{
+	this->text = text;
+	this->dstRec = dstRec;
+	this->color = color;
+	textColor = BLACK;
+	textSize = 60;
+	textPosition = { 0.0f, 0.0f };
+	hasText = true;
+}
+
 Button::Button(std::string text, Texture2D texture, Rectangle srcRec, Rectangle dstRec, Vector2 origin, float rotationAngle, Color color) : text(text), texture(texture),
 srcRec(srcRec), dstRec(dstRec), origin(origin), rotationAngle(rotationAngle), color(color)
 {
@@ -30,6 +41,11 @@ Button::~Button()
 
 void Button::draw()
 {
+	if (texture.id == 0)
+	{
+		DrawRectangleRec(dstRec, color);
+		return;
+	}
 	if (hasText)
 		DrawText(text.c_str(), textPosition.x, textPosition.y, textSize, textColor);
 	DrawTexturePro(texture, srcRec, dstRec, origin, rotationAngle, color);

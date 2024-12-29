@@ -357,6 +357,29 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
     }
 
+    if (objectType1 == "Item-Boomerang" || objectType2 == "Item-Boomerang")
+    {
+        std::cout << objectType1 << " " << objectType2 << std::endl;
+    }
+
+    if (objectType1.substr(0, 5) == "Block" && objectType2 == "Item-Boomerang")
+    {
+        Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
+        if (boomerang->getIsreturning())
+        {
+            boomerang->setIsVisble(false);
+            boomerang->setIsreturning(false);
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(0.0f, -20.0f, 0.0f));
+            boomerang->setRigidBodyTransform(transform);
+            boomerang->setTravelDis(0.0f);
+        }
+		else {
+			boomerang->setIsreturning(true);
+		}
+    }
+
 	if (objectType1 == "Item-GreenMushroom" && objectType2.substr(0, 6) == "Player")
 	{
 		GreenMushroom* greenMushroom = dynamic_cast<GreenMushroom*>(obj1);

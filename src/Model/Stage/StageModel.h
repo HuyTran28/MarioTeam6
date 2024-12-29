@@ -109,11 +109,16 @@ public:
 	std::shared_ptr<Button> getTimerButton() const;
 	int getScore() const;
 	void setScore(int score);
-private:
+protected:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;
 
-	int coins = 10;
+	int m_width;
+	int m_depth;
+	int m_height;
+
+
+	int coins = 0;
 	float timer = 300.0f;
 	int score = 0;
 

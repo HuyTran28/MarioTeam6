@@ -20,6 +20,7 @@ private:
 	bool hasText = false;
 public:
 	Button();
+	Button(std::string text, Rectangle dstRec, Color color);
 	Button(std::string text, Texture2D texture, Rectangle srcRec, Rectangle dstRec, Vector2 origin, float rotationAngle, Color color);
 	Button(std::string text, Texture2D texture, Rectangle srcRec, Rectangle dstRec, Vector2 origin, float rotationAngle, Color color, Color textColor, int textSize, Vector2 textPosition);
 	~Button();

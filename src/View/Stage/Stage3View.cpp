@@ -40,7 +40,6 @@ void Stage3View::render()
     m_model->setItems(items);
 
 
-    std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << '\n';
 
     if (m_model->getBoomerang()->getIsvisble())
     {
@@ -217,7 +216,6 @@ void Stage3View::renderClouds()
     for (int i = 0; i < m_model->getClouds().size(); i++) {
         DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
     }
-
     DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
 }
 
