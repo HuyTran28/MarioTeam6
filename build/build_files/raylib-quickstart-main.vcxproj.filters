@@ -165,6 +165,7 @@
     <ClInclude Include="..\..\src\Model\Stage\Stage3Model.h" />
     <ClInclude Include="..\..\src\View\Stage\Stage3View.h" />
     <ClInclude Include="..\..\src\Controller\Stage3Controller.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Bowser.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Assets\Models\SkeletonMario.glb" />

@@ -129,18 +129,27 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
     Vector3 rotaionAxisGoomba = { 0.0f, 1.0f, 0.0f };
     float rotationAngleGoomba = 0.0f;
 
+
+    Vector3 rotaionAxisBowser = { 0.0f, 1.0f, 0.0f };
+    float rotationAngleBowser = 0.0f;
+
     Vector3 rotaionAxisKoopa = { 0.0f, 1.0f, 0.0f };
     float rotationAngleKoopa = 0.0f;
 
-
     Vector3 scaleGoomba = { 1.0f, 1.0f, 1.0f };
     Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
+    Vector3 scaleBowser = { 1.2f, 1.2f, 1.2f };
+
 
     Vector3 forwardDirGoomba = { 0, 0, 1 };
     Vector3 forwardDirKoopa = { 0, 0, 1 };
+    Vector3 forwardDirBowser = { 0, 0, 1 };
+
 
     float speedGooba = 5.0f;
     float speedKoopa = 5.0f;
+    float speedBowser = 5.0f;
+
 
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
     auto addEnemy = [&](EnemyType type, const std::string& path, const Vector3& position, const Vector3 forwardDir, const Vector3& scale,
@@ -152,11 +161,11 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
         };
 
 
-    
+
 
     //26.5789 1.08211 - 28.6094
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, -28 }, forwardDirGoomba, scaleGoomba, { 26, 1, -28 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, 31}, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, 31 }, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 20, 1, 33 }, forwardDirGoomba, scaleGoomba, { 20, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
@@ -164,7 +173,10 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
 
     addEnemy(EnemyType::Koopa, PATH_KOOPA, { 20, 1, -32 }, forwardDirKoopa, scaleKoopa, { 20, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
     addEnemy(EnemyType::Koopa, PATH_KOOPA, { -24, 1, -32 }, forwardDirKoopa, scaleKoopa, { -24, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    
+
+
+
+    addEnemy(EnemyType::Bowser, PATH_BOWSER, { 0.0f, 1.0f, 0.0f }, forwardDirBowser, scaleBowser, { 0.0f, 1.0f, 0.0f }, { 5.0f, 1.0f, 0.0f }, speedBowser, rotaionAxisBowser, rotationAngleBowser);
 
 
     return enemies;

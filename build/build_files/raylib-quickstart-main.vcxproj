@@ -326,6 +326,7 @@
     <ClInclude Include="..\..\src\Model\Block\WallBlock5.h" />
     <ClInclude Include="..\..\src\Model\Character\AnimationManager.h" />
     <ClInclude Include="..\..\src\Model\Character\CharacterData.h" />
+    <ClInclude Include="..\..\src\Model\Character\Enemy\Bowser.h" />
     <ClInclude Include="..\..\src\Model\Character\Enemy\Enemy.h" />
     <ClInclude Include="..\..\src\Model\Character\Enemy\Goomba.h" />
     <ClInclude Include="..\..\src\Model\Character\Enemy\Koopa.h" />

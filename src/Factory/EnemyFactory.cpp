@@ -68,6 +68,9 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(EnemyType type, std::shared_ptr
     {
         return std::make_shared<Koopa>(rigidBody, collisionShape, motionState, modelPath, pointA, forwardDir, pointA, pointB, speed, scale, rotationAxis, rotaionAngle, dynamicsWorld, "Koopa");
     }
+    case EnemyType::Bowser:
+        return std::make_shared<Bowser>(rigidBody, collisionShape, motionState, modelPath, pointA, forwardDir, pointA, pointB, speed, scale, rotationAxis, rotaionAngle, dynamicsWorld, "Koopa");
+
     default:
         return nullptr;
     }

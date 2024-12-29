@@ -43,6 +43,8 @@ constexpr char PATH_GROUNDBLOCK[] = "../../Assets\\Models\\Platforms\\GroundBloc
 
 constexpr char PATH_GOOMBA[] = "../../Assets\\Models\\Characters\\Goomba.glb";
 constexpr char PATH_KOOPA[] = "../../Assets\\Models\\Characters\\Koopa.glb";
+constexpr char PATH_BOWSER[] = "../../Assets\\Models\\Characters\\Bowser.glb";
+
 
 
 
