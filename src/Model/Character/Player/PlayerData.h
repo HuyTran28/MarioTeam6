@@ -17,7 +17,7 @@ private:
 	bool isBig = false;
 
     bool m_isSpecial = false;
-    float m_specialDuartion = 2.5f;
+    float m_specialDuartion = 3.0f;
     float m_specialTimer = 0.0f;
 
     float m_invincibilityTimer = 0.0f;   // Timer to track invincibility duration

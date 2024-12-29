@@ -203,7 +203,7 @@ std::vector<std::shared_ptr<ItemData>> Stage3Model::createItems()
     addItem(ItemType::BOOMERANG_FLOWER, PATH_BOOMERANGFLOWER, { 16, 3, 26 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 0, 3, 25 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 0, 3, -25 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
-    addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, { -30, 5, 0 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
+    addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, { -30, 4, 0 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
 
 
 

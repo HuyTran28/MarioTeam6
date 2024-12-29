@@ -154,7 +154,7 @@ void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items, Camer
         };
 
 
-    std::vector<Vector3> position1 = { { -36, 3, 24 }, { -36, 3, -22 }, { 18, 3, -22 }, { 16, 3, 26 }, { 0, 3, 25 }, { 0, 3, -25 } };
+    std::vector<Vector3> position1 = { { -36, 3, 24 }, { -36, 3, -22 }, { 18, 3, -22 }, { 16, 3, 26 }, { 0, 3, 25 }, { 0, 3, -25 }, { -30, 4, 0 } };
 
 
     static auto lastSpawnTime = std::chrono::steady_clock::now();
@@ -204,6 +204,10 @@ void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items, Camer
                 {
                     addItem(ItemType::COIN, PATH_COIN, position1[i], scale, rotaionAxis, -90.0f, dynamicsWorld);
 
+                }
+                else if (i == 6)
+                {
+                    addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, position1[i], scale, rotaionAxis, -90.0f, dynamicsWorld);
                 }
 
             }
