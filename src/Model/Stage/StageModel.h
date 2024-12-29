@@ -54,6 +54,8 @@ constexpr char PATH_PURPLEMUSHROOM[] = "../../Assets\\Models\\Items\\PurpleMushr
 constexpr char PATH_GREENMUSHROOM[] = "../../Assets\\Models\\Items\\GreenMushroom.glb";
 constexpr char PATH_BOOMERANGFLOWER[] = "../../Assets\\Models\\Items\\BoomerangFlower.glb";
 constexpr char PATH_BOOMERANG[] = "../../Assets\\Models\\Items\\Boomerang.glb";
+constexpr char PATH_SUPPERSTAR[] = "../../Assets\\Models\\Items\\SuperStar.glb";
+
 
 
 

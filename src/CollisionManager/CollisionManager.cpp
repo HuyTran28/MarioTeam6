@@ -17,33 +17,7 @@ CollisionManager::CollisionManager()
 }
 
 void CollisionManager::removeAllRigidBody() 
-{
- //   // Get the number of collision objects
- //   int numObjects = m_dynamicsWorld->getNumCollisionObjects();
-
-	//std::cout << numObjects << std::endl;
-
- //   // Iterate backward to safely remove all rigid bodies
- //   for (int i = numObjects - 1; i >= 0; i--) {
- //       btCollisionObject* obj = m_dynamicsWorld->getCollisionObjectArray()[i];
- //       
-
-
- //       // Cast to btRigidBody (optional, if you only care about rigid bodies)
- //       btRigidBody* body = btRigidBody::upcast(obj);
-
- //       if (obj == nullptr)
- //           continue;
-
- //       if (body != nullptr) {
- //           // Remove the rigid body from the world
- //           m_dynamicsWorld->removeRigidBody(body);
- //       }
- //       else {
- //           // If not a rigid body, remove the collision object
- //           m_dynamicsWorld->removeCollisionObject(obj);
- //       }
-   
+{   
 }
 
 
