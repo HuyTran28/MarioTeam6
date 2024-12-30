@@ -150,7 +150,7 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
     float rotationAngleKoopa = 0.0f;
 
     Vector3 scaleGoomba = { 1.0f, 1.0f, 1.0f };
-    Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
+    Vector3 scaleKoopa = { 1.0f, 1.0f, 1.0f };
     Vector3 scaleBowser = { 1.2f, 1.2f, 1.2f };
 
 
@@ -210,13 +210,13 @@ std::vector<std::shared_ptr<ItemData>> Stage3Model::createItems()
         };
 
 
-    addItem(ItemType::COIN, PATH_COIN, { -36, 3, 24 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
-    addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { -36, 3, -22 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
+    addItem(ItemType::COIN, PATH_COIN, { -34, 3, 24 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
+    addItem(ItemType::RED_MUSHROOM, PATH_REDMUSHROOM, { -34, 3, -22 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::GREEN_MUSHROOM, PATH_GREENMUSHROOM, { 18, 3, -22 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::BOOMERANG_FLOWER, PATH_BOOMERANGFLOWER, { 16, 3, 26 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 0, 3, 25 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::COIN, PATH_COIN, { 0, 3, -25 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
-    addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, { -30, 4, 0 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
+    addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, { -30, 3, 0 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
 
 
 
