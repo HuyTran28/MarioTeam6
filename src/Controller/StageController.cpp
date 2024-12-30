@@ -11,6 +11,7 @@ void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_pt
     else if (enemyData->getState() == EnemyState::CHASE) {
         targetPos = playerData->getPlayerPos(); // Use the player's position as the target
     }
+    else return;
     enemyData->setTargetPosistion(targetPos);
 
     rotateEnemy(enemyData);
@@ -113,8 +114,14 @@ void StageController::updateMovementOfEnemy(std::vector<std::shared_ptr<Enemy>> 
 {
     for (auto &enemy : enemies)
     {
-		float distanceToPlayer = Vector3Distance(enemy->getPlayerPos(), playerData->getPlayerPos());
-		
+        if (enemy->getState() == EnemyState::SHELL)
+        {
+            updateCollisionShape(enemy);  // Update collision shape
+            updateModelTransform(enemy);  // Synchronize marioData with physics body
+            continue;
+        }
+        float distanceToPlayer = Vector3Distance(enemy->getPlayerPos(), playerData->getPlayerPos());
+	    
         if (distanceToPlayer < 10.0f) {
 			enemy->setState(EnemyState::CHASE);
 		}
