@@ -57,7 +57,7 @@ public:
 	CharacterData(Vector3 playerPos, int playerHealth, Model& playerModel, BoundingBox& playerBoundingBox, const std::string& playerModelPath, float moveSpeed);
 	CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, 
 		std::string modelPath, const Vector3& position, const int& health, const Vector3& scale
-		,const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world);
+		,const Vector3& rotaionAxis, float rotationAngle, const float& speed, std::shared_ptr<btDynamicsWorld> world, bool isUsed = false, float timeBoomerang = 0.0f, Vector3 forwardDir = Vector3{ 1.0f, 0.0f, 0.0f}, bool isOnGround = false);
 
 	Vector3 getPlayerPos() const;
 	int getPlayerHealth() const;
@@ -78,7 +78,7 @@ public:
 	int getCurrentAnimation() const;
 	float getAnimationFrame() const;
 
-
+	void setVelocity(Vector3 velocity) { m_velocity = velocity; }
 	void setModelAnimation(std::shared_ptr<ModelAnimation> modelAnimation);
 	void setAnimationCount(int animationCount);
 	void setCurrentAnimation(int currentAnimation);
@@ -113,5 +113,7 @@ public:
 	float getTimeOfBoomerang() const;
 	void setTimeOfBoomerang(float time);
 
+	void save(std::ofstream& file) override;
+	void load(std::ifstream& file) override;
 	virtual ~CharacterData();
 };

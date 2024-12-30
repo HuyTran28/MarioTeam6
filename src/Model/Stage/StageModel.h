@@ -13,6 +13,8 @@
 #include "../../Button/Button.h"
 #include "../../Model/Character/Player/PlayerData.h"
 #include "../../CollisionManager/CollisionManager.h"
+#include <fstream>
+#include <sstream>
 
 
 
@@ -71,7 +73,7 @@ class StageModel : public StateModel
 public:
 
 	StageModel(Vector3 pos, Vector3 scale, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode);
-
+	StageModel(int continu);
 	virtual ~StageModel() = default;
 	StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraInitPos, Vector3 cameraTarget, float fovy, CameraProjection cameraMode,
 		std::vector<std::shared_ptr<BlockData>> mapData, std::vector<std::shared_ptr<Enemy>> enemies, std::vector<std::shared_ptr<ItemData>> items);
@@ -102,7 +104,6 @@ public:
 	std::vector<std::shared_ptr<BlockData>> getMap() const;
 	void setMap(std::vector<std::shared_ptr<BlockData>> map);
 
-
 	std::shared_ptr<Button> getSettingButton() const;
 	std::shared_ptr<Button> getHealthButton() const;
 	std::shared_ptr<Boomerang> getBoomerang() const;
@@ -113,6 +114,10 @@ public:
 	std::shared_ptr<Button> getTimerButton() const;
 	int getScore() const;
 	void setScore(int score);
+
+	void loadFile();
+	void saveFile(std::string name);
+
 protected:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;

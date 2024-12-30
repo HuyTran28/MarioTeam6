@@ -2,11 +2,63 @@
 
 
 //- 50.672 20.0357 - 0.0156156
-Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -80, 25, 0 }, 50.0f, CAMERA_PERSPECTIVE,
+Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -80, 25, 0 }, 50.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
+    cloudScales = { 1.0f, 1.0f, 1.0f };
+    cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
+    Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
+    volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
+    volcanoPosition = { 360.0f, -120.0f, 60.0f };
+    volcanoScale = { 3.0f, 3.0f, 3.0f };
+    volcanoRotationAxis = { 0.0f, 1.0f, 0.0f };
+    volcanoRotationAngle = 0.0f;
+
+    BowserCastle = LoadModel("../../Assets\\Models\\BowserCastle\\castle.glb");
+    BowserCastlePosition = { 400.0f, -20.0f, 210.0f };
+    BowserCastleScale = { 1.0f, 1.0f, 1.0f };
+    BowserCastleRotationAxis = { 0.0f, 1.0f, 0.0f };
+    BowserCastleRotationAngle = 270.0f;
 
 
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, 25.0f, -60.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, -120.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 12; i++)
+    {
+        Vector3 cloud1Position = { -60.0f + 30.0f * i, 40.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    hills = LoadModel("../../Assets\\Models\\bossRoom.glb");
+    hillsPosition = { 0.0f, 0.0f, 0.0f };
+    hillsScale = { 2.0f, 2.0f, 2.0f };
+    hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
+    hillsRotationAngle = 0.0f;
+
+    healthBar = { 600.0f, 850.0, 700.0f, 50.0f };
+}
+
+Stage3Model::Stage3Model(int continu) : StageModel(continu)
+{
     cloudScales = { 1.0f, 1.0f, 1.0f };
     cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
     Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
@@ -56,6 +108,9 @@ Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.
     hillsScale = { 2.0f, 2.0f, 2.0f };
     hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
     hillsRotationAngle = 0.0f;
+
+    healthBar = { 600.0f, 850.0, 700.0f, 50.0f };
+
 }
 
 
@@ -63,6 +118,9 @@ Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.
 
 Stage3Model::~Stage3Model()
 {
+    std::string name = "Stage3";
+    std::string path = "../../Save/" + name + ".txt";
+    saveFile(path);
 }
 
 std::vector<std::shared_ptr<BlockData>> Stage3Model::createMap()
@@ -177,19 +235,19 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
 
 
     //26.5789 1.08211 - 28.6094
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, -28 }, forwardDirGoomba, scaleGoomba, { 26, 1, -28 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, 31 }, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 10, -28 }, forwardDirGoomba, scaleGoomba, { 26, 1, -28 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 10, 31 }, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
 
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 20, 1, 33 }, forwardDirGoomba, scaleGoomba, { 20, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { -25, 1, 33 }, forwardDirGoomba, scaleGoomba, { -25, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 20, 10, 33 }, forwardDirGoomba, scaleGoomba, { 20, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { -25, 10, 33 }, forwardDirGoomba, scaleGoomba, { -25, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 20, 1, -32 }, forwardDirKoopa, scaleKoopa, { 20, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { -24, 1, -32 }, forwardDirKoopa, scaleKoopa, { -24, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 20, 10, -32 }, forwardDirKoopa, scaleKoopa, { 20, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { -24, 10, -32 }, forwardDirKoopa, scaleKoopa, { -24, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
 
 
-    addEnemy(EnemyType::Bowser, PATH_BOWSER, { 0.0f, 1.0f, 0.0f }, forwardDirBowser, scaleBowser, { 0.0f, 1.0f, 0.0f }, { 5.0f, 1.0f, 0.0f }, speedBowser, rotaionAxisBowser, rotationAngleBowser);
+    addEnemy(EnemyType::Bowser, PATH_BOWSER, { 0.0f, 10.0f, 0.0f }, forwardDirBowser, scaleBowser, { 0.0f, 1.0f, 0.0f }, { 5.0f, 1.0f, 0.0f }, speedBowser, rotaionAxisBowser, rotationAngleBowser);
 
 
     return enemies;
@@ -224,6 +282,11 @@ std::vector<std::shared_ptr<ItemData>> Stage3Model::createItems()
 
 
     return items;
+}
+
+Rectangle Stage3Model::getHealthBar() const
+{
+    return healthBar;
 }
 
 

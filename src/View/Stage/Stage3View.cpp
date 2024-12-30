@@ -78,6 +78,7 @@ void Stage3View::render()
     renderCoin(m_model->getCoins());
     renderTimer(m_model->getTimer(), m_model->getTimerButton());
     renderScore(m_model->getScore());
+    renderHealthBar();
 
     m_model->getPauseButton()->draw();
     m_model->getSettingButton()->draw();
@@ -188,7 +189,7 @@ void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items)
     auto positionExists = [&](const Vector3& pos) {
         for (auto item : items)
         {
-            if (item->getPosition() == pos)
+            if (Vector3Distance(item->getPosition(), pos) < 10.0f)
                 return false;
         }
         return true;
@@ -246,6 +247,27 @@ void Stage3View::renderClouds()
         DrawModelEx(m_model->getClouds()[i], m_model->getCloudPositions()[i], m_model->getCloudRotationsAxis(), m_model->getCloudRotationsAngle()[i], m_model->getCloudScales(), WHITE);
     }
     DrawModelEx(m_model->getHills(), m_model->getHillsPosition(), m_model->getHillsRotationAxis(), m_model->getHillsRotationAngle(), m_model->getHillsScale(), WHITE);
+}
+
+void Stage3View::renderHealthBar()
+{
+	Rectangle healthBar = m_model->getHealthBar();
+	DrawRectangleRec(healthBar, RAYWHITE);
+    std::shared_ptr<Enemy> tmp;
+
+	for (auto enemy : m_model->getEnemies())
+	{
+		if (enemy->getObjectType() == "Enemy-Bowser")
+		{
+			tmp = enemy;
+			break;
+		}
+	}
+
+	std::shared_ptr<Bowser> bowser = std::dynamic_pointer_cast<Bowser>(tmp);
+ 
+	Rectangle curHethBar = { healthBar.x, healthBar.y, healthBar.width * bowser->getPlayerHealth() / 100, healthBar.height };
+	DrawRectangleRec(curHethBar, RED);
 }
 
 void Stage3View::renderCharacter()

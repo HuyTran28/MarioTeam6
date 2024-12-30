@@ -13,8 +13,10 @@ public:
 	Stage3Controller(std::shared_ptr<Stage3Model> model);
 	void registerSelf() override;
 	void update(std::shared_ptr<Event> event) override;
-
+	void updateBowserHealth();
 private:
+	bool isNotifyWin = false;
+
 	std::shared_ptr<Stage3Model> model;
 	void updateMouse();
 	void updateCamera();

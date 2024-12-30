@@ -1,5 +1,5 @@
 #include "Stage3Controller.h"
-
+#include <iostream>
 
 Stage3Controller::Stage3Controller()
 {
@@ -22,14 +22,13 @@ void Stage3Controller::update(std::shared_ptr<Event> event)
 	std::vector<std::shared_ptr<BlockData>> blockData = model->getMap();
 	if (event->getType() == "Tick Event")
 	{
-
 		updateMovementOfPlayer(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()), model->getCamera());
 		updateBigDuration(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateSpecial(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateMovementOfEnemy(enemies, model->getCamera(), std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updatePlayerDie(std::dynamic_pointer_cast<PlayerData>(model->getPlayerData()));
 		updateTimeBoomerang(model->getPlayerData(), model->getBoomerang());
-
+		updateBowserHealth();
 		for (const auto& block : blockData)
 		{
 			if (block->getIsBouncing())
@@ -98,7 +97,37 @@ void Stage3Controller::update(std::shared_ptr<Event> event)
 		removeEnemy(enemies, enemy);
 		model->setEnemies(enemies);
 	}
+	else if (event->getType() == "Win Event")
+	{
+		isInputEnable = false;
+		model->getPlayerData()->setPlayerRotationAngle(270 * DEG2RAD);
+	}
 	updateScore(event, model);
+}
+
+void Stage3Controller::updateBowserHealth()
+{
+	std::shared_ptr<Enemy> tmp;
+	for (auto enemy : model->getEnemies())
+	{
+		if (enemy->getObjectType() == "Enemy-Bowser")
+		{
+			tmp = enemy;
+			break;
+		}
+	}
+	std::shared_ptr<Bowser> bowser = std::dynamic_pointer_cast<Bowser>(tmp);
+	if (bowser == nullptr)
+	{
+		return;
+	}
+	if (bowser->getPlayerHealth() <= 0 && isNotifyWin == false)
+	{
+		isNotifyWin = true;
+		std::shared_ptr<PlayerData> tmp = model->getPlayerData();
+		tmp->setPlayerAnimationState(PlayerAnimationState::WIN);
+		EventManager::getInstance().notify(std::make_shared<WinEvent>());
+	}
 }
 
 void Stage3Controller::updateMouse()

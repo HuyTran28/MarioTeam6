@@ -18,6 +18,26 @@ ItemData::ItemData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCol
 	m_isVisible = true;
 }
 
+void ItemData::save(std::ofstream& file)
+{
+	CollidableObject::save(file);
+	file << m_position.x << " " << m_position.y << " " << m_position.z << " ";
+	file << m_scale.x << " " << m_scale.y << " " << m_scale.z << " ";
+	file << m_rotationAxis.x << " " << m_rotationAxis.y << " " << m_rotationAxis.z << " ";
+	file << m_rotationAngle << " ";
+	file << m_isVisible;
+}
+
+void ItemData::load(std::ifstream& file)
+{
+	CollidableObject::load(file);
+	file >> m_position.x >> m_position.y >> m_position.z;
+	file >> m_scale.x >> m_scale.y >> m_scale.z;
+	file >> m_rotationAxis.x >> m_rotationAxis.y >> m_rotationAxis.z;
+	file >> m_rotationAngle;
+	file >> m_isVisible;
+}
+
 Model ItemData::getModel() const
 {
 	return m_model;

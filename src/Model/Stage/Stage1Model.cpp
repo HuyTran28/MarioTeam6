@@ -44,12 +44,62 @@ Stage1Model::Stage1Model() : StageModel(createMarioModel(Vector3{ 10.0f, 10.0f, 
 
 }
 
+Stage1Model::Stage1Model(int continu) : StageModel(continu)
+{
+    cloudScales = { 1.0f, 1.0f, 1.0f };
+    cloudRotationsAxis = { 0.0f, 1.0f, 0.0f };
+    Model cloud1 = LoadModel("../../Assets\\Models\\clouds.glb");
+
+
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, 25.0f, -60.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 10; i++)
+    {
+        Vector3 cloud1Position = { 0.0f + 30.0f * i, -120.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+    for (int i = 0; i < 12; i++)
+    {
+        Vector3 cloud1Position = { -60.0f + 30.0f * i, 40.0f, 0.0f };
+        float cloud1RotationAngle = 90.0f;
+        cloudPositions.push_back(cloud1Position);
+        cloudRotationsAngle.push_back(cloud1RotationAngle);
+        clouds.push_back(cloud1);
+    }
+
+
+    hills = LoadModel("../../Assets\\Models\\mountain.glb");
+    hillsPosition = { 80.0f, -80.0f, -100.0f };
+    hillsScale = { 2.0f, 2.0f, 2.0f };
+    hillsRotationAxis = { 0.0f, 1.0f, 0.0f };
+    hillsRotationAngle = 0.0f;
+}
+
 
 
 Stage1Model::~Stage1Model()
 {
-
+	std::string name = "Stage1";
+	std::string path = "../../Save/" + name + ".txt";
+	saveFile(path);
 }
+
+
+
+
+
+
 
 std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
 {
@@ -219,7 +269,6 @@ std::vector<std::shared_ptr<BlockData>> Stage1Model::createMap()
             float rotaionAngleIsland = -90.0f;
             Vector3 position = { 430.0f, 1.0f, 10.0f };
             addBlock(BlockType::Flagpole, PATH_ISLANDBLOCK, position, scaleIsland, rotationAxisIsland, rotaionAngleIsland);
-
         };
 
 

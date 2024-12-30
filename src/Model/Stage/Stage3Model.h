@@ -36,16 +36,16 @@ private:
 	Vector3 BowserCastleRotationAxis;
 	float BowserCastleRotationAngle;
 
-
-
+	Rectangle healthBar;
 public:
 	Stage3Model();
+	Stage3Model(int continu);
 	~Stage3Model();
 
 	std::vector<std::shared_ptr<BlockData>> createMap();
 	std::vector<std::shared_ptr<Enemy>>createEnemies();
 	std::vector<std::shared_ptr<ItemData>> createItems();
-
+	Rectangle getHealthBar() const;
 
 	std::shared_ptr<Button> getPauseButton() const;
 	std::vector<Model> getClouds() const;

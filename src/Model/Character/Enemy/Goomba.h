@@ -9,4 +9,12 @@ public:
 		: Enemy(rigidBody, shape, motionState, modelPath, position, forwardDir, pointA, pointB, speed, scale, rotaionAxis, rotationAngle, world, name) {
 		objectType = "Enemy-Goomba";
 	}
+	void save(std::ofstream& file) override
+	{
+		Enemy::save(file);
+	}
+	void load(std::ifstream& file) override
+	{
+		Enemy::load(file);
+	}
 };

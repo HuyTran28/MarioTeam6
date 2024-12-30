@@ -13,6 +13,33 @@ BlockData::~BlockData()
     }
 }
 
+void BlockData::save(std::ofstream& file)
+{
+	CollidableObject::save(file);
+	file << m_position.x << " " << m_position.y << " " << m_position.z << " ";
+	file << m_scale.x << " " << m_scale.y << " " << m_scale.z << " ";
+	file << m_rotationAxis.x << " " << m_rotationAxis.y << " " << m_rotationAxis.z << " ";
+	file << m_rotationAngle << " ";
+	file << m_isBouncing << " ";
+	file << m_bounceTime << " ";
+}
+
+void BlockData::load(std::ifstream& file)
+{
+	CollidableObject::load(file);
+	file >> m_mass;
+    float x, y, z;
+	file >> x >> y >> z;
+	m_inertia = btVector3(x, y, z);
+	file >> m_position.x >> m_position.y >> m_position.z;
+	file >> m_scale.x >> m_scale.y >> m_scale.z;
+	file >> m_rotationAxis.x >> m_rotationAxis.y >> m_rotationAxis.z;
+	file >> m_rotationAngle;
+	file >> m_isBouncing;
+	file >> m_bounceTime;
+}
+
+
 
 
 

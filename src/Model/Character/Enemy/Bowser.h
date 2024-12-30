@@ -8,5 +8,14 @@ public:
 		const Vector3& rotaionAxis, const float& rotationAngle, std::shared_ptr< btDynamicsWorld> world, std::string name)
 		: Enemy(rigidBody, shape, motionState, modelPath, position, forwardDir, pointA, pointB, speed, scale, rotaionAxis, rotationAngle, world, name) {
 		objectType = "Enemy-Bowser";
+		playerHealth = 100;
+	}
+	void save(std::ofstream& file) override
+	{
+		Enemy::save(file);
+	}
+	void load(std::ifstream& file) override
+	{
+		Enemy::load(file);
 	}
 };

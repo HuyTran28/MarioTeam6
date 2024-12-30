@@ -64,6 +64,25 @@ void LevelSelectController::updateMouse()
 			return;
 		}
 	}
+
+	if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+	{
+		if (CheckCollisionPointRec(mousePoint, model->getDestRecLevel1()))
+		{
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage1", 1));
+			return;
+		}
+		if (CheckCollisionPointRec(mousePoint, model->getDestRecLevel2()))
+		{
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage2", 1));
+			return;
+		}
+		if (CheckCollisionPointRec(mousePoint, model->getDestRecLevel3()))
+		{
+			EventManager::getInstance().notify(std::make_shared<StateChangeEvent>("Stage3", 1));
+			return;
+		}
+	}
 }
 
 

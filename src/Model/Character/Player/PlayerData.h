@@ -1,7 +1,7 @@
 #pragma once
 #include "../CharacterData.h"
 #include <string>
-
+#include <fstream>
 
 
 class PlayerData : public CharacterData
@@ -30,10 +30,14 @@ private:
 	bool m_isThrowing = false;
 
 public:
-
+    PlayerData() {}
 
     PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& forwardDir, const Vector3& position,
-        const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world);
+        const float& speed, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world, bool isSpecial = false,
+        float specialDuration = 3.0f, float specialTimer = 0.0f, float invicibilityTimer = 0.0f, bool isInvincible = false, float invincibilityDuration = 1.2f, float throwTimer = 0.0f, float throwDuration = 0.7f, bool m_isThrowing = false);
+
+    void save(std::ofstream& file);
+	void load(std::ifstream& file);
 
     //Vector3 getForwarDir() const;
     bool getIsJumping() const;
@@ -51,6 +55,7 @@ public:
     bool getIsSpecial() const;
     float getSpecialDuration() const;
     float getSpecialTimer() const;
+	float getThrowDuration() const;
 	
 
     void setInvincibilityTimer(float timer);
@@ -59,8 +64,10 @@ public:
 	void setIsThrowing(bool isThrowing);
     void setIsSpecial(bool isSpecial);
     void setSpecialTimer(float timer);
-    
-
+	void setJumpForce(float jumpForce) { m_jumpForce = jumpForce; }
+	void setInvincibilityDuration(float duration) { m_invincibilityDuration = duration; }
+	void setThrowDuration(float duration) { m_throwDuration = duration; }
+	void setSpecialDuration(float duration);
     void setForwarDir(const Vector3& forwardDir);
     void setIsJumping(bool isJumping);
     void setJumpTimer(float jumTimer);

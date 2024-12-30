@@ -25,5 +25,15 @@ public:
 	{
 		return newPosition;
 	}
+	void save(std::ofstream& file) override
+	{
+		BlockData::save(file);
+		file << newPosition.getX() << " " << newPosition.getY() << " " << newPosition.getZ();
+	}
+	void load(std::ifstream& file) override
+	{
+		BlockData::load(file);
+		file >> newPosition[0] >> newPosition[1] >> newPosition[2];
+	}
 	//~PipeBlock(){}
 };

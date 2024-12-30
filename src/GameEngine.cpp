@@ -21,7 +21,7 @@ void GameEngine::run()
 	this->registerSelf();
 
 	//curState = "Menu";
-	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Stage3");
+	std::shared_ptr<StateChangeEvent> stateChangeEvent = std::make_shared<StateChangeEvent>("Menu");
 	EventManager::getInstance().notify(stateChangeEvent);
 
 	GameData& gameData = GameData::getInstance();
@@ -67,8 +67,8 @@ void GameEngine::update(std::shared_ptr<Event> event)
 
 		auto specificEvent = std::dynamic_pointer_cast<StateChangeEvent>(event);
 		curState = specificEvent->getNewState();
-
-		StateFactory::createMVC(curState, stateModel, stateView, stateController);
+		GameData::getInstance().setCurState(curState);
+		StateFactory::createMVC(curState, stateModel, stateView, stateController, specificEvent->getContinu());
 	}
 	else if (event->getType() == "Back Event")
 	{

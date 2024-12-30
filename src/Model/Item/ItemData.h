@@ -23,6 +23,9 @@ public:
 		const Vector3& position, const Vector3& scale, const Vector3& rotaionAxis, const float& rotationAngle, const std::string& modelPath, 
 		std::shared_ptr<btDiscreteDynamicsWorld> world);
 
+	void save(std::ofstream& file) override;
+	void load(std::ifstream& file) override;
+
 	Model getModel() const;
 	Vector3 getPosition() const;
 	Vector3 getScale() const;

@@ -18,6 +18,12 @@ std::shared_ptr<BlockData> BlockFactory::createBlock(BlockType type, std::shared
     }
 
     BoundingBox modelBounds = GetModelBoundingBox(model);
+
+	if (type == BlockType::GroundBlock)
+	{
+        modelBounds.min.y -= 20.0f;
+	}
+
     //calculate the point center of box
     Vector3 modelCenter = {
         (modelBounds.max.x + modelBounds.min.x) * 0.5f,

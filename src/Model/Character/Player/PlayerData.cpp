@@ -4,13 +4,68 @@
 
 PlayerData::PlayerData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
 	std::string modelPath, const Vector3& forwardDir, const Vector3& position, const float& speed, const Vector3& scale, const Vector3& rotaionAxis,
-	const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world)
+	const float& rotationAngle, const float& jumpForce, const int& health, std::shared_ptr<btDynamicsWorld> world, bool isSpecial,
+	float specialDuration, float specialTimer, float invicibilityTimer, bool isInvincible, float invincibilityDuration, float throwTimer, float throwDuration, bool m_isThrowing)
 	: CharacterData(rigidBody, shape, motionState, modelPath, position, health, scale, rotaionAxis, rotationAngle, speed, world)
 {
 	m_jumpForce = jumpForce;
+	m_maxJumpDuration = 0.5f;
 	m_isCrouching = false;
 	m_forwardDir = forwardDir;
 	objectType = "Player-Normal";
+	m_isSpecial = isSpecial;
+	m_specialDuartion = specialDuration;
+	m_specialTimer = specialTimer;
+	m_invincibilityTimer = invicibilityTimer;
+	m_isInvincible = isInvincible;
+	m_invincibilityDuration = invincibilityDuration;
+	m_throwTimer = throwTimer;
+	m_throwDuration = throwDuration;
+	m_isThrowing = m_isThrowing;
+}
+
+void PlayerData::save(std::ofstream& file)
+{
+	CharacterData::save(file);
+
+	file << m_isJumping << " ";
+	file << m_isCrouching << " ";
+	file << m_jumpForce << " ";
+	file << m_jumpTimer << " ";
+	file << m_maxJumpDuration << " ";
+	file << bigDuration << " ";
+	file << isBig << " ";
+	file << m_invincibilityTimer << " ";
+	file << m_isInvincible << " ";
+	file << m_invincibilityDuration << " ";
+	file << m_throwTimer << " ";
+	file << m_throwDuration << " ";
+	file << m_isThrowing << " ";
+	file << m_isSpecial << " ";
+	file << m_specialDuartion << " ";
+	file << m_specialTimer;
+}
+
+void PlayerData::load(std::ifstream& file)
+{
+	CharacterData::load(file);
+
+	file >> m_isJumping;
+	file >> m_isCrouching;
+	file >> m_jumpForce;
+	file >> m_jumpTimer;
+	file >> m_maxJumpDuration;
+	file >> bigDuration;
+	file >> isBig;
+	file >> m_invincibilityTimer;
+	file >> m_isInvincible;
+	file >> m_invincibilityDuration;
+	file >> m_throwTimer;
+	file >> m_throwDuration;
+	file >> m_isThrowing;
+	file >> m_isSpecial;
+	file >> m_specialDuartion;
+	file >> m_specialTimer;
 }
 
 
@@ -47,6 +102,11 @@ float PlayerData::getSpecialDuration() const
 float PlayerData::getSpecialTimer() const
 {
 	return m_specialTimer;
+}
+
+float PlayerData::getThrowDuration() const
+{
+	return m_throwDuration;
 }
 
 bool PlayerData::getIsThrowing() const
@@ -140,6 +200,11 @@ float PlayerData::getMaxJumpDuration() const
 }
 
 
+
+void PlayerData::setSpecialDuration(float duration)
+{
+	m_specialDuartion = duration;
+}
 
 void PlayerData::setForwarDir(const Vector3& forwardDir)
 {

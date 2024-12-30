@@ -27,17 +27,21 @@ protected:
 public:
     // Constructor
     BlockData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, btScalar mass, btVector3 inertia, Model model, Vector3 position, Vector3 scale,
-        Vector3 rotationAxis, float rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld)
+        Vector3 rotationAxis, float rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, bool isBouncing = false, float bounceTime = 0.0f, float gravity = 9.81, float velocity = 0.0f)
 		: CollidableObject(rigidBody, shape, motionState, dynamicsWorld), m_mass(mass), m_inertia(inertia), m_model(model),
           m_position(position), m_scale(scale), m_rotationAxis(rotationAxis), m_rotationAngle(rotationAngle)
     {
-        
-        m_isBouncing = false;
-        m_bounceTime = 0.0f;
+        m_isBouncing = isBouncing;
+        m_bounceTime = bounceTime;
+		gravity = m_gravity;
+		velocity = m_velocity;
     }
 
     // Destructor
     virtual ~BlockData();
+
+	void save(std::ofstream& file) override;
+	void load(std::ifstream& file) override;
 
 
     Model getModel() const;

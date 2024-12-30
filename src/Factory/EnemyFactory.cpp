@@ -44,7 +44,7 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(EnemyType type, std::shared_ptr
     // Create capsule shape
     std::shared_ptr<btCollisionShape> collisionShape = std::make_shared<btCapsuleShape>(radius, capsuleHeight);
 
-    btScalar mass = 20.0f;
+    btScalar mass = 80.0f;
     btVector3 localInertia(0, 0, 0);
     collisionShape->calculateLocalInertia(mass, localInertia);
 

@@ -4,6 +4,8 @@
 #include "btBulletDynamicsCommon.h"
 #include "../../Model/Character/Player/PlayerData.h"
 #include "../../CollisionManager/CollisionManager.h"
+#include <fstream>
+#include <sstream>
 
 class Stage1Model : public StageModel
 {
@@ -20,14 +22,16 @@ private:
 	Vector3 hillsScale;
 	Vector3 hillsRotationAxis;
 	float hillsRotationAngle;
-
+	
 
 public:
 	Stage1Model();
+	Stage1Model(int continu);
 	~Stage1Model();
 
+
 	std::vector<std::shared_ptr<BlockData>> createMap();
-	std::vector<std::shared_ptr<Enemy>>createEnemies();
+	std::vector<std::shared_ptr<Enemy>> createEnemies();
 	std::vector<std::shared_ptr<ItemData>> createItems();
 	
 

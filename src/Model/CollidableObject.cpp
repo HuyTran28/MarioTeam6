@@ -60,9 +60,22 @@ void CollidableObject::setMotionState(std::shared_ptr<btDefaultMotionState> moti
 	m_motionState = motionState;
 }
 
+void CollidableObject::save(std::ofstream& file)
+{
+	file << objectType << " ";
+}
+
+void CollidableObject::load(std::ifstream& file)
+{
+	std::string type;
+	file >> type;
+	objectType = type;
+}
+
 CollidableObject::~CollidableObject()
 {
- 	m_dynamicsWorld->removeRigidBody(m_rigidBody.get());
+	if (m_rigidBody != nullptr)
+ 		m_dynamicsWorld->removeRigidBody(m_rigidBody.get());
 	//btScalar deltaTime = 1.0f / 60.0f; // For 60 FPS
 	//m_dynamicsWorld->stepSimulation(deltaTime, 10); // Max 10 substeps for stability
 

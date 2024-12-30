@@ -1,6 +1,6 @@
 #include "Factory.h"
 
-void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &stateModel, std::shared_ptr<StateView> &stateView, std::shared_ptr<StateController> &stateController)
+void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &stateModel, std::shared_ptr<StateView> &stateView, std::shared_ptr<StateController> &stateController, int continu)
 {
 	if (state == "Menu")
 	{
@@ -28,7 +28,12 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 	}
 	else if (state == "Stage1")
 	{
-		stateModel = std::make_shared<Stage1Model>();
+		if (continu == 0)
+			stateModel = std::make_shared<Stage1Model>();
+		else
+		{
+			stateModel = std::make_shared<Stage1Model>(continu);
+		}
 		stateView = std::make_shared<Stage1View>(std::dynamic_pointer_cast<Stage1Model> (stateModel));
 		stateController = std::make_shared<Stage1Controller>(std::dynamic_pointer_cast<Stage1Model> (stateModel));
 		stateController->registerSelf();
@@ -36,7 +41,12 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 	}
 	else if (state == "Stage2")
 	{
-		stateModel = std::make_shared<Stage2Model>();
+		if (continu == 0)
+			stateModel = std::make_shared<Stage2Model>();
+		else
+		{
+			stateModel = std::make_shared<Stage2Model>(continu);
+		}
 		stateView = std::make_shared<Stage2View>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
 		stateController = std::make_shared<Stage2Controller>(std::dynamic_pointer_cast<Stage2Model> (stateModel));
 		stateController->registerSelf();
@@ -44,7 +54,12 @@ void StateFactory::createMVC(std::string state, std::shared_ptr<StateModel> &sta
 	}
 	else if (state == "Stage3")
 	{
-		stateModel = std::make_shared<Stage3Model>();
+		if (continu == 0)
+			stateModel = std::make_shared<Stage3Model>();
+		else
+		{
+			stateModel = std::make_shared<Stage3Model>(continu);
+		}
 		stateView = std::make_shared<Stage3View>(std::dynamic_pointer_cast<Stage3Model> (stateModel));
 		stateController = std::make_shared<Stage3Controller>(std::dynamic_pointer_cast<Stage3Model> (stateModel));
 		stateController->registerSelf();

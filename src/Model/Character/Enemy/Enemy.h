@@ -2,6 +2,7 @@
 #include "../CharacterData.h"
 #include <memory>
 #include <string>
+#include <fstream>
 
 enum class EnemyState
 {
@@ -16,7 +17,6 @@ protected:
     Vector3 m_pointB;
     Vector3 m_targetPosition;
     bool m_movingToA;
-    std::string m_name;
     bool m_isDie = false;
     EnemyState m_state;
 
@@ -31,7 +31,6 @@ public:
     Vector3 getPointB() const;
     Vector3 getTargetPosition() const;
     bool getMovingToA() const;
-    std::string getName() const;
     void setMovingToA(bool movingToA);
     void setTargetPosistion(Vector3 targetPos);
          
@@ -45,7 +44,8 @@ public:
     EnemyState getState() const { return m_state; }
     void setState(EnemyState state) { m_state = state; }
 
-
+	void save(std::ofstream& file) override;
+	void load(std::ifstream& file) override;
 
     ~Enemy() override;
 };

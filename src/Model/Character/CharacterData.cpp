@@ -247,6 +247,38 @@ void CharacterData::setTimeOfBoomerang(float time)
 	m_timeBoomerang = time;
 }
 
+void CharacterData::save(std::ofstream& file)
+{
+	CollidableObject::save(file);
+	file << m_forwardDir.x << " " << m_forwardDir.y << " " << m_forwardDir.z << " ";
+	file << m_isOnGround << " ";
+	file << m_velocity.x << " " << m_velocity.y << " " << m_velocity.z << " ";
+	file << m_isUsed << " ";
+	file << m_timeBoomerang << " ";
+	file << playerPos.x << " " << playerPos.y << " " << playerPos.z << " ";
+	file << playerHealth << " ";
+	file << playerScale.x << " " << playerScale.y << " " << playerScale.z << " ";
+	file << playerRotationAxis.x << " " << playerRotationAxis.y << " " << playerRotationAxis.z << " ";
+	file << playerRotationAngle << " ";
+	file << moveSpeed << " ";
+}
+
+void CharacterData::load(std::ifstream& file)
+{
+	CollidableObject::load(file);
+	file >> m_forwardDir.x >> m_forwardDir.y >> m_forwardDir.z;
+	file >> m_isOnGround;
+	file >> m_velocity.x >> m_velocity.y >> m_velocity.z;
+	file >> m_isUsed;
+	file >> m_timeBoomerang;
+	file >> playerPos.x >> playerPos.y >> playerPos.z;
+	file >> playerHealth;
+	file >> playerScale.x >> playerScale.y >> playerScale.z;
+	file >> playerRotationAxis.x >> playerRotationAxis.y >> playerRotationAxis.z;
+	file >> playerRotationAngle;
+	file >> moveSpeed;
+}
+
 void CharacterData::setPlayerAnimationState(PlayerAnimationState animationState)
 {
 	m_animationState = animationState;
@@ -259,8 +291,12 @@ PlayerAnimationState CharacterData::getPlayerAnimationState() const
 
 CharacterData::CharacterData(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState,
 	std::string modelPath, const Vector3& position, const int& health, const Vector3& scale, const Vector3& rotaionAxis, float rotationAngle,
-	const float& speed, std::shared_ptr<btDynamicsWorld> world) : CollidableObject(rigidBody, shape, motionState, world)
+	const float& speed, std::shared_ptr<btDynamicsWorld> world, bool isUsed, float timeBoomerang, Vector3 forwardDir, bool isOnGround) : CollidableObject(rigidBody, shape, motionState, world)
 {
+	m_forwardDir = forwardDir;
+	m_isUsed = isUsed;
+	m_timeBoomerang = timeBoomerang;
+
 	playerModelPath = modelPath;
 	playerPos = position;
 	playerHealth = health;

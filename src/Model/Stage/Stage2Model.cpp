@@ -2,7 +2,7 @@
 
 
 
-Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 60.0f, 10.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
+Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 80.0f, 10.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
     volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
@@ -18,11 +18,29 @@ Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 160.0f, 60.0f,
     BowserCastleRotationAngle = 270.0f;
 }
 
+Stage2Model::Stage2Model(int continu) : StageModel(continu)
+{
+	volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
+	volcanoPosition = { 360.0f, -120.0f, 60.0f };
+	volcanoScale = { 3.0f, 3.0f, 3.0f };
+	volcanoRotationAxis = { 0.0f, 1.0f, 0.0f };
+	volcanoRotationAngle = 0.0f;
+
+	BowserCastle = LoadModel("../../Assets\\Models\\BowserCastle\\castle.glb");
+	BowserCastlePosition = { 400.0f, -20.0f, 210.0f };
+	BowserCastleScale = { 1.0f, 1.0f, 1.0f };
+	BowserCastleRotationAxis = { 0.0f, 1.0f, 0.0f };
+	BowserCastleRotationAngle = 270.0f;
+}
+
 
 
 
 Stage2Model::~Stage2Model()
 {
+    std::string name = "Stage2";
+    std::string path = "../../Save/" + name + ".txt";
+    saveFile(path);
 }
 
 std::vector<std::shared_ptr<BlockData>> Stage2Model::createMap()
@@ -317,8 +335,8 @@ std::vector<std::shared_ptr<Enemy>> Stage2Model::createEnemies()
     Vector3 forwardDirGoomba = { 0, 0, 1 };
     Vector3 forwardDirKoopa = { 0, 0, 1 };
 
-    float speedGooba = 5.0f;
-    float speedKoopa = 5.0f;
+    float speedGooba = 20.0f;
+    float speedKoopa = 20.0f;
 
     std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
     auto addEnemy = [&](EnemyType type, const std::string& path, const Vector3& position, const Vector3 forwardDir, const Vector3& scale,

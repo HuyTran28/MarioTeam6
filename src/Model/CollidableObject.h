@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 #include "btBulletDynamicsCommon.h"
+#include <fstream>
 
 class CollidableObject
 {
@@ -28,7 +29,8 @@ public:
 	void setCollisionShape(std::shared_ptr<btCollisionShape> shape);
 	void setMotionState(std::shared_ptr<btDefaultMotionState> motionState);
 
-
+	virtual void save(std::ofstream& file);
+	virtual void load(std::ifstream& file);
 
 	virtual ~CollidableObject();
 };

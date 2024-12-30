@@ -97,6 +97,11 @@ void Stage2Controller::update(std::shared_ptr<Event> event)
 		removeEnemy(enemies, enemy);
 		model->setEnemies(enemies);
 	}
+	else if (event->getType() == "Win Event")
+	{
+		isInputEnable = false;
+		model->getPlayerData()->setPlayerRotationAngle(270 * DEG2RAD);
+	}
 	updateScore(event, model);
 }
 

@@ -127,7 +127,7 @@ bool CollisionManager::detectCollisionFromAboveEnemy(std::vector<btManifoldPoint
         btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
         // Check if the normal is pointing upwards (i.e., collision from below)
-        if (normalOnTarget.y() < -0.6 ) { // Adjust threshold if necessary
+        if (normalOnTarget.y() < -0.6 || normalOnTarget.y() > 0.6 ) { // Adjust threshold if necessary
             collisionFromAbove = true;
             break;  // Exit loop early if collision from below is detected
         }
@@ -307,7 +307,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         goomba->setIsDie(true);
         Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
         EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
-
     }
 
     if (objectType1 == "Enemy-Koopa" && objectType2 == "Item-Boomerang")
@@ -315,7 +314,13 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         Koopa* koopa = dynamic_cast<Koopa*>(obj1);
         Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
         EventManager::getInstance().notify(std::make_shared<EnemyDie>(koopa));
+    }
 
+    if (objectType1 == "Enemy-Bowser" && objectType2 == "Item-Boomerang")
+    {
+        Bowser* bowser = dynamic_cast<Bowser*>(obj1);
+        Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
+		bowser->setPlayerHealth(bowser->getPlayerHealth() - 1);
     }
 
     if (objectType1 == "Item-Boomerang" && objectType2.substr(0, 6) == "Player")
@@ -332,11 +337,6 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             boomerang->setRigidBodyTransform(transform);
             boomerang->setTravelDis(0.0f);
         }
-    }
-
-    if (objectType1 == "Item-Boomerang" || objectType2 == "Item-Boomerang")
-    {
-        std::cout << objectType1 << " " << objectType2 << std::endl;
     }
 
     if (objectType1.substr(0, 5) == "Block" && objectType2 == "Item-Boomerang")
@@ -418,11 +418,34 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
 	}
 
+    if ((objectType1 == "Enemy-Bowser" && objectType2.substr(0, 6) == "Player"))
+    {
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+        Bowser* bowser = dynamic_cast<Bowser*>(obj1);
+
+        if (objectType2 == "Player-Special")
+        {
+			bowser->setPlayerHealth(bowser->getPlayerHealth() - 1);
+            return;
+        }
+
+        if (!player->getIsvincible() && player->getIsOnGround())
+        {
+            player->setPlayerHealth(player->getPlayerHealth() - 1);
+
+            if (player->getPlayerHealth() > 0) {
+                player->setIsvincible(true);
+
+                player->setInvincibilityTimer(player->getInvincibilityDuration());
+                player->setPlayerAnimationState(PlayerAnimationState::HIT); // Trigger hit animation
+            }
+        }
+    }
+
     if ((objectType1 == "Enemy-Koopa" && objectType2.substr(0, 6) == "Player"))
     {
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
         Koopa* koopa = dynamic_cast<Koopa*>(obj1);
-
 
         if (detectCollisionFromAboveEnemy(contactPoints))
         {

@@ -1,0 +1,57 @@
+Player-Normal 0 0 0 1 0 0 0 1 15.5502 2.1927 0.0403039 15.3142 4 0.9 0.9 0.9 0 1 0 4.71239 20 0 0 40000 0.869114 0.851401 0 0 -0.0151145 0 1.2 -0.00380904 0.7 0 0 3 0
+Camera
+0 100 0 2.1927 0.0403039 15.3142 50 0
+Map
+Block-Normal-Ground 0 0 0 3 3 3 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 30 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 21 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 12 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 3 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 -6 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 -15 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 -24 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 40 23 -33 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 39 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 30 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 21 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 12 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 3 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 -6 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 -15 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 -24 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 -33 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall1 -34 23 -42 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall2 20 23 46 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall2 10 23 46 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall2 0 23 46 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall2 -10 23 46 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall2 -20 23 46 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 30 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 20 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 10 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 0 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 -10 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 -20 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall3 -30 23 -45 4 8 4 0 1 0 0 0 0 
+Block-Normal-Wall4 39 23 -41 8 8 90 0 1 0 0 0 0 
+Block-Normal-Wall4 -35 23 41 8 8 30 0 1 0 0 0 0 
+Block-Normal-Wall5 32 23 41 4 8 35 0 1 0 0 0 0 
+Block-Normal-Wall5 -33 23 -41 4 8 32 0 1 0 0 0 0 
+Enemies
+Enemy-Goomba 0 0 1 1 0 0 0 0 0 26 6.00522 -28 0 1 1 1 0 1 0 0 5 26 1 -28 27 1 1 1 0 
+Enemy-Goomba 0 0 1 1 0 0 0 0 0 26 6.00522 31 0 1 1 1 0 1 0 0 5 26 1 31 27 1 1 1 0 
+Enemy-Goomba 0 0 1 1 0 0 0 0 0 20 6.00522 33 0 1 1 1 0 1 0 0 5 20 1 33 -3 1 33 1 0 
+Enemy-Goomba 0 0 1 1 0 0 0 0 0 -25 6.00522 33 0 1 1 1 0 1 0 0 5 -25 1 33 -3 1 33 1 0 
+Enemy-Koopa 0 0 1 1 0 0 0 0 0 20 6.24597 -32 0 1 1 1 0 1 0 0 5 20 1 -32 -2 1 -32 1 0 Normal
+Enemy-Koopa 0 0 1 1 0 0 0 0 0 -24 6.24597 -32 0 1 1 1 0 1 0 0 5 -24 1 -32 -2 1 -32 1 0 Normal
+Enemy-Bowser 0 0 1 1 0 0 0 0 0 9.20411e-18 1.24807 -1.69218e-18 -1 1.2 1.2 1.2 0 1 0 1.75262 5 0 1 0 5 1 0 1 0 
+Items
+Item-Coin -34 3 24 1 1 1 0 1 0 -90 1
+Item-RedMushroom -34 3 -22 1 1 1 0 1 0 -90 1
+Item-GreenMushroom 18 3 -22 1 1 1 0 1 0 -90 1
+Item-Coin 0 3 -25 1 1 1 0 1 0 -90 1
+Item-SuperStar -30 3 0 1 1 1 0 1 0 -90 1
+Item-BoomerangFlower 16 3 26 1 1 1 0 1 0 -90 1
+Item-Coin 0 3 25 1 1 1 0 1 0 -90 1
+Boomerang
+Item-Boomerang 2.07868 4.99581 11.4429 1 1 1 0 1 0 26.187 10 0 -1 2.07868 4.99581 11.4353 0 0 0 40

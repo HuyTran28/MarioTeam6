@@ -18,6 +18,16 @@ public:
 	{
 		this->state = state;
 	}
+	void save(std::ofstream& file) override
+	{
+		Enemy::save(file);
+		file << state;
+	}
+	void load(std::ifstream& file) override
+	{
+		Enemy::load(file);
+		file >> state;
+	}
 private:
 	std::string state;
 };

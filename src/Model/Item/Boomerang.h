@@ -14,6 +14,7 @@ private:
     float   m_speed;
 
 public:
+    Boomerang() {}
     Boomerang(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState
         , const std::string& modelPath, const Model& model, const Vector3& position, const Vector3& scale,
         const Vector3& rotationAxis, const float& rotationAngle, std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld, float speed)
@@ -88,4 +89,30 @@ public:
     {
         m_startPos = pos;
     }
+
+	void save(std::ofstream& file)
+	{
+		ItemData::save(file);
+		file << m_forwardDir.x << " " << m_forwardDir.y << " " << m_forwardDir.z << " ";
+		file << m_startPos.x << " " << m_startPos.y << " " << m_startPos.z << " ";
+		file << m_traveledDistance << " ";
+		file << m_isReturning << " ";
+		file << m_isVisible << " ";
+		file << m_speed;
+	}
+
+	void load(std::ifstream& file)
+	{
+		ItemData::load(file);
+		file >> m_forwardDir.x >> m_forwardDir.y >> m_forwardDir.z;
+		file >> m_startPos.x >> m_startPos.y >> m_startPos.z;
+		file >> m_traveledDistance;
+		file >> m_isReturning;
+		file >> m_isVisible;
+		file >> m_speed;
+	}
+
+	~Boomerang()
+	{
+	}
 };

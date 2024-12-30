@@ -13,5 +13,12 @@ public:
 		:ItemData(rigidBody, shape, motionState, model, position, scale, rotationAxis, rotationAngle, modelPath, dynamicsWorld) {
 		objectType = "Item-GreenMushroom";
 	}
-
+	void save(std::ofstream& file) override
+	{
+		ItemData::save(file);
+	}
+	void load(std::ifstream& file) override
+	{
+		ItemData::load(file);
+	}
 };

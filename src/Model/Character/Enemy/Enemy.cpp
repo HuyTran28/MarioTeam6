@@ -9,7 +9,6 @@ Enemy::Enemy(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollision
 	m_forwardDir = forwardDir;
 	m_pointA = pointA;
 	m_pointB = pointB;
-	m_name = name;
 	m_movingToA = true;
 }
 
@@ -43,11 +42,6 @@ bool Enemy::getMovingToA() const
 	return m_movingToA;
 }
 
-std::string Enemy::getName() const
-{
-	return m_name;
-}
-
 void Enemy::setMovingToA(bool movingToA)
 {
 	m_movingToA = movingToA;
@@ -76,6 +70,24 @@ void Enemy::setIsDie(bool isDie)
 bool Enemy::getIsDie() const
 {
 	return m_isDie;
+}
+
+void Enemy::save(std::ofstream& file)
+{
+	CharacterData::save(file);
+	file << m_pointA.x << " " << m_pointA.y << " " << m_pointA.z << " ";
+	file << m_pointB.x << " " << m_pointB.y << " " << m_pointB.z << " ";
+	file << m_movingToA << " ";
+	file << m_isDie << " ";
+}
+
+void Enemy::load(std::ifstream& file)
+{
+	CharacterData::load(file);
+	file >> m_pointA.x >> m_pointA.y >> m_pointA.z;
+	file >> m_pointB.x >> m_pointB.y >> m_pointB.z;
+	file >> m_movingToA;
+	file >> m_isDie;
 }
 
 Enemy::~Enemy()

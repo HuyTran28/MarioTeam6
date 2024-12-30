@@ -11,5 +11,13 @@ public:
 		: BlockData(rigidBody, shape, motionState, mass, inertia, model, position, scale, rotationAxis, rotationAngle, dynamicsWorld) {
 		objectType = "Block-Empty";
 	}
+	void save(std::ofstream& file) override
+	{
+		BlockData::save(file);
+	}
+	void load(std::ifstream& file) override
+	{
+		BlockData::load(file);
+	}
 	//~EmptyBlock(){}
 };

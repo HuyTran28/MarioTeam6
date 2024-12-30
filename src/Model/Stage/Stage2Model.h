@@ -24,6 +24,7 @@ private:
 
 public:
 	Stage2Model();
+	Stage2Model(int continu);
 	~Stage2Model();
 
 	std::vector<std::shared_ptr<BlockData>> createMap();
