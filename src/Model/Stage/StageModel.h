@@ -123,7 +123,7 @@ public:
 
 	void loadFile();
 	void saveFile(std::string name);
-
+	void saveStage();
 protected:
 	Camera3D m_camera;
 	Vector3 m_cameraInitialPosition;

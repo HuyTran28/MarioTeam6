@@ -27,10 +27,10 @@ void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_pt
 
         rotateEnemy(enemyData);
     }
-    Vector3 dir = Vector3Subtract(targetPos, enemyData->getPlayerPos());
-    dir.y = 0;
-    dir = Vector3Normalize(dir);
-    enemyData->setForwardDir(dir);
+    //Vector3 dir = Vector3Subtract(targetPos, enemyData->getPlayerPos());
+    //dir.y = 0;
+    //dir = Vector3Normalize(dir);
+    //enemyData->setForwardDir(dir);
 }
 
 void StageController::moveToEnemy(std::shared_ptr<Enemy> enemyData)

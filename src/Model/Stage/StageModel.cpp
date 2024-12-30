@@ -9,6 +9,9 @@ void StageModel::saveFile(std::string name)
     file.open(name);
     if (file.is_open())
     {
+		file << score << " " << timer << " " << coins << " " << countFire << std::endl;
+
+		file << "Player" << std::endl;
 		m_playerData->save(file);
         file << std::endl;
 
@@ -41,6 +44,7 @@ void StageModel::saveFile(std::string name)
     }
 }
 
+
 void StageModel::loadFile()
 {
     std::ifstream file;
@@ -49,6 +53,14 @@ void StageModel::loadFile()
     if (file.is_open())
 	{
 		std::string line;
+
+		std::getline(file, line);
+		std::istringstream iss2(line);
+		iss2 >> score >> timer >> coins >> countFire;
+
+		std::getline(file, line);
+		if (line != "Player")
+			return;
 
 		std::shared_ptr<PlayerData> playerData = std::make_shared<PlayerData>();
 		playerData->load(file);
