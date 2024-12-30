@@ -23,7 +23,7 @@
 #include "../Event/WarpEvent.h"
 #include "../Event/RegenerateEvent.h"
 #include "../Event/EnemyDie.h"
-
+#include <algorithm>
 
 
 

@@ -31,14 +31,29 @@ void Stage3View::render()
 
 
     renderCharacter();
-    StateView::renderBlocks(map, m_model->getCamera());
+     //StateView::renderBlocks(map, m_model->getCamera());
     StateView::renderEnemies(enemies, m_model->getCamera());
-    randomEnemy(enemies, m_model->getCamera());
+    randomEnemy(enemies);
     m_model->setEnemies(enemies);
     StateView::renderItems(items, m_model->getCamera());
-    randomItem(items, m_model->getCamera());
+    randomItem(items);
     m_model->setItems(items);
+    
+    auto it = ModelStage::listModels.find("../../Assets\\Models\\Platforms\\tmp2.glb");
+    Model model = {};
+    if (it != ModelStage::listModels.end()) {
+        model = it->second;
+    }
+    else
+    {
+        model = LoadModel("../../Assets\\Models\\Platforms\\tmp2.glb");
+        if (model.meshCount > 0)
+        {
+            ModelStage::listModels["../../Assets\\Models\\Platforms\\tmp2.glb"] = model;
+        }
+    }
 
+   DrawModelEx(model, { 0.0f, 15.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, { 1.0f, 1.0f, 1.0f }, WHITE);
 
 
     if (m_model->getBoomerang()->getIsvisble())
@@ -73,7 +88,7 @@ void Stage3View::render()
 
 
 
-void Stage3View::randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Camera3D cam)
+void Stage3View::randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies)
 {
     Vector3 rotaionAxisGoomba = { 0.0f, 1.0f, 0.0f };
     float rotationAngleGoomba = 0.0f;
@@ -96,7 +111,17 @@ void Stage3View::randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Camer
         {
             auto enemy = EnemyFactory::createEnemy(type, dynamicsWorld, path, position, forwardDir, rotationAxis, rotationAngle, scale, speed, pointA, pointB);
             if (enemy)
+            {
+                auto rigidBody = enemy->getRigidBody();
+                if (rigidBody)
+                {
+                    rigidBody->setActivationState(ACTIVE_TAG);
+                    rigidBody->setUserPointer(enemy.get());
+                }
+          
                 enemies.push_back(enemy);
+            }
+               
         };
 
     std::vector<Vector3> position1 = { { 26, 1, -28 }, { 26, 1, 31 }, { 20, 1, 33 }, { -25, 1, 33 }, { 20, 1, -32 }, { -24, 1, -32 } };
@@ -137,7 +162,7 @@ void Stage3View::randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Camer
 
 }
 
-void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items, Camera3D cam)
+void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items)
 {
     Vector3 rotaionAxis = {0.0f, 1.0f, 0.0f};
     float rotationAngle = 0.0f;

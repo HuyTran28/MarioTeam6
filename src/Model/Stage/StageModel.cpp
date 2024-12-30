@@ -195,6 +195,11 @@ void StageModel::setCamera(Camera3D camera)
     m_camera = camera;
 }
 
+Vector3 StageModel::getCameraPos()
+{
+    return m_camera.position;
+}
+
 std::shared_ptr<PlayerData> StageModel::getPlayerData() const
 {
     return m_playerData;

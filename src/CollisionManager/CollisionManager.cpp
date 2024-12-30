@@ -60,9 +60,12 @@ void CollisionManager::detectCollisions()
         btPersistentManifold* contactManifold = m_dynamicsWorld->getDispatcher()->getManifoldByIndexInternal(i);
         btRigidBody* body0 = const_cast<btRigidBody*>(static_cast<const btRigidBody*>(contactManifold->getBody0()));
         btRigidBody* body1 = const_cast<btRigidBody*>(static_cast<const btRigidBody*>(contactManifold->getBody1()));
+
         CollidableObject* obj1 = static_cast<CollidableObject*>(body0->getUserPointer());
         CollidableObject* obj2 = static_cast<CollidableObject*>(body1->getUserPointer());
         if (!obj1 || !obj2) continue;
+
+
         std::vector<btManifoldPoint> contactPoints;
         for (int j = 0; j < contactManifold->getNumContacts(); ++j) {
             btManifoldPoint& pt = contactManifold->getContactPoint(j);
@@ -124,7 +127,7 @@ bool CollisionManager::detectCollisionFromAboveEnemy(std::vector<btManifoldPoint
         btVector3 normalOnTarget = cp.m_normalWorldOnB;
 
         // Check if the normal is pointing upwards (i.e., collision from below)
-        if (normalOnTarget.y() < -0.6) { // Adjust threshold if necessary
+        if (normalOnTarget.y() < -0.6 ) { // Adjust threshold if necessary
             collisionFromAbove = true;
             break;  // Exit loop early if collision from below is detected
         }

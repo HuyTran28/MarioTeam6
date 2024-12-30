@@ -55,7 +55,6 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(EnemyType type, std::shared_ptr
     std::shared_ptr<btRigidBody> rigidBody = std::make_shared <btRigidBody>(rbInfo);
 
 
-
     // Create enemy based on type
     switch (type)
     {

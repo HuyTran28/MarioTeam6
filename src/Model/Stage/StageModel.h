@@ -81,7 +81,7 @@ public:
 
 	Camera3D& getCamera();
 	void setCamera(Camera3D camera);
-
+	Vector3 getCameraPos();
 
 	std::shared_ptr<PlayerData> getPlayerData() const;
 	std::shared_ptr<Button> getPauseButton() const;

@@ -15,8 +15,8 @@ public:
 	Stage3View(std::shared_ptr<Stage3Model> model);
 	void render();
 
-	void randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies, Camera3D cam);
-	void randomItem(std::vector<std::shared_ptr<ItemData>>& items, Camera3D cam);
+	void randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies);
+	void randomItem(std::vector<std::shared_ptr<ItemData>>& items);
 
 
 	void renderClouds();

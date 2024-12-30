@@ -1,8 +1,8 @@
 #include "Stage3Model.h"
 
 
-
-Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -20.0f, 70.0f, 40.0f }, 200.0f, CAMERA_PERSPECTIVE,
+//- 50.672 20.0357 - 0.0156156
+Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 0.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -80, 25, 0 }, 50.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
 
@@ -90,8 +90,13 @@ std::vector<std::shared_ptr<BlockData>> Stage3Model::createMap()
     float rotationAngle2 = 0.0f;
 
 
-    for (float z = 30.0f; z >= -30.0f; z -= 9.0f) {
+    for (float z = 30.0f; z >= -39.0f; z -= 9.0f) {
         position2 = { 40.0f, 23.0f, z };
+        addBlock(BlockType::WallBlock1, PATH_WALLBLOCK1, position2, scale2, rotationAxis2, rotationAngle2);
+    }
+
+    for (float z = 39.0f; z >= -48.0f; z -= 9.0f) {
+        position2 = { -34.0f, 23.0f, z };
         addBlock(BlockType::WallBlock1, PATH_WALLBLOCK1, position2, scale2, rotationAxis2, rotationAngle2);
     }
 
@@ -101,22 +106,30 @@ std::vector<std::shared_ptr<BlockData>> Stage3Model::createMap()
     }
 
 
-    for (float x = 20.0f; x >= -20.0f; x -= 10.0f) {
+    for (float x = 30.0f; x >= -30.0f; x -= 10.0f) {
         position2 = { x, 23.0f, -45 };
         addBlock(BlockType::WallBlock3, PATH_WALLBLOCK3, position2, scale2, rotationAxis2, rotationAngle2);
     }
 
 
-    scale2 = { 4.0f, 8.0f, 80.0f };
+    scale2 = { 8.0f, 8.0f, 90.0f };
     // position2 = { 32.0f, 23.0f, -41.0f};
-    position2 = { 33.3f, 23.0f, -39.0f };
+    position2 = { 39.0f, 23.0f, -41.0f };
+    addBlock(BlockType::WallBlock4, PATH_WALLBLOCK4, position2, scale2, rotationAxis2, rotationAngle2);
+
+    scale2 = { 8.0f, 8.0f, 30.0f };
+// position2 = { 32.0f, 23.0f, -41.0f};
+    position2 = { -35.0f, 23.0f, 41.0f };
     addBlock(BlockType::WallBlock4, PATH_WALLBLOCK4, position2, scale2, rotationAxis2, rotationAngle2);
 
     scale2 = { 4.0f, 8.0f, 35.0f };
-    // position2 = { 32.0f, 23.0f, -41.0f};
     position2 = { 32.0f, 23.0f, 41.0f };
-    addBlock(BlockType::WallBlock4, PATH_WALLBLOCK5, position2, scale2, rotationAxis2, rotationAngle2);
+    addBlock(BlockType::WallBlock5, PATH_WALLBLOCK5, position2, scale2, rotationAxis2, rotationAngle2);
 
+
+    scale2 = { 4.0f, 8.0f, 32.0f };
+    position2 = { -33.0f, 23.0f, -41.0f };
+    addBlock(BlockType::WallBlock5, PATH_WALLBLOCK5, position2, scale2, rotationAxis2, rotationAngle2);
 
 
     return map;
