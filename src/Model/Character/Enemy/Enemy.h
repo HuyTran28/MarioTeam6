@@ -20,6 +20,12 @@ protected:
     bool m_isDie = false;
     EnemyState m_state;
 
+
+    float m_throwTimer = 0.0f;
+    float m_throwDuration = 0.7f;
+    bool m_isThrowing = false;
+
+
 public:
     Enemy(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::string modelPath, const Vector3& position, const Vector3& forwardDir, const Vector3& pointA, const Vector3& pointB, const float& speed, const Vector3& scale,
         const Vector3& rotaionAxis, const float& rotationAngle, std::shared_ptr< btDynamicsWorld> world, std::string name);
@@ -44,6 +50,10 @@ public:
     EnemyState getState() const { return m_state; }
     void setState(EnemyState state) { m_state = state; }
 
+    bool getIsThrowing() const;
+    float getThrowTimer() const;
+    void setThrowTimer(float timer);
+    void setIsThrowing(bool isThrowing);
 	void save(std::ofstream& file) override;
 	void load(std::ifstream& file) override;
 

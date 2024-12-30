@@ -276,6 +276,8 @@ std::vector<std::shared_ptr<ItemData>> Stage3Model::createItems()
     addItem(ItemType::COIN, PATH_COIN, { 0, 3, -25 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
     addItem(ItemType::SUPER_STAR, PATH_SUPPERSTAR, { -30, 3, 0 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
 
+    //addItem(ItemType::FIRE, PATH_FIRE, { -10, 5, 10 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);
+
 
 
     //addItem(ItemType::PURPLE_MUSHROOM, PATH_PURPLEMUSHROOM, { 133.894 ,13.6733, 17.4 }, { 1.0f, 1.0f, 1.0f }, { 0.0f, 1.0f, 0.0f }, -90.0f, dynamicsWorld);*/

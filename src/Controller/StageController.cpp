@@ -27,6 +27,10 @@ void StageController::moveEnemy(std::shared_ptr<Enemy> enemyData, std::shared_pt
 
         rotateEnemy(enemyData);
     }
+    Vector3 dir = Vector3Subtract(targetPos, enemyData->getPlayerPos());
+    dir.y = 0;
+    dir = Vector3Normalize(dir);
+    enemyData->setForwardDir(dir);
 }
 
 void StageController::moveToEnemy(std::shared_ptr<Enemy> enemyData)
@@ -168,6 +172,131 @@ void StageController::updateMovementOfBoomerang(std::shared_ptr<Boomerang> boome
 
     btVector3 pos = transform.getOrigin();
     boomerang->setPosition({ (float)pos.getX(), (float)pos.getY(), (float)pos.getZ() });
+}
+
+void StageController::updateMovementOfFire(std::shared_ptr<Fire> fire)
+{
+    Vector3 movement = Vector3Scale(fire->getForwarDir(), fire->getSpeed() * GetFrameTime());
+    fire->setTravelDis(fire->getTravelDistance() + Vector3Length(movement));
+
+
+    if (fire->getTravelDistance() >= fire->getDistance())
+    {
+        fire->setIsreturning(true);
+        fire->setForwarDir(Vector3Scale(fire->getForwarDir(), -1.0f));
+        fire->setTravelDis(0.0f);
+    }
+
+
+    btTransform transform;
+    fire->getRigidBody()->getMotionState()->getWorldTransform(transform);
+    btVector3 origin = transform.getOrigin();
+    origin += btVector3(movement.x, movement.y, movement.z);
+    transform.setOrigin(origin);
+    fire->setRigidBodyTransform(transform);
+
+        
+    fire->setRotationAngle(fmod(fire->getRotationAngle() + (360.f * GetFrameTime()), 360.0f));
+    btQuaternion rotation(btVector3(0, 1, 0), btRadians(fire->getRotationAngle()));
+    transform.setRotation(rotation);
+    fire->setRigidBodyTransform(transform);
+
+
+    btVector3 pos = transform.getOrigin();
+    fire->setPosition({ (float)pos.getX(), (float)pos.getY(), (float)pos.getZ() });
+
+}
+
+void StageController::updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_ptr<Fire> fire)
+{
+    float deltaTime = GetFrameTime();
+
+    // Update the throw timer
+    if (bowser->getThrowTimer() > 0.0f) {
+        bowser->setThrowTimer(bowser->getThrowTimer() - deltaTime);
+    }
+    else
+    {
+        bowser->setIsThrowing(false);
+    }
+
+
+
+    if (bowser->getIsUsed())
+    {
+        Vector3 forwardDir = bowser->getForwardDir();
+
+        if (forwardDir == Vector3{ 0.0f, 0.0f, 0.0f })
+        {
+            forwardDir = { 1.0f, 0.0f, 0.0f };
+        }
+
+        float Duration = std::max(0.0f, bowser->getTimeFire() - deltaTime);
+        bowser->setTimeFire(Duration);
+
+
+      
+        
+        if (!fire->getIsvisble())
+        {
+            EventManager::getInstance().notify(std::make_shared<FireEvent>());
+            Vector3 pos = Vector3Add(Vector3Add(bowser->getPlayerPos(), { 5.0f, 4.0f, 0.0f }), Vector3Multiply({ 1.5f, 1.5f, 1.5f }, forwardDir));
+            fire->setStartPos(pos);
+            fire->setPosition(pos);
+            fire->setForwarDir(forwardDir);
+            fire->setIsVisble(true);
+
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(fire->getStartPos().x, fire->getStartPos().y, fire->getStartPos().z));
+            fire->setRigidBodyTransform(transform);
+
+            // Reset the throw timer
+            bowser->setThrowTimer(1.0f); // Set the cooldown duration as needed
+            bowser->setIsThrowing(true);
+        }
+        
+
+
+        if (fire->getIsvisble())
+        {
+            if (fire->getIsreturning())
+            {
+                if (Vector3Distance(fire->getPosition(), fire->getStartPos()) < 0.5)
+                {
+                    fire->setIsVisble(false);
+                    fire->setIsreturning(false);
+
+
+                    btTransform transform;
+                    transform.setIdentity();
+                    transform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+                    fire->setRigidBodyTransform(transform);
+                    fire->setTravelDis(0.0f);
+                }
+                else
+                {
+                    updateMovementOfFire(fire);
+                }
+            }
+            else
+            {
+                updateMovementOfFire(fire);
+            }
+        }
+
+
+        if (Duration <= 0)
+        {
+            bowser->setIsUsed(false);
+            bowser->setTimeFire(0.0f);
+            fire->setIsVisble(false);
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+            fire->setRigidBodyTransform(transform);
+        }
+    }
 }
 
 

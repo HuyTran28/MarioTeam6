@@ -12,7 +12,7 @@
 #include "../Model/Item/PurpleMushroom.h"
 #include "../Model/Item/SuperStar.h"
 #include "../Model/Item/Boomerang.h"
-
+#include "../Model/Item/Fire.h"
 enum ItemType
 {
     BOOMERANG_FLOWER,
@@ -21,7 +21,8 @@ enum ItemType
     PURPLE_MUSHROOM,
     SUPER_STAR,
     COIN,
-    BOOMERANG_VK
+    BOOMERANG_VK,
+    FIRE,
 };
 
 class ItemFactory

@@ -293,6 +293,7 @@
     <ClInclude Include="..\..\src\Event\EnemyDie.h" />
     <ClInclude Include="..\..\src\Event\Event.h" />
     <ClInclude Include="..\..\src\Event\EventManager.h" />
+    <ClInclude Include="..\..\src\Event\FireEvent.h" />
     <ClInclude Include="..\..\src\Event\InitializeEvent.h" />
     <ClInclude Include="..\..\src\Event\ItemTouchedEvent.h" />
     <ClInclude Include="..\..\src\Event\JumpEvent.h" />
@@ -338,6 +339,7 @@
     <ClInclude Include="..\..\src\Model\Item\Boomerang.h" />
     <ClInclude Include="..\..\src\Model\Item\BoomerangFlower.h" />
     <ClInclude Include="..\..\src\Model\Item\Coin.h" />
+    <ClInclude Include="..\..\src\Model\Item\Fire.h" />
     <ClInclude Include="..\..\src\Model\Item\GreenMushroom.h" />
     <ClInclude Include="..\..\src\Model\Item\ItemData.h" />
     <ClInclude Include="..\..\src\Model\Item\PurpleMushroom.h" />

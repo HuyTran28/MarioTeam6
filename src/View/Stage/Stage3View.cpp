@@ -71,6 +71,26 @@ void Stage3View::render()
             { m_model->getBoomerang()->getScale().x, m_model->getBoomerang()->getScale().y, m_model->getBoomerang()->getScale().z }, WHITE);
     }
 
+    std::vector<std::shared_ptr<Fire>> fires = m_model->getVectorFire();
+    for (int i = 0; i < fires.size(); i++)
+    {
+        if (fires[i]->getIsvisble())
+        {
+            btTransform transform;
+            fires[i]->getRigidBody()->getMotionState()->getWorldTransform(transform);
+            btQuaternion rotation = transform.getRotation();
+            Vector3 rotationAxis = { (float)rotation.getAxis().getX(),
+                                     (float)rotation.getAxis().getY(),
+                                     (float)rotation.getAxis().getZ() };
+            float rotationAngleDeg = btDegrees(rotation.getAngle());
+
+
+            DrawModelEx(fires[i]->getModel(), fires[i]->getPosition(), rotationAxis, rotationAngleDeg,
+                { fires[i]->getScale().x,fires[i]->getScale().y, fires[i]->getScale().z }, WHITE);
+        }
+    }
+    
+
 
     EndMode3D();
 
@@ -98,7 +118,7 @@ void Stage3View::randomEnemy(std::vector<std::shared_ptr<Enemy>>& enemies)
     float rotationAngleKoopa = 0.0f;
 
     Vector3 scaleGoomba = { 1.0f, 1.0f, 1.0f };
-    Vector3 scaleKoopa = { 0.8f, 0.8f, 0.8f };
+    Vector3 scaleKoopa = { 1.0f, 1.0f, 1.0f };
 
     Vector3 forwardDirGoomba = { 0, 0, 1 };
     Vector3 forwardDirKoopa = { 0, 0, 1 };
@@ -180,7 +200,7 @@ void Stage3View::randomItem(std::vector<std::shared_ptr<ItemData>>& items)
         };
 
 
-    std::vector<Vector3> position1 = { { -36, 3, 24 }, { -36, 3, -22 }, { 18, 3, -22 }, { 16, 3, 26 }, { 0, 3, 25 }, { 0, 3, -25 }, { -30, 4, 0 } };
+    std::vector<Vector3> position1 = { { -34, 3, 24 }, { -34, 3, -22 }, { 18, 3, -22 }, { 16, 3, 26 }, { 0, 3, 25 }, { 0, 3, -25 }, { -30, 3, 0 } };
 
 
     static auto lastSpawnTime = std::chrono::steady_clock::now();

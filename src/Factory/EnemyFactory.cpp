@@ -61,7 +61,6 @@ std::shared_ptr<Enemy> EnemyFactory::createEnemy(EnemyType type, std::shared_ptr
     case EnemyType::Goomba:
     {
         return std::make_shared<Goomba>(rigidBody, collisionShape, motionState, modelPath, pointA, forwardDir, pointA, pointB, speed, scale, rotationAxis, rotaionAngle, dynamicsWorld, "Goomba");
-
     }
     case EnemyType::Koopa:
     {

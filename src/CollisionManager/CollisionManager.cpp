@@ -63,6 +63,7 @@ void CollisionManager::detectCollisions()
 
         CollidableObject* obj1 = static_cast<CollidableObject*>(body0->getUserPointer());
         CollidableObject* obj2 = static_cast<CollidableObject*>(body1->getUserPointer());
+        std::cout << obj1->getObjectType() << " " << obj2->getObjectType() << '\n';
         if (!obj1 || !obj2) continue;
 
 
@@ -339,6 +340,28 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         }
     }
 
+    if (objectType1 == "Enemy-Bowser" && objectType2 == "Item-Fire")
+    {
+        Bowser* bowser = dynamic_cast<Bowser*>(obj1);
+        Fire* fire = dynamic_cast<Fire*>(obj2);
+        if (fire->getIsreturning())
+        {
+            fire->setIsVisble(false);
+            fire->setIsreturning(false);
+            btTransform transform;
+            transform.setIdentity();
+            transform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+            fire->setRigidBodyTransform(transform);
+            fire->setTravelDis(0.0f);
+        }
+    }
+
+
+    if (objectType1 == "Item-Boomerang" || objectType2 == "Item-Boomerang")
+    {
+        std::cout << objectType1 << " " << objectType2 << std::endl;
+    }
+
     if (objectType1.substr(0, 5) == "Block" && objectType2 == "Item-Boomerang")
     {
         Boomerang* boomerang = dynamic_cast<Boomerang*>(obj2);
@@ -378,12 +401,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         player->setObjectType("Player-Special");
     }
 
-    //if ((objectType1 == "Enemy-Goomba" && objectType2 == "Player-Special"))
-    //{
-    //    PlayerData* player = dynamic_cast<PlayerData*>(obj2);
-    //    Goomba* goomba = dynamic_cast<Goomba*>(obj1);
-    //    EventManager::getInstance().notify(std::make_shared<EnemyDie>(goomba));
-    //}
+    
    
 	if ((objectType1 == "Enemy-Goomba" && objectType2.substr(0, 6) == "Player"))
 	{
@@ -480,6 +498,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             }
         }
     }
+
 
     if (objectType2.substr(0, 6) == "Player" && objectType1 == "Block-Flagpole")
     {

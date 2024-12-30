@@ -10,6 +10,7 @@
 #include "../Event/JumpEvent.h"
 #include "../Event/DieEvent.h"
 #include "../Event/BoomerangEvent.h"
+#include "../Event/FireEvent.h"
 #include "../Event/EnemyDie.h"
 
 class StageController : public StateController
@@ -42,6 +43,8 @@ public:
 
 	void updateMovementOfBoomerang(std::shared_ptr<Boomerang> boomerang);
 	void updateTimeBoomerang(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Boomerang> boomerang);
+	void updateMovementOfFire(std::shared_ptr<Fire> fire);
+	void updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_ptr<Fire> fire);
 
 
 	void updateBounceOfBlock(std::shared_ptr<BlockData> blockData);

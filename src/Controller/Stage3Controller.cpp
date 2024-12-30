@@ -36,6 +36,32 @@ void Stage3Controller::update(std::shared_ptr<Event> event)
 				updateBounceOfBlock(block);
 			}
 		}
+		static auto lastSpawnTime = std::chrono::steady_clock::now();
+		auto currentTime = std::chrono::steady_clock::now();
+		if (std::chrono::duration_cast<std::chrono::seconds>(currentTime - lastSpawnTime).count() >= 10)
+		{
+			for (const auto& enemy : enemies)
+			{
+				if (enemy->getObjectType() == "Enemy-Bowser")
+				{
+					enemy->setIsUsed(true);
+					enemy->setTimeFire(enemy->getFireDuration());
+					int cnt = model->getCountFire();
+					std::vector<std::shared_ptr<Fire>> fires = model->getVectorFire();
+					if (cnt > 0)
+					{
+						cnt--;
+						updateTimeFire(enemy, fires[cnt]);
+					}
+					else
+					{
+						cnt = fires.size();
+					}
+					model->setCountFire(cnt);
+				}
+			}
+		}
+		
 		updateMouse();
 		float timer = model->getTimer();
 		updateTimer(timer);

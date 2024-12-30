@@ -490,22 +490,17 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
 
 
     Model model = LoadModel(PATH_BOOMERANG);
-
     BoundingBox modelBounds = GetModelBoundingBox(model);
-    //calculate the point center of box
     Vector3 modelCenter = {
         (modelBounds.max.x + modelBounds.min.x) * 0.5f,
         (modelBounds.max.y + modelBounds.min.y) * 0.5f,
         (modelBounds.max.z + modelBounds.min.z) * 0.5f
     };
-
-
     Vector3 halfExtents = {
         (modelBounds.max.x - modelBounds.min.x) * scale.x * 0.5f,
         (modelBounds.max.y - modelBounds.min.y) * scale.y * 0.5f,
         (modelBounds.max.z - modelBounds.min.z) * scale.z * 0.5f
     };
-
     btTransform startTransform;
     startTransform.setIdentity();
     startTransform.setOrigin(btVector3(
@@ -519,8 +514,6 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
     itemShape = std::make_shared<btBoxShape>(btVector3(
         halfExtents.x, halfExtents.y, halfExtents.z));
     itemShape->setMargin(0.05f);
-
-
 
     btScalar mass = 0.0f;
     btVector3 localInertia(0, 0, 0);
@@ -538,9 +531,7 @@ StageModel::StageModel(std::shared_ptr<PlayerData> playerData, Vector3 cameraIni
         startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 40.0f);
 
 
-
-
-
+    createFire();
 
 
 
@@ -606,6 +597,11 @@ std::vector<std::shared_ptr<Enemy>> StageModel::getEnemies()
 	return m_enemies;
 }
 
+int StageModel::getCountFire()
+{
+    return countFire;
+}
+
 int StageModel::getCoins() const
 {
 	return coins;
@@ -636,6 +632,11 @@ void StageModel::setTimer(float timer)
 	this->timer = timer;
 }
 
+void StageModel::setCountFire(int count)
+{
+    countFire = count;
+}
+
 int StageModel::getScore() const
 {
 	return score;
@@ -660,6 +661,13 @@ std::shared_ptr<Button> StageModel::getHealthButton() const
 std::shared_ptr<Boomerang> StageModel::getBoomerang() const
 {
     return m_boomerang;
+}
+
+
+
+std::vector<std::shared_ptr<Fire>> StageModel::getVectorFire()
+{
+    return fires;
 }
 
 void StageModel::setCamera(Camera3D camera)
@@ -756,5 +764,64 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
  void StageModel::setMap(std::vector<std::shared_ptr<BlockData>> map)
  {
      m_map = map;
+ }
+
+ void StageModel::createFire()
+ {
+    
+
+     for (int i = 0; i < 20; i++)
+     {
+         std::shared_ptr<btDiscreteDynamicsWorld> dynamicsWorld = CollisionManager::getInstance()->getDynamicsWorld();
+         Vector3 startPosition = { 0.0f, -50.0f, 0.0f };
+         Vector3 scale = { 1.0f, 1.0f, 1.0f };
+         Vector3 rotateAxis = { 0.0f, 1.0f, 0.0f };
+
+         float rotateAngle = 0.0f;
+         Model model = LoadModel(PATH_FIRE);
+         BoundingBox modelBounds = GetModelBoundingBox(model);
+         Vector3 modelCenter = {
+             (modelBounds.max.x + modelBounds.min.x) * 0.5f,
+             (modelBounds.max.y + modelBounds.min.y) * 0.5f,
+             (modelBounds.max.z + modelBounds.min.z) * 0.5f
+         };
+         Vector3 halfExtents = {
+             (modelBounds.max.x - modelBounds.min.x) * scale.x * 0.5f,
+             (modelBounds.max.y - modelBounds.min.y) * scale.y * 0.5f,
+             (modelBounds.max.z - modelBounds.min.z) * scale.z * 0.5f
+         };
+         btTransform startTransform;
+         startTransform.setIdentity();
+         startTransform.setOrigin(btVector3(
+             startPosition.x + (modelCenter.x * scale.x),
+             startPosition.y + (modelCenter.y * scale.y),
+             startPosition.z + (modelCenter.z * scale.z)
+         ));
+
+         // Create box shape based on model dimensions
+         std::shared_ptr<btCollisionShape>  itemShape = nullptr;
+         itemShape = std::make_shared<btBoxShape>(btVector3(
+             halfExtents.x, halfExtents.y, halfExtents.z));
+         itemShape->setMargin(0.05f);
+
+         btScalar mass = 0.0f;
+         btVector3 localInertia(0, 0, 0);
+         itemShape->calculateLocalInertia(mass, localInertia);
+
+
+         std::shared_ptr<btDefaultMotionState> motionState = std::make_shared<btDefaultMotionState>(startTransform);
+         btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, motionState.get(), itemShape.get(), localInertia);
+
+         std::shared_ptr<btRigidBody> itemRigidBody = std::make_shared<btRigidBody>(rbInfo);
+
+         //// Add block to the world
+         dynamicsWorld->addRigidBody(itemRigidBody.get());
+
+         std::shared_ptr<Fire> fire = std::make_shared<Fire>(itemRigidBody, itemShape, motionState, PATH_FIRE, model, startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 40.0f);
+         fires.push_back(fire);
+     }
+     countFire = fires.size();
+
+
  }
 

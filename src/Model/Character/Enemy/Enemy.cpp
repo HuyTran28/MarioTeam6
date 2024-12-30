@@ -72,6 +72,26 @@ bool Enemy::getIsDie() const
 	return m_isDie;
 }
 
+bool Enemy::getIsThrowing() const
+{
+	return m_isThrowing;
+}
+
+float Enemy::getThrowTimer() const
+{
+	return m_throwTimer;
+}
+
+void Enemy::setThrowTimer(float timer)
+{
+	m_throwTimer = timer;
+}
+
+void Enemy::setIsThrowing(bool isThrowing)
+{
+	m_isThrowing = isThrowing;
+}
+
 void Enemy::save(std::ofstream& file)
 {
 	CharacterData::save(file);

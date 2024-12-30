@@ -30,6 +30,9 @@ protected:
 	float m_timeBoomerang = 0.0f;
 
 
+	const float m_duarationOfFire = 20.0f;
+	float m_timeFire = 0.0f;
+
 	Vector3 m_velocity;
 	bool m_isOnGround;
 	Vector3 m_forwardDir;
@@ -112,6 +115,9 @@ public:
 	float getDurationBoomerang() const;
 	float getTimeOfBoomerang() const;
 	void setTimeOfBoomerang(float time);
+	float getTimeFire() const;
+	void setTimeFire(float time);
+	float getFireDuration() const;
 
 	void save(std::ofstream& file) override;
 	void load(std::ifstream& file) override;

@@ -279,6 +279,21 @@ void CharacterData::load(std::ifstream& file)
 	file >> moveSpeed;
 }
 
+float CharacterData::getTimeFire() const
+{
+	return m_timeFire;
+}
+
+void CharacterData::setTimeFire(float time)
+{
+	m_timeFire = time;
+}
+
+float CharacterData::getFireDuration() const
+{
+	return m_duarationOfFire;
+}
+
 void CharacterData::setPlayerAnimationState(PlayerAnimationState animationState)
 {
 	m_animationState = animationState;
