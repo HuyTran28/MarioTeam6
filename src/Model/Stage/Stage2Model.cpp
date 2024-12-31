@@ -2,7 +2,7 @@
 
 
 
-Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 270.0f, 5.0f, 160.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
+Stage2Model::Stage2Model() : StageModel(createMarioModel(Vector3{ 0.0f, 5.0f, 5.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 30.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
     volcano = LoadModel("../../Assets\\Models\\volcanoHill.glb");
@@ -358,15 +358,11 @@ std::vector<std::shared_ptr<Enemy>> Stage2Model::createEnemies()
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 84, 26, 12 }, forwardDirGoomba, scaleGoomba, { 84, 26, 12 }, { 93, 26, 12 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-   // addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 138, 61, 20.0947 }, forwardDirGoomba, scaleGoomba, { 137.293, 61, 20 }, { 137.313, 61, 2 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 145, 61, 12.5778 }, forwardDirGoomba, scaleGoomba, { 145, 61, 12.5778 }, { 165, 61, 12.5778 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 150, 61, 12.5778 }, forwardDirGoomba, scaleGoomba, { 150, 61, 12.5778 }, { 170, 61, 12.5778 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
     addEnemy(EnemyType::Koopa, PATH_KOOPA, { 155, 61, 12.5778 }, forwardDirKoopa, scaleKoopa, { 155, 61, 12.5778 }, { 175, 61, 12.5778 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
 
-   /* addEnemy(EnemyType::Koopa, PATH_KOOPA, { 170, 61, 5 }, forwardDirKoopa, scaleKoopa, { 170, 61, 5 }, { 150, 61, 5 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 175, 61, 5 }, forwardDirGoomba, scaleGoomba, { 175, 61, 5 }, { 155, 61, 5 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 180, 61, 5 }, forwardDirGoomba, scaleGoomba, { 180, 61, 5 }, { 160, 61, 5 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);*/
 
 
     addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 255, 4, 42 }, forwardDirGoomba, scaleGoomba, { 255, 4, 42 }, { 275, 4, 42 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
@@ -374,8 +370,7 @@ std::vector<std::shared_ptr<Enemy>> Stage2Model::createEnemies()
     
     addEnemy(EnemyType::Koopa, PATH_KOOPA, { 257, 4, 50 }, forwardDirGoomba, scaleGoomba, { 257, 4, 50 }, { 266, 4, 65.2282 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
     addEnemy(EnemyType::Koopa, PATH_KOOPA, { 273, 4.5, 51 }, forwardDirGoomba, scaleGoomba, { 273, 4.5, 51 }, { 266, 4.5, 65.2282 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    /*addEnemy(EnemyType::Koopa, PATH_KOOPA, { 257, 4, 70 }, forwardDirGoomba, scaleGoomba, { 257, 4, 70 }, { 266, 4, 65.2282 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 273, 4.5, 70 }, forwardDirGoomba, scaleGoomba, { 273, 4.5, 70 }, { 266, 4, 65.2282 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);*/
+    
 
    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 256, 4, 162 }, forwardDirGoomba, scaleGoomba, { 256, 4, 162 }, { 270, 4, 162 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
