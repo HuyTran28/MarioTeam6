@@ -39,8 +39,6 @@ void Stage2View::render()
     StateView::renderItems(items, m_model->getCamera());
     
 
-    std::cout << m_model->getPlayerData()->getPlayerPos().x << " " << m_model->getPlayerData()->getPlayerPos().y << " " << m_model->getPlayerData()->getPlayerPos().z << '\n';
-    m_model->setCamera(m_model->getCamera());
 
     if (m_model->getBoomerang()->getIsvisble())
     {
