@@ -110,11 +110,6 @@ void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
 
         // Apply to rigid body
         enemyData->setWorldTransform(transform);
-
-        // Update the forward direction
-        btVector3 forwardDir = transform.getBasis() * btVector3(0, 0, 1); // Assuming forward direction is along the Z-axis
-        enemyData->setForwardDir(Vector3{ forwardDir.x(), 0.0f, forwardDir.z()});
-
     }
     enemyData->setPlayerRotationAngle(angle);
 }   
