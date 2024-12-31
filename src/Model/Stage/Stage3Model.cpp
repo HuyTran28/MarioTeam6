@@ -2,7 +2,7 @@
 
 
 //- 50.672 20.0357 - 0.0156156
-Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 0.0f, 20.0f, 0.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -80, 25, 0 }, 50.0f, CAMERA_PERSPECTIVE,
+Stage3Model::Stage3Model() : StageModel(createMarioModel(Vector3{ 3.0f, 10.0f, 3.0f }, Vector3{ 0.9f, 0.9f, 0.9f }), Vector3{ 0.0f, 100.0f, 0.0f }, Vector3{ -80, 25, 0 }, 50.0f, CAMERA_PERSPECTIVE,
     createMap(), createEnemies(), createItems())
 {
     cloudScales = { 1.0f, 1.0f, 1.0f };
@@ -235,19 +235,19 @@ std::vector<std::shared_ptr<Enemy>> Stage3Model::createEnemies()
 
 
     //26.5789 1.08211 - 28.6094
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 10, -28 }, forwardDirGoomba, scaleGoomba, { 26, 1, -28 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 10, 31 }, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, -28 }, forwardDirGoomba, scaleGoomba, { 26, 1, -28 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 26, 1, 31 }, forwardDirGoomba, scaleGoomba, { 26, 1, 31 }, { 27, 1, 1 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
 
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 20, 10, 33 }, forwardDirGoomba, scaleGoomba, { 20, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
-    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { -25, 10, 33 }, forwardDirGoomba, scaleGoomba, { -25, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { 20, 1, 33 }, forwardDirGoomba, scaleGoomba, { 20, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
+    addEnemy(EnemyType::Goomba, PATH_GOOMBA, { -25, 1, 33 }, forwardDirGoomba, scaleGoomba, { -25, 1, 33 }, { -3, 1, 33 }, speedGooba, rotaionAxisGoomba, rotationAngleGoomba);
 
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 20, 10, -32 }, forwardDirKoopa, scaleKoopa, { 20, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
-    addEnemy(EnemyType::Koopa, PATH_KOOPA, { -24, 10, -32 }, forwardDirKoopa, scaleKoopa, { -24, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { 20, 1, -32 }, forwardDirKoopa, scaleKoopa, { 20, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
+    addEnemy(EnemyType::Koopa, PATH_KOOPA, { -24, 1, -32 }, forwardDirKoopa, scaleKoopa, { -24, 1, -32 }, { -2, 1, -32 }, speedKoopa, rotaionAxisKoopa, rotationAngleKoopa);
 
 
 
-    addEnemy(EnemyType::Bowser, PATH_BOWSER, { 0.0f, 10.0f, 0.0f }, forwardDirBowser, scaleBowser, { 0.0f, 1.0f, 0.0f }, { 5.0f, 1.0f, 0.0f }, speedBowser, rotaionAxisBowser, rotationAngleBowser);
+    addEnemy(EnemyType::Bowser, PATH_BOWSER, { 0.0f, 1.0f, 0.0f }, forwardDirBowser, scaleBowser, { 0.0f, 1.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, speedBowser, rotaionAxisBowser, rotationAngleBowser);
 
 
     return enemies;

@@ -829,7 +829,7 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
          //// Add block to the world
          dynamicsWorld->addRigidBody(itemRigidBody.get());
 
-         std::shared_ptr<Fire> fire = std::make_shared<Fire>(itemRigidBody, itemShape, motionState, PATH_FIRE, model, startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 40.0f);
+         std::shared_ptr<Fire> fire = std::make_shared<Fire>(itemRigidBody, itemShape, motionState, PATH_FIRE, model, startPosition, scale, rotateAxis, rotateAngle, dynamicsWorld, 100.0f);
          fires.push_back(fire);
      }
      countFire = fires.size();

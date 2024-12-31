@@ -104,9 +104,9 @@ void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
         interpolatedRotation.normalize(); // Normalize to avoid numerical errors
 
         // Update transform (preserve position)
-        btVector3 currentPosition = transform.getOrigin();
+        //btVector3 currentPosition = transform.getOrigin();
         transform.setRotation(interpolatedRotation);
-        transform.setOrigin(currentPosition);
+        //transform.setOrigin(currentPosition);
 
         // Apply to rigid body
         enemyData->setWorldTransform(transform);
@@ -252,7 +252,7 @@ void StageController::updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_
             fire->setRigidBodyTransform(transform);
 
             // Reset the throw timer
-            bowser->setThrowTimer(1.0f); // Set the cooldown duration as needed
+            bowser->setThrowTimer(0.5f); // Set the cooldown duration as needed
             bowser->setIsThrowing(true);
         }
         
