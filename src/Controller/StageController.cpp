@@ -110,6 +110,11 @@ void StageController::rotateEnemy(std::shared_ptr<Enemy> enemyData)
 
         // Apply to rigid body
         enemyData->setWorldTransform(transform);
+
+        // Update the forward direction
+        btVector3 forwardDir = transform.getBasis() * btVector3(0, 0, 1); // Assuming forward direction is along the Z-axis
+        enemyData->setForwardDir(Vector3{ forwardDir.x(), 0.0f, forwardDir.z()});
+
     }
     enemyData->setPlayerRotationAngle(angle);
 }   
@@ -215,37 +220,35 @@ void StageController::updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_
     if (bowser->getThrowTimer() > 0.0f) {
         bowser->setThrowTimer(bowser->getThrowTimer() - deltaTime);
     }
-    else
-    {
+    else {
         bowser->setIsThrowing(false);
     }
 
-
-
-    if (bowser->getIsUsed())
-    {
+    if (bowser->getIsUsed()) {
+        // Get Bowser's forward direction
         Vector3 forwardDir = bowser->getForwardDir();
-
-        if (forwardDir == Vector3{ 0.0f, 0.0f, 0.0f })
-        {
-            forwardDir = { 1.0f, 0.0f, 0.0f };
+        if (Vector3Length(forwardDir) == 0.0f) {
+            forwardDir = { 1.0f, 0.0f, 0.0f }; // Default direction if Bowser's forwardDir is invalid
         }
 
-        float Duration = std::max(0.0f, bowser->getTimeFire() - deltaTime);
-        bowser->setTimeFire(Duration);
+        float duration = std::max(0.0f, bowser->getTimeFire() - deltaTime);
+        bowser->setTimeFire(duration);
 
-
-      
-        
-        if (!fire->getIsvisble())
-        {
+        if (!fire->getIsvisble()) {
+            // Notify event
             EventManager::getInstance().notify(std::make_shared<FireEvent>());
-            Vector3 pos = Vector3Add(Vector3Add(bowser->getPlayerPos(), { 5.0f, 4.0f, 0.0f }), Vector3Multiply({ 1.5f, 1.5f, 1.5f }, forwardDir));
+
+            // Calculate starting position and direction
+            Vector3 pos = Vector3Add(
+                Vector3Add(bowser->getPlayerPos(), { 5.0f, 4.0f, 5.0f }),
+                Vector3Scale(forwardDir, 1.5f)
+            );
             fire->setStartPos(pos);
             fire->setPosition(pos);
-            fire->setForwarDir(forwardDir);
+            fire->setForwarDir(forwardDir); // Set forward direction of the fire
             fire->setIsVisble(true);
 
+            // Set initial rigid body transform
             btTransform transform;
             transform.setIdentity();
             transform.setOrigin(btVector3(fire->getStartPos().x, fire->getStartPos().y, fire->getStartPos().z));
@@ -255,39 +258,24 @@ void StageController::updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_
             bowser->setThrowTimer(0.5f); // Set the cooldown duration as needed
             bowser->setIsThrowing(true);
         }
-        
 
+        if (fire->getIsvisble()) {
+            if (fire->getIsreturning()) {
+                fire->setIsVisble(false);
+                fire->setIsreturning(false);
 
-        if (fire->getIsvisble())
-        {
-            if (fire->getIsreturning())
-            {
-                if (Vector3Distance(fire->getPosition(), fire->getStartPos()) < 0.5)
-                {
-                    fire->setIsVisble(false);
-                    fire->setIsreturning(false);
-
-
-                    btTransform transform;
-                    transform.setIdentity();
-                    transform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
-                    fire->setRigidBodyTransform(transform);
-                    fire->setTravelDis(0.0f);
-                }
-                else
-                {
-                    updateMovementOfFire(fire);
-                }
+                btTransform transform;
+                transform.setIdentity();
+                transform.setOrigin(btVector3(0.0f, -50.0f, 0.0f));
+                fire->setRigidBodyTransform(transform);
+                fire->setTravelDis(0.0f);
             }
-            else
-            {
+            else {
                 updateMovementOfFire(fire);
             }
         }
 
-
-        if (Duration <= 0)
-        {
+        if (duration <= 0) {
             bowser->setIsUsed(false);
             bowser->setTimeFire(0.0f);
             fire->setIsVisble(false);
@@ -298,6 +286,7 @@ void StageController::updateTimeFire(std::shared_ptr<Enemy> bowser, std::shared_
         }
     }
 }
+
 
 
 void StageController::updateTimeBoomerang(std::shared_ptr<PlayerData> playerData, std::shared_ptr<Boomerang> boomerang)

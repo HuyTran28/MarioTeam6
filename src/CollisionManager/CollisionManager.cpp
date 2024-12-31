@@ -510,4 +510,22 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 		m_dynamicsWorld->removeRigidBody(player->getRigidBody().get());
 		EventManager::getInstance().notify(std::make_shared<WinEvent>());
     }
+
+    if (objectType1 == "Item-Fire" && objectType2.substr(0, 6) == "Player")
+    {
+        PlayerData* player = dynamic_cast<PlayerData*>(obj2);
+
+
+        if (!player->getIsvincible())
+        {
+            player->setPlayerHealth(player->getPlayerHealth() - 1);
+
+            if (player->getPlayerHealth() > 0) {
+                player->setIsvincible(true);
+
+                player->setInvincibilityTimer(player->getInvincibilityDuration());
+                player->setPlayerAnimationState(PlayerAnimationState::HIT); // Trigger hit animation
+            }
+        }
+    }
 }

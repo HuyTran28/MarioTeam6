@@ -748,21 +748,61 @@ std::shared_ptr<PlayerData> StageModel::createMarioModel(Vector3 position, Vecto
     std::shared_ptr<btRigidBody> playerRigidBody = std::make_shared<btRigidBody>(rbInfo);
 
     std::string modelPath = "../../Assets\\Models\\Characters\\" + GameData::getInstance().getPlayerName() + ".glb";
-    marioModel = std::make_shared<PlayerData>(
-        playerRigidBody,                               // std::shared_ptr<btRigidBody>
-        playerShape,                                   // std::shared_ptr<btCollisionShape>
-        motionState,								   // std::shared_ptr<btDefaultMotionState>
-        modelPath,                                     // std::string
-        forwardDir,                                    // Vector3
-        positionMario,                                 // Vector3
-        20.0f,                                         // float
-        scaleMario,                                    // Vector3
-        rotationAxisMario,                             // Vector3
-        0.0f,                                          // float
-        40000.0f,                                      // float
-        5,                                           // int
-        dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
-    );
+	if (GameData::getInstance().getPlayerName() == "Mario")
+	{
+        marioModel = std::make_shared<PlayerData>(
+            playerRigidBody,                               // std::shared_ptr<btRigidBody>
+            playerShape,                                   // std::shared_ptr<btCollisionShape>
+            motionState,								   // std::shared_ptr<btDefaultMotionState>
+            modelPath,                                     // std::string
+            forwardDir,                                    // Vector3
+            positionMario,                                 // Vector3
+            20.0f,                                         // float
+            scaleMario,                                    // Vector3
+            rotationAxisMario,                             // Vector3
+            0.0f,                                          // float
+            40000.0f,                                      // float
+            5,                                           // int
+            dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
+        );
+	}
+	else if (GameData::getInstance().getPlayerName() == "Luigi")
+	{
+        marioModel = std::make_shared<PlayerData>(
+            playerRigidBody,                               // std::shared_ptr<btRigidBody>
+            playerShape,                                   // std::shared_ptr<btCollisionShape>
+            motionState,								   // std::shared_ptr<btDefaultMotionState>
+            modelPath,                                     // std::string
+            forwardDir,                                    // Vector3
+            positionMario,                                 // Vector3
+            10.0f,                                         // float
+            scaleMario,                                    // Vector3
+            rotationAxisMario,                             // Vector3
+            0.0f,                                          // float
+            60000.0f,                                      // float
+            5,                                           // int
+            dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
+        );
+	}
+    else if (GameData::getInstance().getPlayerName() == "Princess")
+	{
+        marioModel = std::make_shared<PlayerData>(
+            playerRigidBody,                               // std::shared_ptr<btRigidBody>
+            playerShape,                                   // std::shared_ptr<btCollisionShape>
+            motionState,								   // std::shared_ptr<btDefaultMotionState>
+            modelPath,                                     // std::string
+            forwardDir,                                    // Vector3
+            positionMario,                                 // Vector3
+            20.0f,                                         // float
+            scaleMario,                                    // Vector3
+            rotationAxisMario,                             // Vector3
+            0.0f,                                          // float
+            40000.0f,                                      // float
+            5,                                           // int
+            dynamicsWorld                                 // std::shared_ptr<btDynamicsWorld>
+        );
+	}
+    
 
     return marioModel;
 }
