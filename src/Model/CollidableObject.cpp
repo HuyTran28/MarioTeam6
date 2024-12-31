@@ -25,6 +25,16 @@ void CollidableObject::setObjectType(std::string type)
 	objectType = type;
 }
 
+bool CollidableObject::getIsCreatedRunTime()
+{
+	return false;
+}
+
+void CollidableObject::setIsCreatedRunTime(bool isCreatedRunTime)
+{
+	isCreatedRunTime = isCreatedRunTime;
+}
+
 std::shared_ptr<btRigidBody> CollidableObject::getRigidBody() const
 {
 	return m_rigidBody;

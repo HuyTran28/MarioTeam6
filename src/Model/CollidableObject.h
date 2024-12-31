@@ -14,7 +14,7 @@ protected:
 	std::shared_ptr<btCollisionShape> m_collisionShape;
 	std::shared_ptr<btDefaultMotionState> m_motionState;
 	std::string objectType;
-
+	bool isCreatedRunTime = false;
 public:
 	CollidableObject();
 	CollidableObject(std::shared_ptr<btRigidBody> rigidBody, std::shared_ptr<btCollisionShape> shape, std::shared_ptr<btDefaultMotionState> motionState, std::shared_ptr<btDynamicsWorld> world);
@@ -25,6 +25,8 @@ public:
 	std::shared_ptr<btDynamicsWorld> getDynamicsWorld() const;
 	std::string getObjectType();
 	void setObjectType(std::string type);
+	bool getIsCreatedRunTime();
+	void setIsCreatedRunTime(bool isCreatedRunTime);
 	void setRigidBody(std::shared_ptr<btRigidBody> rigidBody);
 	void setCollisionShape(std::shared_ptr<btCollisionShape> shape);
 	void setMotionState(std::shared_ptr<btDefaultMotionState> motionState);

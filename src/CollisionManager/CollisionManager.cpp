@@ -196,19 +196,23 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
             
             BlockData* blockData = dynamic_cast<BlockData*>(obj1);
 
-            if (detectCollisionFromBelow(contactPoints))
+            if (detectCollisionFromBelow(contactPoints) && obj1->getIsCreatedRunTime() == false)
             {
                 blockData->setIsBounce(true);
                 blockData->setBouncetime(TILE_DURATION);
             }  
+			if (detectCollisionFromAbove(contactPoints) && obj1->getIsCreatedRunTime() == true)
+			{
+				blockData->setIsBounce(true);
+				blockData->setBouncetime(TILE_DURATION);
+			}
     }
 
     if (objectType1 == "Block-Question" && objectType2.substr(0, 6) == "Player")
     {
-       
-        if (detectCollisionFromBelow(contactPoints))
+        BlockData* block = dynamic_cast<BlockData*>(obj1);
+        if (detectCollisionFromAbove(contactPoints) || detectCollisionFromBelow(contactPoints))
         {
-            BlockData* block = dynamic_cast<BlockData*>(obj1);
             std::shared_ptr<BlockData> newBlock = BlockFactory::createBlock(BlockType::EmptyBlock, CollisionManager::getInstance()->getDynamicsWorld(),
                 "../../Assets\\Models\\Platforms\\EmptyBlock.glb",
                 block->getPosition(), block->getScale(),
@@ -224,7 +228,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
         PipeBlock* block = dynamic_cast<PipeBlock*>(obj1);
         PlayerData* player = dynamic_cast<PlayerData*>(obj2);
 
-        if (IsKeyPressed(KEY_S) && detectCollisionFromAbove(contactPoints))
+        if (IsKeyPressed(KEY_S) && (detectCollisionFromAbove(contactPoints) || detectCollisionFromBelow(contactPoints)))
         {
 			EventManager::getInstance().notify(std::make_shared<WarpEvent>());
             player->getRigidBody().get()->translate(block->getNewPosition());
@@ -251,7 +255,7 @@ void CollisionManager::handle(CollidableObject* obj1, CollidableObject* obj2, st
 
     if (objectType1 == "Block-NormalBrickBlock" && objectType2 == "Player-Big")
     {
-        if (detectCollisionFromBelow(contactPoints))
+        if (detectCollisionFromBelow(contactPoints) || detectCollisionFromAbove(contactPoints))
         {
             BlockData* block = dynamic_cast<BlockData*>(obj1);
             std::shared_ptr<BlockData> newBlock = nullptr;

@@ -43,6 +43,9 @@ void SoundManager::update(std::shared_ptr<Event> event)
 		{
 			PlaySoundEffect("Power Up");
 		}
+		else {
+			PlaySoundEffect("Power Up");
+		}
 	}
 	else if (event->getType() == "Block Change Event")
 	{

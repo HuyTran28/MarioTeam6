@@ -224,6 +224,7 @@ void StageModel::loadFile()
 
             std::shared_ptr<BlockData> block = BlockFactory::createBlock(type, CollisionManager::getInstance()->getDynamicsWorld(), path, position, scale, rotationAxis, rotationAngle);
 
+            block->setIsCreatedRunTime(true);
 			block->setBouncetime(bounceTime);
 			block->setIsBounce(isBouncing);
 
@@ -310,6 +311,7 @@ void StageModel::loadFile()
 			iss >> isDie;
 
             std::shared_ptr<Enemy> enemy = EnemyFactory::createEnemy(type, CollisionManager::getInstance()->getDynamicsWorld(), path, position, forwardDir, rotationAxis, rotationAngle, scale, speed, pointA, pointB);
+			enemy->setIsCreatedRunTime(true);
 
 			enemy->setIsOnGround(isOnGround);
 			enemy->setVelocity(velocity);
@@ -387,6 +389,7 @@ void StageModel::loadFile()
 			iss >> isVisible;
 
             std::shared_ptr<ItemData> item = ItemFactory::createItem(type, position, path, scale, rotationAxis, rotationAngle, CollisionManager::getInstance()->getDynamicsWorld());
+			item->setIsCreatedRunTime(true);
             items.push_back(item);
         }
 		m_items = items;
